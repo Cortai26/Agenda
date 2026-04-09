@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Meus agendamentos — Agenda</title>
+<meta name="description" content="Consulte e gerencie seus agendamentos. Veja horários marcados e cancele se precisar.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://agendatop.vercel.app/meus-agendamentos.html">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Meus agendamentos — Agenda">
+<meta property="og:description" content="Consulte e gerencie seus agendamentos. Veja horários marcados e cancele se precisar.">
+<meta property="og:image" content="https://agendatop.vercel.app/icon-512.png">
+<meta property="og:url" content="https://agendatop.vercel.app/meus-agendamentos.html">
+<meta property="og:site_name" content="Agenda">
+<meta property="og:locale" content="pt_BR">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Meus agendamentos — Agenda">
+<meta name="twitter:description" content="Consulte e gerencie seus agendamentos. Veja horários marcados e cancele se precisar.">
+<meta name="twitter:image" content="https://agendatop.vercel.app/icon-512.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>/* ══ NEUTRAL (default) ══ */
+:root, html.t-neutral {
+  --topbar-bg: #1A0E06;
+  --BG: #F8F4EF;
+  --MR: #1A0E06;
+  --L:  #FF5C1A;
+  --L2: #E04A10;
+  --CZ: #9C8878;
+  --VD: #2D6A4F;
+  --AM: #B45309;
+  --VM: #C0392B;
+  --BE: #1a73e8;
+  --CF: #1a73e8;
+  --CR: #C0392B;
+  --surface: #FFFFFF;
+  --surface-2: #F2EDE7;
+  --border: rgba(43,26,14,.1);
+  --r: 12px;
+  --font-d: 'Syne', sans-serif;
+  --font-b: 'Nunito', sans-serif;
+}
+
+/* ══ ONYX (luxury dark) ══ */
+html.t-onyx {
+  --topbar-bg: #131313;
+  --BG: #131313;
+  --MR: #E5E2E1;
+  --L:  #F2CA50;
+  --L2: #D4AF37;
+  --CZ: #5C5045;
+  --VD: #4ade80;
+  --AM: #fbbf24;
+  --VM: #f87171;
+  --BE: #60a5fa;
+  --CF: #60a5fa;
+  --CR: #f87171;
+  --surface: #1C1C1C;
+  --surface-2: #242424;
+  --border: rgba(255,255,255,.07);
+}
+
+/* ══ FEMININE (rose/white) ══ */
+html.t-feminine {
+  --topbar-bg: #2C1517;
+  --BG: #FFFBFF;
+  --MR: #201A1A;
+  --L:  #D81B60;
+  --L2: #AD1457;
+  --CZ: #908E8E;
+  --VD: #2D6A4F;
+  --AM: #B45309;
+  --VM: #C0392B;
+  --BE: #7c3aed;
+  --CF: #7c3aed;
+  --CR: #C0392B;
+  --surface: #FFFFFF;
+  --surface-2: #FFF1F3;
+  --border: #F4DDDF;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+
+body{background:var(--BG);color:var(--MR);font-family:'Nunito',sans-serif;min-height:100vh}
+
+/* TOPO */
+.top{background:var(--topbar-bg,#1A0E06);padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
+.top-logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--CR)}.top-logo em{color:var(--L);font-style:normal}
+.top-nome{font-size:13px;color:var(--text-3);font-weight:700;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* WRAP */
+.wrap{max-width:min(480px,100%);margin:0 auto;padding:24px 16px 60px}
+
+/* BUSCA */
+.busca-card{background:var(--surface);border-radius:20px;padding:28px 22px;box-shadow:0 4px 20px rgba(43,26,14,.1);margin-bottom:20px}
+.busca-ico{font-size:clamp(24px,7vw,40px);text-align:center;margin-bottom:12px}
+.busca-tit{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--MR);text-align:center;margin-bottom:6px}
+.busca-sub{font-size:14px;color:var(--CZ);font-weight:600;text-align:center;margin-bottom:24px;line-height:1.6}
+.fl{display:block;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--CZ);margin-bottom:7px}
+.fi{width:100%;padding:13px 16px;border-radius:10px;border:2px solid var(--L);background:var(--surface);font-family:'Nunito',sans-serif;font-size:16px;font-weight:700;color:var(--MR);outline:none;transition:.2s;margin-bottom:14px}
+.fi:focus{border-color:var(--L)}.fi::placeholder{color:var(--text-3);font-weight:600}
+.err{background:var(--surface)0f0;border:1px solid rgba(229,57,53,.3);color:var(--VM);border-radius:8px;padding:10px 14px;font-size:13px;font-weight:700;margin-bottom:14px;display:none}.err.show{display:block}
+.btn-buscar{width:100%;padding:15px;background:var(--L);color:var(--surface);border:none;border-radius:10px;font-family:'Syne',sans-serif;font-size:18px;font-weight:700;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-buscar:hover:not(:disabled){background:var(--primary-d);transform:translateY(-1px)}.btn-buscar:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+/* RESULTADOS */
+.res-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.res-tit{font-family:'Syne',sans-serif;font-size:18px;font-weight:800}
+.btn-novo{background:none;border:none;color:var(--L);font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+
+.ag-card{background:var(--surface);border-radius:16px;padding:18px;margin-bottom:12px;box-shadow:0 2px 10px rgba(43,26,14,.08);border-left:4px solid var(--BE);transition:.2s}
+.ag-card.st-pendente{border-left-color:var(--AM)}
+.ag-card.st-confirmado{border-left-color:var(--VD)}
+.ag-card.st-cancelado{border-left-color:var(--VM);opacity:.6}
+.ag-card.st-concluido{border-left-color:var(--text-3)}
+.ag-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.ag-data{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--MR)}
+.stb{font-size:11px;font-weight:800;padding:4px 12px;border-radius:20px}
+.sp{background:rgba(245,158,11,.12);color:var(--AM)}.sc{background:rgba(45,106,79,.12);color:var(--VD)}
+.sx{background:rgba(229,57,53,.1);color:var(--VM)}.sk{background:rgba(100,100,100,.1);color:var(--text-3)}
+.ag-srv{font-size:17px;font-weight:800;color:var(--MR);margin-bottom:4px}
+.ag-info{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.ag-hora{font-size:13px;color:var(--CZ);font-weight:700;display:flex;align-items:center;gap:4px}
+.ag-preco{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--L)}
+
+/* CANCELAR */
+.btn-cancelar{margin-top:12px;width:100%;padding:10px;border-radius:9px;border:1.5px solid rgba(229,57,53,.3);background:rgba(229,57,53,.04);font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:var(--VM);cursor:pointer;transition:.2s}
+.btn-cancelar:hover{background:var(--VM);color:var(--surface);border-color:var(--VM)}
+
+/* VAZIO */
+.vazio{text-align:center;padding:36px 20px}
+.vazio-ico{font-size:clamp(30px,8vw,48px);margin-bottom:12px}
+.vazio-tit{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:6px}
+.vazio-sub{font-size:14px;color:var(--CZ);font-weight:600;line-height:1.6;margin-bottom:20px}
+.btn-agendar{display:inline-block;background:var(--L);color:var(--surface);padding:12px 24px;border-radius:10px;font-family:'Syne',sans-serif;font-size:16px;font-weight:700;text-decoration:none;transition:.2s}
+.btn-agendar:hover{background:var(--primary-d)}
+
+.loading{padding:32px;text-align:center;color:var(--CZ);font-size:14px;font-weight:600}
+
+/* MODAL CANCELAR */
+.overlay{position:fixed;inset:0;background:rgba(43,26,14,.65);z-index:100;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+.overlay.show{opacity:1;pointer-events:all}
+.modal{background:var(--surface);border-radius:24px 24px 0 0;padding:24px 20px 40px;width:100%;max-width:min(480px,100%);transform:translateY(100%);transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
+.overlay.show .modal{transform:translateY(0)}
+.modal-tit{font-family:'Syne',sans-serif;font-size:19px;font-weight:800;margin-bottom:8px}
+.modal-sub{font-size:14px;color:var(--CZ);font-weight:600;line-height:1.6;margin-bottom:22px}
+.modal-btns{display:flex;gap:10px}
+.btn-vol{flex:1;padding:13px;border-radius:10px;border:2px solid var(--BE);background:var(--surface);font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;color:var(--CF);cursor:pointer}
+.btn-conf-cancel{flex:1;padding:13px;border-radius:10px;border:none;background:var(--VM);font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;color:var(--surface);cursor:pointer;transition:.2s}
+.btn-conf-cancel:hover{background:var(--red)}.btn-conf-cancel:disabled{opacity:.4;cursor:not-allowed}
+
+@media(max-width:min(400px,100%)){.wrap{padding:16px 12px 60px}.busca-card{padding:22px 16px}}
+
+.logo-text{display:flex;flex-direction:column;line-height:1}
+
+/* Dark header context (painel, agendar, admin) — white text */
+.hdr .hdr-logo 
+/* Login box context — dark text */
+.lbox .hdr-logo 
+/* Landing page — white */
+
+.hdr-logo{display:flex;align-items:center;gap:11px;text-decoration:none;flex-shrink:0}
+.logo-icon{flex-shrink:0;display:block}
+.logo-wm{font-family:'Syne',sans-serif;font-weight:800;letter-spacing:3px;
+  text-transform:uppercase;line-height:1;font-size:18px}
+.logo-wm .logo-a{color:var(--primary)}
+.hdr .logo-wm,.top .logo-wm{color:var(--surface)}
+.lbox .logo-wm{color:var(--text);font-size:22px}
+.lbox .hdr-logo{flex-direction:column;gap:6px}
+@media(max-width:min(380px,100%)){.logo-icon{width:28px!important;height:28px!important}.logo-wm{font-size:15px}}
+
+/* ── LOGO AGENDA ── */
+.hdr-logo{display:flex;align-items:center;gap:11px;text-decoration:none;flex-shrink:0}
+.logo-icon{flex-shrink:0;display:block;width:34px;height:34px}
+.logo-wm{font-family:'Syne',sans-serif;font-weight:800;letter-spacing:3px;
+  text-transform:uppercase;line-height:1;font-size:18px;white-space:nowrap}
+.logo-wm .logo-a{color:var(--primary)}
+.hdr .logo-wm,.top .logo-wm{color:var(--surface)}
+.lbox .logo-wm{color:var(--text);font-size:20px}
+.lbox .hdr-logo{flex-direction:column;gap:8px;align-items:center}
+@media(max-width:min(380px,100%)){.logo-icon{width:26px!important;height:26px!important}.logo-wm{font-size:14px!important}}
+
+/* ── RESPONSIVO ≥480px ── */
+@media(min-width:480px){
+  .wrap{max-width:520px;padding:24px 20px 60px}
+  .busca-card{padding:28px}
+}
+/* ── RESPONSIVO ≥768px ── */
+@media(min-width:768px){
+  .wrap{max-width:680px;padding:28px 0 60px}
+}
+
+@media(max-width:380px){
+  .page{padding:12px 10px 40px}
+  .ags-wrap{padding:0}
+}
+@media(min-width:1024px){
+  .page{max-width:800px;padding:32px 0 60px}
+}
+@media(min-width:1440px){
+  .page{max-width:960px}
+}
+
+
+.top .top-nome,.top .logo-wm,.top-nome{color:#fff}
+.wordmark{font-family:'Sora',sans-serif;font-weight:800;letter-spacing:-.04em;color:var(--text,#1D1D1F);display:inline-flex;align-items:baseline;line-height:1}
+.wm-dot{display:inline-block;width:.2em;height:.2em;border-radius:50%;background:#E55A0C;margin-left:2px;position:relative;top:-.52em;flex-shrink:0}
+.brand-lockup{display:inline-flex;align-items:center;gap:10px;text-decoration:none}
+</style>
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#FF5C1A">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Agenda">
+  <link rel="apple-touch-icon" href="/icon-192.png">
+
+<script>
+// Apply theme from localStorage (set by painel/agendar)
+(function(){
+  var params = new URLSearchParams(location.search);
+  var sl = params.get('slug') || '';
+  var cls = '';
+  try {
+    cls = localStorage.getItem('cortai_painel_tema') || 
+          localStorage.getItem('cortai_tema_ag_'+sl) || '';
+  } catch(e) {}
+  // Fallback: load from bank
+  if(sl && !cls){
+    fetch('https://acldrisohnjfekjxgmoh.supabase.co/rest/v1/saloes?slug=eq.'+sl+'&select=tema,plano',{
+      headers:{'apikey':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFjbGRyaXNvaG5qZmVranhnbW9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1ODA1MzcsImV4cCI6MjA4OTE1NjUzN30.etojz12x1oVNvbW_fPeVpNx2OFuJ72C1YioFBlCLS2Y'}
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d&&d[0]){
+        var tpl=(d[0].tema&&d[0].tema.template)||(d[0].plano==='basico'?'neutral':null);
+        if(tpl){ document.documentElement.className='t-'+tpl; }
+      }
+    }).catch(function(){});
+  }
+  if(cls){ document.documentElement.className=cls; }
+})();
+</script>
+</head>
+<body>
+
+<div class="top">
+  <div class="top-logo"><svg width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100" height="100" rx="22" fill="#E55A0C"/>
+    <rect y="0" width="100" height="32" rx="22" fill="#C44D08"/>
+    <rect y="22" width="100" height="10" fill="#C44D08"/>
+    <rect x="18" y="40" width="64" height="2" rx="1" fill="rgba(255,255,255,0.20)"/>
+    <rect x="47" y="52" width="30" height="6" rx="3" fill="rgba(255,255,255,0.18)"/>
+    <rect x="47" y="63" width="20" height="5" rx="2.5" fill="rgba(255,255,255,0.10)"/>
+    <circle cx="33" cy="65" r="10" fill="#FFFFFF"/>
+  </svg>
+    <span style="font-family:'Sora',sans-serif;font-weight:800;font-size:20px;letter-spacing:-.04em;color:#fff;display:inline-flex;align-items:baseline;line-height:1;user-select:none">Agenda<span style="display:inline-block;width:4px;height:4px;border-radius:50%;background:#E55A0C;margin-left:2px;position:relative;top:-10px"></span></span></div>
+  <div class="top-nome" id="topNome"></div>
+</div>
+
+<div class="wrap">
+
+  <!-- BUSCA -->
+  <div id="secBusca" class="busca-card">
+    <div class="busca-ico">📅</div>
+    <div class="busca-tit">Meus agendamentos</div>
+    <div class="busca-sub">Digite seu WhatsApp para ver seus horários marcados em <strong id="nomeSalao"></strong>.</div>
+    <div class="err" id="errBusca"></div>
+    <label class="fl">Seu WhatsApp</label>
+    <input class="fi" type="tel" id="inputTel" placeholder="(11) 99999-9999" maxlength="20" autocomplete="tel">
+    <button class="btn-buscar" id="btnBuscar">
+      <span>Consultar meus horários</span>
+    </button>
+    <div style="text-align:center;margin-top:14px">
+      <a id="linkAgendar" href="#" style="font-size:13px;font-weight:800;color:var(--L);text-decoration:underline;text-underline-offset:3px">
+        Ainda não agendou? Marque agora →
+      </a>
+    </div>
+  </div>
+
+  <!-- RESULTADOS -->
+  <div id="secResultados" style="display:none">
+    <div class="res-header">
+      <div class="res-tit" id="resTit"></div>
+      <button class="btn-novo" onclick="novaBusca()">← Voltar</button>
+    </div>
+    <div id="listaAgs"></div>
+  </div>
+
+</div>
+
+<!-- MODAL CONFIRMAR CANCELAMENTO -->
+<div class="overlay" id="overlayCancel">
+  <div class="modal">
+    <div class="modal-tit">Cancelar agendamento?</div>
+    <div class="modal-sub" id="cancelSub"></div>
+    <div class="modal-btns">
+      <button class="btn-vol" onclick="fecharCancel()">Não, voltar</button>
+      <button class="btn-conf-cancel" id="btnConfCancel" onclick="confirmarCancel()">Sim, cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPA='https://acldrisohnjfekjxgmoh.supabase.co';
+const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFjbGRyaXNvaG5qZmVranhnbW9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1ODA1MzcsImV4cCI6MjA4OTE1NjUzN30.etojz12x1oVNvbW_fPeVpNx2OFuJ72C1YioFBlCLS2Y';
+const MESES=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const DIAS_SEM=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+
+var slug='', salaoNome='', telAtual='', cancelId=null, cancelamentoMin=120;
+
+async function api(path,opts){
+  opts=opts||{};
+  var r=await fetch(SUPA+'/rest/v1/'+path,{
+    headers:Object.assign({'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=representation'},opts.headers||{}),
+    method:opts.method||'GET',body:opts.body
+  });
+  if(!r.ok)throw new Error(await r.text());
+  return r.status===204?null:r.json();
+}
+async function rpc(fn,params){
+  var r=await fetch(SUPA+'/rest/v1/rpc/'+fn,{
+    method:'POST',
+    headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json'},
+    body:JSON.stringify(params)
+  });
+  var txt=await r.text();
+  if(!r.ok){try{var j=JSON.parse(txt);throw new Error(j.message||txt);}catch(e2){if(e2.message!==txt)throw e2;throw new Error(txt);}}
+  try{return JSON.parse(txt);}catch{return txt;}
+}
+
+function pad(n){return String(n).padStart(2,'0');}
+function fmtData(ds){
+  var p=ds.split('-');
+  var d=new Date(parseInt(p[0]),parseInt(p[1])-1,parseInt(p[2]));
+  return DIAS_SEM[d.getDay()]+', '+parseInt(p[2])+' de '+MESES[parseInt(p[1])-1];
+}
+function isPassado(ds){
+  var hoje=new Date();hoje.setHours(0,0,0,0);
+  var p=ds.split('-');var d=new Date(parseInt(p[0]),parseInt(p[1])-1,parseInt(p[2]));
+  return d<hoje;
+}
+
+// Inicializa a partir da URL
+(function(){
+  var params=new URLSearchParams(location.search);
+
+  // S3.3: Cancel by token (from email link)
+  var cancelToken=params.get('cancelar')||'';
+  if(cancelToken){
+    document.body.innerHTML=
+      '<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--bg,#faf9f7);font-family:-apple-system,sans-serif;padding:20px">'+
+      '<div style="background:var(--card,#fff);border-radius:16px;padding:32px;max-width:380px;width:100%;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.08)">'+
+      '<div id="cancelResult" style="font-size:48px;margin-bottom:12px">⏳</div>'+
+      '<div id="cancelMsg" style="font-size:16px;font-weight:700;color:#1a1008;margin-bottom:8px">Cancelando...</div>'+
+      '<div id="cancelSub" style="font-size:13px;color:#888"></div>'+
+      '</div></div>';
+    fetch('https://acldrisohnjfekjxgmoh.supabase.co/rest/v1/rpc/cancelar_via_token',{
+      method:'POST',
+      headers:{'apikey':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFjbGRyaXNvaG5qZmVranhnbW9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1ODA1MzcsImV4cCI6MjA4OTE1NjUzN30.etojz12x1oVNvbW_fPeVpNx2OFuJ72C1YioFBlCLS2Y','Content-Type':'application/json'},
+      body:JSON.stringify({p_token:cancelToken})
+    }).then(function(r){return r.json();}).then(function(d){
+      var resEl=document.getElementById('cancelResult');
+      var msgEl=document.getElementById('cancelMsg');
+      var subEl=document.getElementById('cancelSub');
+      if(d&&d.ok){
+        if(resEl) resEl.textContent='✅';
+        if(msgEl) msgEl.textContent='Agendamento cancelado!';
+        if(subEl) subEl.textContent=(d.servico_nome||'')+' em '+fmtData(d.data||'')+(d.hora?' às '+d.hora.substring(0,5):'');
+      } else {
+        if(resEl) resEl.textContent='❌';
+        if(msgEl) msgEl.textContent='Não foi possível cancelar';
+        if(subEl) subEl.textContent=(d&&d.erro)||'Tente novamente ou entre em contato com o estabelecimento.';
+      }
+    }).catch(function(e){
+      var msgEl=document.getElementById('cancelMsg');
+      if(msgEl) msgEl.textContent='Erro de conexão. Tente novamente.';
+    });
+    return;
+  }
+
+  slug=params.get('slug')||'';
+  if(!slug){document.body.innerHTML='<div style="text-align:center;padding:60px 20px;font-family:Nunito,sans-serif">Link inválido.</div>';return;}
+
+  // Carrega nome do salão
+  api('saloes?slug=eq.'+slug+'&select=nome,cancelamento_min').then(function(res){
+    salaoNome=res&&res[0]?res[0].nome:slug;
+    cancelamentoMin=res&&res[0]?res[0].cancelamento_min:120;
+    document.getElementById('topNome').textContent=salaoNome;
+    document.getElementById('nomeSalao').textContent=salaoNome;
+    document.title='Meus Agendamentos — '+salaoNome;
+  });
+
+  document.getElementById('linkAgendar').href='agendar.html?slug='+slug;
+
+  // Enter no campo
+  document.getElementById('inputTel').addEventListener('keydown',function(e){
+    if(e.key==='Enter')document.getElementById('btnBuscar').click();
+  });
+
+  document.getElementById('btnBuscar').addEventListener('click',async function(){
+    var err=document.getElementById('errBusca');
+    err.classList.remove('show');
+    var tel=document.getElementById('inputTel').value.trim();
+    if(!tel||tel.replace(/\D/g,'').length<8){
+      err.textContent='Informe seu número de WhatsApp.';
+      err.classList.add('show');return;
+    }
+    this.disabled=true;this.querySelector('span').textContent='Buscando...';
+    try{
+      var ags=await rpc('meus_agendamentos',{p_slug:slug,p_telefone:tel});
+      telAtual=tel;
+      // Mostra nome parcial para confirmar identidade
+      if(ags&&ags.length>0){
+        var primeiroNome=ags[0].cliente_nome||'';
+        var nomeParcial=primeiroNome.length>1?primeiroNome[0]+primeiroNome.substring(1).replace(/[a-zA-ZÀ-ú]/g,'*'):'';
+        if(nomeParcial){
+          var el=document.getElementById('errBusca');
+          el.style.background='rgba(45,106,79,.08)';el.style.borderColor='rgba(45,106,79,.3)';el.style.color='#2D6A4F';
+          el.textContent='✓ Encontramos agendamentos para '+nomeParcial;el.classList.add('show');
+          setTimeout(function(){el.classList.remove('show');el.style='';},3000);
+        }
+      }
+      mostrarResultados(ags||[]);
+    }catch(e){
+      err.textContent='Erro ao buscar. Tente novamente.';
+      err.classList.add('show');
+    }
+    this.disabled=false;this.querySelector('span').textContent='Consultar meus horários';
+  });
+
+  document.getElementById('overlayCancel').addEventListener('click',function(e){
+    if(e.target===this)fecharCancel();
+  });
+})();
+
+function mostrarResultados(ags){
+  document.getElementById('secBusca').style.display='none';
+  document.getElementById('secResultados').style.display='block';
+
+  var futuros=ags.filter(function(a){return !isPassado(a.data)&&a.status!=='cancelado';});
+  var passados=ags.filter(function(a){return isPassado(a.data)||a.status==='cancelado';});
+
+  document.getElementById('resTit').textContent=
+    futuros.length>0
+      ? futuros.length+' agendamento'+(futuros.length!==1?'s':'')+' próximo'+(futuros.length!==1?'s':'')
+      : 'Seus agendamentos';
+
+  if(ags.length===0){
+    document.getElementById('listaAgs').innerHTML=
+      '<div class="vazio">'+
+      '<div class="vazio-ico">📅</div>'+
+      '<div class="vazio-tit">Nenhum agendamento</div>'+
+      '<div class="vazio-sub">Você ainda não tem horários marcados em '+salaoNome+'.</div>'+
+      '<a class="btn-agendar" href="agendar.html?slug='+slug+'">Agendar agora →</a>'+
+      '</div>';
+    return;
+  }
+
+  var html='';
+
+  // Próximos
+  if(futuros.length>0){
+    html+='<div style="font-size:11px;font-weight:800;color:var(--CZ);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px">PRÓXIMOS</div>';
+    futuros.forEach(function(a){html+=cardAg(a,true);});
+  }
+
+  // Histórico
+  if(passados.length>0){
+    html+='<div style="font-size:11px;font-weight:800;color:var(--CZ);letter-spacing:1.5px;text-transform:uppercase;margin:'+(futuros.length>0?'20px':'0')+'px 0 10px">HISTÓRICO</div>';
+    passados.forEach(function(a){html+=cardAg(a,false);});
+  }
+
+  // Botão novo agendamento
+  html+='<div style="text-align:center;margin-top:8px">'+
+    '<a class="btn-agendar" href="agendar.html?slug='+slug+'">+ Agendar novo horário</a>'+
+    '</div>';
+
+  document.getElementById('listaAgs').innerHTML=html;
+}
+
+function cardAg(a, podeCancelar){
+  var passado=isPassado(a.data);
+  var cls='ag-card st-'+(a.status==='concluido'||passado&&a.status!=='cancelado'?'concluido':a.status);
+  var stbCls=a.status==='confirmado'?'sc':a.status==='cancelado'?'sx':a.status==='concluido'||passado?'sk':'sp';
+  var stbLbl=a.status==='confirmado'?'Confirmado':a.status==='cancelado'?'Cancelado':a.status==='concluido'||passado?'Concluído':'Pendente';
+  var cancelBtn='';
+  if(podeCancelar&&a.status!=='cancelado'){
+    cancelBtn='<button class="btn-cancelar" onclick="abrirCancel(\''+a.id+'\',\''+a.servico_nome+'\',\''+a.data+'\',\''+a.hora+'\')">Cancelar agendamento</button>';
+  }
+  return '<div class="'+cls+'">'+
+    '<div class="ag-top">'+
+      '<div class="ag-data">'+fmtData(a.data)+'</div>'+
+      '<span class="stb '+stbCls+'">'+stbLbl+'</span>'+
+    '</div>'+
+    '<div class="ag-srv">'+a.servico_nome+'</div>'+
+    '<div class="ag-info">'+
+      '<div class="ag-hora">🕐 '+a.hora.substring(0,5)+'</div>'+
+      '<div class="ag-preco">R$'+Math.round(a.servico_preco/100)+'</div>'+
+    '</div>'+
+    cancelBtn+
+    '</div>';
+}
+
+function novaBusca(){
+  document.getElementById('secBusca').style.display='block';
+  document.getElementById('secResultados').style.display='none';
+}
+
+// CANCELAR
+function abrirCancel(id,nome,data,hora){
+  // Verifica se está dentro do prazo mínimo
+  if(cancelamentoMin>0){
+    var p=data.split('-');
+    var horaParts=hora.substring(0,5).split(':');
+    var agDate=new Date(parseInt(p[0]),parseInt(p[1])-1,parseInt(p[2]),parseInt(horaParts[0]),parseInt(horaParts[1]));
+    var agora=new Date();
+    var diffMin=(agDate-agora)/60000;
+    if(diffMin>0&&diffMin<cancelamentoMin){
+      var horas=Math.round(cancelamentoMin/60);
+      alert('⚠️ Este agendamento não pode ser cancelado com menos de '+horas+' hora'+(horas!==1?'s':'')+' de antecedência.\nEntre em contato diretamente com o salão.');
+      return;
+    }
+  }
+  cancelId=id;
+  document.getElementById('cancelSub').textContent=
+    'Tem certeza que quer cancelar '+nome+' no dia '+fmtData(data)+' às '+hora.substring(0,5)+'?';
+  document.getElementById('overlayCancel').classList.add('show');
+}
+function fecharCancel(){
+  document.getElementById('overlayCancel').classList.remove('show');
+  cancelId=null;
+}
+async function confirmarCancel(){
+  var btn=document.getElementById('btnConfCancel');
+  btn.disabled=true;btn.textContent='Cancelando...';
+  try{
+    await api('agendamentos?id=eq.'+cancelId,{method:'PATCH',body:JSON.stringify({status:'cancelado'})});
+    fecharCancel();
+    // Re-busca
+    var ags=await rpc('meus_agendamentos',{p_slug:slug,p_telefone:telAtual});
+    mostrarResultados(ags||[]);
+  }catch(e){
+    alert('Erro ao cancelar. Tente novamente.');
+  }
+  btn.disabled=false;btn.textContent='Sim, cancelar';
+}
+</script>
+
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('/sw.js').catch(function(){});
+  });
+}
+</script>
+</body>
+</html>

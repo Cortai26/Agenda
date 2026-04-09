@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 56" fill="none">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&amp;display=swap');
+    </style>
+  </defs>
+
+  <!-- Icon mark: scissors in circle -->
+  <circle cx="28" cy="28" r="28" fill="#FF5C1A"/>
+
+  <!-- Scissors blades — two elongated paths crossing at pivot -->
+  <!-- Blade top-right -->
+  <path d="M16 40 Q22 32 28 28 Q34 24 40 18"
+        stroke="white" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+  <!-- Blade top-left -->
+  <path d="M40 40 Q34 32 28 28 Q22 24 16 18"
+        stroke="white" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+  <!-- Pivot circle -->
+  <circle cx="28" cy="28" r="2.8" fill="white"/>
+  <!-- Handle rings -->
+  <circle cx="14.5" cy="41.5" r="5.5" stroke="white" stroke-width="2.5" fill="none"/>
+  <circle cx="41.5" cy="41.5" r="5.5" stroke="white" stroke-width="2.5" fill="none"/>
+
+  <!-- Wordmark: "Cortaí" in Syne 800 -->
+  <text x="70" y="38"
+        font-family="'Syne', sans-serif"
+        font-weight="800"
+        font-size="32"
+        letter-spacing="-0.5"
+        fill="#2B1A0E">Cort</text>
+
+  <!-- "a" dark -->
+  <text x="140" y="38"
+        font-family="'Syne', sans-serif"
+        font-weight="800"
+        font-size="32"
+        fill="#2B1A0E">a</text>
+
+  <!-- "i" without accent (we draw custom) -->
+  <text x="158" y="38"
+        font-family="'Syne', sans-serif"
+        font-weight="800"
+        font-size="32"
+        fill="#2B1A0E">i</text>
+
+  <!-- Custom scissors accent on í — two diverging blade lines -->
+  <line x1="161" y1="8" x2="155" y2="2" stroke="#FF5C1A" stroke-width="2.8" stroke-linecap="round"/>
+  <line x1="163" y1="8" x2="169" y2="2" stroke="#FF5C1A" stroke-width="2.8" stroke-linecap="round"/>
+  <!-- Pivot dot -->
+  <circle cx="162" cy="9" r="1.8" fill="#FF5C1A"/>
+</svg>

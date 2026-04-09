@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agenda — Encontre profissionais perto de você</title>
+  <meta property="og:image" content="https://agendatop.vercel.app/icon-512.png">
+<meta name="description" content="Descubra profissionais próximos a você e agende online em segundos.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<!-- Leaflet.js — OpenStreetMap (free, no API key) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+:root{
+  --primary:#FF5C1A;--primary-light:rgba(255,92,26,.1);
+  --bg:#F8F4EF;--surface:#fff;--surface-2:#F2EDE7;
+  --border:#E5DDD5;--text:#1A0E06;--text-2:#5C4033;--text-3:#9C8070;
+  --font-d:'Manrope',sans-serif;--font-b:'Inter',sans-serif;
+  --r:12px;--sh:0 2px 12px rgba(0,0,0,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-b);background:var(--bg);color:var(--text);min-height:100vh}
+
+/* Header */
+.mkt-header{
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:12px 16px;display:flex;align-items:center;gap:12px;
+  position:sticky;top:0;z-index:200;
+}
+.mkt-logo{font-family:var(--font-d);font-weight:900;font-size:18px;letter-spacing:2px;color:var(--text);flex-shrink:0}
+.mkt-logo span{color:var(--primary)}
+.mkt-search{
+  flex:1;display:flex;align-items:center;gap:8px;
+  background:var(--surface-2);border-radius:10px;padding:8px 12px;
+  border:1px solid var(--border);
+}
+.mkt-search input{
+  flex:1;border:none;background:transparent;font-size:14px;
+  font-family:var(--font-b);color:var(--text);outline:none;
+}
+.mkt-search input::placeholder{color:var(--text-3)}
+.btn-loc{
+  background:var(--primary);color:#fff;border:none;border-radius:8px;
+  padding:6px 10px;font-size:12px;font-weight:700;cursor:pointer;
+  font-family:var(--font-b);white-space:nowrap;flex-shrink:0;
+}
+
+/* Filters */
+.mkt-filters{
+  display:flex;gap:8px;padding:10px 16px;overflow-x:auto;
+  background:var(--surface);border-bottom:1px solid var(--border);
+  scrollbar-width:none;
+}
+.mkt-filters::-webkit-scrollbar{display:none}
+.fchip{
+  padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;
+  cursor:pointer;white-space:nowrap;border:1.5px solid var(--border);
+  background:var(--surface-2);color:var(--text-2);transition:.15s;flex-shrink:0;
+}
+.fchip.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+/* Layout */
+.mkt-layout{display:flex;height:calc(100vh - 104px)}
+
+/* Map */
+#mktMap{flex:0 0 45%;height:100%;z-index:1}
+@media(max-width:768px){
+  .mkt-layout{flex-direction:column;height:auto}
+  #mktMap{flex:none;height:260px}
+}
+
+/* Cards */
+.mkt-cards{
+  flex:1;overflow-y:auto;padding:12px;
+  display:flex;flex-direction:column;gap:10px;
+  background:var(--bg);
+}
+.mkt-empty{
+  text-align:center;padding:40px 20px;color:var(--text-3);
+  font-size:14px;font-weight:600;
+}
+
+/* Professional card */
+.mkt-card{
+  background:var(--surface);border-radius:var(--r);
+  border:1px solid var(--border);padding:14px;
+  cursor:pointer;transition:.15s;box-shadow:var(--sh);
+}
+.mkt-card:hover{border-color:var(--primary);transform:translateY(-1px)}
+.mkt-card.highlight{border-color:var(--primary);box-shadow:0 0 0 2px var(--primary-light)}
+.mkt-card-top{display:flex;align-items:flex-start;gap:12px}
+.mkt-avatar{
+  width:48px;height:48px;border-radius:10px;background:var(--primary-light);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;flex-shrink:0;
+}
+.mkt-card-info{flex:1;min-width:0}
+.mkt-card-nome{font-family:var(--font-d);font-size:15px;font-weight:800;color:var(--text)}
+.mkt-card-cat{font-size:11px;color:var(--primary);font-weight:700;margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
+.mkt-card-desc{font-size:12px;color:var(--text-3);margin-top:4px;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mkt-card-end{font-size:11px;color:var(--text-3);margin-top:6px;display:flex;align-items:center;gap:4px}
+.mkt-card-btn{
+  display:block;width:100%;margin-top:10px;padding:10px;
+  background:var(--primary);color:#fff;border:none;border-radius:8px;
+  font-size:13px;font-weight:800;cursor:pointer;font-family:var(--font-d);
+  text-align:center;text-decoration:none;transition:.15s;
+}
+
+.mkt-card-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.mkt-card-btn{flex:1;min-width:100px;text-align:center}
+.mkt-card-btn-sec{background:transparent!important;color:var(--primary)!important;border:1.5px solid var(--primary)!important}
+.mkt-card-end{color:var(--text-2,#666);font-size:12px;margin-top:4px;text-decoration:none;display:block}
+a.mkt-card-end:hover{color:var(--primary,#E55A0C);text-decoration:underline}
+
+.mkt-card-btn:hover{background:#e04d10}
+
+/* Loading */
+.mkt-loading{text-align:center;padding:30px;color:var(--text-3);font-size:14px}
+
+/* Category icons */
+.cat-icon{font-size:24px}
+
+.wordmark{font-family:'Sora',sans-serif;font-weight:800;letter-spacing:-.04em;color:var(--text,#1D1D1F);display:inline-flex;align-items:baseline;line-height:1}
+.wm-dot{display:inline-block;width:.2em;height:.2em;border-radius:50%;background:#E55A0C;margin-left:2px;position:relative;top:-.52em;flex-shrink:0}
+.brand-lockup{display:inline-flex;align-items:center;gap:10px;text-decoration:none}
+</style>
+</head>
+<body>
+
+<header class="mkt-header">
+  <div class="mkt-logo brand-lockup"><svg width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100" height="100" rx="22" fill="#E55A0C"/>
+    <rect y="0" width="100" height="32" rx="22" fill="#C44D08"/>
+    <rect y="22" width="100" height="10" fill="#C44D08"/>
+    <rect x="18" y="40" width="64" height="2" rx="1" fill="rgba(255,255,255,0.20)"/>
+    <rect x="47" y="52" width="30" height="6" rx="3" fill="rgba(255,255,255,0.18)"/>
+    <rect x="47" y="63" width="20" height="5" rx="2.5" fill="rgba(255,255,255,0.10)"/>
+    <circle cx="33" cy="65" r="10" fill="#FFFFFF"/>
+  </svg><span class="wordmark" style="font-size:16px;color:#1D1D1F">Agenda<span class="wm-dot"></span></span></div>
+  <div class="mkt-search">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:#9C8070;flex-shrink:0"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="searchInput" placeholder="Buscar por nome ou cidade..." oninput="filtrar()">
+  </div>
+  <button class="btn-loc" onclick="localizarMe()">📍 Perto de mim</button>
+</header>
+
+<div class="mkt-filters">
+  <button class="fchip on" data-cat="" onclick="setCategoria(this,'')">🔍 Todos</button>
+  <button class="fchip" data-cat="beleza" onclick="setCategoria(this,'beleza')">✂️ Beleza</button>
+  <button class="fchip" data-cat="estetica" onclick="setCategoria(this,'estetica')">💅 Estética</button>
+  <button class="fchip" data-cat="saude" onclick="setCategoria(this,'saude')">🏥 Saúde</button>
+  <button class="fchip" data-cat="bem_estar" onclick="setCategoria(this,'bem_estar')">🧘 Bem-estar</button>
+  <button class="fchip" data-cat="pet" onclick="setCategoria(this,'pet')">🐾 Pet</button>
+  <button class="fchip" data-cat="domestico" onclick="setCategoria(this,'domestico')">🏠 Doméstico</button>
+  <button class="fchip" data-cat="personal" onclick="setCategoria(this,'personal')">💪 Personal</button>
+</div>
+
+<div class="mkt-layout">
+  <div id="mktMap"></div>
+  <div class="mkt-cards" id="mktCards">
+    <div class="mkt-loading">🗺️ Carregando profissionais...</div>
+  </div>
+</div>
+
+<script>
+const SUPA='https://acldrisohnjfekjxgmoh.supabase.co';
+const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFjbGRyaXNvaG5qZmVranhnbW9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1ODA1MzcsImV4cCI6MjA4OTE1NjUzN30.etojz12x1oVNvbW_fPeVpNx2OFuJ72C1YioFBlCLS2Y';
+
+var _todos=[], _markers={}, _catAtiva='', _map=null, _userMarker=null;
+
+const CAT_ICONS={
+  beleza:'✂️', estetica:'💅', saude:'🏥', bem_estar:'🧘',
+  pet:'🐾', domestico:'🏠', personal:'💪', default:'📋'
+};
+const CAT_LABELS={
+  beleza:'Beleza', estetica:'Estética', saude:'Saúde',
+  bem_estar:'Bem-estar', pet:'Pet Shop', domestico:'Serviços Domésticos',
+  personal:'Personal/Treinador'
+};
+
+// ── Init map ──
+function initMap(){
+  _map = L.map('mktMap').setView([-15.78, -47.93], 5); // Brazil center
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    maxZoom:19
+  }).addTo(_map);
+}
+
+// ── Custom marker icon ──
+function makeIcon(emoji){
+  return L.divIcon({
+    className:'',
+    html:'<div style="background:#FF5C1A;color:#fff;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 8px rgba(0,0,0,.3);border:2px solid #fff">'+emoji+'</div>',
+    iconSize:[34,34],iconAnchor:[17,17]
+  });
+}
+
+// ── Load saloes ──
+async function carregar(){
+  try{
+    var r=await fetch(SUPA+'/rest/v1/rpc/saloes_marketplace',{
+      method:'POST',
+      headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({})
+    });
+    if(!r.ok) throw new Error('RPC falhou: '+r.status);
+    var d=await r.json();
+    _todos=Array.isArray(d)?d:[];
+    if(_todos.length===0){
+      document.getElementById('mktCards').innerHTML=
+        '<div class="mkt-empty">Nenhum profissional cadastrado ainda.<br>Em breve mais profissionais na sua cidade!</div>';
+      return;
+    }
+    renderCards(_todos);
+    var comCoordenada=_todos.filter(function(s){return s.lat&&s.lng;});
+    if(comCoordenada.length) addMapMarkers(comCoordenada);
+  }catch(e){
+    console.error('Marketplace:',e);
+    document.getElementById('mktCards').innerHTML=
+      '<div class="mkt-empty">Erro ao carregar. Tente novamente.<br><small>'+e.message+'</small></div>';
+  }
+}
+
+// ── Add markers ──
+function addMapMarkers(lista){
+  // Clear old markers
+  Object.values(_markers).forEach(function(m){_map.removeLayer(m);});
+  _markers={};
+  var bounds=[];
+  lista.forEach(function(s){
+    if(!s.lat||!s.lng) return;
+    var icon=CAT_ICONS[s.categoria]||CAT_ICONS.default;
+    var m=L.marker([s.lat,s.lng],{icon:makeIcon(icon)})
+      .addTo(_map)
+      .bindPopup(
+        '<div style="font-family:Inter,sans-serif;min-width:160px">'+
+        '<div style="font-weight:800;font-size:14px;margin-bottom:4px">'+escHtml(s.nome)+'</div>'+
+        (s.descricao?'<div style="font-size:12px;color:#666;margin-bottom:8px">'+escHtml(s.descricao)+'</div>':'')+
+        '<a href="agendar.html?slug='+s.slug+'" style="display:block;background:#FF5C1A;color:#fff;padding:8px;border-radius:8px;text-align:center;font-weight:800;font-size:12px;text-decoration:none">📅 Agendar</a>'+
+        '</div>'
+      );
+    m.on('click',function(){highlightCard(s.slug);});
+    _markers[s.slug]=m;
+    bounds.push([s.lat,s.lng]);
+  });
+  if(bounds.length) _map.fitBounds(bounds,{padding:[30,30],maxZoom:14});
+}
+
+// ── Render cards ──
+function renderCards(lista){
+  var el=document.getElementById('mktCards');
+  if(!lista.length){
+    el.innerHTML='<div class="mkt-empty">Nenhum profissional encontrado.<br>Tente outra categoria ou cidade.</div>';
+    return;
+  }
+  el.innerHTML=lista.map(function(s){
+    var icon=CAT_ICONS[s.categoria]||CAT_ICONS.default;
+    var catLabel=CAT_LABELS[s.categoria]||'Profissional';
+    var agendarUrl='https://agendatop.vercel.app/agendar.html?slug='+s.slug;
+    var endereco=s.endereco||s.cidade||'';
+    var mapsUrl=endereco?'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(endereco+' '+( s.cidade||'')):'';
+    var endHtml=endereco
+      ? (mapsUrl
+          ? '<a href="'+mapsUrl+'" target="_blank" rel="noopener" class="mkt-card-end">📍 '+escHtml(endereco)+'</a>'
+          : '<div class="mkt-card-end">📍 '+escHtml(endereco)+'</div>')
+      : '';
+    return '<div class="mkt-card" id="card-'+s.slug+'" onclick="focusMarker(\''+s.slug+'\')">'+
+      '<div class="mkt-card-top">'+
+        '<div class="mkt-avatar">'+icon+'</div>'+
+        '<div class="mkt-card-info">'+
+          '<div class="mkt-card-nome">'+escHtml(s.nome)+'</div>'+
+          '<div class="mkt-card-cat">'+catLabel+'</div>'+
+          (s.descricao?'<div class="mkt-card-desc">'+escHtml(s.descricao)+'</div>':'')+
+          endHtml+
+        '</div>'+
+      '</div>'+
+      '<div class="mkt-card-actions">'+
+        '<a href="'+agendarUrl+'" class="mkt-card-btn" onclick="event.stopPropagation()">📅 Agendar</a>'+
+        (mapsUrl?'<a href="'+mapsUrl+'" target="_blank" rel="noopener" class="mkt-card-btn mkt-card-btn-sec" onclick="event.stopPropagation()">🗺️ Como chegar</a>':'')+ 
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+function escHtml(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function focusMarker(slug){
+  var m=_markers[slug];
+  if(m){ _map.setView(m.getLatLng(),15,{animate:true}); m.openPopup(); }
+  highlightCard(slug);
+}
+
+function highlightCard(slug){
+  document.querySelectorAll('.mkt-card').forEach(function(c){c.classList.remove('highlight');});
+  var c=document.getElementById('card-'+slug);
+  if(c){ c.classList.add('highlight'); c.scrollIntoView({behavior:'smooth',block:'nearest'}); }
+}
+
+// ── Filters ──
+function setCategoria(btn, cat){
+  document.querySelectorAll('.fchip').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  _catAtiva=cat;
+  filtrar();
+}
+
+function filtrar(){
+  var q=(document.getElementById('searchInput').value||'').toLowerCase().trim();
+  var lista=_todos.filter(function(s){
+    var matchCat=!_catAtiva||s.categoria===_catAtiva;
+    var matchQ=!q||
+      (s.nome||'').toLowerCase().includes(q)||
+      (s.cidade||'').toLowerCase().includes(q)||
+      (s.endereco||'').toLowerCase().includes(q)||
+      (s.descricao||'').toLowerCase().includes(q);
+    return matchCat&&matchQ;
+  });
+  renderCards(lista);
+  var comCoordenada=lista.filter(function(s){return s.lat&&s.lng;});
+  addMapMarkers(comCoordenada);
+  if(lista.length===0&&q){
+    document.getElementById('mktCards').innerHTML=
+      '<div class="mkt-empty">Nenhum resultado para "<strong>'+q+'</strong>".<br>Tente outra cidade ou categoria.</div>';
+  }
+}
+
+// ── Geolocation ──
+function localizarMe(){
+  if(!navigator.geolocation){alert('Geolocalização não suportada.');return;}
+  navigator.geolocation.getCurrentPosition(function(pos){
+    var lat=pos.coords.latitude, lng=pos.coords.longitude;
+    _map.setView([lat,lng],13,{animate:true});
+    if(_userMarker) _map.removeLayer(_userMarker);
+    _userMarker=L.marker([lat,lng],{
+      icon:L.divIcon({
+        className:'',
+        html:'<div style="width:14px;height:14px;background:#3b82f6;border:2px solid #fff;border-radius:50%;box-shadow:0 0 0 4px rgba(59,130,246,.25)"></div>',
+        iconSize:[14,14],iconAnchor:[7,7]
+      })
+    }).addTo(_map).bindPopup('Você está aqui').openPopup();
+
+    // Geocode reverse with Nominatim to get city
+    fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lng+'&format=json')
+      .then(function(r){return r.json();})
+      .then(function(d){
+        var city=d.address&&(d.address.city||d.address.town||d.address.municipality||'');
+        if(city){
+          document.getElementById('searchInput').value=city;
+          filtrar();
+        }
+      }).catch(function(){});
+  },function(){
+    alert('Não foi possível obter sua localização. Verifique as permissões.');
+  });
+}
+
+// ── Boot ──
+initMap();
+carregar();
+</script>
+</body>
+</html>

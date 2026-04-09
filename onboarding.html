@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="t-obsidian">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Configurar minha Agenda</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="stylesheet" href="/design-tokens.css?v=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-body,'Nunito Sans',sans-serif);background:#0C0A09;color:#fff;min-height:100vh;-webkit-font-smoothing:antialiased}
+
+.onb-wrap{max-width:480px;margin:0 auto;padding:0 20px 80px}
+
+/* Progress bar */
+.onb-progress-track{height:3px;background:rgba(255,255,255,.1);position:sticky;top:0;z-index:100}
+.onb-progress-fill{height:100%;background:#E55A0C;border-radius:2px;transition:width .4s ease}
+
+/* Steps */
+.onb-step{display:none;padding-top:40px;animation:fadeIn .3s ease}
+.onb-step.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.onb-icon{font-size:48px;margin-bottom:20px;display:block}
+.onb-title{font-family:'Sora',sans-serif;font-size:26px;font-weight:800;color:#fff;letter-spacing:-.02em;margin-bottom:8px;line-height:1.2}
+.onb-subtitle{font-size:15px;color:#9B9B9B;margin-bottom:28px;line-height:1.5}
+
+/* Fields */
+.onb-field{margin-bottom:16px}
+.onb-label{font-family:'Sora',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9B9B9B;display:block;margin-bottom:8px}
+.onb-input{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10);border-radius:12px;padding:14px 16px;font-size:16px;font-family:var(--font-body);color:#fff;outline:none;transition:.2s;-webkit-appearance:none}
+.onb-input::placeholder{color:#4A4A4A}
+.onb-input:focus{border-color:#E55A0C;box-shadow:0 0 0 3px rgba(229,90,12,.15)}
+select.onb-input{color:#fff}
+select.onb-input option{background:#1A1714;color:#fff}
+
+.onb-row-2{display:flex;gap:12px}
+.onb-row-2 .onb-field{flex:1;min-width:0}
+
+/* Buttons */
+.onb-btn-primary{display:block;width:100%;padding:16px;background:#E55A0C;color:#fff;border:none;border-radius:14px;font-family:'Sora',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:.2s;margin-bottom:10px;text-align:center}
+.onb-btn-primary:hover{background:#C44D08}
+.onb-btn-primary:active{transform:scale(.98)}
+.onb-btn-secondary{display:block;width:100%;padding:14px;background:rgba(255,255,255,.07);color:#fff;border:1px solid rgba(255,255,255,.12);border-radius:14px;font-family:'Sora',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:.2s;margin-bottom:10px;text-align:center}
+.onb-btn-secondary:hover{background:rgba(255,255,255,.12)}
+.onb-btn-ghost{display:block;width:100%;padding:12px;background:none;color:#9B9B9B;border:none;font-family:'Sora',sans-serif;font-size:14px;cursor:pointer;text-align:center;transition:.15s}
+.onb-btn-ghost:hover{color:#fff}
+
+/* Category grid */
+.onb-cats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
+.onb-cat{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);border-radius:12px;padding:16px 12px;cursor:pointer;text-align:center;transition:.15s}
+.onb-cat:hover{background:rgba(255,255,255,.09)}
+.onb-cat.sel{border-color:#E55A0C;background:rgba(229,90,12,.12)}
+.onb-cat-icon{font-size:28px;display:block;margin-bottom:6px}
+.onb-cat-label{font-family:'Sora',sans-serif;font-size:13px;font-weight:600;color:#fff}
+
+/* Presets */
+.onb-presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.onb-preset{background:rgba(229,90,12,.12);border:1px solid rgba(229,90,12,.3);border-radius:20px;padding:6px 14px;font-size:13px;font-weight:600;color:#E55A0C;cursor:pointer;transition:.15s}
+.onb-preset:hover{background:rgba(229,90,12,.2)}
+
+/* Dias da semana */
+.onb-dias{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.onb-dia-row{background:rgba(255,255,255,.05);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px}
+.onb-dia-check{width:20px;height:20px;accent-color:#E55A0C;cursor:pointer;flex-shrink:0}
+.onb-dia-nome{font-family:'Sora',sans-serif;font-size:14px;font-weight:600;color:#fff;min-width:80px;flex:1}
+.onb-dia-horarios{display:flex;align-items:center;gap:6px}
+.onb-input-time{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10);border-radius:8px;padding:6px 8px;font-size:13px;color:#fff;font-family:var(--font-body);outline:none;width:75px;text-align:center;-webkit-appearance:none}
+.onb-input-time:focus{border-color:#E55A0C}
+.onb-dia-sep{font-size:12px;color:#9B9B9B}
+
+/* Link box */
+.onb-link-box{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.onb-link-url{flex:1;font-size:13px;color:#E55A0C;word-break:break-all;font-weight:600}
+.onb-copy-btn{background:#E55A0C;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0;font-family:'Sora',sans-serif;transition:.15s}
+.onb-copy-btn:hover{background:#C44D08}
+.onb-copy-btn.copied{background:#34C759}
+
+/* Success step */
+.onb-success-check{width:72px;height:72px;background:rgba(52,199,89,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:32px}
+</style>
+</head>
+<body>
+<div class="onb-progress-track">
+  <div class="onb-progress-fill" id="progressFill" style="width:20%"></div>
+</div>
+
+<div class="onb-wrap">
+  <!-- ETAPA 1: Boas-vindas -->
+  <div class="onb-step active" data-step="1">
+    <span class="onb-icon">👋</span>
+    <h1 class="onb-title">Bem-vindo à Agenda!</h1>
+    <p class="onb-subtitle">Vamos configurar sua agenda em 4 passos rápidos. Leva menos de 3 minutos.</p>
+    <div class="onb-field">
+      <label class="onb-label">Como se chama seu negócio?</label>
+      <input class="onb-input" type="text" id="onbNome" placeholder="Ex: Studio da Maria" autocomplete="organization" autofocus>
+    </div>
+    <button class="onb-btn-primary" onclick="avancar(1)">Continuar →</button>
+  </div>
+
+  <!-- ETAPA 2: Categoria -->
+  <div class="onb-step" data-step="2">
+    <span class="onb-icon">🎯</span>
+    <h1 class="onb-title">Qual é o seu segmento?</h1>
+    <p class="onb-subtitle">Vamos sugerir serviços para facilitar sua configuração.</p>
+    <div class="onb-cats">
+      <div class="onb-cat" data-cat="beleza" onclick="selecionarCat(this)">
+        <span class="onb-cat-icon">✂️</span><span class="onb-cat-label">Beleza & Cabelo</span>
+      </div>
+      <div class="onb-cat" data-cat="estetica" onclick="selecionarCat(this)">
+        <span class="onb-cat-icon">💅</span><span class="onb-cat-label">Estética</span>
+      </div>
+      <div class="onb-cat" data-cat="saude" onclick="selecionarCat(this)">
+        <span class="onb-cat-icon">🦷</span><span class="onb-cat-label">Saúde</span>
+      </div>
+      <div class="onb-cat" data-cat="bem_estar" onclick="selecionarCat(this)">
+        <span class="onb-cat-icon">🧘</span><span class="onb-cat-label">Bem-estar</span>
+      </div>
+      <div class="onb-cat" data-cat="domestico" onclick="selecionarCat(this)">
+        <span class="onb-cat-icon">🏠</span><span class="onb-cat-label">Serviços Domésticos</span>
+      </div>
+      <div class="onb-cat" data-cat="pet" onclick="selecionarCat(this)">
+        <span class="onb-cat-icon">🐾</span><span class="onb-cat-label">Pet</span>
+      </div>
+      <div class="onb-cat" data-cat="personal" onclick="selecionarCat(this)">
+        <span class="onb-cat-icon">💪</span><span class="onb-cat-label">Personal</span>
+      </div>
+      <div class="onb-cat" data-cat="outro" onclick="selecionarCat(this)">
+        <span class="onb-cat-icon">📋</span><span class="onb-cat-label">Outro</span>
+      </div>
+    </div>
+    <button class="onb-btn-primary" onclick="avancar(2)">Continuar →</button>
+    <button class="onb-btn-ghost" onclick="voltar(2)">← Voltar</button>
+  </div>
+
+  <!-- ETAPA 3: Primeiro serviço -->
+  <div class="onb-step" data-step="3">
+    <span class="onb-icon">⚡</span>
+    <h1 class="onb-title">Seu primeiro serviço</h1>
+    <p class="onb-subtitle">Você pode adicionar mais depois no painel.</p>
+    <div class="onb-presets" id="onbPresets"></div>
+    <div class="onb-field">
+      <label class="onb-label">Nome do serviço</label>
+      <input class="onb-input" type="text" id="onbServNome" placeholder="Ex: Corte de Cabelo">
+    </div>
+    <div class="onb-row-2">
+      <div class="onb-field">
+        <label class="onb-label">Duração</label>
+        <select class="onb-input" id="onbServDur">
+          <option value="30">30 min</option>
+          <option value="45">45 min</option>
+          <option value="60" selected>60 min</option>
+          <option value="90">90 min</option>
+          <option value="120">2 horas</option>
+        </select>
+      </div>
+      <div class="onb-field">
+        <label class="onb-label">Preço (R$)</label>
+        <input class="onb-input" type="number" id="onbServPreco" placeholder="50" min="0" step="1">
+      </div>
+    </div>
+    <button class="onb-btn-primary" onclick="salvarServico()">Continuar →</button>
+    <button class="onb-btn-ghost" onclick="pular(3)">Pular por agora</button>
+    <button class="onb-btn-ghost" onclick="voltar(3)">← Voltar</button>
+  </div>
+
+  <!-- ETAPA 4: Horários -->
+  <div class="onb-step" data-step="4">
+    <span class="onb-icon">🕐</span>
+    <h1 class="onb-title">Quando você atende?</h1>
+    <p class="onb-subtitle">Selecione os dias e horários. Pode ajustar depois.</p>
+    <div class="onb-dias" id="onbDias"></div>
+    <button class="onb-btn-primary" onclick="salvarHorarios()">Continuar →</button>
+    <button class="onb-btn-ghost" onclick="pular(4)">Pular por agora</button>
+    <button class="onb-btn-ghost" onclick="voltar(4)">← Voltar</button>
+  </div>
+
+  <!-- ETAPA 5: Pronto! -->
+  <div class="onb-step" data-step="5">
+    <div style="text-align:center;padding-top:20px">
+      <div class="onb-success-check">🎉</div>
+      <h1 class="onb-title" style="text-align:center">Sua Agenda está pronta!</h1>
+      <p class="onb-subtitle" style="text-align:center">Compartilhe seu link com seus clientes e comece a receber agendamentos.</p>
+    </div>
+    <div class="onb-link-box">
+      <span class="onb-link-url" id="onbLinkUrl">—</span>
+      <button class="onb-copy-btn" id="onbCopyBtn" onclick="copiarLink()">Copiar</button>
+    </div>
+    <a class="onb-btn-primary" id="onbVerPagina" href="#" target="_blank" style="text-decoration:none;display:block;text-align:center">Ver minha página →</a>
+    <button class="onb-btn-secondary" onclick="irParaPainel()">Ir para o painel</button>
+  </div>
+</div>
+
+<script>
+var SUPA='https://acldrisohnjfekjxgmoh.supabase.co';
+var KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFjbGRyaXNvaG5qZmVranhnbW9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1ODA1MzcsImV4cCI6MjA4OTE1NjUzN30.etojz12x1oVNvbW_fPeVpNx2OFuJ72C1YioFBlCLS2Y';
+var SK='cortai_painel_v4';
+var BASE='https://cortai-five.vercel.app';
+
+var etapa=1;
+var dados={nome:'',cat:'',slug:''};
+
+var PRESETS={
+  beleza:['Corte de Cabelo','Coloração','Escova','Manicure','Pedicure','Barba'],
+  estetica:['Limpeza de Pele','Design de Sobrancelha','Depilação','Massagem Relaxante'],
+  saude:['Consulta','Retorno','Avaliação','Procedimento'],
+  bem_estar:['Yoga','Pilates','Personal Training','Meditação'],
+  domestico:['Diária Completa','Meia Diária','Limpeza Pesada','Passagem de Roupa'],
+  pet:['Banho','Tosa','Banho e Tosa','Consulta Veterinária'],
+  personal:['Treino Individual','Avaliação Física','Consultoria','Plano de Treino'],
+  outro:['Consulta','Serviço','Atendimento','Sessão']
+};
+
+var DIAS_NOMES=['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+
+function carregarSessao(){
+  try{return JSON.parse(localStorage.getItem(SK)||'null');}catch(e){return null;}
+}
+
+function irParaEtapa(n){
+  document.querySelector('[data-step="'+etapa+'"]').classList.remove('active');
+  etapa=n;
+  document.querySelector('[data-step="'+n+'"]').classList.add('active');
+  document.getElementById('progressFill').style.width=(n*20)+'%';
+  window.scrollTo(0,0);
+  if(n===4) renderDias();
+}
+
+function avancar(atual){
+  if(atual===1){
+    var nome=document.getElementById('onbNome').value.trim();
+    if(!nome){alert('Por favor, insira o nome do seu negócio.');return;}
+    dados.nome=nome;
+    salvarNome(nome);
+  }
+  if(atual===2&&!dados.cat){alert('Selecione uma categoria.');return;}
+  irParaEtapa(atual+1);
+}
+function voltar(atual){irParaEtapa(atual-1);}
+function pular(atual){irParaEtapa(atual+1);}
+
+function selecionarCat(el){
+  document.querySelectorAll('.onb-cat').forEach(function(c){c.classList.remove('sel');});
+  el.classList.add('sel');
+  dados.cat=el.dataset.cat;
+  var presets=PRESETS[dados.cat]||[];
+  var c=document.getElementById('onbPresets');
+  if(c) c.innerHTML=presets.map(function(p){
+    return '<span class="onb-preset" onclick="document.getElementById(\'onbServNome\').value=\''+p+'\'">'+p+'</span>';
+  }).join('');
+}
+
+function renderDias(){
+  var dias=[1,2,3,4,5,6,0]; // Seg→Dom
+  var html=dias.map(function(d){
+    var checked=d!==0?'checked':'';
+    return '<div class="onb-dia-row">'+
+      '<input type="checkbox" class="onb-dia-check" id="dia-'+d+'" '+checked+'>'+
+      '<label class="onb-dia-nome" for="dia-'+d+'">'+DIAS_NOMES[d]+'</label>'+
+      '<div class="onb-dia-horarios">'+
+        '<input class="onb-input-time" type="time" id="ini-'+d+'" value="09:00">'+
+        '<span class="onb-dia-sep">às</span>'+
+        '<input class="onb-input-time" type="time" id="fim-'+d+'" value="18:00">'+
+      '</div>'+
+    '</div>';
+  }).join('');
+  document.getElementById('onbDias').innerHTML=html;
+}
+
+async function salvarNome(nome){
+  try{
+    var s=carregarSessao();
+    if(!s) return;
+    dados.slug=s.slug;
+    await fetch(SUPA+'/rest/v1/rpc/salvar_perfil_salao',{
+      method:'POST',
+      headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({p_slug:s.slug,p_senha:'',p_dados:{nome:nome}})
+    });
+  }catch(e){}
+}
+
+async function salvarServico(){
+  var nome=document.getElementById('onbServNome').value.trim();
+  if(!nome){alert('Insira o nome do serviço.');return;}
+  var dur=parseInt(document.getElementById('onbServDur').value)||60;
+  var preco=Math.round((parseFloat(document.getElementById('onbServPreco').value)||0)*100);
+  try{
+    var s=carregarSessao();
+    if(!s){irParaEtapa(4);return;}
+    await fetch(SUPA+'/rest/v1/servicos',{
+      method:'POST',
+      headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+      body:JSON.stringify({salao_id:s.id,icone:'📋',nome:nome,preco:preco,duracao:dur,ativo:true,ordem:1})
+    });
+    irParaEtapa(4);
+  }catch(e){alert('Erro ao salvar. Tente novamente.');}
+}
+
+async function salvarHorarios(){
+  try{
+    var s=carregarSessao();
+    if(!s){irParaEtapa(5);mostrarLink();return;}
+    var horario={};
+    [0,1,2,3,4,5,6].forEach(function(d){
+      var cb=document.getElementById('dia-'+d);
+      if(cb&&cb.checked){
+        var ini=document.getElementById('ini-'+d);
+        var fim=document.getElementById('fim-'+d);
+        horario[String(d)]={ini:(ini?ini.value:'09:00'),fim:(fim?fim.value:'18:00')};
+      } else {
+        horario[String(d)]=null;
+      }
+    });
+    await fetch(SUPA+'/rest/v1/saloes?slug=eq.'+s.slug,{
+      method:'PATCH',
+      headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+      body:JSON.stringify({horario:horario})
+    });
+  }catch(e){}
+  irParaEtapa(5);
+  mostrarLink();
+}
+
+function mostrarLink(){
+  var s=carregarSessao();
+  var slug=s?s.slug:(dados.slug||'');
+  if(!slug) return;
+  var url=BASE+'/agendar.html?slug='+slug;
+  var el=document.getElementById('onbLinkUrl');
+  var btn=document.getElementById('onbVerPagina');
+  if(el) el.textContent=url.replace('https://','');
+  if(btn) btn.href=url;
+}
+
+function copiarLink(){
+  var el=document.getElementById('onbLinkUrl');
+  var btn=document.getElementById('onbCopyBtn');
+  if(!el) return;
+  var txt='https://'+el.textContent;
+  navigator.clipboard.writeText(txt).then(function(){
+    if(btn){btn.textContent='Copiado ✓';btn.classList.add('copied');
+      setTimeout(function(){btn.textContent='Copiar';btn.classList.remove('copied');},2000);}
+  }).catch(function(){});
+}
+
+function irParaPainel(){window.location.href='/painel.html';}
+
+// Check session on load
+(function(){
+  var s=carregarSessao();
+  if(!s){window.location.href='/painel.html';}
+  else{dados.slug=s.slug;}
+})();
+</script>
+</body>
+</html>

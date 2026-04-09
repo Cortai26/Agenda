@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /painel.html
+Disallow: /admin.html
+Disallow: /cadastro.html
+Allow: /agendar.html
+Allow: /index.html
+Allow: /meus-agendamentos.html
+
+Sitemap: https://cortai-five.vercel.app/sitemap.xml
