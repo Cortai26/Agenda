@@ -762,11 +762,10 @@ async function salvarManual(){
     });
     fecharManual();
     if(typeof toast==='function') toast('\u2713 Agendamento salvo!','ok');
-    if(typeof renderDrill==='function'&&window._drillDia===data){
-      renderDrill(data);
-    } else if(typeof renderAgenda==='function'){
-      _tabOk.agenda=false; renderAgenda();
-    }
+    await _recarregarCalDados();
+    renderCalendar();
+    if(window._drillDia) await renderDrill(window._drillDia);
+    if(typeof renderAgenda==='function'){ _tabOk.agenda=false; renderAgenda(); }
   }catch(e){
     if(btn){btn.disabled=false;btn.textContent='\u2713 Confirmar agendamento';}
     if(errEl){errEl.textContent='Erro: '+e.message;errEl.style.display='block';}
