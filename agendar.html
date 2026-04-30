@@ -535,7 +535,7 @@ html.t-onyx .dia-card.ativo .d-mes { color: rgba(19,19,19,.7); }
 }
 .h-btn {
   padding: 11px 4px;
-  min-height: 44px;
+  min-height: 48px;
   background: var(--c-surface-2);
   border: 1.5px solid var(--c-border);
   border-radius: var(--r-md);
@@ -573,7 +573,14 @@ html.t-onyx .dia-card.ativo .d-mes { color: rgba(19,19,19,.7); }
 html.t-onyx .h-btn.sel { color: #131313; font-weight: 900; }
 html.t-feminine .h-btn.sel { color: #fff; }
 
-html.t-onyx .h-btn { border-radius: var(--r-sm); font-family: 'Manrope', sans-serif; letter-spacing: .3px; }
+html.t-onyx .h-btn {
+  border-radius: var(--r-sm);
+  font-family: 'Manrope', sans-serif;
+  letter-spacing: .3px;
+  background: #2A2A2A;
+  color: #E5E2E1;
+  border-color: rgba(255,255,255,0.1);
+}
 html.t-neutral .h-btn {
   background: #FFFFFF;
   border-color: #D4C4B0;
@@ -647,8 +654,8 @@ html.t-onyx .ag-input::placeholder { color: var(--c-text-3); }
 .btn-ag {
   width: 100%;
   padding: 16px;
-  background: var(--c-primary);
-  color: var(--c-bg);
+  background: var(--c-primary) !important;
+  color: #FFFFFF !important;
   border: none;
   border-radius: var(--r-xl);
   font-family: var(--font-head);

@@ -13,6 +13,7 @@ function renderTema(){
     {cls:'t-onyx',     label:'Onyx',     sub:'Dark elegante',    color:'#212121', border:'rgba(255,255,255,.2)'},
     {cls:'t-feminine', label:'Feminine', sub:'Rosa · estética',  color:'#FFE4EC', border:'rgba(200,100,120,.3)'},
     {cls:'t-neutral',  label:'Neutral',  sub:'Bege · clean',     color:'#F5F0E8', border:'rgba(200,180,160,.4)'},
+    {cls:'t-clinic',   label:'Clinic',   sub:'Azul · saúde',     color:'#F4F8FB', border:'rgba(44,111,170,.3)'},
   ];
 
   var html='<div class="perfil-tit sec-collapse" onclick="if(typeof toggleSec===\'function\')toggleSec(this)">Tema visual</div><div class="sec-body">';

@@ -261,6 +261,80 @@
       --r-xs: 4px;
     }
 
+    /* ── TEMA t-clinic — Saúde · Bem-estar · Fitness ── */
+    html.t-clinic {
+      --bg: #F4F8FB;
+      --s1: #FFFFFF;
+      --s2: #E8F1F8;
+      --s3: #D4E5F2;
+      --bd: rgba(44,111,170,.15);
+      --bd2: rgba(44,111,170,.25);
+      --primary: #2C6FAA;
+      --primary-d: #1A4E7A;
+      --primary-bg: rgba(44,111,170,.08);
+      --primary-glow: rgba(44,111,170,.2);
+      --tx: #1C3A5E;
+      --tx2: #3A6080;
+      --tx3: #5A7A9A;
+      --green: #16A34A;
+      --green-bg: rgba(22,163,74,.08);
+      --red: #DC2626;
+      --red-bg: rgba(220,38,38,.07);
+      --amber: #D97706;
+      --amber-bg: rgba(217,119,6,.08);
+      --blue: #2C6FAA;
+      --r-sm: 8px;
+      --r-md: 12px;
+      --r-lg: 16px;
+      --r-xl: 22px;
+      --sh: 0 1px 6px rgba(28,58,94,.06);
+      --sh-lg: 0 4px 20px rgba(28,58,94,.1);
+      --font-h: 'Syne', sans-serif;
+      --font-b: 'Nunito', sans-serif;
+      --sidebar-w: 220px;
+      --sidebar-bg: #FFFFFF;
+      --sidebar-border: #D4E5F2;
+      --sidebar-active-bg: rgba(44,111,170,.1);
+      --sidebar-active-color: var(--primary);
+      --sidebar-text: #3A6080;
+      --sidebar-text-hover: #1C3A5E;
+      --topbar-bg: #FFFFFF;
+      --card-bg: #FFFFFF;
+      --card-border: #D4E5F2;
+      --input-bg: #E8F1F8;
+      --btn-primary-bg: var(--primary);
+      --btn-primary-text: #FFFFFF;
+      --badge-active-bg: rgba(44,111,170,.1);
+      --badge-active-text: var(--primary);
+      --badge-trial-bg: rgba(217,119,6,.1);
+      --badge-trial-text: var(--amber);
+      --badge-cancel-bg: rgba(220,38,38,.08);
+      --badge-cancel-text: var(--red);
+      --sparkbar: #DBEAFE;
+      --sparkbar-active: var(--primary);
+      --table-border: #D4E5F2;
+      --table-hover: #F4F8FB;
+      --bg-card: var(--s2);
+      --bg-card-2: var(--s3);
+      --bg-input: var(--input-bg);
+      --bg-topbar: var(--topbar-bg);
+      --text: var(--tx);
+      --text-2: var(--tx2);
+      --text-3: var(--tx3);
+      --sep: var(--bd);
+      --sep-2: var(--bd2);
+      --sep-strong: var(--bd2);
+      --border: var(--bd);
+      --border-2: var(--bd2);
+      --surface-2: var(--s2);
+      --surface-3: var(--s3);
+      --primary-light: var(--primary-bg);
+      --primary-shadow: var(--primary-glow);
+      --font-brand: var(--font-h);
+      --font-body: var(--font-b);
+      --r-xs: 4px;
+    }
+
     body {
       background: var(--bg);
       color: var(--text);
@@ -487,6 +561,9 @@
       overflow: hidden;
       text-overflow: ellipsis;
       min-width: 0;
+    }
+    @media(max-width:480px) {
+      .topbar-name { display: none; }
     }
 
     .topbar-actions {
@@ -2778,7 +2855,7 @@
       padding: 0 0 14px
     }
 
-    @media(max-width:380px) {
+    @media(max-width:480px) {
       .metrics {
         grid-template-columns: 1fr 1fr
       }

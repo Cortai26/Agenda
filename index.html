@@ -76,8 +76,8 @@ h1 em{font-style:normal;color:var(--primary)}
 .hero-btns{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:400px;margin:0 auto 40px}
 .btn-a{background:var(--primary);color:#fff;padding:18px 36px;border-radius:14px;font-size:17px;font-weight:800;text-decoration:none;font-family:var(--font-d);transition:.2s;box-shadow:0 8px 32px var(--primary-glow);display:flex;align-items:center;gap:8px;justify-content:center;width:100%}
 .btn-a:hover{background:var(--primary-d);transform:translateY(-2px);box-shadow:0 12px 40px var(--primary-glow)}
-.btn-b{background:var(--dark-4);color:var(--text);padding:15px 28px;border-radius:12px;font-size:14px;font-weight:700;text-decoration:none;transition:.2s;border:1px solid var(--border-2);display:flex;align-items:center;gap:6px;justify-content:center;width:100%}
-.btn-b:hover{background:var(--dark-5);border-color:rgba(255,255,255,.2)}
+.btn-b{background:transparent;color:var(--muted);padding:12px 20px;border-radius:12px;font-size:14px;font-weight:600;text-decoration:none;transition:.2s;display:flex;align-items:center;gap:6px;justify-content:center;width:100%}
+.btn-b:hover{color:var(--text)}
 .hero-proof{font-size:13px;color:var(--muted-2);font-weight:600;display:flex;align-items:center;gap:6px;justify-content:center}
 .hero-proof strong{color:var(--primary)}
 
@@ -137,6 +137,10 @@ h1 em{font-style:normal;color:var(--primary)}
 .plano{background:var(--dark-3);border:1px solid var(--border);border-radius:20px;padding:28px;text-align:left;position:relative;transition:.2s}
 .plano:hover{border-color:var(--border-2);transform:translateY(-3px)}
 .plano.hot{border-color:var(--primary);background:linear-gradient(135deg,var(--dark-3),rgba(255,92,26,.05))}
+.plano.top{border-color:rgba(229,90,12,.35);background:var(--dark-3);box-shadow:0 8px 32px rgba(229,90,12,.12),0 2px 8px rgba(0,0,0,.2);transform:scale(1.02);padding:32px 28px;z-index:1}
+.plano.top:hover{transform:scale(1.02) translateY(-3px)}
+.plano-badge{display:none}
+.plano.top .plano-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--primary);margin-bottom:10px}
 .plano-tag{display:inline-block;background:var(--primary);color:#fff;font-size:10px;font-weight:800;padding:4px 12px;border-radius:20px;margin-bottom:14px;letter-spacing:.5px}
 .plano-n{font-family:var(--font-d);font-size:20px;font-weight:800;color:var(--white);margin-bottom:6px}
 .plano-p{font-family:var(--font-d);font-size:42px;font-weight:800;color:var(--primary);line-height:1;margin-bottom:12px}
@@ -404,7 +408,8 @@ footer strong{color:var(--text);font-weight:800}
         <a href="cadastro.html?plano=equipe" class="btn-p btn-p-fill">Começar agora →</a>
       </div>
 
-      <div class="plano rv">
+      <div class="plano top rv">
+        <div class="plano-badge">✦ Melhor custo por vaga</div>
         <div class="plano-n">Negócio</div>
         <div class="plano-p"><sup>R$</sup>140<sub>/mês</sub></div>
         <div class="plano-desc">Para negócios com equipe completa e alto volume.</div>
@@ -416,7 +421,7 @@ footer strong{color:var(--text);font-weight:800}
           <li>Personalização total</li>
           <li>Suporte prioritário WhatsApp</li>
         </ul>
-        <a href="cadastro.html?plano=negocio" class="btn-p btn-p-out">Testar 14 dias grátis</a>
+        <a href="cadastro.html?plano=negocio" class="btn-p btn-p-fill">Testar 14 dias grátis</a>
       </div>
 
     </div>
