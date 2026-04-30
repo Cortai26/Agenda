@@ -36,9 +36,9 @@ async function renderClientes(page){
     });
   }
   html+='</div>';
-  html+='<div class="reeng-hdr"><div class="reeng-tit">🔔 Sem agendar há +30 dias'+(inativos.length>0?'<span class="rb">'+inativos.length+'</span>':'')+'</div></div>';
-  html+='<div class="reeng-sub">Clientes que não agendaram há mais de 30 dias. Um WhatsApp pode trazer eles de volta! 💬</div>';
-  html+='<div class="lista"><div class="lista-hdr"><h3>Inativos</h3><span class="tag-c" style="background:rgba(245,158,11,.1);color:var(--AM)">'+inativos.length+' cliente'+(inativos.length!==1?'s':'')+'</span></div>';
+  html+='<div class="lista" style="margin-top:14px">';
+  html+='<div class="lista-hdr"><div class="reeng-tit">🔔 Sem agendar há +30 dias'+(inativos.length>0?'<span class="rb">'+inativos.length+'</span>':'')+'</div><span class="tag-c" style="background:rgba(245,158,11,.1);color:var(--AM)">'+inativos.length+' cliente'+(inativos.length!==1?'s':'')+'</span></div>';
+  html+='<div class="reeng-sub" style="padding:0 16px 10px">Clientes sem agendamento há mais de 30 dias. Um WhatsApp pode trazer eles de volta! 💬</div>';
   if(inativos.length===0){
     html+='<div class="empty" style="color:var(--VD)">🎉 Todos agendaram recentemente!</div>';
   } else {

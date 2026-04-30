@@ -220,12 +220,36 @@ async function carregar(){
     }
     renderCards(_todos);
     var comCoordenada=_todos.filter(function(s){return s.lat&&s.lng;});
+    var semCoordenada=_todos.filter(function(s){return !s.lat&&!s.lng&&(s.endereco||s.cidade);});
     if(comCoordenada.length) addMapMarkers(comCoordenada);
+    if(semCoordenada.length) geocodeAndAddMarkers(semCoordenada);
   }catch(e){
     console.error('Marketplace:',e);
     document.getElementById('mktCards').innerHTML=
       '<div class="mkt-empty">Erro ao carregar. Tente novamente.<br><small>'+e.message+'</small></div>';
   }
+}
+
+// ── Geocode establishments that have address but no coordinates ──
+async function geocodeAndAddMarkers(lista){
+  for(var i=0;i<lista.length;i++){
+    var s=lista[i];
+    var q=[s.endereco,s.cidade,'Brasil'].filter(Boolean).join(', ');
+    try{
+      var r=await fetch('https://nominatim.openstreetmap.org/search?q='+encodeURIComponent(q)+'&format=json&limit=1&countrycodes=br');
+      var gd=await r.json();
+      if(gd&&gd[0]){
+        var lat=parseFloat(gd[0].lat), lng=parseFloat(gd[0].lon);
+        var idx=_todos.findIndex(function(t){return t.slug===s.slug;});
+        if(idx>=0){_todos[idx].lat=lat;_todos[idx].lng=lng;}
+        lista[i]=Object.assign({},s,{lat:lat,lng:lng});
+      }
+    }catch(e){console.warn('Geocode falhou para '+s.nome,e);}
+    // Nominatim rate limit: 1 req/sec
+    if(i<lista.length-1) await new Promise(function(res){setTimeout(res,1100);});
+  }
+  var todos=_todos.filter(function(s){return s.lat&&s.lng;});
+  if(todos.length) addMapMarkers(todos);
 }
 
 // ── Add markers ──
