@@ -1062,18 +1062,27 @@ input.fi:focus{
 @media(max-width:400px){.kpi-grid{grid-template-columns:1fr 1fr}.kpi-card:nth-child(3){grid-column:1/-1}}
 </style>
 <script>
-function enviarWhatsApp(tel, pix, nome, valor, venc){
+function enviarWhatsApp(tel, pix, nome, valor, venc, link){
   if(!tel){alert('Telefone do estabelecimento não cadastrado.');return;}
   var num=tel.replace(/\D/g,'');
   if(!num.startsWith('55')) num='55'+num;
   var msg='Olá '+nome+'! 👋\n\n'
     +'Segue sua cobrança Agenda 💈\n'
     +'💰 Valor: R$'+valor+'\n'
-    +(venc?'📅 Vencimento: '+venc+'\n':'')
-    +'\n⚡ *PIX Copia e Cola:*\n'+pix+'\n\n'
-    +'Copie o código acima e pague pelo app do seu banco. Qualquer dúvida é só chamar!';
+    +(venc?'📅 Vencimento: '+venc+'\n':'');
+  if(pix){
+    msg+='\n⚡ *PIX Copia e Cola:*\n'+pix+'\n\nCopie o código acima e pague pelo app do seu banco.';
+  } else if(link){
+    msg+='\n💳 *Link de pagamento:*\n'+link+'\n\nAcesse o link para efetuar o pagamento.';
+  }
+  msg+='\n\nQualquer dúvida é só chamar!';
   var url='https://wa.me/'+num+'?text='+encodeURIComponent(msg);
   window.open(url,'_blank');
+}
+function enviarWhatsAppById(id){
+  var c=(window._cobsData||{})[id];
+  if(!c){alert('Dados não encontrados.');return;}
+  enviarWhatsApp(c.tel,c.pix,c.nome,c.valor,c.venc,c.link);
 }
 </script>
 </head>
@@ -1619,12 +1628,23 @@ async function renderCobrancas(el){
     OVERDUE:'cancelado', CANCELLED:'cancelado', REFUNDED:'cancelado'
   };
 
+  // Build lookup map so WhatsApp handler doesn't need long strings in onclick
+  window._cobsData = {};
+  list.forEach(c=>{
+    const s=saloes.find(x=>x.id===c.salao_id)||{};
+    const nome=c.salao_nome&&c.salao_nome!=='—'?c.salao_nome:(s.nome||'—');
+    const tel=(s.fat_celular||s.telefone||c.salao_tel||'').replace(/\D/g,'');
+    const id=c.asaas_id||c.id||'';
+    window._cobsData[id]={tel,pix:c.pix_copia_cola||'',nome,valor:((c.valor||0)/100).toFixed(2),venc:c.vencimento?fmtData(c.vencimento):'',link:c.link_pagamento||''};
+  });
+
   let html='<div class="adm-card">';
   html+=`<div class="adm-card-hdr">
     <span class="adm-card-title">💳 Cobranças <span style="font-size:11px;font-weight:600;color:var(--tx3)">(${total} no Asaas)</span></span>
-    <div style="display:flex;gap:8px">
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="btn-add" onclick="criarCobrancaTeste()">+ Teste R$1</button>
       <button class="btn-add" onclick="criarCobranca()">+ Nova cobrança</button>
+      <button class="btn-add" onclick="criarAssinatura()" style="background:var(--primary-bg);color:var(--primary);border:1px solid var(--primary)">♻️ Recorrente</button>
       <button class="btn-add" onclick="exportarRelatorio()" style="background:var(--s2);color:var(--tx)">📊 Exportar</button>
     </div>
   </div>`;
@@ -1652,11 +1672,12 @@ async function renderCobrancas(el){
       const valFmt='R$'+((c.valor||0)/100).toFixed(2);
       const asaas_id=c.asaas_id||c.id||'';
 
+      const hasWa = tel && (c.link_pagamento || c.pix_copia_cola);
       html+=`<tr>
         <td><div class="t-biz">
           <div class="t-biz-icon">✂️</div>
           <div>
-            <div class="t-biz-name">${esc(nome)}</div>
+            <div class="t-biz-name">${esc(nome)}${c.is_recorrente?' <span title="Recorrente" style="font-size:10px">♻️</span>':''}</div>
             ${c.descricao?`<div style="font-size:10px;color:var(--tx3)">${esc(c.descricao)}</div>`:''}
           </div>
         </div></td>
@@ -1667,7 +1688,7 @@ async function renderCobrancas(el){
         <td style="text-align:right;display:flex;gap:4px;justify-content:flex-end;flex-wrap:wrap">
           ${c.link_pagamento?`<button class="t-actions" title="Abrir link" onclick="openLink('${c.link_pagamento}')">🔗</button>`:''}
           ${c.pix_copia_cola?`<button class="t-actions" title="Copiar PIX" onclick="copiarPix('${c.pix_copia_cola.replace(/'/g,'').replace(/`/g,'')}')">📋</button>`:''}
-          ${c.pix_copia_cola&&tel?`<button class="t-actions" title="Enviar WhatsApp" onclick="enviarWhatsApp('${tel}','${c.pix_copia_cola.replace(/'/g,'').replace(/`/g,'')}','${esc(nome)}','${((c.valor||0)/100).toFixed(2)}','${c.vencimento||''}')" style="background:#25D366;color:#fff">📲</button>`:''}
+          ${hasWa?`<button class="t-actions" title="Enviar WhatsApp" onclick="enviarWhatsAppById('${asaas_id}')" style="background:#25D366;color:#fff">📲</button>`:''}
           ${c.status!=='RECEIVED'&&c.status!=='CONFIRMED'&&c.status!=='CANCELLED'&&asaas_id?`<button class="t-actions" title="Cancelar" onclick="cancelarCobAsaas('${asaas_id}')">❌</button>`:''}
           ${c.status==='RECEIVED'||c.status==='CONFIRMED'?`<span style="font-size:11px;color:#4ADE80;font-weight:700">✓ Pago</span>`:''}
         </td>
@@ -1892,6 +1913,148 @@ async function confirmarCobranca(){
   }catch(e){
     console.error('[criarCobranca] exception:', e);
     if(btn){btn.disabled=false;btn.textContent='Gerar Cobrança';}
+    errEl.textContent='Erro de conexão: '+e.message;
+    errEl.style.display='block';
+  }
+}
+
+async function criarAssinatura(){
+  const salaoBtns=(clientes||[]).map(c=>{
+    const fatCpf=c.fat_cpf_cnpj||c.cpf_cnpj||'';
+    const cpfMasked=fatCpf?fatCpf.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/,'$1.$2.$3-$4'):'';
+    return `<option value="${c.id}" data-slug="${c.slug}" data-nome="${esc(c.fat_nome||c.nome)}" data-email="${esc(c.fat_email||c.email||'')}" data-tel="${esc(c.fat_celular||c.telefone||'')}" data-cpf="${esc(fatCpf)}">${esc(c.nome)} (${c.slug})${cpfMasked?' · '+cpfMasked:' ⚠️ sem CPF'}</option>`;
+  }).join('');
+  const html=`<div>
+    <div style="font-size:16px;font-weight:800;color:var(--tx);margin-bottom:4px">♻️ Nova Assinatura Recorrente</div>
+    <div style="font-size:11px;color:var(--tx3);margin-bottom:16px">Cobrança automática mensal via Asaas.</div>
+    <div style="margin-bottom:12px">
+      <label style="font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;display:block;margin-bottom:5px">ESTABELECIMENTO *</label>
+      <select id="asSalao" onchange="asAutoFill(this)" style="width:100%;padding:9px 10px;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r-md);color:var(--tx);font-size:13px">
+        <option value="">— Selecione —</option>${salaoBtns}
+      </select>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div>
+        <label style="font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;display:block;margin-bottom:5px">PLANO *</label>
+        <select id="asPlano" onchange="asUpdateValor()" style="width:100%;padding:9px 10px;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r-md);color:var(--tx);font-size:13px">
+          <option value="basico">Solo — R$35/mês</option>
+          <option value="pro">Profissional — R$70/mês</option>
+          <option value="salao">Salão — R$140/mês</option>
+          <option value="custom">Valor personalizado</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;display:block;margin-bottom:5px">VALOR (R$/mês) *</label>
+        <input id="asValor" type="number" min="1" step="0.01" value="35" readonly style="width:100%;padding:9px 10px;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r-md);color:var(--tx);font-size:13px">
+      </div>
+    </div>
+    <div style="margin-bottom:12px">
+      <label style="font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;display:block;margin-bottom:5px">FORMA DE PAGAMENTO *</label>
+      <select id="asTipo" style="width:100%;padding:9px 10px;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r-md);color:var(--tx);font-size:13px">
+        <option value="BOLETO">🏦 Boleto (mensal)</option>
+        <option value="CREDIT_CARD">💳 Cartão de Crédito (mensal)</option>
+        <option value="PIX">⚡ PIX (mensal)</option>
+      </select>
+    </div>
+    <details style="margin-bottom:12px">
+      <summary style="font-size:11px;font-weight:700;color:var(--tx3);cursor:pointer;padding:8px 0">▸ Dados do responsável</summary>
+      <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px">
+        <input id="asNome" type="text" placeholder="Nome completo *" style="width:100%;padding:9px 10px;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r-md);color:var(--tx);font-size:13px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <input id="asCpf" type="tel" maxlength="18" placeholder="CPF ou CNPJ *" style="padding:9px 10px;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r-md);color:var(--tx);font-size:13px;width:100%">
+          <input id="asEmail" type="email" placeholder="E-mail" style="padding:9px 10px;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r-md);color:var(--tx);font-size:13px;width:100%">
+        </div>
+        <input id="asCel" type="tel" placeholder="Celular" style="width:100%;padding:9px 10px;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r-md);color:var(--tx);font-size:13px">
+      </div>
+    </details>
+    <div id="asErr" style="color:var(--red);font-size:12px;margin-bottom:8px;display:none"></div>
+    <div style="display:flex;gap:10px">
+      <button onclick="fecharModal()" style="flex:1;padding:10px;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r-md);color:var(--tx);font-size:13px;font-weight:700;cursor:pointer">Cancelar</button>
+      <button onclick="confirmarAssinatura()" id="asBtn" style="flex:2;padding:10px;background:var(--primary);border:none;border-radius:var(--r-md);color:var(--btn-primary-text);font-size:13px;font-weight:800;cursor:pointer">Criar Assinatura</button>
+    </div>
+  </div>`;
+  abrirModal('custom',null,null,null,html);
+}
+
+function asAutoFill(sel){
+  const opt=sel&&sel.selectedOptions[0];
+  if(!opt||!opt.value) return;
+  const nm=document.getElementById('asNome');
+  const cpf=document.getElementById('asCpf');
+  const em=document.getElementById('asEmail');
+  const cel=document.getElementById('asCel');
+  if(nm) nm.value=opt.dataset.nome||'';
+  if(cpf&&opt.dataset.cpf){const d=opt.dataset.cpf.replace(/\D/g,'');
+    cpf.value=d.length===11?d.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,'$1.$2.$3-$4'):d;}
+  if(em) em.value=opt.dataset.email||'';
+  if(cel) cel.value=opt.dataset.tel||'';
+}
+
+function asUpdateValor(){
+  const plano=document.getElementById('asPlano')?.value;
+  const valEl=document.getElementById('asValor');
+  if(!valEl) return;
+  const map={basico:35,pro:70,salao:140};
+  if(plano!=='custom'){valEl.value=map[plano]||35;valEl.readOnly=true;}
+  else{valEl.readOnly=false;}
+}
+
+async function confirmarAssinatura(){
+  const tok=SESSION&&SESSION.access_token?SESSION.access_token:KEY;
+  const sel=document.getElementById('asSalao');
+  const opt=sel&&sel.selectedOptions[0];
+  const errEl=document.getElementById('asErr');
+  const btn=document.getElementById('asBtn');
+
+  if(!opt||!opt.value){errEl.textContent='Selecione um estabelecimento';errEl.style.display='block';return;}
+  const nome=document.getElementById('asNome')?.value.trim()||opt.dataset.nome||'';
+  const cpfRaw=(document.getElementById('asCpf')?.value||opt.dataset.cpf||'').replace(/\D/g,'');
+  const email=document.getElementById('asEmail')?.value.trim()||opt.dataset.email||'';
+  const cel=document.getElementById('asCel')?.value.trim()||opt.dataset.tel||'';
+  const plano=document.getElementById('asPlano')?.value||'basico';
+  const valor=parseFloat(document.getElementById('asValor')?.value||'0');
+  const tipo=document.getElementById('asTipo')?.value||'BOLETO';
+
+  if(!cpfRaw||cpfRaw.length<11){errEl.textContent='CPF/CNPJ do responsável é obrigatório';errEl.style.display='block';return;}
+  if(!valor||valor<1){errEl.textContent='Valor mínimo R$1';errEl.style.display='block';return;}
+
+  errEl.style.display='none';
+  if(btn){btn.disabled=true;btn.textContent='Criando...';}
+
+  const salaoUUID=opt.value;
+  if(cpfRaw&&cpfRaw!==opt.dataset.cpf){
+    try{await api('saloes?id=eq.'+salaoUUID,{method:'PATCH',body:JSON.stringify({cpf_cnpj:cpfRaw})});}catch(_){}
+    const c=clientes.find(x=>x.id===salaoUUID);if(c)c.cpf_cnpj=cpfRaw;
+  }
+
+  try{
+    const body={
+      action:'criar_assinatura',
+      salao_id:salaoUUID,
+      plano:plano==='custom'?'basico':plano,
+      tipo,
+      cpf_cnpj:cpfRaw,
+      nome:nome||opt.dataset.nome,
+      email:email||undefined,
+      telefone:cel||undefined,
+      cycle:'MONTHLY',
+    };
+    if(plano==='custom') body.valor_override=valor;
+    const r=await fetch(ASAAS_FN,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok},body:JSON.stringify(body)});
+    const d=await r.json();
+    if(d&&d.ok){
+      fecharModal();
+      toast('✓ Assinatura recorrente criada!','ok');
+      navSidebar('cobrancas',null);
+    } else {
+      console.error('[criarAssinatura] resposta Asaas:',JSON.stringify(d));
+      if(btn){btn.disabled=false;btn.textContent='Criar Assinatura';}
+      errEl.textContent='Erro: '+(d.erro||d.error||JSON.stringify(d));
+      errEl.style.display='block';
+    }
+  }catch(e){
+    console.error('[criarAssinatura] exception:',e);
+    if(btn){btn.disabled=false;btn.textContent='Criar Assinatura';}
     errEl.textContent='Erro de conexão: '+e.message;
     errEl.style.display='block';
   }
