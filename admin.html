@@ -1828,16 +1828,19 @@ async function confirmarCobranca(){
   errEl.style.display='none';
   if(btn){btn.disabled=true;btn.textContent='Gerando...';}
 
+  // opt.value = UUID do salão (a opção usa value="${c.id}")
+  const salaoUUID = opt.value;
+
   // Save CPF to DB
   if(cpfRaw&&cpfRaw!==opt.dataset.cpf){
-    try{ await api('saloes?id=eq.'+opt.dataset.id,{method:'PATCH',body:JSON.stringify({cpf_cnpj:cpfRaw})}); }catch(_){}
-    const c=clientes.find(x=>x.id===opt.dataset.id); if(c) c.cpf_cnpj=cpfRaw;
+    try{ await api('saloes?id=eq.'+salaoUUID,{method:'PATCH',body:JSON.stringify({cpf_cnpj:cpfRaw})}); }catch(_){}
+    const c=clientes.find(x=>x.id===salaoUUID); if(c) c.cpf_cnpj=cpfRaw;
   }
 
   try{
     const body={
       action:'criar_cobranca',
-      salao_id:opt.dataset.id,
+      salao_id:salaoUUID,
       plano:plano==='custom'?'basico':plano,
       tipo,
       cpf_cnpj:cpfRaw,
@@ -1857,11 +1860,13 @@ async function confirmarCobranca(){
       alert(msg);
       navSidebar('cobrancas',null);
     } else {
+      console.error('[criarCobranca] resposta Asaas:', JSON.stringify(d));
       if(btn){btn.disabled=false;btn.textContent='Gerar Cobrança';}
       errEl.textContent='Erro: '+(d.erro||d.error||JSON.stringify(d));
       errEl.style.display='block';
     }
   }catch(e){
+    console.error('[criarCobranca] exception:', e);
     if(btn){btn.disabled=false;btn.textContent='Gerar Cobrança';}
     errEl.textContent='Erro de conexão: '+e.message;
     errEl.style.display='block';
@@ -1944,12 +1949,14 @@ async function confirmarCobrancaTeste(){
       alert(msg);
       navSidebar('cobrancas',null);
     } else {
+      console.error('[testR1] resposta Asaas completa:', JSON.stringify(d));
       if(btn){btn.disabled=false;btn.textContent='Gerar PIX R$1';}
-      alert('Erro do servidor:\n'+(d.erro||d.error||JSON.stringify(d)));
+      alert('Erro do servidor:\n'+(d.erro||d.error||JSON.stringify(d))+'\n\n(veja console F12 para detalhes)');
     }
   }catch(e){
+    console.error('[testR1] exception:', e);
     if(btn){btn.disabled=false;btn.textContent='Gerar PIX R\$1';}
-    alert('Erro: '+e.message);
+    alert('Erro: '+e.message+'\n\n(veja console F12 para detalhes)');
   }
 }
 
