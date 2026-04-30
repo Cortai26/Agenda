@@ -1690,6 +1690,28 @@ async function cancelarCobAsaas(asaas_id){
 function _renderClientesLegacy(){}
 function _renderFinanceiroLegacy(){}
 
+function openLink(url){
+  if(!url) return;
+  window.open(url, '_blank', 'noopener');
+}
+
+function copiarPix(texto){
+  if(!texto){alert('Chave PIX não disponível');return;}
+  navigator.clipboard.writeText(texto).then(()=>{
+    toast('✓ PIX copiado!','ok');
+  }).catch(()=>{
+    // fallback para browsers sem clipboard API
+    const ta=document.createElement('textarea');
+    ta.value=texto;
+    ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    toast('✓ PIX copiado!','ok');
+  });
+}
+
 function setFst(v,btn){
   filtroStatus=v;
   document.querySelectorAll('[id^="fst-"],.btn-filtro').forEach(b=>b.classList.remove('on'));
