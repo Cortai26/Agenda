@@ -16,19 +16,6 @@
 <style>
 /* ═══ RESET ═══ */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-function enviarWhatsApp(tel, pix, nome, valor, venc){
-  if(!tel){alert('Telefone do estabelecimento não cadastrado.');return;}
-  var num=tel.replace(/\D/g,'');
-  if(!num.startsWith('55')) num='55'+num;
-  var msg='Olá '+nome+'! 👋\n\n'
-    +'Segue sua cobrança Agenda 💈\n'
-    +'💰 Valor: R$'+valor+'\n'
-    +(venc?'📅 Vencimento: '+venc+'\n':'')
-    +'\n⚡ *PIX Copia e Cola:*\n'+pix+'\n\n'
-    +'Copie o código acima e pague pelo app do seu banco. Qualquer dúvida é só chamar!';
-  var url='https://wa.me/'+num+'?text='+encodeURIComponent(msg);
-  window.open(url,'_blank');
-}
 
 html{-webkit-text-size-adjust:100%}
 body{background:var(--bg);color:var(--tx);font-family:var(--font-b)}
@@ -1074,6 +1061,21 @@ input.fi:focus{
 .kpi-valor{font-size:clamp(18px,5vw,36px);font-weight:800;line-height:1;word-break:break-all}
 @media(max-width:400px){.kpi-grid{grid-template-columns:1fr 1fr}.kpi-card:nth-child(3){grid-column:1/-1}}
 </style>
+<script>
+function enviarWhatsApp(tel, pix, nome, valor, venc){
+  if(!tel){alert('Telefone do estabelecimento não cadastrado.');return;}
+  var num=tel.replace(/\D/g,'');
+  if(!num.startsWith('55')) num='55'+num;
+  var msg='Olá '+nome+'! 👋\n\n'
+    +'Segue sua cobrança Agenda 💈\n'
+    +'💰 Valor: R$'+valor+'\n'
+    +(venc?'📅 Vencimento: '+venc+'\n':'')
+    +'\n⚡ *PIX Copia e Cola:*\n'+pix+'\n\n'
+    +'Copie o código acima e pague pelo app do seu banco. Qualquer dúvida é só chamar!';
+  var url='https://wa.me/'+num+'?text='+encodeURIComponent(msg);
+  window.open(url,'_blank');
+}
+</script>
 </head>
 <body>
 <!-- ══════════════════════════════════════════
