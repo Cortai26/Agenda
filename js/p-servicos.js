@@ -146,7 +146,7 @@ async function carregarServicos(){
     var r=await rpc('listar_servicos_dono',{p_slug:S.slug,p_senha:_pw||''});
     _servicos=Array.isArray(r)?r:[];
   }catch(e){
-    try{_servicos=await api('servicos?salao_id=eq.'+S.id+'&order=ordem')||[];}catch{_servicos=[];}
+    try{_servicos=await api('servicos?salao_id=eq.'+S.id+'&order=ordem')||[];}catch(e2){_servicos=[];}
   }
 }
 function renderServicos(){
@@ -155,7 +155,7 @@ function renderServicos(){
   var ativos=_servicos.filter(function(s){return s.ativo;}).length;
   var html='<div class="srv-hdr"><h3>Meus Serviços</h3><button class="btn-add" onclick="abrirSrv()">+ Adicionar</button></div>';
   html+='<div class="srv-info-txt">Serviços <strong>ativos</strong> aparecem na sua página. Use ⚪/🟢 para mostrar ou ocultar.</div>';
-  html+='<div style="font-size:11px;color:var(--CZ);font-weight:700;margin-bottom:10px;text-align:center">'+ativos+' de '+_servicos.length+' visível'+(ativos!==1?'s':'')+'</div>';
+  html+='<div style="font-size:11px;color:var(--text-3);font-weight:700;margin-bottom:10px;text-align:center">'+ativos+' de '+_servicos.length+' visível'+(ativos!==1?'s':'')+'</div>';
   html+='<div class="lista">';
   if(_servicos.length===0){
     html+='<div class="srv-empty">Nenhum serviço ainda.<br><strong>Toque em "+ Adicionar" para começar!</strong></div>';
@@ -184,7 +184,8 @@ async function abrirSrv(id){
   document.getElementById('srvDesc').value=s&&s.descricao?s.descricao:'';
   document.getElementById('srvPreco').value=s?s.preco/100:'';
   document.getElementById('srvDur').value=s?s.duracao:30;
-  document.getElementById('srvErr').classList.remove('show');
+  var errEl=document.getElementById('srvErr');
+  if(errEl){errEl.style.display='none';errEl.classList.remove('show');}
   _icoSel=s?s.icone:'📋'; buildIcones();
   document.getElementById('ovSrv').classList.add('show');
   setTimeout(function(){document.getElementById('srvNome').focus();},300);
@@ -192,81 +193,50 @@ async function abrirSrv(id){
 async function fecharSrv(){document.getElementById('ovSrv').classList.remove('show');_editSrvId=null;}
 async function buildIcones(){
   var icEl = document.getElementById('iconGrid');
+  if(!icEl) return;
   icEl.innerHTML=ICONES.map(function(ic){
-    return '<button class="ico-btn'+(ic===_icoSel?' on':'')+'" onclick="selIco(\''+ic+'\')">'+ic+'</button>';
+    return '<button type="button" class="ico-btn'+(ic===_icoSel?' sel':'')+'" onclick="selIco(\''+ic+'\')">'+ic+'</button>';
   }).join('');
   icEl.style.display = 'grid';
 }
 async function selIco(ic){_icoSel=ic;buildIcones();}
-/* S1.2: getPw via modal — shared by all modules */
-var _getPwResolve=null, _getPwReject=null;
 
-function _ovSenhaConfirmar(){
-  var val=document.getElementById('ovSenhaInput').value;
-  var errEl=document.getElementById('ovSenhaErr');
-  if(!val){
-    errEl.textContent='Informe a senha.';errEl.style.display='block';
-    document.getElementById('ovSenhaInput').focus();return;
-  }
-  errEl.style.display='none';
-  document.getElementById('ovSenha').style.display='none';
-  document.getElementById('ovSenhaInput').value='';
-  if(_getPwResolve){_getPwResolve(val);_getPwResolve=null;_getPwReject=null;}
-}
-
-function _ovSenhaCancelar(){
-  document.getElementById('ovSenha').style.display='none';
-  document.getElementById('ovSenhaInput').value='';
-  document.getElementById('ovSenhaErr').style.display='none';
-  if(_getPwReject){_getPwReject(null);_getPwResolve=null;_getPwReject=null;}
-}
-
-async function getPw(titulo, desc){
-  if(_pw)return _pw;
-  return new Promise(function(resolve){
-    var ov=document.getElementById('ovSenha');
-    var titEl=document.getElementById('ovSenhaTit');
-    var descEl=document.getElementById('ovSenhaDesc');
-    var errEl=document.getElementById('ovSenhaErr');
-    var inp=document.getElementById('ovSenhaInput');
-    if(titEl) titEl.textContent=titulo||'Confirmar ação';
-    if(descEl) descEl.textContent=desc||'Informe sua senha para continuar.';
-    if(errEl) errEl.style.display='none';
-    if(inp) inp.value='';
-    _getPwResolve=function(val){_pw=val; resolve(val);};
-    _getPwReject=function(){resolve(null);};
-    ov.style.display='flex';
-    setTimeout(function(){if(inp)inp.focus();},80);
-  });
-}
 async function salvarServico(){
+  console.log('[salvarServico] iniciado');
   var btn=document.getElementById('btnSvSrv'), err=document.getElementById('srvErr');
-  err.classList.remove('show');
+  if(!err||!btn){console.error('[salvarServico] elementos não encontrados');return;}
+  err.style.display='none'; err.classList.remove('show');
   var nome=document.getElementById('srvNome').value.trim();
-  var preco=parseFloat(document.getElementById('srvPreco').value);
+  var precoVal=document.getElementById('srvPreco').value.trim();
+  var preco=parseFloat(precoVal);
   var dur=parseInt(document.getElementById('srvDur').value);
   var desc=document.getElementById('srvDesc').value.trim();
-  if(!nome){err.textContent='Informe o nome.';err.classList.add('show');return;}
-  if(!preco||preco<=0){err.textContent='Preço inválido.';err.classList.add('show');return;}
-  if(!dur||dur<10){err.textContent='Duração mínima: 10 min.';err.classList.add('show');return;}
-  var pw=await getPw(); if(!pw)return;
+  if(!nome){err.textContent='Informe o nome.';err.style.display='block';return;}
+  if(!precoVal||isNaN(preco)||preco<=0){err.textContent='Preço inválido.';err.style.display='block';return;}
+  if(isNaN(dur)||dur<10){err.textContent='Duração mínima: 10 min.';err.style.display='block';return;}
+  console.log('[salvarServico] validação OK, pedindo senha...');
+  var pw=await getPw();
+  if(!pw){console.warn('[salvarServico] senha cancelada');return;}
+  console.log('[salvarServico] senha obtida, salvando...');
   btn.disabled=true; btn.textContent='Salvando...';
   try{
     if(!_icoSel) _icoSel = '📋';
+    var precoCentavos = Math.round(preco*100);
     if(_editSrvId){
       var atual=_servicos.find(function(s){return s.id===_editSrvId;});
-      await rpc('atualizar_servico',{p_slug:S.slug,p_senha:pw,p_servico_id:_editSrvId,p_icone:_icoSel,p_nome:nome,p_descricao:desc||null,p_preco:Math.round(preco*100),p_duracao:dur,p_ativo:atual?atual.ativo:true});
+      await rpc('atualizar_servico',{p_slug:S.slug,p_senha:pw,p_servico_id:_editSrvId,p_icone:_icoSel,p_nome:nome,p_descricao:desc||null,p_preco:precoCentavos,p_duracao:dur,p_ativo:atual?atual.ativo:true});
     } else {
-      await rpc('adicionar_servico',{p_slug:S.slug,p_senha:pw,p_icone:_icoSel,p_nome:nome,p_descricao:desc||null,p_preco:Math.round(preco*100),p_duracao:dur,p_ordem:_servicos.length+1});
+      await rpc('adicionar_servico',{p_slug:S.slug,p_senha:pw,p_icone:_icoSel,p_nome:nome,p_descricao:desc||null,p_preco:precoCentavos,p_duracao:dur,p_ordem:_servicos.length+1});
     }
+    console.log('[salvarServico] sucesso!');
     fecharSrv(); await carregarServicos(); _tabOk.servicos=false; renderServicos(); toast('✓ Serviço salvo!','ok');
   }catch(e){
-    console.error('Erro ao salvar serviço:', e);
+    console.error('[salvarServico] erro:', e);
     if(e.message && e.message.includes('Acesso negado')){_pw=null;err.textContent='Senha incorreta.';}
     else err.textContent='Erro: '+(e.message || 'Desconhecido');
-    err.classList.add('show');
+    err.style.display='block';
   }
-  btn.disabled=false; btn.textContent='Salvar serviço';
+  btn.disabled=false; btn.textContent='Salvar';
 }
 async function toggleSrv(id){
   var pw=await getPw(); if(!pw)return;
