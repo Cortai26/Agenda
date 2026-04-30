@@ -31,6 +31,11 @@
   --brasa-bg:    rgba(255,92,26,0.09);
   --brasa-bg-mid:rgba(255,92,26,0.15);
 
+  /* ── Brand tokens (design system) ── */
+  --c-brand:      #E55A0C; /* botões, ícones, destaques */
+  --c-brand-text: #C04A08; /* texto laranja sobre fundo claro — 5.28:1 WCAG AA */
+  --c-brand-dark: #9C3A06; /* hover / estado ativo */
+
   /* ── Status ── */
   --success:    #34C759;
   --success-bg: rgba(52,199,89,0.10);
@@ -40,8 +45,25 @@
   --error-bg:   rgba(255,59,48,0.10);
 
   /* ── Tipografia ── */
-  --font-brand: 'Sora', sans-serif;
-  --font-body:  'Nunito Sans', sans-serif;
+  --font-brand:   'Sora', sans-serif;
+  --font-body:    'Nunito Sans', sans-serif;
+  --font-heading: 'Manrope', sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
+
+  /* Escala tipográfica */
+  --text-h1:      clamp(28px, 6vw, 48px);
+  --text-h2:      clamp(20px, 4vw, 32px);
+  --text-h3:      clamp(15px, 2.5vw, 18px);
+  --text-body:    15px;
+  --text-label:   13px;
+  --text-caption: 11px;
+  --text-mono:    14px;
+
+  /* Pesos */
+  --fw-heading: 800;
+  --fw-subhead: 700;
+  --fw-label:   600;
+  --fw-body:    400;
 
   /* ── Border radius ── */
   --r-xs:  5px;

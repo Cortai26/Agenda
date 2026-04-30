@@ -33,6 +33,25 @@ html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
    TEMA NEUTRO (padrão / plano básico)
    Azul profissional · fundo claro · Inter/Syne
    ══════════════════════════════════════════════════ */
+:root {
+  /* ── Brand tokens (WCAG safe) ── */
+  --c-brand:      #E55A0C;
+  --c-brand-text: #C04A08; /* texto laranja sobre fundo claro — 5.28:1 AA ✅ */
+  --c-brand-dark: #9C3A06;
+  /* ── Tipografia ── */
+  --font-heading: 'Manrope', sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
+  --text-h1:      clamp(28px, 6vw, 48px);
+  --text-h2:      clamp(20px, 4vw, 32px);
+  --text-h3:      clamp(15px, 2.5vw, 18px);
+  --text-body:    15px;
+  --text-label:   13px;
+  --text-caption: 11px;
+  --fw-heading:   800;
+  --fw-subhead:   700;
+  --fw-label:     600;
+  --fw-body:      400;
+}
 :root,
 html.t-neutral {
   /* Cores */
@@ -456,6 +475,10 @@ html.t-onyx .srv-card.ativo .srv-ico-wrap { background: rgba(242,202,80,.2); }
 
 html.t-onyx .srv-n { font-size: 13px; letter-spacing: .3px; color: var(--c-text); }
 html.t-onyx .srv-p { font-size: 18px; font-weight: 800; }
+/* Laranja sobre fundo claro — WCAG AA: usar #C04A08 (5.28:1) em vez de #E55A0C (3.54:1) */
+html.t-neutral .srv-p,
+html.t-feminine .srv-p,
+html.t-clinic .srv-p { color: var(--c-brand-text, #C04A08); }
 html.t-onyx .srv-m { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
 
 html.t-feminine .srv-n { font-size: 14px; }
@@ -534,7 +557,10 @@ html.t-onyx .dia-card.ativo .d-mes { color: rgba(19,19,19,.7); }
   padding: 0 14px 14px;
 }
 .h-btn {
-  padding: 11px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
   min-height: 48px;
   background: var(--c-surface-2);
   border: 1.5px solid var(--c-border);
