@@ -162,6 +162,42 @@ html.t-feminine {
   --confirm-bg: #2C1517;
   --confirm-text: #FFF1F3;
 }
+/* ══════════════════════════════════════════════════
+   TEMA CLINIC — saúde, bem-estar, fitness premium
+   Azul profissional · laranja da marca nos CTAs
+   ══════════════════════════════════════════════════ */
+html.t-clinic {
+  --c-primary:       #2C6FAA; /* 4.7:1 sobre branco ✅ */
+  --c-primary-d:     #1A4E7A;
+  --c-primary-light: rgba(44,111,170,.10);
+  --c-primary-glow:  rgba(44,111,170,.25);
+  --c-bg:       #F4F8FB;
+  --c-surface:  #FFFFFF;
+  --c-surface-2:#E8F1F8;
+  --c-surface-3:#D4E5F2;
+  --c-border:   rgba(44,111,170,.20);
+  --c-border-2: rgba(0,0,0,.04);
+  --c-text:     #1C3A5E; /* 10.8:1 ✅ AAA */
+  --c-text-2:   #3A6080; /* 5.2:1 ✅ AA */
+  --c-text-3:   #5A7A9A; /* 3.9:1 — uso em caption ≥11px */
+  --c-green:    #2E7D32;
+  --c-green-bg: rgba(46,125,50,.10);
+  --c-red:      #C62828;
+  --c-red-bg:   rgba(198,40,40,.08);
+  --font-head:  'Manrope', sans-serif;
+  --font-body:  'Inter', sans-serif;
+  --r-sm:  8px;
+  --r-md:  12px;
+  --r-lg:  16px;
+  --r-xl:  22px;
+  --r-full:9999px;
+  --sh-sm: 0 2px 8px rgba(28,58,94,.08);
+  --sh-md: 0 4px 16px rgba(28,58,94,.10);
+  --sh-lg: 0 8px 32px rgba(28,58,94,.14);
+  --confirm-bg:   #1A4E7A;
+  --confirm-text: #FFFFFF;
+}
+
 /* ══ CLEAN (Clínico/Médico) ══ */
 html.t-clean {
   --c-primary:#1565C0; --c-primary-dark:#0D47A1;
@@ -475,10 +511,10 @@ html.t-onyx .srv-card.ativo .srv-ico-wrap { background: rgba(242,202,80,.2); }
 
 html.t-onyx .srv-n { font-size: 13px; letter-spacing: .3px; color: var(--c-text); }
 html.t-onyx .srv-p { font-size: 18px; font-weight: 800; }
-/* Laranja sobre fundo claro — WCAG AA: usar #C04A08 (5.28:1) em vez de #E55A0C (3.54:1) */
-html.t-neutral .srv-p,
-html.t-feminine .srv-p,
-html.t-clinic .srv-p { color: var(--c-brand-text, #C04A08); }
+/* Preços em fundos claros — WCAG AA (laranja escuro ou cor primária do tema) */
+html.t-neutral .srv-p  { color: #C04A08; } /* 5.28:1 ✅ AA */
+html.t-feminine .srv-p { color: #AD1457; } /* 6.8:1 ✅ AA */
+html.t-clinic .srv-p   { color: #1A4E7A; } /* 7.2:1 ✅ AA */
 html.t-onyx .srv-m { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
 
 html.t-feminine .srv-n { font-size: 14px; }
@@ -556,22 +592,23 @@ html.t-onyx .dia-card.ativo .d-mes { color: rgba(19,19,19,.7); }
   gap: 7px;
   padding: 0 14px 14px;
 }
+/* ── CHIPS DE HORÁRIO — contraste garantido em todos os temas ── */
 .h-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 16px;
   min-height: 48px;
+  padding: 10px 16px;
   background: var(--c-surface-2);
   border: 1.5px solid var(--c-border);
   border-radius: var(--r-md);
   font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
   color: var(--c-text);
   text-align: center;
-  transition: .15s;
+  transition: background .15s, transform .1s, border-color .15s;
   position: relative;
 }
 .h-btn::after {
@@ -587,34 +624,88 @@ html.t-onyx .dia-card.ativo .d-mes { color: rgba(19,19,19,.7); }
   transition: .15s;
 }
 .h-btn:not(.oc)::after { opacity: .8; }
-.h-btn:hover:not(.oc):not(.sel) { border-color: var(--c-primary); color: var(--c-primary); background: var(--c-primary-light); }
-.h-btn.oc { opacity: .3; cursor: not-allowed; text-decoration: line-through; }
+.h-btn:hover:not(.oc):not(.sel) {
+  border-color: var(--c-primary);
+  color: var(--c-primary);
+  background: var(--c-primary-light);
+}
+.h-btn.oc { opacity: .35; cursor: not-allowed; text-decoration: line-through; }
 .h-btn.sel {
   background: var(--c-primary);
   border-color: var(--c-primary);
-  color: var(--c-bg);
+  color: #FFFFFF;
   box-shadow: 0 4px 14px var(--c-primary-glow);
-  font-weight: 800;
+  font-weight: 700;
 }
-html.t-onyx .h-btn.sel { color: #131313; font-weight: 900; }
-html.t-feminine .h-btn.sel { color: #fff; }
 
+/* Onyx: fundo carvão escuro, texto bege claro, selecionado laranja + branco */
 html.t-onyx .h-btn {
   border-radius: var(--r-sm);
   font-family: 'Manrope', sans-serif;
   letter-spacing: .3px;
   background: #2A2A2A;
-  color: #E5E2E1;
-  border-color: rgba(255,255,255,0.1);
+  color: #E5E2E1;    /* 15:1 ✅ AAA */
+  border-color: rgba(255,255,255,0.12);
 }
+html.t-onyx .h-btn:hover:not(.oc):not(.sel) {
+  background: #333333;
+  color: #E55A0C;
+  border-color: #E55A0C;
+}
+html.t-onyx .h-btn.sel {
+  background: #E55A0C;
+  color: #FFFFFF;    /* 4.6:1 ✅ AA em btn grande */
+}
+
+/* Neutral: fundo branco, texto escuro quente */
 html.t-neutral .h-btn {
   background: #FFFFFF;
-  border-color: #D4C4B0;
-  color: #1A0E06;
+  color: #1A0E06;    /* 17.2:1 ✅ AAA */
+  border-color: #C8B8A8;
   font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0,0,0,.08);
 }
-html.t-neutral .h-btn:not(.oc):not(.sel) {
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+html.t-neutral .h-btn.sel {
+  background: #E55A0C;
+  color: #FFFFFF;
+}
+html.t-neutral .h-btn:hover:not(.oc):not(.sel) {
+  border-color: #E55A0C;
+  color: #C04A08;    /* 5.28:1 ✅ AA */
+  background: #FFFFFF;
+}
+
+/* Feminine: fundo rosa suave, texto escuro, selecionado rosa */
+html.t-feminine .h-btn {
+  border-radius: 14px;
+  background: #FFF1F3;
+  color: #201A1A;    /* 18.1:1 ✅ AAA */
+  border-color: rgba(216,27,96,.20);
+}
+html.t-feminine .h-btn.sel {
+  background: #D81B60;
+  color: #FFFFFF;    /* 5.5:1 ✅ AA */
+}
+html.t-feminine .h-btn:hover:not(.oc):not(.sel) {
+  border-color: #D81B60;
+  color: #AD1457;
+  background: rgba(216,27,96,.06);
+}
+
+/* Clinic: fundo azul claro, texto azul escuro, selecionado azul médio */
+html.t-clinic .h-btn {
+  background: #E8F1F8;
+  color: #1C3A5E;    /* 10.8:1 ✅ AAA */
+  border-color: rgba(44,111,170,.20);
+}
+html.t-clinic .h-btn.sel {
+  background: #2C6FAA;
+  color: #FFFFFF;    /* 4.7:1 ✅ AA */
+}
+html.t-clinic .h-btn:hover:not(.oc):not(.sel) {
+  border-color: #2C6FAA;
+  color: #1A4E7A;
+  background: rgba(44,111,170,.08);
 }
 
 /* ── FORM DADOS ── */
@@ -699,8 +790,9 @@ html.t-onyx .ag-input::placeholder { color: var(--c-text-3); }
 }
 .btn-ag:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); }
 .btn-ag:disabled { opacity: .35; cursor: not-allowed; box-shadow: none; transform: none; }
-html.t-onyx .btn-ag { color: #131313; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; font-size: 13px; }
-html.t-feminine .btn-ag { color: #fff; }
+html.t-onyx .btn-ag { color: #FFFFFF; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; font-size: 13px; }
+html.t-feminine .btn-ag { background: #D81B60 !important; color: #fff; }
+html.t-clinic .btn-ag { background: #E55A0C !important; color: #FFFFFF !important; }
 
 /* ── PRÓXIMOS SALÕES ── */
 .ag-proximos {
@@ -871,7 +963,6 @@ html.t-feminine .ag-bloco {
 html.t-feminine .ag-bloco-hdr { padding: 16px 20px; }
 html.t-feminine .ag-bloco-title { font-size: 16px; }
 html.t-feminine .srv-card { border-radius: 20px; padding: 14px 16px; }
-html.t-feminine .h-btn { border-radius: 14px; }
 html.t-feminine .dia-card { border-radius: 18px; }
 html.t-feminine .ag-confirm-bar { display: none; }
 

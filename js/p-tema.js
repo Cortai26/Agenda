@@ -10,10 +10,10 @@ function renderTema(){
   if(_legMap[cls]) cls=_legMap[cls];
 
   var opcoes=[
-    {cls:'t-onyx',     label:'Onyx',     sub:'Dark elegante',    color:'#212121', border:'rgba(255,255,255,.2)'},
-    {cls:'t-feminine', label:'Feminine', sub:'Rosa · estética',  color:'#FFE4EC', border:'rgba(200,100,120,.3)'},
-    {cls:'t-neutral',  label:'Neutral',  sub:'Bege · clean',     color:'#F5F0E8', border:'rgba(200,180,160,.4)'},
-    {cls:'t-clinic',   label:'Clinic',   sub:'Azul · saúde',     color:'#F4F8FB', border:'rgba(44,111,170,.3)'},
+    {cls:'t-onyx',     label:'Onyx',     sub:'Dark elegante',  color:'#1A1A1A', accent:'#E55A0C', border:'rgba(255,255,255,.2)'},
+    {cls:'t-feminine', label:'Feminine', sub:'Rosa · estética',color:'#FFF1F3', accent:'#D81B60', border:'rgba(216,27,96,.3)'},
+    {cls:'t-neutral',  label:'Neutral',  sub:'Bege · clean',   color:'#F5F0E8', accent:'#E55A0C', border:'rgba(200,180,160,.4)'},
+    {cls:'t-clinic',   label:'Clinic',   sub:'Azul · saúde',   color:'#E8F1F8', accent:'#2C6FAA', border:'rgba(44,111,170,.3)'},
   ];
 
   var html='<div class="perfil-tit sec-collapse" onclick="if(typeof toggleSec===\'function\')toggleSec(this)">Tema visual</div><div class="sec-body">';
@@ -23,10 +23,12 @@ function renderTema(){
   opcoes.forEach(function(o){
     var ativo=cls===o.cls;
     var onclick='aplicarTemaSimples(\''+o.cls+'\')';
-    var borderStyle=o.border?'border:1px solid '+o.border:'';
+    var activeStyle=ativo?'outline:3px solid '+o.accent+';outline-offset:3px;transform:scale(1.08)':'';
     html+='<div class="theme-swatch-item'+(ativo?' active':'')+'\" data-theme="'+o.cls+'" onclick="'+onclick+'" style="flex-shrink:0">';
-    html+='<div class="swatch-circle" style="background:'+o.color+';'+borderStyle+'"></div>';
-    html+='<span>'+o.label.toUpperCase()+'</span>';
+    html+='<div class="swatch-circle" style="background:'+o.color+';border:1.5px solid '+o.border+';display:flex;align-items:center;justify-content:center;'+activeStyle+'">';
+    html+='<div style="width:18px;height:18px;border-radius:50%;background:'+o.accent+'"></div>';
+    html+='</div>';
+    html+='<span style="font-weight:'+(ativo?'700':'500')+'">'+o.label+'</span>';
     html+='</div>';
   });
 
