@@ -103,5 +103,11 @@
     }
   ],
   "cleanUrls": false,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "crons": [
+    {
+      "path": "/api/enviar-lembretes",
+      "schedule": "0 10 * * *"
+    }
+  ]
 }

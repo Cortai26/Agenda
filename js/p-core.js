@@ -475,6 +475,8 @@ function iniciarApp(sessao){
     }
   }
 
+  verificarTrialExpirando(sessao);
+
   var fab=document.getElementById('fabBtn');
   if(fab) fab.style.display='flex';
   carregarServicos();
@@ -584,6 +586,30 @@ function _syncNavState(id) {
 }
 
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+/* ── Email transacional (fire-and-forget) ── */
+function enviarEmail(tipo, dados){
+  fetch('/api/send-email',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(Object.assign({tipo:tipo},dados))
+  }).catch(function(){});
+}
+
+function verificarTrialExpirando(salao){
+  if(!salao||!salao.trial_expira||salao.email_responsavel===false) return;
+  var email=salao.email||salao.email_responsavel;
+  if(!email) return;
+  var dias=Math.ceil((new Date(salao.trial_expira)-new Date())/86400000);
+  if(dias===3||dias===1||dias===0){
+    enviarEmail('trial_expirando',{
+      email:email,
+      nome_salao:salao.nome,
+      responsavel:salao.responsavel,
+      dias_restantes:dias
+    });
+  }
+}
 
 /* ═══ HELPERS DE LISTA ═══ */
 function profIdx(profId){

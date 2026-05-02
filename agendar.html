@@ -1835,21 +1835,27 @@ document.getElementById('btnAg').onclick=async()=>{
         body:JSON.stringify({sinal_valor:_sinalToSave,sinal_pago:false,pix_valor:S.srv.preco})
       }).catch(function(){});
     }
-    // S3.1: Send confirmation email (fire and forget)
+    // Send confirmation email (fire and forget)
     if(emailVal && rpcRes.cancel_token){
-      fetch(`https://acldrisohnjfekjxgmoh.supabase.co/functions/v1/enviar-email`,{
+      var _sinalPct=salao.sinal_percentual||30;
+      var _sinalVal2=salao.aceita_pix!==false&&salao.pix_key&&S.srv.preco>0?Math.round(S.srv.preco*(_sinalPct/100)):0;
+      var _horasCan=(salao.cancelamento_min||120)>=60?Math.floor((salao.cancelamento_min||120)/60):null;
+      fetch('/api/send-email',{
         method:'POST', headers:{'Content-Type':'application/json'},
         body:JSON.stringify({
-          tipo:'confirmacao',
+          tipo:'confirmacao_agendamento',
           cliente_email:emailVal, cliente_nome:S.nome,
           salao_nome:salao.nome, salao_endereco:salao.endereco||'',
           servico_nome:S.srv.nome, servico_ico:S.srv.icone||'📋',
           data:S.dataStr, hora:S.hora,
           profissional_nome:S.profNome||null,
           cancel_token:rpcRes.cancel_token,
-          slug:slug
+          sinal_valor:_sinalVal2,
+          sinal_pct:_sinalPct,
+          pix_key:salao.pix_key||null,
+          horas_antecedencia:_horasCan
         })
-      }).catch(()=>{});
+      }).catch(function(){});
     }
   }catch(e){
     if(e.message.includes('unique')) alert('Esse horário acabou de ser ocupado! Escolha outro.');
