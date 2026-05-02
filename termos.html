@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Termos de Uso — Agenda</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0C0A09;
+    --surface: #1A1714;
+    --border: rgba(255,255,255,0.07);
+    --orange: #E55A0C;
+    --orange-dim: rgba(229,90,12,0.12);
+    --text: #E8E3DE;
+    --text-2: #9A9188;
+    --text-3: #5A534C;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: rgba(12,10,9,0.92);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+  .logo {
+    font-family: 'Sora', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .logo span { color: var(--orange); }
+  .back-link {
+    font-size: 13px;
+    color: var(--text-2);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.15s;
+  }
+  .back-link:hover { color: var(--text); }
+  .hero {
+    padding: 64px 24px 40px;
+    max-width: 760px;
+    margin: 0 auto;
+    border-bottom: 1px solid var(--border);
+  }
+  .doc-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--orange-dim);
+    border: 1px solid rgba(229,90,12,0.25);
+    border-radius: 100px;
+    padding: 4px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--orange);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .hero p { color: var(--text-2); max-width: 560px; margin-bottom: 28px; }
+  .meta { display: flex; gap: 24px; flex-wrap: wrap; }
+  .meta-item { display: flex; flex-direction: column; gap: 2px; }
+  .meta-label { font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; }
+  .meta-value { font-size: 13px; font-weight: 600; color: var(--text-2); }
+  .layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    max-width: 1020px;
+    margin: 0 auto;
+  }
+  .sidebar {
+    padding: 40px 24px;
+    position: sticky;
+    top: 61px;
+    height: fit-content;
+    border-right: 1px solid var(--border);
+  }
+  .sidebar-title {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-3);
+    margin-bottom: 16px;
+  }
+  .sidebar nav a {
+    display: block;
+    font-size: 13px;
+    color: var(--text-2);
+    text-decoration: none;
+    padding: 6px 0;
+    border-left: 2px solid transparent;
+    padding-left: 12px;
+    margin-left: -12px;
+    transition: all 0.15s;
+    line-height: 1.4;
+  }
+  .sidebar nav a:hover { color: var(--text); border-color: var(--orange); }
+  .content { padding: 40px 40px 80px; max-width: 680px; }
+  section { margin-bottom: 48px; scroll-margin-top: 80px; }
+  h2 {
+    font-family: 'Sora', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  h2 .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    background: var(--orange-dim);
+    border: 1px solid rgba(229,90,12,0.2);
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--orange);
+    flex-shrink: 0;
+  }
+  p { color: var(--text-2); margin-bottom: 12px; }
+  p:last-child { margin-bottom: 0; }
+  ul, ol { color: var(--text-2); padding-left: 20px; margin-bottom: 12px; }
+  li { margin-bottom: 6px; }
+  .highlight {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--orange);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 14px;
+    color: var(--text-2);
+  }
+  .plan-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin: 16px 0;
+  }
+  .plan-table th {
+    background: var(--surface);
+    color: var(--text);
+    font-weight: 600;
+    padding: 10px 14px;
+    text-align: left;
+    border: 1px solid var(--border);
+  }
+  .plan-table td {
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    color: var(--text-2);
+    vertical-align: top;
+  }
+  .plan-table tr:hover td { background: rgba(255,255,255,0.02); }
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 24px;
+    text-align: center;
+  }
+  footer p { font-size: 13px; color: var(--text-3); margin: 0; }
+  @media (max-width: 680px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .content { padding: 32px 20px 60px; }
+    .hero { padding: 40px 20px 32px; }
+    header { padding: 16px 20px; }
+    .plan-table { font-size: 12px; }
+    .plan-table th, .plan-table td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">Agenda<span>.</span></a>
+  <a href="/" class="back-link">← Voltar ao início</a>
+</header>
+
+<div class="hero">
+  <div class="doc-badge">📋 Documento Legal</div>
+  <h1>Termos de Uso</h1>
+  <p>Condições que regem o uso da plataforma Agenda por profissionais e estabelecimentos. Leia com atenção antes de criar sua conta.</p>
+  <div class="meta">
+    <div class="meta-item">
+      <span class="meta-label">Versão</span>
+      <span class="meta-value">1.0</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Vigência</span>
+      <span class="meta-value">01 de maio de 2026</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Atualização</span>
+      <span class="meta-value">01 de maio de 2026</span>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <p class="sidebar-title">Índice</p>
+    <nav>
+      <a href="#aceitacao">1. Aceitação</a>
+      <a href="#servico">2. O serviço</a>
+      <a href="#planos">3. Planos e pagamentos</a>
+      <a href="#trial">4. Período trial</a>
+      <a href="#cancelamento">5. Cancelamento</a>
+      <a href="#obrigacoes">6. Suas obrigações</a>
+      <a href="#proibicoes">7. Proibições</a>
+      <a href="#dados-clientes">8. Dados dos seus clientes</a>
+      <a href="#propriedade">9. Propriedade intelectual</a>
+      <a href="#disponibilidade">10. Disponibilidade</a>
+      <a href="#responsabilidade">11. Responsabilidade</a>
+      <a href="#foro">12. Foro e lei aplicável</a>
+      <a href="#contato">13. Contato</a>
+    </nav>
+  </aside>
+
+  <main class="content">
+
+    <section id="aceitacao">
+      <h2><span class="num">1</span> Aceitação dos termos</h2>
+      <p>Ao criar uma conta ou utilizar a plataforma <strong>Agenda</strong> (agendatop.vercel.app), você declara ter lido, compreendido e concordado integralmente com estes Termos de Uso e com nossa <a href="/privacidade.html" style="color:var(--orange)">Política de Privacidade</a>.</p>
+      <p>Se você representa um estabelecimento ou empresa, declara ter poderes para aceitar estes termos em nome da pessoa jurídica.</p>
+      <div class="highlight">
+        Se não concordar com qualquer condição, não utilize o serviço. A utilização implica aceite integral.
+      </div>
+    </section>
+
+    <section id="servico">
+      <h2><span class="num">2</span> O serviço</h2>
+      <p>O Agenda é uma plataforma de Software como Serviço (SaaS) que oferece:</p>
+      <ul>
+        <li>Sistema de agendamento online com link personalizado para clientes finais</li>
+        <li>Painel de gestão de agenda, clientes, serviços e equipe</li>
+        <li>Ferramentas de marketing e comunicação com clientes</li>
+        <li>Analytics de desempenho do estabelecimento</li>
+        <li>Página pública de perfil no marketplace Agenda</li>
+      </ul>
+      <p>O Agenda não é um marketplace de serviços — somos uma ferramenta de gestão. Não intermediamos a relação entre o profissional e o cliente final.</p>
+    </section>
+
+    <section id="planos">
+      <h2><span class="num">3</span> Planos e pagamentos</h2>
+      <p>O Agenda oferece os seguintes planos mensais:</p>
+
+      <table class="plan-table">
+        <thead>
+          <tr>
+            <th>Plano</th>
+            <th>Valor/mês</th>
+            <th>Para quem</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Solo</strong></td>
+            <td>R$ 35,00</td>
+            <td>Profissional autônomo individual</td>
+          </tr>
+          <tr>
+            <td><strong>Equipe</strong></td>
+            <td>R$ 70,00</td>
+            <td>Até 3 profissionais no mesmo espaço</td>
+          </tr>
+          <tr>
+            <td><strong>Negócio</strong></td>
+            <td>R$ 140,00</td>
+            <td>Estabelecimentos com equipe completa</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>Os pagamentos são processados via PIX ou boleto pela plataforma Asaas, empresa regulada pelo Banco Central do Brasil. O acesso ao plano contratado é liberado automaticamente após a confirmação do pagamento.</p>
+      <p>Os valores podem ser reajustados com aviso prévio de <strong>30 dias</strong> por e-mail. O reajuste não se aplica ao período já pago.</p>
+    </section>
+
+    <section id="trial">
+      <h2><span class="num">4</span> Período de teste (trial)</h2>
+      <p>Novos cadastros têm acesso a um período de teste gratuito de <strong>7 dias</strong> com todas as funcionalidades do plano Equipe.</p>
+      <ul>
+        <li>Não é necessário inserir dados de pagamento para o trial</li>
+        <li>Ao final do trial, o acesso fica restrito até a contratação de um plano</li>
+        <li>Os dados inseridos durante o trial são preservados após a contratação</li>
+      </ul>
+    </section>
+
+    <section id="cancelamento">
+      <h2><span class="num">5</span> Cancelamento e reembolso</h2>
+      <p>Você pode cancelar sua conta a qualquer momento pelo painel de configurações ou por e-mail para <a href="mailto:contato@agenda.pro" style="color:var(--orange)">contato@agenda.pro</a>.</p>
+      <ul>
+        <li>O acesso permanece ativo até o final do período pago</li>
+        <li>Não realizamos reembolsos proporcionais por cancelamento antecipado</li>
+        <li><strong>Exceção:</strong> em caso de falha grave do serviço por período superior a 72 horas consecutivas, o período equivalente será creditado ou reembolsado</li>
+      </ul>
+      <p>Após o cancelamento, seus dados ficam disponíveis para exportação por 30 dias. Após esse prazo, são excluídos conforme nossa Política de Privacidade.</p>
+    </section>
+
+    <section id="obrigacoes">
+      <h2><span class="num">6</span> Suas obrigações</h2>
+      <p>Ao usar o Agenda, você se compromete a:</p>
+      <ul>
+        <li>Fornecer informações verdadeiras e mantê-las atualizadas</li>
+        <li>Manter sua senha em sigilo e não compartilhar o acesso com terceiros não autorizados</li>
+        <li>Obter o consentimento dos seus clientes finais para armazenar seus dados na plataforma</li>
+        <li>Usar o serviço apenas para fins lícitos e compatíveis com a legislação brasileira</li>
+        <li>Manter seus dados fiscais atualizados para fins de faturamento</li>
+        <li>Notificar imediatamente em caso de suspeita de uso não autorizado da conta</li>
+      </ul>
+    </section>
+
+    <section id="proibicoes">
+      <h2><span class="num">7</span> Proibições</h2>
+      <p>É expressamente proibido:</p>
+      <ul>
+        <li>Usar a plataforma para atividades ilegais, fraudes ou golpes</li>
+        <li>Tentar acessar dados de outros estabelecimentos</li>
+        <li>Realizar engenharia reversa, descompilar ou copiar o código-fonte da plataforma</li>
+        <li>Sobrecarregar os servidores com requisições automatizadas (bots, scrapers)</li>
+        <li>Revender ou sublicenciar o acesso a terceiros</li>
+        <li>Inserir dados de clientes sem base legal adequada (consentimento ou contrato)</li>
+      </ul>
+      <p>A violação dessas proibições pode resultar na suspensão imediata da conta sem reembolso e em responsabilização civil e criminal.</p>
+    </section>
+
+    <section id="dados-clientes">
+      <h2><span class="num">8</span> Dados dos seus clientes finais</h2>
+      <p>Ao inserir dados de seus clientes na plataforma, você é o <strong>Controlador</strong> dessas informações nos termos da LGPD. O Agenda atua como <strong>Operador</strong>.</p>
+      <p>Como Controlador, você é responsável por:</p>
+      <ul>
+        <li>Ter base legal para coletar e armazenar esses dados (consentimento ou execução de contrato)</li>
+        <li>Informar seus clientes sobre o uso dos dados</li>
+        <li>Atender a eventuais solicitações de acesso, correção ou exclusão dos clientes</li>
+        <li>Não inserir dados sensíveis desnecessários (saúde, biometria, etc.) sem as salvaguardas adequadas</li>
+      </ul>
+    </section>
+
+    <section id="propriedade">
+      <h2><span class="num">9</span> Propriedade intelectual</h2>
+      <p>Todos os direitos sobre a plataforma Agenda — código, design, marca, interfaces e documentação — pertencem exclusivamente ao operador do serviço.</p>
+      <p>O conteúdo inserido por você (nome do estabelecimento, serviços, textos de descrição) permanece de sua propriedade. Ao inserir esse conteúdo, você nos concede licença limitada para exibi-lo na plataforma.</p>
+      <p>Você não pode usar a marca "Agenda" ou os elementos visuais da plataforma sem autorização expressa por escrito.</p>
+    </section>
+
+    <section id="disponibilidade">
+      <h2><span class="num">10</span> Disponibilidade do serviço</h2>
+      <p>Nos comprometemos a manter a plataforma disponível com no mínimo <strong>99% de uptime mensal</strong>, exceto em:</p>
+      <ul>
+        <li>Manutenções programadas (avisadas com antecedência mínima de 24h)</li>
+        <li>Falhas de infraestrutura de terceiros (Supabase, Vercel) fora do nosso controle</li>
+        <li>Eventos de força maior (desastres naturais, interrupções de internet, etc.)</li>
+      </ul>
+      <p>Falhas serão comunicadas no canal de status e, quando relevantes, por e-mail.</p>
+    </section>
+
+    <section id="responsabilidade">
+      <h2><span class="num">11</span> Limitação de responsabilidade</h2>
+      <p>O Agenda não se responsabiliza por:</p>
+      <ul>
+        <li>Perdas de agendamentos causadas por falha do usuário ao configurar horários ou serviços</li>
+        <li>Prejuízos decorrentes do uso inadequado da plataforma</li>
+        <li>Relação comercial entre o profissional e seus clientes finais</li>
+        <li>Conteúdo inserido pelos usuários</li>
+        <li>Danos indiretos, lucros cessantes ou perda de receita</li>
+      </ul>
+      <p>Nossa responsabilidade máxima em qualquer caso é limitada ao valor pago pelo usuário nos últimos 3 meses de assinatura.</p>
+    </section>
+
+    <section id="foro">
+      <h2><span class="num">12</span> Foro e lei aplicável</h2>
+      <p>Estes Termos são regidos pela legislação brasileira. Fica eleito o foro da Comarca de São Paulo/SP para dirimir quaisquer controvérsias decorrentes deste contrato, com renúncia expressa a qualquer outro, por mais privilegiado que seja.</p>
+      <p>Para questões de consumo, aplica-se o Código de Defesa do Consumidor (Lei nº 8.078/1990) e a LGPD (Lei nº 13.709/2018).</p>
+    </section>
+
+    <section id="contato">
+      <h2><span class="num">13</span> Contato</h2>
+      <p>Dúvidas sobre estes Termos:</p>
+      <ul>
+        <li>E-mail: <a href="mailto:contato@agenda.pro" style="color:var(--orange)">contato@agenda.pro</a></li>
+        <li>Privacidade: <a href="mailto:privacidade@agenda.pro" style="color:var(--orange)">privacidade@agenda.pro</a></li>
+      </ul>
+      <p>Respondemos em até 5 dias úteis.</p>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  <p>© 2026 Agenda. Todos os direitos reservados. · <a href="/privacidade.html" style="color:var(--text-2);text-decoration:none">Política de Privacidade</a></p>
+</footer>
+
+</body>
+</html>

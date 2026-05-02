@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Política de Privacidade — Agenda</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0C0A09;
+    --surface: #1A1714;
+    --border: rgba(255,255,255,0.07);
+    --orange: #E55A0C;
+    --orange-dim: rgba(229,90,12,0.12);
+    --text: #E8E3DE;
+    --text-2: #9A9188;
+    --text-3: #5A534C;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Header */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: rgba(12,10,9,0.92);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+  .logo {
+    font-family: 'Sora', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .logo span { color: var(--orange); }
+  .back-link {
+    font-size: 13px;
+    color: var(--text-2);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.15s;
+  }
+  .back-link:hover { color: var(--text); }
+
+  /* Hero */
+  .hero {
+    padding: 64px 24px 40px;
+    max-width: 760px;
+    margin: 0 auto;
+    border-bottom: 1px solid var(--border);
+  }
+  .doc-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--orange-dim);
+    border: 1px solid rgba(229,90,12,0.25);
+    border-radius: 100px;
+    padding: 4px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--orange);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  .hero p {
+    color: var(--text-2);
+    font-size: 15px;
+    max-width: 560px;
+    margin-bottom: 28px;
+  }
+  .meta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .meta-label { font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; }
+  .meta-value { font-size: 13px; font-weight: 600; color: var(--text-2); }
+
+  /* Layout */
+  .layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    max-width: 1020px;
+    margin: 0 auto;
+    gap: 0;
+  }
+
+  /* Índice lateral */
+  .sidebar {
+    padding: 40px 24px;
+    position: sticky;
+    top: 61px;
+    height: fit-content;
+    border-right: 1px solid var(--border);
+  }
+  .sidebar-title {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-3);
+    margin-bottom: 16px;
+  }
+  .sidebar nav a {
+    display: block;
+    font-size: 13px;
+    color: var(--text-2);
+    text-decoration: none;
+    padding: 6px 0;
+    border-left: 2px solid transparent;
+    padding-left: 12px;
+    margin-left: -12px;
+    transition: all 0.15s;
+    line-height: 1.4;
+  }
+  .sidebar nav a:hover {
+    color: var(--text);
+    border-color: var(--orange);
+  }
+
+  /* Conteúdo */
+  .content {
+    padding: 40px 40px 80px;
+    max-width: 680px;
+  }
+
+  section {
+    margin-bottom: 48px;
+    scroll-margin-top: 80px;
+  }
+
+  h2 {
+    font-family: 'Sora', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  h2 .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    background: var(--orange-dim);
+    border: 1px solid rgba(229,90,12,0.2);
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--orange);
+    flex-shrink: 0;
+  }
+
+  p { color: var(--text-2); margin-bottom: 12px; }
+  p:last-child { margin-bottom: 0; }
+
+  ul, ol {
+    color: var(--text-2);
+    padding-left: 20px;
+    margin-bottom: 12px;
+  }
+  li { margin-bottom: 6px; }
+
+  .highlight {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--orange);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 14px;
+    color: var(--text-2);
+  }
+
+  .contact-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .contact-card .name {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--text);
+  }
+  .contact-card a {
+    color: var(--orange);
+    text-decoration: none;
+    font-size: 14px;
+  }
+  .contact-card a:hover { text-decoration: underline; }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 24px;
+    text-align: center;
+  }
+  footer p { font-size: 13px; color: var(--text-3); margin: 0; }
+
+  /* Mobile */
+  @media (max-width: 680px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .content { padding: 32px 20px 60px; }
+    .hero { padding: 40px 20px 32px; }
+    header { padding: 16px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">Agenda<span>.</span></a>
+  <a href="/" class="back-link">← Voltar ao início</a>
+</header>
+
+<div class="hero">
+  <div class="doc-badge">📄 Documento Legal</div>
+  <h1>Política de Privacidade</h1>
+  <p>Como coletamos, usamos e protegemos seus dados pessoais. Em conformidade com a Lei Geral de Proteção de Dados (LGPD — Lei nº 13.709/2018).</p>
+  <div class="meta">
+    <div class="meta-item">
+      <span class="meta-label">Versão</span>
+      <span class="meta-value">1.0</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Vigência</span>
+      <span class="meta-value">01 de maio de 2026</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Última atualização</span>
+      <span class="meta-value">01 de maio de 2026</span>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <p class="sidebar-title">Índice</p>
+    <nav>
+      <a href="#quem-somos">1. Quem somos</a>
+      <a href="#dados-coletados">2. Dados coletados</a>
+      <a href="#finalidades">3. Finalidades</a>
+      <a href="#base-legal">4. Base legal</a>
+      <a href="#compartilhamento">5. Compartilhamento</a>
+      <a href="#retencao">6. Retenção</a>
+      <a href="#seus-direitos">7. Seus direitos</a>
+      <a href="#seguranca">8. Segurança</a>
+      <a href="#cookies">9. Cookies</a>
+      <a href="#menores">10. Menores</a>
+      <a href="#alteracoes">11. Alterações</a>
+      <a href="#contato">12. Contato</a>
+    </nav>
+  </aside>
+
+  <main class="content">
+
+    <section id="quem-somos">
+      <h2><span class="num">1</span> Quem somos</h2>
+      <p>O <strong>Agenda</strong> é uma plataforma de agendamento online para profissionais autônomos e estabelecimentos brasileiros, operada por pessoa jurídica com sede no Brasil.</p>
+      <p>Nesta Política, "Agenda", "nós" ou "nosso" se referem ao operador da plataforma. "Você" se refere ao profissional que contrata o serviço (<strong>Controlador</strong> dos dados dos seus clientes) ou ao cliente final que realiza agendamentos.</p>
+      <div class="highlight">
+        O Agenda atua como <strong>Operador</strong> dos dados que os profissionais inserem na plataforma, nos termos do art. 39 da LGPD. Cada profissional é o Controlador dos dados dos seus clientes finais.
+      </div>
+    </section>
+
+    <section id="dados-coletados">
+      <h2><span class="num">2</span> Dados que coletamos</h2>
+
+      <p><strong>Dados dos profissionais (conta):</strong></p>
+      <ul>
+        <li>Nome, e-mail e telefone para criação de conta</li>
+        <li>Dados de faturamento: CPF/CNPJ, endereço, razão social</li>
+        <li>Chave PIX para recebimento de pagamentos antecipados</li>
+        <li>Configurações do estabelecimento (horários, serviços, temas)</li>
+      </ul>
+
+      <p><strong>Dados dos clientes finais (agendamentos):</strong></p>
+      <ul>
+        <li>Nome e número de WhatsApp para confirmação de agendamento</li>
+        <li>Histórico de visitas e serviços contratados</li>
+        <li>Dados opcionais: e-mail (para lembretes)</li>
+      </ul>
+
+      <p><strong>Dados de uso da plataforma:</strong></p>
+      <ul>
+        <li>Visualizações de páginas (page_views) para analytics do estabelecimento</li>
+        <li>Logs de acesso para segurança e prevenção de fraude</li>
+        <li>Preferências de tema e configurações salvas</li>
+      </ul>
+    </section>
+
+    <section id="finalidades">
+      <h2><span class="num">3</span> Para que usamos seus dados</h2>
+      <ul>
+        <li><strong>Prestação do serviço:</strong> gerenciar agendamentos, enviar confirmações e lembretes</li>
+        <li><strong>Cobrança e faturamento:</strong> processar assinaturas via Asaas (PIX e boleto)</li>
+        <li><strong>Comunicação:</strong> enviar e-mails transacionais via Resend (confirmações, alertas de trial)</li>
+        <li><strong>Segurança:</strong> detectar tentativas de acesso indevido e fraudes</li>
+        <li><strong>Melhoria do produto:</strong> analytics agregados e anônimos de uso da plataforma</li>
+        <li><strong>Suporte:</strong> responder dúvidas e resolver problemas</li>
+      </ul>
+      <div class="highlight">
+        Não vendemos, alugamos nem cedemos dados pessoais a terceiros para fins de marketing. Nunca.
+      </div>
+    </section>
+
+    <section id="base-legal">
+      <h2><span class="num">4</span> Base legal (LGPD)</h2>
+      <p>Cada tratamento de dados tem uma base legal específica nos termos do art. 7º da LGPD:</p>
+      <ul>
+        <li><strong>Execução de contrato (art. 7º, V):</strong> dados necessários para prestar o serviço contratado pelo profissional</li>
+        <li><strong>Legítimo interesse (art. 7º, IX):</strong> analytics agregados de uso, segurança e prevenção de fraude</li>
+        <li><strong>Consentimento (art. 7º, I):</strong> envio de comunicações de marketing, quando solicitadas</li>
+        <li><strong>Obrigação legal (art. 7º, II):</strong> retenção de dados fiscais pelo prazo exigido pela legislação</li>
+      </ul>
+    </section>
+
+    <section id="compartilhamento">
+      <h2><span class="num">5</span> Compartilhamento de dados</h2>
+      <p>Compartilhamos dados pessoais apenas com os seguintes parceiros, estritamente necessários para o funcionamento do serviço:</p>
+      <ul>
+        <li><strong>Supabase Inc.</strong> — infraestrutura de banco de dados, hospedagem nos EUA com conformidade SOC 2</li>
+        <li><strong>Vercel Inc.</strong> — hospedagem da aplicação web, servidores na edge global</li>
+        <li><strong>Asaas Gestão Financeira S.A.</strong> — processamento de cobranças e pagamentos, empresa brasileira regulada pelo Banco Central</li>
+        <li><strong>Resend Inc.</strong> — envio de e-mails transacionais</li>
+      </ul>
+      <p>Todos os parceiros são vinculados por contratos que exigem tratamento adequado dos dados e conformidade com a LGPD ou legislação equivalente.</p>
+      <p>Dados podem ser compartilhados com autoridades públicas quando exigido por lei, decisão judicial ou para exercício regular de direitos em processo judicial.</p>
+    </section>
+
+    <section id="retencao">
+      <h2><span class="num">6</span> Retenção dos dados</h2>
+      <ul>
+        <li><strong>Dados de conta ativa:</strong> mantidos durante toda a vigência do contrato</li>
+        <li><strong>Dados de agendamentos:</strong> 5 anos após o encerramento da conta (obrigação fiscal)</li>
+        <li><strong>Dados de faturamento:</strong> 10 anos (obrigação fiscal brasileira)</li>
+        <li><strong>Logs de segurança:</strong> 6 meses</li>
+        <li><strong>Dados de clientes finais:</strong> excluídos em até 30 dias após solicitação do profissional ou encerramento da conta</li>
+      </ul>
+    </section>
+
+    <section id="seus-direitos">
+      <h2><span class="num">7</span> Seus direitos</h2>
+      <p>Nos termos dos arts. 17 a 22 da LGPD, você tem direito a:</p>
+      <ul>
+        <li><strong>Confirmação:</strong> saber se tratamos seus dados</li>
+        <li><strong>Acesso:</strong> obter cópia dos dados que possuímos sobre você</li>
+        <li><strong>Correção:</strong> corrigir dados incompletos, inexatos ou desatualizados</li>
+        <li><strong>Anonimização ou exclusão:</strong> de dados desnecessários ou tratados em desconformidade</li>
+        <li><strong>Portabilidade:</strong> receber seus dados em formato estruturado</li>
+        <li><strong>Informação:</strong> sobre compartilhamento com terceiros</li>
+        <li><strong>Revogação do consentimento:</strong> quando aplicável</li>
+        <li><strong>Oposição:</strong> ao tratamento baseado em legítimo interesse</li>
+      </ul>
+      <p>Para exercer qualquer direito, envie e-mail para <a href="mailto:privacidade@agenda.pro" style="color:var(--orange)">privacidade@agenda.pro</a>. Respondemos em até 15 dias úteis.</p>
+    </section>
+
+    <section id="seguranca">
+      <h2><span class="num">8</span> Segurança</h2>
+      <p>Adotamos medidas técnicas e organizacionais para proteger seus dados:</p>
+      <ul>
+        <li>Criptografia em trânsito (HTTPS/TLS 1.3) e em repouso</li>
+        <li>Row Level Security (RLS) no banco de dados — cada estabelecimento acessa apenas seus próprios dados</li>
+        <li>Autenticação por senha com hash bcrypt</li>
+        <li>Tokens de sessão com expiração automática</li>
+        <li>Rate limiting em operações sensíveis</li>
+        <li>Acesso administrativo restrito e auditado</li>
+      </ul>
+      <div class="highlight">
+        Em caso de incidente de segurança que possa afetar seus dados, notificaremos você e a ANPD dentro do prazo legal de 72 horas após ciência do ocorrido.
+      </div>
+    </section>
+
+    <section id="cookies">
+      <h2><span class="num">9</span> Cookies e armazenamento local</h2>
+      <p>O Agenda utiliza armazenamento local do navegador (localStorage) para:</p>
+      <ul>
+        <li>Manter sua sessão autenticada</li>
+        <li>Salvar preferências de tema visual</li>
+        <li>Lembrar configurações da interface</li>
+      </ul>
+      <p>Não utilizamos cookies de rastreamento, publicidade ou analytics de terceiros.</p>
+    </section>
+
+    <section id="menores">
+      <h2><span class="num">10</span> Menores de idade</h2>
+      <p>O Agenda é uma plataforma destinada a profissionais adultos. Não coletamos intencionalmente dados de menores de 18 anos sem consentimento dos responsáveis legais.</p>
+      <p>Se você identificar que dados de um menor foram inseridos sem autorização adequada, entre em contato imediatamente para exclusão.</p>
+    </section>
+
+    <section id="alteracoes">
+      <h2><span class="num">11</span> Alterações nesta política</h2>
+      <p>Podemos atualizar esta Política periodicamente. Alterações significativas serão comunicadas por e-mail e notificação no painel com antecedência mínima de 15 dias.</p>
+      <p>O uso continuado da plataforma após a entrada em vigor das alterações constitui aceite das novas condições.</p>
+    </section>
+
+    <section id="contato">
+      <h2><span class="num">12</span> Encarregado de dados (DPO)</h2>
+      <p>Para exercer seus direitos ou tirar dúvidas sobre privacidade:</p>
+      <div class="contact-card">
+        <span class="name">Encarregado de Proteção de Dados — Agenda</span>
+        <a href="mailto:privacidade@agenda.pro">privacidade@agenda.pro</a>
+        <span style="font-size:13px;color:var(--text-3)">Respondemos em até 15 dias úteis</span>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  <p>© 2026 Agenda. Todos os direitos reservados. · <a href="/termos.html" style="color:var(--text-2);text-decoration:none">Termos de Uso</a></p>
+</footer>
+
+</body>
+</html>
