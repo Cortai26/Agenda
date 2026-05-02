@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Cancelar agendamento — Agenda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+:root,html.t-neutral{
+  --c-primary:#E55A0C;--c-bg:#F8F4EF;--c-surface:#FFFFFF;--c-surface-2:#F2EDE7;
+  --c-border:#D4C4B0;--c-text:#1A0E06;--c-text-2:#5C4033;--c-text-3:#9C8878;
+  --c-green:#16A34A;--c-red:#DC2626;--font-head:'Sora',sans-serif;--font-body:'Nunito Sans',sans-serif;
+  --r-md:12px;--r-lg:16px;
+}
+html.t-onyx{
+  --c-primary:#E55A0C;--c-bg:#131313;--c-surface:#1C1C1C;--c-surface-2:#242424;
+  --c-border:rgba(255,255,255,.08);--c-text:#E5E2E1;--c-text-2:#A09080;--c-text-3:#5C5045;
+  --c-green:#4ADE80;--c-red:#F87171;--font-head:'Sora',sans-serif;--font-body:'Nunito Sans',sans-serif;
+  --r-md:4px;--r-lg:8px;
+}
+html.t-feminine{
+  --c-primary:#D81B60;--c-bg:#FFFBFF;--c-surface:#FFFFFF;--c-surface-2:#FFF1F3;
+  --c-border:#F4DDDF;--c-text:#201A1A;--c-text-2:#534344;--c-text-3:#908E8E;
+  --c-green:#2E7D32;--c-red:#C62828;--font-head:'Sora',sans-serif;--font-body:'Nunito Sans',sans-serif;
+  --r-md:14px;--r-lg:20px;
+}
+body{background:var(--c-bg);color:var(--c-text);font-family:var(--font-body);min-height:100vh}
+#app{max-width:480px;margin:0 auto;padding:40px 20px;text-align:center}
+.card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-lg);padding:20px;margin-bottom:16px;text-align:left}
+.btn-canc{width:100%;padding:16px;background:var(--c-red);color:#fff;border:none;border-radius:var(--r-md);font-size:16px;font-weight:700;cursor:pointer;margin-bottom:12px;font-family:var(--font-head)}
+a.btn-back{font-size:14px;color:var(--c-text-2);text-decoration:none;display:inline-block}
+</style>
+</head>
+<body>
+<div id="app"><div id="loading" style="font-size:14px;color:var(--c-text-2)">⏳ Verificando agendamento...</div></div>
+
+<script>
+var SUPA_URL='https://acldrisohnjfekjxgmoh.supabase.co';
+var SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFjbGRyaXNvaG5qZmVranhnbW9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1ODA1MzcsImV4cCI6MjA4OTE1NjUzN30.etojz12x1oVNvbW_fPeVpNx2OFuJ72C1YioFBlCLS2Y';
+var H={'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json'};
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+async function sfetch(path){
+  var r=await fetch(SUPA_URL+'/rest/v1/'+path,{headers:H});
+  return r.json();
+}
+
+async function applyThema(salaoId){
+  try{
+    var r=await fetch(SUPA_URL+'/rest/v1/saloes?id=eq.'+salaoId+'&select=tema',{headers:H});
+    var d=await r.json();
+    var temaRaw=d&&d[0]&&d[0].tema;
+    var tema='t-neutral';
+    if(temaRaw){
+      if(typeof temaRaw==='object') tema='t-'+(temaRaw.template||'neutral');
+      else tema=temaRaw;
+    }
+    var legado={'t-obsidian':'t-onyx','t-dark':'t-onyx','t-azure':'t-neutral','t-emerald':'t-neutral','t-rose':'t-feminine','t-crimson':'t-feminine','t-clean':'t-neutral','t-verde':'t-neutral'};
+    tema=legado[tema]||tema;
+    if(['t-onyx','t-feminine','t-neutral'].indexOf(tema)<0) tema='t-neutral';
+    document.documentElement.className=tema;
+  }catch(e){}
+}
+
+async function init(){
+  var token=new URLSearchParams(location.search).get('token');
+  if(!token){mostrarErro('Link inválido.');return;}
+
+  var ags=await sfetch('agendamentos?cancel_token=eq.'+token+'&select=id,status,data,hora,servico_nome,servico_preco,sinal_valor,sinal_pago,cancelado_em,salao_id');
+  var ag=ags&&ags[0];
+  if(!ag){mostrarErro('Agendamento não encontrado ou link inválido.');return;}
+  if(ag.status==='cancelado'){mostrarErro('Este agendamento já foi cancelado.');return;}
+  if(ag.status==='concluido'){mostrarErro('Este agendamento já foi concluído e não pode ser cancelado.');return;}
+
+  await applyThema(ag.salao_id);
+
+  var sal=await sfetch('saloes?id=eq.'+ag.salao_id+'&select=nome,cancelamento_min,sinal_percentual');
+  var salao=sal&&sal[0]?sal[0]:{};
+
+  var dataHoraAg=new Date(ag.data+'T'+ag.hora);
+  var agora=new Date();
+  var diffMin=(dataHoraAg-agora)/60000;
+  var cancelMin=salao.cancelamento_min||120;
+  var dentroJanela=diffMin>cancelMin;
+  var sinalRetido=ag.sinal_pago&&!dentroJanela;
+
+  var sinalFmt=ag.sinal_valor>0?(ag.sinal_valor/100).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}):null;
+  var dataFmt=new Date(ag.data+'T12:00:00').toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'});
+  var horaFmt=ag.hora?ag.hora.slice(0,5):'';
+  var horasCan=cancelMin>=60?Math.floor(cancelMin/60)+'h':cancelMin+'min';
+
+  var aviso='';
+  if(sinalRetido){
+    aviso='<div class="card" style="background:rgba(220,38,38,.06);border-color:rgba(220,38,38,.2);margin-bottom:16px;font-size:14px;color:var(--c-text-2)">'+
+      '⚠️ O agendamento é em menos de '+horasCan+'. O sinal de <strong style="color:var(--c-text)">'+sinalFmt+'</strong> será retido pelo profissional conforme a política de cancelamento.'+
+    '</div>';
+  } else if(dentroJanela&&sinalFmt){
+    aviso='<div class="card" style="background:rgba(22,163,74,.06);border-color:rgba(22,163,74,.2);margin-bottom:16px;font-size:14px;color:var(--c-text-2)">'+
+      '✅ Você está dentro do prazo. O sinal de <strong>'+sinalFmt+'</strong> será devolvido pelo profissional.'+
+    '</div>';
+  }
+
+  document.getElementById('app').innerHTML=
+    '<div style="margin-bottom:28px">'+
+      '<div style="font-size:36px;margin-bottom:16px">'+(sinalRetido?'⚠️':'🗓️')+'</div>'+
+      '<div style="font-family:var(--font-head);font-size:20px;font-weight:700;color:var(--c-text);margin-bottom:8px">Cancelar agendamento</div>'+
+      '<div style="font-size:14px;color:var(--c-text-2)">'+
+        esc(ag.servico_nome)+' · '+dataFmt+' às '+horaFmt+'<br>'+
+        '<strong>'+esc(salao.nome||'')+'</strong>'+
+      '</div>'+
+    '</div>'+
+    aviso+
+    '<button class="btn-canc" id="btnCancelar" onclick="cancelar(\''+token+'\','+sinalRetido+')">Confirmar cancelamento</button>'+
+    '<a href="javascript:history.back()" class="btn-back">← Manter agendamento</a>';
+}
+
+async function cancelar(token, sinalRetido){
+  var btn=document.getElementById('btnCancelar');
+  if(btn){btn.textContent='Cancelando...';btn.disabled=true;}
+  var r=await fetch(SUPA_URL+'/rest/v1/agendamentos?cancel_token=eq.'+token,{
+    method:'PATCH',
+    headers:Object.assign({},H,{'Prefer':'return=minimal'}),
+    body:JSON.stringify({status:'cancelado',cancelado_em:new Date().toISOString(),sinal_retido:!!sinalRetido})
+  });
+  if(r.ok||r.status===204){
+    document.getElementById('app').innerHTML=
+      '<div style="padding:40px 0">'+
+        '<div style="font-size:48px;margin-bottom:16px">✅</div>'+
+        '<div style="font-family:var(--font-head);font-size:20px;font-weight:700;margin-bottom:8px">Agendamento cancelado</div>'+
+        '<div style="font-size:14px;color:var(--c-text-2)">'+
+          (sinalRetido?'O sinal foi retido pelo profissional conforme a política de cancelamento.':'Cancelamento realizado com sucesso.')+
+        '</div>'+
+      '</div>';
+  } else {
+    mostrarErro('Erro ao cancelar. Entre em contato com o estabelecimento.');
+  }
+}
+
+function mostrarErro(msg){
+  document.getElementById('app').innerHTML=
+    '<div style="padding:40px 0">'+
+      '<div style="font-size:48px;margin-bottom:16px">❌</div>'+
+      '<div style="font-size:16px;color:var(--c-text-2)">'+esc(msg)+'</div>'+
+    '</div>';
+}
+
+init();
+</script>
+</body>
+</html>

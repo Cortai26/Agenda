@@ -1,6 +1,6 @@
 /* ═══ p-config.js — Aba Minha Página + Pagamentos ═══ */
 
-var _pgtoState = {dinheiro:true, pix:true, cartao:false, pixKey:'', pixTipo:'telefone'};
+var _pgtoState = {dinheiro:true, pix:true, cartao:false, pixKey:'', pixTipo:'telefone', sinalObrig:false, sinalPct:30, cancelMin:120};
 
 var HORARIO_PADRAO = {
   '0':null,
@@ -562,7 +562,7 @@ async function renderPagamentos(){
   el.innerHTML='<div class="loading">Carregando...</div>';
 
   // Public fields via direct API
-  var dadosPgto=await api('saloes?slug=eq.'+S.slug+'&select=pix_key,pix_tipo,aceita_dinheiro,aceita_pix,aceita_cartao,asaas_subscription_id,metodo_assinatura,assinatura_status,plano');
+  var dadosPgto=await api('saloes?slug=eq.'+S.slug+'&select=pix_key,pix_tipo,aceita_dinheiro,aceita_pix,aceita_cartao,asaas_subscription_id,metodo_assinatura,assinatura_status,plano,sinal_percentual,sinal_obrigatorio,cancelamento_min');
   var d=dadosPgto&&dadosPgto[0]?dadosPgto[0]:{};
   // Private fields via RPC
   try{
@@ -577,6 +577,9 @@ async function renderPagamentos(){
   _pgtoState.cartao=!!d.aceita_cartao;
   _pgtoState.pixKey=d.pix_key||'';
   _pgtoState.pixTipo=d.pix_tipo||'telefone';
+  _pgtoState.sinalObrig=!!d.sinal_obrigatorio;
+  _pgtoState.sinalPct=d.sinal_percentual||30;
+  _pgtoState.cancelMin=d.cancelamento_min||120;
 
   var cobrancasPendentes=[];
   try{cobrancasPendentes=await rpc('listar_cobrancas_salao',{p_salao_id:S.id});}catch(_){}
@@ -773,6 +776,33 @@ function buildPagamentosUI(el){
     '</select></div>'+
     '<div class="fg"><label class="fl">Chave PIX</label>'+
     '<input class="fi" type="text" id="pixKeyInput" placeholder="Sua chave PIX" value="'+(_pgtoState.pixKey||'')+'"></div>'+
+    '<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--bd)">'+
+    '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--CZ);margin-bottom:10px">Sinal no agendamento</div>'+
+    '<div class="pgto-row" style="padding:0 0 10px">'+
+      '<div><div style="font-size:13px;font-weight:700;color:var(--MR)">Cobrar sinal obrigatório</div>'+
+      '<div style="font-size:11px;color:var(--CZ);margin-top:2px">Cliente paga parte ao agendar para confirmar</div></div>'+
+      '<button class="pgto-toggle '+(_pgtoState.sinalObrig?'on':'')+'" id="tgSinalObrig" onclick="toggleSinalObrig(this)"></button>'+
+    '</div>'+
+    '<div id="sinalOpcoes" style="'+(_pgtoState.sinalObrig?'':'display:none')+'">'+
+    '<div class="pgto-row" style="padding:0 0 8px">'+
+      '<div style="font-size:12px;font-weight:600;color:var(--MR)">Percentual do sinal</div>'+
+      '<div style="display:flex;align-items:center;gap:8px">'+
+      '<input type="range" id="sliderSinal" min="10" max="50" step="5" value="'+_pgtoState.sinalPct+'"'+
+      ' oninput="document.getElementById(\'lblSinal\').textContent=this.value+\'%\'"'+
+      ' style="width:90px;accent-color:var(--L)">'+
+      '<span id="lblSinal" style="font-weight:700;color:var(--L);min-width:32px">'+_pgtoState.sinalPct+'%</span>'+
+      '</div></div>'+
+    '<div class="pgto-row" style="padding:0 0 4px">'+
+      '<div style="font-size:12px;font-weight:600;color:var(--MR)">Cancelamento gratuito até</div>'+
+      '<select id="selCancelMin" style="padding:6px 10px;border-radius:8px;background:var(--s2);color:var(--MR);border:1px solid var(--bd);font-size:12px">'+
+      '<option value="60"'+(_pgtoState.cancelMin===60?' selected':'')+'>1 hora</option>'+
+      '<option value="120"'+(_pgtoState.cancelMin===120?' selected':'')+'>2 horas</option>'+
+      '<option value="240"'+(_pgtoState.cancelMin===240?' selected':'')+'>4 horas</option>'+
+      '<option value="480"'+(_pgtoState.cancelMin===480?' selected':'')+'>8 horas</option>'+
+      '<option value="1440"'+(_pgtoState.cancelMin===1440?' selected':'')+'>24 horas</option>'+
+      '</select></div>'+
+    '</div>'+
+    '</div>'+
     '</div>'+
     '<div class="pgto-row">'+
       '<div class="pgto-lbl">\ud83d\udcb3 Cart\u00e3o</div>'+
@@ -790,6 +820,12 @@ function togglePgto(tipo){
   if(pixSec) pixSec.style.display=_pgtoState.pix?'':'none';
 }
 
+function toggleSinalObrig(btn){
+  btn.classList.toggle('on');
+  var op=document.getElementById('sinalOpcoes');
+  if(op) op.style.display=btn.classList.contains('on')?'':'none';
+}
+
 async function salvarPagamentos(){
   var pw=await getPw(); if(!pw)return;
   var pixKey=document.getElementById('pixKeyInput')?document.getElementById('pixKeyInput').value.trim():'';
@@ -797,6 +833,21 @@ async function salvarPagamentos(){
   try{
     await rpc('salvar_pagamentos',{p_slug:S.slug,p_senha:pw,p_aceita_dinheiro:_pgtoState.dinheiro,p_aceita_pix:_pgtoState.pix,p_aceita_cartao:_pgtoState.cartao,p_pix_key:pixKey||null,p_pix_tipo:pixTipo});
     toast('\u2713 Formas de pagamento salvas!','ok');
+    // Salvar campos de sinal separadamente
+    var sinalObrig=document.getElementById('tgSinalObrig')?document.getElementById('tgSinalObrig').classList.contains('on'):false;
+    var sinalPct=document.getElementById('sliderSinal')?parseInt(document.getElementById('sliderSinal').value):30;
+    var cancelMin=document.getElementById('selCancelMin')?parseInt(document.getElementById('selCancelMin').value):120;
+    await api('saloes?id=eq.'+S.id,{
+      method:'PATCH',
+      headers:{'Prefer':'return=minimal'},
+      body:JSON.stringify({sinal_obrigatorio:sinalObrig,sinal_percentual:sinalPct,cancelamento_min:cancelMin})
+    }).catch(function(){});
+    _pgtoState.sinalObrig=sinalObrig;
+    _pgtoState.sinalPct=sinalPct;
+    _pgtoState.cancelMin=cancelMin;
+    S.sinal_obrigatorio=sinalObrig;
+    S.sinal_percentual=sinalPct;
+    S.cancelamento_min=cancelMin;
   }catch(e){
     if(e.message&&e.message.includes('Acesso negado')){_pw=null;}
     toast('Erro ao salvar','err');

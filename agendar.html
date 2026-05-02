@@ -1427,7 +1427,7 @@ function updateBar(){
 // ── INIT ──
 async function init(){
   try {
-    const dados = await supa(`saloes?slug=eq.${slug}&select=id,slug,nome,responsavel,plano,status,descricao,endereco,cancelamento_min,pix_key,pix_tipo,aceita_pix,aceita_dinheiro,aceita_cartao,tema,trial_expira,horario`);
+    const dados = await supa(`saloes?slug=eq.${slug}&select=id,slug,nome,responsavel,plano,status,descricao,endereco,cancelamento_min,pix_key,pix_tipo,aceita_pix,aceita_dinheiro,aceita_cartao,tema,trial_expira,horario,sinal_percentual,sinal_obrigatorio`);
     if(!dados||dados.length===0){ document.getElementById('srvWrap').innerHTML='<div class="erro">Salão não encontrado</div>'; return; }
     salao = dados[0];
     document.title = salao.nome+' — Agendamento';
@@ -1826,6 +1826,15 @@ document.getElementById('btnAg').onclick=async()=>{
     if(rpcRes.profissional_nome) S.profNome=rpcRes.profissional_nome;
     S._agId=rpcRes.id;
     showModal({id:rpcRes.id});
+    // Registrar sinal no agendamento (fire and forget)
+    if(salao.aceita_pix!==false && salao.pix_key && S.srv.preco>0){
+      var _sinalToSave=Math.round(S.srv.preco*((salao.sinal_percentual||30)/100));
+      fetch(SUPA_URL+'/rest/v1/agendamentos?id=eq.'+rpcRes.id,{
+        method:'PATCH',
+        headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+        body:JSON.stringify({sinal_valor:_sinalToSave,sinal_pago:false,pix_valor:S.srv.preco})
+      }).catch(function(){});
+    }
     // S3.1: Send confirmation email (fire and forget)
     if(emailVal && rpcRes.cancel_token){
       fetch(`https://acldrisohnjfekjxgmoh.supabase.co/functions/v1/enviar-email`,{
@@ -1848,6 +1857,19 @@ document.getElementById('btnAg').onclick=async()=>{
     btn.disabled=false; btn.textContent='✅ Confirmar agendamento';
   }
 };
+
+async function copiarChavePix(){
+  var chave=salao&&salao.pix_key;
+  if(!chave) return;
+  var btn=document.getElementById('btnCopiarChavePix');
+  try{
+    await navigator.clipboard.writeText(chave);
+    if(btn){var orig=btn.textContent;btn.textContent='✅ Copiado!';btn.style.background='#16a34a';setTimeout(function(){btn.textContent=orig;btn.style.background='';},2000);}
+  }catch(e){
+    var el=document.createElement('textarea');el.value=chave;document.body.appendChild(el);el.select();document.execCommand('copy');document.body.removeChild(el);
+    if(btn){var orig2=btn.textContent;btn.textContent='✅ Copiado!';setTimeout(function(){btn.textContent=orig2;},2000);}
+  }
+}
 
 function fecharConfirmacao(){
   document.getElementById('confirmScreen').style.display='none';
@@ -2002,31 +2024,67 @@ function showModal(ag){
     cr('Valor','R$ '+(S.srv.preco/100).toFixed(0))+
     (salao.endereco?cr('Local',salao.endereco):'');
 
-  // ── PIX opcional ──
+  // ── PIX Sinal ──
   var pixSec=document.getElementById('pixSection');
   if(pixSec && salao.aceita_pix!==false && salao.pix_key){
-    try{
-      _pixCode = gerarPixEMV(
-        salao.pix_key,
-        salao.pix_tipo||'aleatoria',
-        salao.nome,
-        S.srv.preco, // valor fixo do serviço
-        salao.cidade||'Brasil'
-      );
-      document.getElementById('pixCopiaCola').textContent = _pixCode;
-      document.getElementById('pixValorLbl').textContent =
-        'R$ '+(S.srv.preco/100).toFixed(2).replace('.',',');
-      pixSec.style.display='block';
-    }catch(e){ pixSec.style.display='none'; }
+    var _pct=salao.sinal_percentual||30;
+    var _sinalVal=Math.round((S.srv.preco||0)*_pct/100);
+    var _sinalFmt='R$ '+(_sinalVal/100).toFixed(2).replace('.',',');
+    var _totalFmt='R$ '+(S.srv.preco/100).toFixed(2).replace('.',',');
+    var _minsCan=salao.cancelamento_min||120;
+    var _hrsCan=_minsCan>=60?Math.floor(_minsCan/60)+'h':_minsCan+'min';
+    var _tipoLbl={telefone:'📱 Telefone',email:'📧 E-mail',cpf:'🪪 CPF',cnpj:'🏢 CNPJ',aleatoria:'🔑 Chave aleatória'}[salao.pix_tipo||'aleatoria']||'PIX';
+    var _obrig=!!salao.sinal_obrigatorio;
+    window._sinalVal=_sinalVal;
+    pixSec.innerHTML=
+      '<div style="background:rgba(229,90,12,.08);border:1.5px solid rgba(229,90,12,.2);border-radius:14px;overflow:hidden">'+
+        '<div style="background:rgba(229,90,12,.10);border-bottom:1px solid rgba(229,90,12,.15);padding:12px 16px;display:flex;align-items:center;gap:10px">'+
+          '<span style="font-size:20px">📲</span>'+
+          '<div>'+
+            '<div style="font-weight:700;font-size:14px;color:var(--c-text)">'+(_obrig?'Sinal obrigatório via PIX':'Pague o sinal via PIX')+'</div>'+
+            '<div style="font-size:12px;color:var(--c-text-2)">'+(_obrig?'Necessário para confirmar o agendamento':'Garanta seu horário pagando o sinal')+'</div>'+
+          '</div>'+
+        '</div>'+
+        '<div style="padding:14px 16px">'+
+          '<div style="display:flex;justify-content:space-between;margin-bottom:6px">'+
+            '<span style="font-size:13px;color:var(--c-text-2)">Total do serviço</span>'+
+            '<span style="font-size:13px;font-weight:600;color:var(--c-text)">'+_totalFmt+'</span>'+
+          '</div>'+
+          '<div style="display:flex;justify-content:space-between;margin-bottom:14px">'+
+            '<span style="font-size:14px;font-weight:700;color:var(--c-text)">Sinal agora ('+_pct+'%)</span>'+
+            '<span style="font-size:14px;font-weight:700;color:var(--c-primary)">'+_sinalFmt+'</span>'+
+          '</div>'+
+          '<div style="background:var(--c-surface);border:1px solid var(--c-border);border-radius:10px;padding:12px 14px;margin-bottom:12px">'+
+            '<div style="font-size:11px;color:var(--c-text-2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">'+_tipoLbl+'</div>'+
+            '<div style="display:flex;align-items:center;gap:10px;justify-content:space-between">'+
+              '<span style="font-family:monospace;font-size:13px;font-weight:600;color:var(--c-text);word-break:break-all;flex:1">'+esc(salao.pix_key)+'</span>'+
+              '<button id="btnCopiarChavePix" onclick="copiarChavePix()" style="padding:6px 14px;background:var(--c-primary);color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0">Copiar</button>'+
+            '</div>'+
+          '</div>'+
+          '<div style="padding:10px 14px;background:rgba(229,90,12,.06);border-radius:8px;font-size:12px;color:var(--c-text-2);line-height:1.5">'+
+            '⏱️ Cancelamento gratuito até <strong style="color:var(--c-text)">'+_hrsCan+' de antecedência</strong>. Após esse prazo, o sinal é retido.'+
+          '</div>'+
+        '</div>'+
+      '</div>';
+    pixSec.style.display='block';
   } else if(pixSec){
     pixSec.style.display='none';
+    window._sinalVal=0;
   }
 
   document.getElementById('btnWaConfirm').onclick=function(){
     let tel=S.tel.replace(/\D/g,'');
     if(tel.length<=11) tel='55'+tel;
     const linkAg=window.location.origin+'/agendar.html?slug='+slug;
-    const pixLinha=salao.pix_key?'\n\n📲 *Pix:* '+salao.pix_key+'\nValor: R$ '+(S.srv.preco/100).toFixed(2):'';
+    var _waMinsCan=salao.cancelamento_min||120;
+    var _waHrsCan=_waMinsCan>=60?Math.floor(_waMinsCan/60)+'h':_waMinsCan+'min';
+    var _waSinalV=window._sinalVal||0;
+    var _waPct=salao.sinal_percentual||30;
+    const pixLinha=salao.pix_key?
+      '\n\n📲 *PIX:* '+salao.pix_key+
+      (_waSinalV>0?'\n💰 *Sinal:* R$'+(_waSinalV/100).toFixed(2)+' ('+_waPct+'%)':'')+
+      '\n⏱️ Cancelamento gratuito até '+_waHrsCan+' de antecedência'
+      :'';
     const msg=encodeURIComponent(
       '📅 *Agendamento confirmado!*\n\n'+'📍 *'+salao.nome+'*\n'+
       (salao.endereco?'🗺️ '+salao.endereco+'\n':'')+

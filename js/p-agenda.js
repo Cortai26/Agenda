@@ -401,6 +401,17 @@ async function renderDrill(ds){
         }
         btns+='<button class="gs-btn gs-canc" data-id="'+ag.id+'" onclick="cancelAg(this.dataset.id,\'drill\')">✕</button>';
       }
+      var sinalHtml='';
+      if(ag.sinal_valor>0){
+        var sinalFmtDrill=(ag.sinal_valor/100).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+        if(ag.sinal_pago){
+          sinalHtml='<span style="font-size:10px;color:#16a34a;font-weight:700;display:block">✅ Sinal '+sinalFmtDrill+'</span>';
+        } else if(ag.sinal_retido){
+          sinalHtml='<span style="font-size:10px;color:#dc2626;font-weight:700;display:block">🔒 Sinal retido '+sinalFmtDrill+'</span>';
+        } else {
+          sinalHtml='<button data-agid="'+ag.id+'" onclick="confirmarSinal(this.dataset.agid,this)" style="font-size:10px;font-weight:700;color:var(--L);background:rgba(229,90,12,.1);border:1px solid rgba(229,90,12,.3);border-radius:5px;padding:3px 8px;cursor:pointer;display:block;margin-top:3px">📲 Sinal '+sinalFmtDrill+'</button>';
+        }
+      }
       slotsHtml+=
         '<div class="'+cls+'">'+
         '<div class="gs-hora">'+t+'</div>'+
@@ -408,6 +419,7 @@ async function renderDrill(ds){
           '<div class="gs-nome">'+esc(ag.cliente_nome)+'</div>'+
           '<div class="gs-srv">✂️ '+esc(ag.servico_nome)+'</div>'+
           '<div class="gs-tel">📱 '+ag.cliente_tel+'</div>'+
+          sinalHtml+
         '</div>'+
         '<div class="gs-right">'+
           '<div class="gs-preco">'+formatPrice(ag.servico_preco)+'</div>'+
@@ -813,4 +825,20 @@ function abrirCalModal(){
 
 function fecharCalModal(){
   var ov=document.getElementById('calModalOv'); if(ov) ov.remove();
+}
+
+async function confirmarSinal(agId, btn){
+  if(btn){btn.disabled=true;btn.textContent='Confirmando...';}
+  try{
+    await api('agendamentos?id=eq.'+agId,{
+      method:'PATCH',
+      headers:{'Prefer':'return=minimal'},
+      body:JSON.stringify({sinal_pago:true,sinal_pago_em:new Date().toISOString()})
+    });
+    toast('✅ Sinal confirmado!','ok');
+    if(window._drillDia) await renderDrill(window._drillDia);
+  }catch(e){
+    toast('Erro ao confirmar sinal','err');
+    if(btn){btn.disabled=false;btn.textContent='📲 Confirmar sinal';}
+  }
 }
