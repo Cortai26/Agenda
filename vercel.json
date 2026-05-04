@@ -108,6 +108,10 @@
     {
       "path": "/api/enviar-lembretes",
       "schedule": "0 10 * * *"
+    },
+    {
+      "path": "/api/cobrar-trial-expirado",
+      "schedule": "0 8 * * *"
     }
   ]
 }
