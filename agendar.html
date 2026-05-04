@@ -1868,13 +1868,27 @@ async function copiarChavePix(){
   var chave=salao&&salao.pix_key;
   if(!chave) return;
   var btn=document.getElementById('btnCopiarChavePix');
+  var origTxt=btn?btn.textContent:'Copiar';
+  var origBg=btn?btn.style.background:'';
+  function _mostrarCopiado(){
+    if(btn){btn.textContent='✅ Copiado!';btn.style.background='#16a34a';}
+    if(typeof toast==='function') toast('Chave PIX copiada!','ok');
+    setTimeout(function(){if(btn){btn.textContent=origTxt;btn.style.background=origBg;}},2200);
+  }
   try{
     await navigator.clipboard.writeText(chave);
-    if(btn){var orig=btn.textContent;btn.textContent='✅ Copiado!';btn.style.background='#16a34a';setTimeout(function(){btn.textContent=orig;btn.style.background='';},2000);}
+    _mostrarCopiado();
   }catch(e){
-    var el=document.createElement('textarea');el.value=chave;document.body.appendChild(el);el.select();document.execCommand('copy');document.body.removeChild(el);
-    if(btn){var orig2=btn.textContent;btn.textContent='✅ Copiado!';setTimeout(function(){btn.textContent=orig2;},2000);}
+    var el=document.createElement('textarea');el.value=chave;document.body.appendChild(el);el.select();try{document.execCommand('copy');}catch(_){}document.body.removeChild(el);
+    _mostrarCopiado();
   }
+}
+
+function toast(msg){
+  var t=document.getElementById('_agToast');
+  if(!t){t=document.createElement('div');t.id='_agToast';t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a0e06;color:#fff;padding:10px 20px;border-radius:24px;font-size:14px;font-weight:700;z-index:9999;pointer-events:none;opacity:0;transition:opacity .2s';document.body.appendChild(t);}
+  t.textContent=msg;t.style.opacity='1';
+  clearTimeout(t._timer);t._timer=setTimeout(function(){t.style.opacity='0';},2000);
 }
 
 function fecharConfirmacao(){
