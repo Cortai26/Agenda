@@ -18,17 +18,17 @@ function abrirUpgrade(){
   var modal=document.createElement('div');
   modal.style.cssText='background:var(--surface);border-radius:20px 20px 0 0;padding:24px 20px 36px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto';
 
-  var planoAtual = S.plano||'basico';
+  var planoAtual = PLANOS_INFO[S.plano] ? S.plano : null;
   var html = '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">';
   html += '<div style="font-family:var(--font-d);font-size:18px;font-weight:800;color:var(--text)">🚀 Escolha seu plano</div>';
   html += '<button onclick="fecharUpgrade()" style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--text-3)">✕</button>';
   html += '</div>';
-  html += '<div style="font-size:12px;font-weight:700;color:var(--text-3);margin-bottom:16px;text-align:center">Plano atual: <b style="color:var(--primary)">'+PLANOS_INFO[planoAtual].nome+'</b></div>';
+  html += '<div style="font-size:12px;font-weight:700;color:var(--text-3);margin-bottom:16px;text-align:center">'+(planoAtual?'Plano atual: <b style="color:var(--primary)">'+PLANOS_INFO[planoAtual].nome+'</b>':'Escolha um plano para continuar')+'</div>';
 
   Object.entries(PLANOS_INFO).forEach(function(kv){
     var id=kv[0], p=kv[1];
     var atual = id===planoAtual;
-    html += '<div style="border:2px solid '+(atual?'var(--primary)':'var(--surface-2)')+';border-radius:14px;padding:16px;margin-bottom:12px;background:'+(atual?'rgba(255,92,26,.04)':'#fff')+'">';
+    html += '<div style="border:2px solid '+(atual?'var(--primary)':'var(--surface-2)')+';border-radius:14px;padding:16px;margin-bottom:12px;background:'+(atual?'rgba(255,92,26,.04)':'var(--surface-2)')+'">';
     html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">';
     html += '<div style="font-family:var(--font-d);font-size:16px;font-weight:800;color:'+p.cor+'">'+p.nome+'</div>';
     html += '<div style="font-size:20px;font-weight:900;color:var(--text);font-family:var(--font-d)">R$ '+p.preco+'<span style="font-size:11px;font-weight:600;color:var(--text-3)">/mês</span></div>';
