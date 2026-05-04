@@ -6,6 +6,15 @@
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
+  // Verificar token de autenticidade do Asaas
+  const WEBHOOK_TOKEN = process.env.ASAAS_WEBHOOK_TOKEN;
+  if (WEBHOOK_TOKEN) {
+    const receivedToken = req.headers['asaas-access-token'];
+    if (receivedToken !== WEBHOOK_TOKEN) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+  }
+
   const evento = req.body;
 
   if (!['PAYMENT_RECEIVED', 'PAYMENT_CONFIRMED'].includes(evento?.event)) {
