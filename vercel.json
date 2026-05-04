@@ -112,6 +112,10 @@
     {
       "path": "/api/cobrar-trial-expirado",
       "schedule": "0 8 * * *"
+    },
+    {
+      "path": "/api/bloquear-inadimplentes",
+      "schedule": "0 9 * * *"
     }
   ]
 }

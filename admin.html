@@ -1509,12 +1509,13 @@ function renderVisaoGeral(el){
             <div class="t-biz-loc">${esc(c.email||c.slug||'')}</div>
           </div>
         </div></td>
-        <td><span class="badge badge-${c.status}">${c.status==='ativo'?'Ativo':c.status==='trial'?'Trial':'Inativo'}</span></td>
+        <td><span class="badge badge-${c.status==='bloqueado'?'cancelado':c.status}">${c.status==='ativo'?'Ativo':c.status==='trial'?'Trial':c.status==='bloqueado'?'Bloqueado':'Inativo'}</span></td>
         <td><span class="vg-plano pl-${c.plano}">${PNOME[c.plano]||c.plano}</span></td>
         <td style="font-size:11px;color:${vencido?'var(--red)':'var(--tx3)'};font-weight:700">${venc}</td>
         <td style="text-align:right">
           <button class="t-actions" data-action="edit" data-slug="${c.slug}" data-nome="${esc(c.nome)}" onclick="abrirModal('edit','${c.id}','${c.slug}','${esc(c.nome)}')">✏️</button>
           <button class="t-actions" data-action="reset" data-slug="${c.slug}" data-nome="${esc(c.nome)}" onclick="resetarSenha('${c.slug}','${esc(c.nome)}')">🔑</button>
+          <button class="t-actions" title="${c.status==='bloqueado'?'Liberar acesso':'Bloquear acesso'}" onclick="toggleAtivoSalao('${c.id}','${c.status}')" style="${c.status==='bloqueado'?'background:#16a34a;color:#fff':'background:#ef4444;color:#fff'}">${c.status==='bloqueado'?'🔓':'🔒'}</button>
           <button class="t-actions" data-action="del" data-id="${c.id}" data-nome="${esc(c.nome)}" onclick="excluir('${c.id}','${esc(c.nome)}')">🗑️</button>
         </td>
       </tr>`;
@@ -1635,7 +1636,7 @@ async function renderCobrancas(el){
     const nome=c.salao_nome&&c.salao_nome!=='—'?c.salao_nome:(s.nome||'—');
     const tel=(s.fat_celular||s.telefone||c.salao_tel||'').replace(/\D/g,'');
     const id=c.asaas_id||c.id||'';
-    window._cobsData[id]={tel,pix:c.pix_copia_cola||'',nome,valor:((c.valor||0)/100).toFixed(2),venc:c.vencimento?fmtData(c.vencimento):'',link:c.link_pagamento||''};
+    window._cobsData[id]={tel,pix:c.pix_copia_cola||'',nome,valor:((c.valor||0)/100).toFixed(2),venc:c.vencimento?fmtData(c.vencimento):'',link:c.link_pagamento||'',salaoId:c.salao_id||'',planoRef:c.plano_ref||'equipe',valorNum:c.valor||0};
   });
 
   let html='<div class="adm-card">';
@@ -1689,6 +1690,7 @@ async function renderCobrancas(el){
           ${c.link_pagamento?`<button class="t-actions" title="Abrir link" onclick="openLink('${c.link_pagamento}')">🔗</button>`:''}
           ${c.pix_copia_cola?`<button class="t-actions" title="Copiar PIX" onclick="copiarPix('${c.pix_copia_cola.replace(/'/g,'').replace(/`/g,'')}')">📋</button>`:''}
           ${hasWa?`<button class="t-actions" title="Enviar WhatsApp" onclick="enviarWhatsAppById('${asaas_id}')" style="background:#25D366;color:#fff">📲</button>`:''}
+          ${(c.status==='PENDING'||c.status==='OVERDUE')&&asaas_id?`<button class="t-actions" title="Confirmar pago manualmente" onclick="confirmarPagamentoAdmin('${asaas_id}')" style="background:#16a34a;color:#fff">✅</button>`:''}
           ${c.status!=='RECEIVED'&&c.status!=='CONFIRMED'&&c.status!=='CANCELLED'&&asaas_id?`<button class="t-actions" title="Cancelar" onclick="cancelarCobAsaas('${asaas_id}')">❌</button>`:''}
           ${c.status==='RECEIVED'||c.status==='CONFIRMED'?`<span style="font-size:11px;color:#4ADE80;font-weight:700">✓ Pago</span>`:''}
         </td>
@@ -1710,6 +1712,38 @@ async function cancelarCobAsaas(asaas_id){
   if(d&&d.ok){toast('✓ Cobrança cancelada','ok');navSidebar('cobrancas',null);}
   else{alert('Erro ao cancelar: '+(d.erro||JSON.stringify(d)));}
 }
+
+async function confirmarPagamentoAdmin(asaasId){
+  const d=window._cobsData&&window._cobsData[asaasId];
+  if(!d||!d.salaoId){alert('Dados da cobrança não encontrados. Recarregue a página.');return;}
+  if(!confirm('Confirmar pagamento e ativar o salão "'+d.nome+'" agora?')) return;
+  try{
+    await api('asaas_cobrancas?asaas_id=eq.'+asaasId,{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:'RECEIVED',pago_em:new Date().toISOString()})});
+    const planoValorMap={basico:3500,solo:3500,equipe:7000,pro:7000,negocio:14000,salao:14000};
+    let plano=d.planoRef||'equipe';
+    if(!planoValorMap[plano]){
+      if(d.valorNum<=3500) plano='basico';
+      else if(d.valorNum<=7000) plano='equipe';
+      else plano='negocio';
+    }
+    const proximoVenc=new Date();proximoVenc.setDate(proximoVenc.getDate()+30);
+    await api('saloes?id=eq.'+d.salaoId,{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:'ativo',plano:plano,assinatura_status:'ACTIVE',trial_expira:null})});
+    toast('✅ Pagamento confirmado e salão ativado!','ok');
+    navSidebar('cobrancas',null);
+  }catch(e){alert('Erro: '+e.message);}
+}
+
+async function toggleAtivoSalao(salaoId,statusAtual){
+  const novoStatus=statusAtual==='bloqueado'?'ativo':'bloqueado';
+  const msg=novoStatus==='ativo'?'Liberar acesso para este salão?':'Bloquear este salão?';
+  if(!confirm(msg)) return;
+  try{
+    await api('saloes?id=eq.'+salaoId,{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:novoStatus})});
+    toast(novoStatus==='ativo'?'🔓 Acesso liberado!':'🔒 Salão bloqueado!','ok');
+    navSidebar('visaogeral',null);
+  }catch(e){alert('Erro: '+e.message);}
+}
+
 function _renderClientesLegacy(){}
 function _renderFinanceiroLegacy(){}
 
