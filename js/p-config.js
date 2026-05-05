@@ -510,13 +510,13 @@ async function renderFinanceiro(el){
     var metodo=ss.metodo_assinatura||'';
     var statusLabel={'ACTIVE':'\u2705 Ativa','INACTIVE':'\u23f8 Inativa','OVERDUE':'\u26a0\ufe0f Em atraso','PENDING':'\ud83d\udd50 Aguardando'}[ss.assinatura_status]||'\u2014';
     var statusColor={'ACTIVE':'#4ADE80','OVERDUE':'#F87171','PENDING':'#FBBF24','INACTIVE':'#6B7280'}[ss.assinatura_status]||'var(--CZ)';
-    var metodoLabel={'PIX':'\u26a1 PIX','BOLETO':'\ud83c\udfe6 Boleto','CREDIT_CARD':'\ud83d\udcb3 Cart\u00e3o'}[metodo]||'';
-    var html='<div class="perfil-card"><div class="perfil-tit">\ud83d\udcb0 Financeiro Corta\u00ed</div>';
+    var metodoLabel={'PIX':'\ud83d\udc9a PIX','BOLETO':'\ud83c\udfe6 Boleto','CREDIT_CARD':'\ud83d\udcb3 Cart\u00e3o'}[metodo]||'';
+    var html='<div class="perfil-card"><div class="perfil-tit">\ud83d\udcb0 Financeiro Agenda</div>';
     html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--s2);border-radius:10px;margin-bottom:12px">';
     html+='<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--CZ)">Assinatura</div><div style="font-size:13px;font-weight:800;color:'+statusColor+'">'+statusLabel+'</div></div>';
     if(metodoLabel)html+='<div style="text-align:right"><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--CZ)">M\u00e9todo</div><div style="font-size:12px;font-weight:700;color:var(--MR)">'+metodoLabel+'</div></div>';
     html+='</div>';
-    var list=dados&&dados.length?dados.slice(0,3):[];
+    var list=dados&&dados.length?dados.slice(0,6):[];
     if(list.length){
       html+='<div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--CZ);margin-bottom:8px">\u00daltimas faturas</div>';
       list.forEach(function(c){
@@ -590,12 +590,12 @@ async function renderPagamentos(){
   var hasAssinatura=!!(d.asaas_subscription_id);
   var statusColor={'ACTIVE':'#4ADE80','INACTIVE':'#6B7280','OVERDUE':'#F87171','PENDING':'#FBBF24'}[d.assinatura_status]||'#6B7280';
   var statusLabel={'ACTIVE':'Ativa \u2713','INACTIVE':'Inativa','OVERDUE':'Em atraso \u26a0\ufe0f','PENDING':'Aguardando pagamento','SEM_ASSINATURA':'Sem assinatura'}[d.assinatura_status||'SEM_ASSINATURA']||d.assinatura_status;
-  var metodoLabel={'PIX':'\u26a1 PIX','BOLETO':'\ud83c\udfe6 Boleto','CREDIT_CARD':'\ud83d\udcb3 Cart\u00e3o de Cr\u00e9dito'}[d.metodo_assinatura]||'\u2014';
+  var metodoLabel={'PIX':'\ud83d\udc9a PIX','BOLETO':'\ud83c\udfe6 Boleto','CREDIT_CARD':'\ud83d\udcb3 Cart\u00e3o de Cr\u00e9dito'}[d.metodo_assinatura]||'\u2014';
 
   var html='';
 
   html+='<div class="pgto-card" style="margin-bottom:14px">'+
-    '<div class="pgto-tit">\ud83d\udccb Assinatura Corta\u00ed</div>'+
+    '<div class="pgto-tit">\ud83d\udccb Assinatura Agenda</div>'+
     '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">'+
       '<div>'+
         '<div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--CZ)">Plano atual</div>'+
@@ -641,7 +641,7 @@ async function renderPagamentos(){
 
   html+='<div class="pgto-card" style="margin-bottom:14px">'+
     '<div class="pgto-tit">'+(hasAssinatura?'\ud83d\udd04 Alterar forma de pagamento':'\ud83d\ude80 Ativar assinatura recorrente')+'</div>'+
-    '<div style="font-size:12px;color:var(--CZ);font-weight:600;margin-bottom:14px;line-height:1.5">Escolha como pagar o plano Corta\u00ed todo m\u00eas. A cobran\u00e7a acontece automaticamente no dia 10.</div>'+
+    '<div style="font-size:12px;color:var(--CZ);font-weight:600;margin-bottom:14px;line-height:1.5">Escolha como pagar o plano Agenda todo m\u00eas. A cobran\u00e7a acontece automaticamente no dia 10.</div>'+
     '<div style="margin-bottom:14px">'+
       '<label class="fl">Forma de pagamento</label>'+
       '<div style="display:flex;flex-direction:column;gap:8px">'+

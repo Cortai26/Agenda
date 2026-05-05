@@ -332,7 +332,7 @@ var _calDados={}, _drillDia=null;
 /* ── TEMA DO PAINEL ── */
 function setPainelTema(cls){
   var htmlEl=document.documentElement;
-  var allThemes=['t-onyx','t-feminine','t-neutral',
+  var allThemes=['t-onyx','t-feminine','t-neutral','t-clinic',
     // legacy themes
     't-obsidian','t-azure','t-emerald','t-rose','t-crimson','t-clean','t-verde'];
   allThemes.forEach(function(t){htmlEl.classList.remove(t);});

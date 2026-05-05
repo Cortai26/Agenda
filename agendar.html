@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Nunito+Sans:wght@300;400;600&family=Manrope:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/tokens.css?v=22">
+<link rel="stylesheet" href="/css/tokens.css?v=23">
 <style>
 /* ═══════════════════════════════════════════════════════════════
    AGENDA — SISTEMA DE TEMAS v2
@@ -386,12 +386,19 @@ html.t-feminine .ag-step-dot.active { color: #fff; }
   margin-bottom: 12px;
   overflow: hidden;
   box-shadow: var(--sh-sm);
-  transition: .2s;
+  transition: opacity .2s, box-shadow .2s, background .2s;
 }
 .ag-bloco.locked {
   background: var(--c-surface-2);
   box-shadow: none;
   opacity: .7;
+}
+@keyframes blocoIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+.ag-bloco.ag-entrando {
+  animation: blocoIn .28s cubic-bezier(.34,1.56,.64,1) both;
 }
 html.t-onyx .ag-bloco { background: var(--c-surface); border-color: var(--c-border); }
 html.t-onyx .ag-bloco.locked { background: var(--c-surface-2); }
@@ -1363,7 +1370,7 @@ const MESES=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agos
 const MESES_C=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
 const SEM=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
 function fmt(d){return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
-function unlock(id){const el=document.getElementById(id);if(el){el.classList.remove('locked');el.style.opacity='';}}
+function unlock(id){const el=document.getElementById(id);if(!el)return;el.classList.remove('locked');el.style.opacity='';el.classList.add('ag-entrando');setTimeout(function(){el.classList.remove('ag-entrando');},300);}
 function scr(id){
   const el=document.getElementById(id); if(!el) return;
   setTimeout(function(){
@@ -2189,6 +2196,6 @@ document.addEventListener('change', function(e){
   }
 });
 </script>
-<script src="/js/toast.js?v=22"></script>
+<script src="/js/toast.js?v=23"></script>
 </body>
 </html>
