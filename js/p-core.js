@@ -520,7 +520,7 @@ function iniciarApp(sessao){
   setTimeout(function(){
     if(typeof pedirPermissaoPush==='function') pedirPermissaoPush(S.slug,_pw||'');
   },500);
-  var isBasico=sessao.plano==='basico'||sessao.plano==='trial';
+  var isBasico=sessao.plano==='basico'||sessao.plano==='solo';
   document.querySelectorAll('.tab-plano-pro').forEach(function(el){
     el.style.display=isBasico?'none':'';
   });

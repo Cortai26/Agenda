@@ -1,9 +1,9 @@
 /* ══════════════════════════════════════════════
-   Cortaí — Service Worker v2.0
+   Agenda — Service Worker v3.0
    Cache offline + Push Notifications (RFC 8291)
 ══════════════════════════════════════════════ */
 
-const CACHE = 'cortai-v2'
+const CACHE = 'agenda-v3'
 
 const PRECACHE = [
   '/painel.html',
