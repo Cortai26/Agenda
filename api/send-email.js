@@ -16,7 +16,7 @@ export default async function handler(req, res) {
   const r = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { 'Authorization': 'Bearer ' + RESEND_KEY, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ from: 'Agenda <noreply@cortai.app>', to, subject, html })
+    body: JSON.stringify({ from: 'Agenda <cortai.contato@gmail.com>', to, subject, html })
   });
 
   const body = await r.json();
@@ -49,7 +49,7 @@ function baseHtml(conteudo) {
 function montarEmail(tipo, d) {
   if (tipo === 'confirmacao_agendamento') {
     const cancelUrl = d.cancel_token
-      ? `https://cortai.app/cancelar.html?token=${encodeURIComponent(d.cancel_token)}`
+      ? `https://agendatop.vercel.app/cancelar.html?token=${encodeURIComponent(d.cancel_token)}`
       : null;
     const sinalHtml = d.sinal_valor > 0
       ? `<div class="row"><span class="lbl">Sinal PIX (${d.sinal_pct || 30}%)</span><span class="val" style="color:#E55A0C">${fmt(d.sinal_valor)}</span></div>
@@ -81,7 +81,7 @@ function montarEmail(tipo, d) {
 
   if (tipo === 'lembrete_agendamento') {
     const cancelUrl = d.cancel_token
-      ? `https://cortai.app/cancelar.html?token=${encodeURIComponent(d.cancel_token)}`
+      ? `https://agendatop.vercel.app/cancelar.html?token=${encodeURIComponent(d.cancel_token)}`
       : null;
     return {
       subject: `⏰ Lembrete: amanhã você tem horário em ${esc(d.salao_nome)}`,
@@ -107,7 +107,7 @@ function montarEmail(tipo, d) {
     const urgencia = dias <= 1 ? '🚨' : dias <= 3 ? '⚠️' : '⏳';
     const diasTxt = dias === 0 ? 'hoje' : dias === 1 ? 'amanhã' : `em ${dias} dias`;
     return {
-      subject: `${urgencia} Seu período gratuito termina ${diasTxt} — Cortai`,
+      subject: `${urgencia} Seu período gratuito termina ${diasTxt} — Agenda`,
       html: baseHtml(`
         <div class="head"><h1>${urgencia} Período gratuito terminando</h1></div>
         <div class="body">
@@ -117,7 +117,7 @@ function montarEmail(tipo, d) {
             Seu histórico de agendamentos está preservado.
           </p>
           <div style="text-align:center">
-            <a class="btn" href="https://cortai.app/painel.html?tab=assinatura">Assinar agora — a partir de R$35/mês</a>
+            <a class="btn" href="https://agendatop.vercel.app/painel.html?tab=assinatura">Assinar agora — a partir de R$35/mês</a>
           </div>
         </div>
         <div class="footer">Dúvidas? Responda este email ou fale pelo suporte no app.</div>

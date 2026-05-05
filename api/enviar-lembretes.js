@@ -1,7 +1,8 @@
 export default async function handler(req, res) {
   const auth = req.headers['authorization'] || '';
   const CRON_SECRET = process.env.CRON_SECRET;
-  if (CRON_SECRET && auth !== 'Bearer ' + CRON_SECRET) {
+  if (!CRON_SECRET) return res.status(500).json({ error: 'CRON_SECRET não configurado' });
+  if (auth !== 'Bearer ' + CRON_SECRET) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
@@ -35,7 +36,7 @@ export default async function handler(req, res) {
 
   const base = process.env.VERCEL_URL
     ? 'https://' + process.env.VERCEL_URL
-    : 'https://cortai.app';
+    : 'https://agendatop.vercel.app';
 
   let enviados = 0;
   let erros = 0;

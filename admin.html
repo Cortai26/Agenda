@@ -1500,7 +1500,11 @@ function renderVisaoGeral(el){
       <tbody>`;
     filtrados.forEach(c=>{
       const venc=c.vencimento?fmtData(c.vencimento):'—';
-      const vencido=c.vencimento&&new Date(c.vencimento)<new Date()&&c.status==='ativo';
+      const diasVenc=c.vencimento?Math.ceil((new Date(c.vencimento)-new Date())/86400000):null;
+      const vencido=diasVenc!==null&&diasVenc<0;
+      const vencendoEm7=diasVenc!==null&&diasVenc>=0&&diasVenc<=7;
+      const vencColor=vencido?'var(--red)':(vencendoEm7?'var(--amber,#ca8a04)':'var(--tx3)');
+      const vencLabel=c.vencimento?(c.status==='bloqueado'&&vencido?'Venceu '+venc:(vencendoEm7?'Vence '+venc:venc)):'—';
       html+=`<tr>
         <td><div class="t-biz">
           <div class="t-biz-icon">✂️</div>
@@ -1511,7 +1515,7 @@ function renderVisaoGeral(el){
         </div></td>
         <td><span class="badge badge-${c.status==='bloqueado'?'cancelado':c.status}">${c.status==='ativo'?'Ativo':c.status==='trial'?'Trial':c.status==='bloqueado'?'Bloqueado':'Inativo'}</span></td>
         <td><span class="vg-plano pl-${c.plano}">${PNOME[c.plano]||c.plano}</span></td>
-        <td style="font-size:11px;color:${vencido?'var(--red)':'var(--tx3)'};font-weight:700">${venc}</td>
+        <td style="font-size:11px;color:${vencColor};font-weight:700">${vencLabel}</td>
         <td style="text-align:right">
           <button class="t-actions" data-action="edit" data-slug="${c.slug}" data-nome="${esc(c.nome)}" onclick="abrirModal('edit','${c.id}','${c.slug}','${esc(c.nome)}')">✏️</button>
           <button class="t-actions" data-action="reset" data-slug="${c.slug}" data-nome="${esc(c.nome)}" onclick="resetarSenha('${c.slug}','${esc(c.nome)}')">🔑</button>
@@ -1647,6 +1651,7 @@ async function renderCobrancas(el){
       <button class="btn-add" onclick="criarCobranca()">+ Nova cobrança</button>
       <button class="btn-add" onclick="criarAssinatura()" style="background:var(--primary-bg);color:var(--primary);border:1px solid var(--primary)">♻️ Recorrente</button>
       <button class="btn-add" onclick="exportarRelatorio()" style="background:var(--s2);color:var(--tx)">📊 Exportar</button>
+      <button class="btn-add" id="btnSincronizar" onclick="sincronizarPagamentos()" style="background:var(--s2);color:var(--tx)">🔄 Sincronizar</button>
     </div>
   </div>`;
 
@@ -1727,7 +1732,8 @@ async function confirmarPagamentoAdmin(asaasId){
       else plano='negocio';
     }
     const proximoVenc=new Date();proximoVenc.setDate(proximoVenc.getDate()+30);
-    await api('saloes?id=eq.'+d.salaoId,{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:'ativo',plano:plano,assinatura_status:'ACTIVE',trial_expira:null})});
+    const proximoVencStr=proximoVenc.toISOString().split('T')[0];
+    await api('saloes?id=eq.'+d.salaoId,{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:'ativo',plano:plano,assinatura_status:'ACTIVE',trial_expira:null,vencimento:proximoVencStr})});
     toast('✅ Pagamento confirmado e salão ativado!','ok');
     navSidebar('cobrancas',null);
   }catch(e){alert('Erro: '+e.message);}
@@ -1742,6 +1748,29 @@ async function toggleAtivoSalao(salaoId,statusAtual){
     toast(novoStatus==='ativo'?'🔓 Acesso liberado!':'🔒 Salão bloqueado!','ok');
     navSidebar('visaogeral',null);
   }catch(e){alert('Erro: '+e.message);}
+}
+
+async function sincronizarPagamentos(){
+  const btn=document.getElementById('btnSincronizar');
+  if(btn){btn.disabled=true;btn.textContent='⏳ Verificando...';}
+  try{
+    const res=await fetch('/api/sincronizar-pagamentos',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-cron-secret':window._cronSecret||''}
+    });
+    const d=await res.json();
+    if(!res.ok) throw new Error(d.error||'Erro desconhecido');
+    if(d.sincronizados>0){
+      toast(`✅ ${d.sincronizados} pagamento(s) reconciliado(s)!`,'ok');
+      navSidebar('cobrancas',null);
+    } else {
+      toast(`Nenhum pagamento novo confirmado (${d.pendentes} pendente(s) verificado(s))`,'ok');
+    }
+  }catch(e){
+    toast('Erro ao sincronizar: '+e.message,'err');
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent='🔄 Sincronizar';}
+  }
 }
 
 function _renderClientesLegacy(){}

@@ -8,11 +8,9 @@ export default async function handler(req, res) {
 
   // Verificar token de autenticidade do Asaas
   const WEBHOOK_TOKEN = process.env.ASAAS_WEBHOOK_TOKEN;
-  if (WEBHOOK_TOKEN) {
-    const receivedToken = req.headers['asaas-access-token'];
-    if (receivedToken !== WEBHOOK_TOKEN) {
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
+  if (!WEBHOOK_TOKEN) return res.status(500).json({ error: 'ASAAS_WEBHOOK_TOKEN não configurado' });
+  if (req.headers['asaas-access-token'] !== WEBHOOK_TOKEN) {
+    return res.status(401).json({ error: 'Unauthorized' });
   }
 
   const evento = req.body;
@@ -39,6 +37,7 @@ export default async function handler(req, res) {
     `${SUPA_URL}/rest/v1/asaas_cobrancas?asaas_id=eq.${pagamento.id}&select=id,salao_id,valor,plano_ref`,
     { headers: H }
   );
+  if (!rCob.ok) return res.status(500).json({ error: 'Erro ao consultar banco', status: rCob.status });
   const [cobranca] = await rCob.json();
 
   if (!cobranca) {
@@ -72,6 +71,7 @@ export default async function handler(req, res) {
   // 5. Próximo vencimento: 30 dias
   const proximoVenc = new Date();
   proximoVenc.setDate(proximoVenc.getDate() + 30);
+  const proximoVencStr = proximoVenc.toISOString().split('T')[0];
   const proximoVencFmt = proximoVenc.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
   // 6. Ativar salão
@@ -84,6 +84,7 @@ export default async function handler(req, res) {
       pagamento:         'mensal',
       assinatura_status: 'ACTIVE',
       trial_expira:      null,
+      vencimento:        proximoVencStr,
     }),
   });
 

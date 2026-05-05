@@ -17,7 +17,8 @@ const PLANO_VALOR = {
 export default async function handler(req, res) {
   const auth = req.headers['authorization'] || '';
   const CRON_SECRET = process.env.CRON_SECRET;
-  if (CRON_SECRET && auth !== 'Bearer ' + CRON_SECRET) {
+  if (!CRON_SECRET) return res.status(500).json({ error: 'CRON_SECRET não configurado' });
+  if (auth !== 'Bearer ' + CRON_SECRET) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
@@ -156,11 +157,11 @@ export default async function handler(req, res) {
         }),
       });
 
-      // 8. Bloquear o salão
+      // 8. Bloquear o salão e registrar vencimento da cobrança pendente
       await fetch(`${SUPA_URL}/rest/v1/saloes?id=eq.${salao.id}`, {
         method: 'PATCH',
         headers: H_SUPA,
-        body: JSON.stringify({ status: 'bloqueado' }),
+        body: JSON.stringify({ status: 'bloqueado', vencimento: vencimentoStr }),
       });
 
       // 9. Email com link de pagamento

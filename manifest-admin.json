@@ -1,7 +1,7 @@
 {
-  "name": "Cortaí Admin",
-  "short_name": "Cortaí Admin",
-  "description": "Dashboard administrativo — Cortaí",
+  "name": "Agenda Admin",
+  "short_name": "Agenda Admin",
+  "description": "Dashboard administrativo — Agenda",
   "start_url": "/admin.html",
   "scope": "/",
   "display": "standalone",

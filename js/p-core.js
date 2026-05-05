@@ -477,6 +477,36 @@ function iniciarApp(sessao){
 
   verificarTrialExpirando(sessao);
 
+  // S2.4: Banner próximo vencimento para salões ativos
+  if(sessao.status==='ativo' && sessao.vencimento){
+    var bVenc=document.getElementById('bannerVencimento');
+    var bVencTxt=document.getElementById('bannerVencimentoTxt');
+    if(bVenc&&bVencTxt){
+      var diasVenc=Math.ceil((new Date(sessao.vencimento+'T23:59:59')-new Date())/86400000);
+      var msgVenc='';
+      if(diasVenc<0){
+        bVenc.style.background='rgba(220,38,38,.15)';
+        bVenc.style.color='#dc2626';
+        bVenc.style.cursor='pointer';
+        bVenc.onclick=function(){abrirUpgrade();};
+        msgVenc='⚠️ Pagamento em atraso — regularize para evitar bloqueio';
+      } else if(diasVenc<=7){
+        bVenc.style.background='rgba(234,179,8,.12)';
+        bVenc.style.color='var(--amber,#ca8a04)';
+        bVenc.style.cursor='pointer';
+        bVenc.onclick=function(){abrirUpgrade();};
+        msgVenc='⏰ Seu plano vence em '+diasVenc+(diasVenc===1?' dia':' dias')+' — renove para continuar';
+      } else {
+        bVenc.style.background='rgba(0,0,0,.04)';
+        bVenc.style.color='var(--text-3,#888)';
+        var dtFmt=new Date(sessao.vencimento+'T12:00:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
+        msgVenc='📅 Próximo pagamento: '+dtFmt;
+      }
+      bVencTxt.textContent=msgVenc;
+      bVenc.style.display='block';
+    }
+  }
+
   var fab=document.getElementById('fabBtn');
   if(fab) fab.style.display='flex';
   carregarServicos();

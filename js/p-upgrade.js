@@ -81,24 +81,6 @@ function iniciarUpgrade(planoNovo){
         '</div>' +
         '<div style="font-family:var(--font-d);font-size:22px;font-weight:900;color:var(--text)">R$'+info.preco+'<span style="font-size:11px;font-weight:600;color:var(--text-3)">/mês</span></div>' +
       '</div>' +
-      // Tipo de cobrança
-      '<div style="margin-bottom:18px">' +
-        '<div style="font-size:10px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">Tipo de cobrança</div>' +
-        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">' +
-          '<label id="upgLblAvulso" style="border:2px solid var(--primary);border-radius:12px;padding:12px;cursor:pointer;text-align:center;background:rgba(229,90,12,.06)">' +
-            '<input type="radio" name="upgTipo" value="avulso" checked onchange="_upgTipoChange()" style="display:none">' +
-            '<div style="font-size:18px;margin-bottom:4px">⚡</div>' +
-            '<div style="font-family:var(--font-d);font-size:13px;font-weight:800;color:var(--text)">PIX único</div>' +
-            '<div style="font-size:10px;color:var(--text-3);font-weight:600">Escolha quantos meses</div>' +
-          '</label>' +
-          '<label id="upgLblRecorrente" style="border:2px solid var(--surface-2);border-radius:12px;padding:12px;cursor:pointer;text-align:center">' +
-            '<input type="radio" name="upgTipo" value="recorrente" onchange="_upgTipoChange()" style="display:none">' +
-            '<div style="font-size:18px;margin-bottom:4px">♻️</div>' +
-            '<div style="font-family:var(--font-d);font-size:13px;font-weight:800;color:var(--text)">Recorrente</div>' +
-            '<div style="font-size:10px;color:var(--text-3);font-weight:600">Débito mensal automático</div>' +
-          '</label>' +
-        '</div>' +
-      '</div>' +
       // Meses (só para avulso)
       '<div id="upgMesesWrap" style="margin-bottom:18px">' +
         '<div style="font-size:10px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Período</div>' +
@@ -140,17 +122,6 @@ function _mesesBtn(m, id, ativo){
     '<div style="font-family:var(--font-d);font-size:13px;font-weight:800;color:var(--text)">'+label+'</div>' +
     '</label>';
 }
-function _upgTipoChange(){
-  var tipo = document.querySelector('input[name="upgTipo"]:checked')?.value || 'avulso';
-  var lA = document.getElementById('upgLblAvulso');
-  var lR = document.getElementById('upgLblRecorrente');
-  var mW = document.getElementById('upgMesesWrap');
-  if(lA){ lA.style.borderColor = tipo==='avulso' ? 'var(--primary)' : 'var(--surface-2)'; lA.style.background = tipo==='avulso' ? 'rgba(229,90,12,.06)' : ''; }
-  if(lR){ lR.style.borderColor = tipo==='recorrente' ? 'var(--primary)' : 'var(--surface-2)'; lR.style.background = tipo==='recorrente' ? 'rgba(229,90,12,.06)' : ''; }
-  if(mW) mW.style.display = tipo==='recorrente' ? 'none' : '';
-  var btn = document.getElementById('upgSubmitBtn');
-  if(btn) btn.textContent = tipo==='recorrente' ? 'Ativar cobrança recorrente' : 'Gerar cobrança';
-}
 function _upgMesesChange(){
   ['upgM1','upgM3','upgM6','upgM12'].forEach(function(id){
     var el = document.getElementById(id);
@@ -182,7 +153,6 @@ async function _submeterUpgrade(planoNovo){
   var nome  = (document.getElementById('upgNome')?.value || '').trim();
   var cpfRaw= (document.getElementById('upgCpf')?.value  || '').replace(/\D/g,'');
   var email = (document.getElementById('upgEmail')?.value|| '').trim();
-  var tipo  = document.querySelector('input[name="upgTipo"]:checked')?.value || 'avulso';
   var meses = parseInt(document.querySelector('input[name="upgMeses"]:checked')?.value || '1');
 
   errEl.style.display = 'none';
@@ -192,7 +162,6 @@ async function _submeterUpgrade(planoNovo){
   btn.disabled = true; btn.textContent = 'Aguarde...';
 
   try{
-    // Validar no banco
     var val = await rpc('validar_upgrade_plano',{p_slug:S.slug,p_senha:_pw||'',p_plano:planoNovo});
     if(!val||!val.ok){
       errEl.textContent = val?.erro || 'Erro ao validar. Tente novamente.';
@@ -208,33 +177,21 @@ async function _submeterUpgrade(planoNovo){
       nome:      nome,
       email:     email || val.email || undefined,
       telefone:  val.telefone || undefined,
+      action:    'criar_cobranca',
+      meses:     meses,
+      tipo:      'PIX',
     };
 
-    var d;
-    if(tipo === 'recorrente'){
-      body.action = 'criar_assinatura';
-      body.cycle  = 'MONTHLY';
-      var r = await fetch(ASAAS_FN,{method:'POST',headers:{'Content-Type':'application/json','apikey':KEY},body:JSON.stringify(body)});
-      d = await r.json();
-      if(!d||!d.ok){ errEl.textContent='Erro: '+(d?.erro||'Tente novamente'); errEl.style.display='block'; btn.disabled=false; btn.textContent='Ativar cobrança recorrente'; return; }
-      _fecharStep2();
-      fecharUpgrade();
-      toast('♻️ Assinatura recorrente ativada! A cobrança mensal via PIX foi configurada.','ok');
-    } else {
-      body.action = 'criar_cobranca';
-      body.meses  = meses;
-      body.tipo   = 'PIX';
-      var r2 = await fetch(ASAAS_FN,{method:'POST',headers:{'Content-Type':'application/json','apikey':KEY},body:JSON.stringify(body)});
-      d = await r2.json();
-      if(!d||!d.ok){ errEl.textContent='Erro: '+(d?.erro||'Tente novamente'); errEl.style.display='block'; btn.disabled=false; btn.textContent='Gerar cobrança'; return; }
-      _fecharStep2();
-      fecharUpgrade();
-      abrirModalPix(d, planoNovo, meses);
-    }
+    var r = await fetch(ASAAS_FN,{method:'POST',headers:{'Content-Type':'application/json','apikey':KEY},body:JSON.stringify(body)});
+    var d = await r.json();
+    if(!d||!d.ok){ errEl.textContent='Erro: '+(d?.erro||'Tente novamente'); errEl.style.display='block'; btn.disabled=false; btn.textContent='Gerar cobrança'; return; }
+    _fecharStep2();
+    fecharUpgrade();
+    abrirModalPix(d, planoNovo, meses);
   }catch(e){
     errEl.textContent = 'Erro de conexão: '+e.message;
     errEl.style.display = 'block';
-    btn.disabled=false; btn.textContent = tipo==='recorrente'?'Ativar cobrança recorrente':'Gerar cobrança';
+    btn.disabled=false; btn.textContent='Gerar cobrança';
   }
 }
 
