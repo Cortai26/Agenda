@@ -1409,7 +1409,7 @@ function updateBar(){
 // ── INIT ──
 async function init(){
   try {
-    const dados = await supa(`saloes?slug=eq.${slug}&select=id,slug,nome,responsavel,plano,status,descricao,endereco,cancelamento_min,pix_key,pix_tipo,aceita_pix,aceita_dinheiro,aceita_cartao,tema,trial_expira,horario,sinal_percentual,sinal_obrigatorio`);
+    const dados = await supa(`saloes?slug=eq.${slug}&select=id,slug,nome,responsavel,plano,status,descricao,endereco,cancelamento_min,pix_key,pix_tipo,aceita_pix,aceita_dinheiro,aceita_cartao,tema,trial_expira,horario,sinal_percentual,sinal_obrigatorio,mostrar_sinal`);
     if(!dados||dados.length===0){ document.getElementById('srvWrap').innerHTML='<div class="erro">Salão não encontrado</div>'; return; }
     salao = dados[0];
     document.title = salao.nome+' — Agendamento';
@@ -1442,7 +1442,7 @@ async function init(){
 
     // PIX hint no step de dados
     var _pixHintEl = document.getElementById('pixHint');
-    if(_pixHintEl && salao.aceita_pix !== false && salao.pix_key){
+    if(_pixHintEl && salao.mostrar_sinal && salao.pix_key){
       var _pct   = salao.sinal_percentual || 30;
       var _mins  = salao.cancelamento_min || 120;
       var _hrsCan= _mins >= 60 ? Math.floor(_mins/60)+'h' : _mins+'min';
@@ -1840,7 +1840,7 @@ document.getElementById('btnAg').onclick=async()=>{
     S._agId=rpcRes.id;
     showModal({id:rpcRes.id});
     // Registrar sinal no agendamento (fire and forget)
-    if(salao.aceita_pix!==false && salao.pix_key && S.srv.preco>0){
+    if(salao.mostrar_sinal && salao.pix_key && S.srv.preco>0){
       var _sinalToSave=Math.round(S.srv.preco*((salao.sinal_percentual||30)/100));
       fetch(SUPA_URL+'/rest/v1/agendamentos?id=eq.'+rpcRes.id,{
         method:'PATCH',
@@ -1851,7 +1851,7 @@ document.getElementById('btnAg').onclick=async()=>{
     // Send confirmation email (fire and forget)
     if(emailVal && rpcRes.cancel_token){
       var _sinalPct=salao.sinal_percentual||30;
-      var _sinalVal2=salao.aceita_pix!==false&&salao.pix_key&&S.srv.preco>0?Math.round(S.srv.preco*(_sinalPct/100)):0;
+      var _sinalVal2=salao.mostrar_sinal&&salao.pix_key&&S.srv.preco>0?Math.round(S.srv.preco*(_sinalPct/100)):0;
       var _horasCan=(salao.cancelamento_min||120)>=60?Math.floor((salao.cancelamento_min||120)/60):null;
       fetch('/api/send-email',{
         method:'POST', headers:{'Content-Type':'application/json'},
@@ -2067,7 +2067,7 @@ function showModal(ag){
 
   // ── PIX Sinal ──
   var pixSec=document.getElementById('pixSection');
-  if(pixSec && salao.aceita_pix!==false && salao.pix_key){
+  if(pixSec && salao.mostrar_sinal && salao.pix_key){
     var _pct=salao.sinal_percentual||30;
     var _sinalVal=Math.round((S.srv.preco||0)*_pct/100);
     var _sinalFmt='R$ '+(_sinalVal/100).toFixed(2).replace('.',',');
