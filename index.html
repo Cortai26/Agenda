@@ -303,9 +303,8 @@ footer strong{color:var(--text);font-weight:800}
   <div class="nav-r">
     <a href="#como" class="nav-link">Como funciona</a>
     <a href="#planos" class="nav-link">Planos</a>
-    <a href="marketplace.html" class="nav-link">🗺️ Encontrar</a>
     <a href="agendar.html?slug=barbershop" class="nav-link">Ver demo</a>
-    <a href="painel.html" style="color:var(--white);border:1px solid var(--border-2);padding:7px 14px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;transition:.2s">Meu painel</a>
+    <a href="painel.html" style="color:var(--white);border:1px solid var(--border-2);padding:7px 14px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;transition:.2s">Entrar →</a>
     <a href="cadastro.html" class="nav-cta">Criar conta →</a>
   </div>
 </nav>
@@ -503,17 +502,6 @@ const obs = new IntersectionObserver(function(entries){
 document.querySelectorAll('.rv').forEach(function(el){obs.observe(el)});
 </script>
 
-<!-- Marketplace section -->
-<section class="sec" style="background:var(--surface);margin:0;border-top:1px solid var(--border)">
-  <div class="rv" style="text-align:center;max-width:600px;margin:0 auto">
-    <div class="sec-tag rv">Encontre profissionais</div>
-    <div class="sec-h rv" style="font-size:clamp(24px,5vw,36px)">Precisa agendar um serviço?</div>
-    <p class="sec-sub rv" style="margin-bottom:28px">Descubra profissionais perto de você no mapa e agende em segundos.</p>
-    <a href="marketplace.html" class="btn-a rv" style="display:inline-block;max-width:320px">
-      🗺️ Ver profissionais no mapa
-    </a>
-  </div>
-</section>
 <script src="/js/toast.js"></script>
 </body>
 </html>

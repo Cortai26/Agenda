@@ -1,23 +1,23 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>Painel — Agenda</title>
+  <title>Painel â€” Agenda</title>
   <meta name="robots" content="noindex,nofollow">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png?v=24">
-  <link rel="apple-touch-icon" href="/icon-192.png?v=24">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png?v=25">
+  <link rel="apple-touch-icon" href="/icon-192.png?v=25">
   <link rel="manifest" href="/manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800;900&family=Nunito+Sans:wght@400;600;700;800&family=Manrope:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="/css/tokens.css?v=24">
+  <link rel="stylesheet" href="/css/tokens.css?v=25">
   <style>
-    /* ── RESET ── */
+    /* â”€â”€ RESET â”€â”€ */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -30,7 +30,7 @@
       height: 100%
     }
 
-    /* ── Brand tokens & tipografia globais ── */
+    /* â”€â”€ Brand tokens & tipografia globais â”€â”€ */
     :root {
       --c-brand:      #E55A0C;
       --c-brand-text: #C04A08;
@@ -49,8 +49,8 @@
       --fw-body:      400;
     }
 
-    /* ── TEMA PADRÃO: Obsidian dark ── */
-    /* ═══ TEMAS ADMIN (usados no painel) ═══ */
+    /* â”€â”€ TEMA PADRÃƒO: Obsidian dark â”€â”€ */
+    /* â•â•â• TEMAS ADMIN (usados no painel) â•â•â• */
     :root,
     html.t-onyx {
       --bg: #131313;
@@ -105,7 +105,7 @@
       --table-border: rgba(255, 255, 255, .05);
       --table-hover: rgba(255, 255, 255, .03);
 
-      /* ── Aliases para compatibilidade com o painel ── */
+      /* â”€â”€ Aliases para compatibilidade com o painel â”€â”€ */
       --bg-card: var(--s2);
       --bg-card-2: var(--s3);
       --bg-input: var(--input-bg);
@@ -182,7 +182,7 @@
       --table-border: rgba(216, 27, 96, .06);
       --table-hover: rgba(216, 27, 96, .03);
 
-      /* ── Aliases para compatibilidade com o painel ── */
+      /* â”€â”€ Aliases para compatibilidade com o painel â”€â”€ */
       --bg-card: var(--s2);
       --bg-card-2: var(--s3);
       --bg-input: var(--input-bg);
@@ -259,7 +259,7 @@
       --table-border: #C8B8A8;
       --table-hover: #F8F4EF;
 
-      /* ── Aliases para compatibilidade com o painel ── */
+      /* â”€â”€ Aliases para compatibilidade com o painel â”€â”€ */
       --bg-card: var(--s2);
       --bg-card-2: var(--s3);
       --bg-input: var(--input-bg);
@@ -283,7 +283,7 @@
       --r-xs: 4px;
     }
 
-    /* ── TEMA t-clinic — Saúde · Bem-estar · Fitness ── */
+    /* â”€â”€ TEMA t-clinic â€” SaÃºde Â· Bem-estar Â· Fitness â”€â”€ */
     html.t-clinic {
       --bg: #F4F8FB;
       --s1: #FFFFFF;
@@ -365,7 +365,7 @@
       overflow: hidden
     }
 
-    /* ── LOGIN ── */
+    /* â”€â”€ LOGIN â”€â”€ */
     #loginWrap,
     #criarSenhaWrap {
       position: fixed;
@@ -530,7 +530,7 @@
       color: var(--primary)
     }
 
-    /* ── APP WRAPPER ── */
+    /* â”€â”€ APP WRAPPER â”€â”€ */
     #appWrap {
       display: none;
       height: 100%;
@@ -548,7 +548,7 @@
       }
     }
 
-    /* ── TOPBAR ── */
+    /* â”€â”€ TOPBAR â”€â”€ */
     .topbar {
       display: flex;
       align-items: center;
@@ -666,7 +666,7 @@
       color: var(--red)
     }
 
-    /* ── MAIN AREA ── */
+    /* â”€â”€ MAIN AREA â”€â”€ */
     .app-main {
       flex: 1;
       min-width: 0;
@@ -685,7 +685,7 @@
       -webkit-overflow-scrolling: touch;
     }
 
-    /* ── BOTTOM NAV ── */
+    /* â”€â”€ BOTTOM NAV â”€â”€ */
     .app-bottom {
       display: flex;
       background: var(--bottom-bg);
@@ -733,7 +733,7 @@
       }
     }
 
-    /* ── SIDEBAR (desktop) ── */
+    /* â”€â”€ SIDEBAR (desktop) â”€â”€ */
     .app-sidebar {
       width: 220px;
       flex-shrink: 0;
@@ -859,7 +859,7 @@
       flex-shrink: 0;
     }
 
-    /* ── TAB BODIES ── */
+    /* â”€â”€ TAB BODIES â”€â”€ */
     .tab-body {
       display: none
     }
@@ -869,7 +869,7 @@
       min-height: 1px
     }
 
-    /* ── FAB ── */
+    /* â”€â”€ FAB â”€â”€ */
     .fab {
       position: fixed;
       bottom: calc(70px + env(safe-area-inset-bottom, 0px));
@@ -901,7 +901,7 @@
       }
     }
 
-    /* ── TOAST ── */
+    /* â”€â”€ TOAST â”€â”€ */
     #toastEl {
       position: fixed;
       top: 16px;
@@ -920,7 +920,7 @@
       pointer-events: none;
     }
 
-    /* ── BANNERS ── */
+    /* â”€â”€ BANNERS â”€â”€ */
     #bannerDemo,
     #bannerTrial {
       display: none;
@@ -944,7 +944,7 @@
       color: var(--text)
     }
 
-    /* ── MODALS / OVERLAYS ── */
+    /* â”€â”€ MODALS / OVERLAYS â”€â”€ */
     .overlay {
       display: none;
       position: fixed;
@@ -1024,7 +1024,7 @@
       display: block
     }
 
-    /* ── FORM ELEMENTS ── */
+    /* â”€â”€ FORM ELEMENTS â”€â”€ */
     .fg {
       display: flex;
       flex-direction: column;
@@ -1113,12 +1113,12 @@
       cursor: not-allowed
     }
 
-    /* ── WRAP / CONTENT ── */
+    /* â”€â”€ WRAP / CONTENT â”€â”€ */
     @media(min-width:768px) {}
 
     @media(min-width:1024px) {}
 
-    /* ── AGENDA COMPONENTS (generated by p-agenda.js) ── */
+    /* â”€â”€ AGENDA COMPONENTS (generated by p-agenda.js) â”€â”€ */
 
     @media(max-width:360px) {}
 
@@ -2272,7 +2272,7 @@
       background: var(--primary-light)
     }
 
-    /* Horários */
+    /* HorÃ¡rios */
     .hora-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -2459,7 +2459,7 @@
       background: var(--green)
     }
 
-    /* ── G2: Layout consistency ── */
+    /* â”€â”€ G2: Layout consistency â”€â”€ */
 
     .srv-lista {
       margin: 0 !important
@@ -2508,8 +2508,8 @@
       vertical-align: middle
     }
 
-    /* ── G3: Calendar picker ── */
-    /* ── C3: Consistent layout across all tabs ── */
+    /* â”€â”€ G3: Calendar picker â”€â”€ */
+    /* â”€â”€ C3: Consistent layout across all tabs â”€â”€ */
 
     .cli-mt {
       display: block;
@@ -2522,7 +2522,7 @@
     }
 
 
-    /* ── ÚNICO: wrap container para todas as abas ── */
+    /* â”€â”€ ÃšNICO: wrap container para todas as abas â”€â”€ */
     .wrap {
       padding: 16px 16px 80px;
       max-width: 680px;
@@ -2544,7 +2544,7 @@
       }
     }
 
-    /* ── Calendar redesign (Windows-style) ── */
+    /* â”€â”€ Calendar redesign (Windows-style) â”€â”€ */
     .cd-hoje {
       background: var(--primary) !important;
       border-radius: 6px
@@ -2595,7 +2595,7 @@
       height: 34px
     }
 
-    /* ── Tab content padding ── */
+    /* â”€â”€ Tab content padding â”€â”€ */
     .tab-body.on {
       padding: 16px 16px 80px;
       max-width: 680px;
@@ -2625,7 +2625,7 @@
     }
 
 
-    /* ── Reengajamento / clientes inativos ── */
+    /* â”€â”€ Reengajamento / clientes inativos â”€â”€ */
     .reeng-hdr {
       display: flex;
       align-items: center;
@@ -2660,7 +2660,7 @@
       font-weight: 800
     }
 
-    /* ── Metrics cards — fix var resolution ── */
+    /* â”€â”€ Metrics cards â€” fix var resolution â”€â”€ */
     .mc {
       background: var(--s2, var(--bg-card, #1e1e1e));
       border-radius: var(--r-md, 12px);
@@ -2695,7 +2695,7 @@
       color: var(--amber, #FF9500)
     }
 
-    /* ── Calendar ── */
+    /* â”€â”€ Calendar â”€â”€ */
     .cal-wrap {
       background: var(--s1, var(--bg-card, #1a1a1a));
       border-radius: var(--r-lg, 14px);
@@ -2887,13 +2887,13 @@
       }
     }
 
-    /* ── Calendar header hoje button ── */
+    /* â”€â”€ Calendar header hoje button â”€â”€ */
     .hoje-btn {
       font-size: 12px;
       padding: 5px 10px
     }
 
-    /* ── Calendar modal ── */
+    /* â”€â”€ Calendar modal â”€â”€ */
     #calModalOv {
       position: fixed;
       inset: 0;
@@ -3013,7 +3013,7 @@
       color: #fff
     }
 
-    /* ── Cal-grid (modal novo agendamento) ── */
+    /* â”€â”€ Cal-grid (modal novo agendamento) â”€â”€ */
     .cal-grid{background:var(--s1,#181818);border:1px solid var(--bd,rgba(255,255,255,.07));border-radius:var(--r-lg,12px);padding:20px;max-width:340px}
     .cal-grid__head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
     .cal-grid__title{font:700 14px var(--font-h,'Manrope',sans-serif);color:var(--tx,#E5E2E1)}
@@ -3037,9 +3037,9 @@
 
 <body>
 
-  <!-- ──────────────────────────────────────
+  <!-- â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
      LOGIN
-────────────────────────────────────── -->
+â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
   <div id="loginWrap">
     <div class="lbox">
       <div class="llogo">
@@ -3052,12 +3052,12 @@
         </svg>
         <span class="wordmark" style="font-size:22px;color:#fff">Agenda<span class="wm-dot"></span></span>
       </div>
-      <p class="lsub">Painel de gestão</p>
+      <p class="lsub">Painel de gestÃ£o</p>
       <div class="login-erro" id="loginErro"></div>
       <label class="ll" for="loginEmail">E-mail</label>
       <input class="li" type="email" id="loginEmail" placeholder="seu@email.com" autocomplete="email">
       <label class="ll" for="loginSenha">Senha</label>
-      <input class="li" type="password" id="loginSenha" placeholder="••••••••" autocomplete="current-password">
+      <input class="li" type="password" id="loginSenha" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" autocomplete="current-password">
       <button class="lbtn" id="btnLogin" type="button">Entrar</button>
       <button class="llink" id="btnEsqueci" type="button">Esqueci minha senha</button>
     </div>
@@ -3067,48 +3067,48 @@
   <div id="criarSenhaWrap">
     <div class="lbox">
       <p style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:16px;text-align:center">
-        Olá, <span id="csNome" style="color:var(--primary)"></span>!<br>
+        OlÃ¡, <span id="csNome" style="color:var(--primary)"></span>!<br>
         <span style="font-size:12px;color:var(--text-3);font-weight:600">Crie sua senha para continuar.</span>
       </p>
       <div class="lerr" id="csErr"></div>
       <label class="ll" for="csSenha">Nova senha</label>
-      <input class="li" type="password" id="csSenha" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+      <input class="li" type="password" id="csSenha" placeholder="MÃ­nimo 6 caracteres" autocomplete="new-password">
       <label class="ll" for="csSenha2">Confirmar senha</label>
       <input class="li" type="password" id="csSenha2" placeholder="Repita a senha" autocomplete="new-password">
       <button class="lbtn" id="btnCriarSenha" type="button">Criar senha e entrar</button>
     </div>
   </div>
 
-  <!-- ──────────────────────────────────────
+  <!-- â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
      APP
-────────────────────────────────────── -->
+â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
   <div id="appWrap">
 
     <!-- SIDEBAR (desktop) -->
     <aside class="app-sidebar">
-      <div class="sb-logo">
+      <a class="sb-logo" href="#" onclick="tabSidebar('agenda',document.querySelector('[data-tab=agenda]'));return false" style="text-decoration:none;cursor:pointer">
         <svg width="28" height="28" viewBox="0 0 100 100" fill="none">
           <rect width="100" height="100" rx="22" fill="#E55A0C" />
           <rect y="22" width="100" height="10" fill="#C44D08" />
           <circle cx="33" cy="65" r="10" fill="#FFFFFF" />
         </svg>
         <span class="sb-brand">AGENDA</span>
-      </div>
+      </a>
       <nav class="sb-nav">
         <button class="sb-item tnav on" data-tab="agenda" onclick="tabSidebar('agenda',this)"> <span
-            class="sb-icon">📅</span>Agenda</button>
+            class="sb-icon">ðŸ“…</span>Agenda</button>
         <button class="sb-item tnav" data-tab="clientes" onclick="tabSidebar('clientes',this)"> <span
-            class="sb-icon">👥</span>Clientes</button>
+            class="sb-icon">ðŸ‘¥</span>Clientes</button>
         <button class="sb-item tnav" data-tab="servicos" onclick="tabSidebar('servicos',this)"> <span
-            class="sb-icon">✂️</span>Serviços</button>
+            class="sb-icon">âœ‚ï¸</span>ServiÃ§os</button>
         <button class="sb-item tnav" data-tab="equipe" onclick="tabSidebar('equipe',this)"> <span
-            class="sb-icon">👤</span>Equipe</button>
+            class="sb-icon">ðŸ‘¤</span>Equipe</button>
         <button class="sb-item tnav tab-plano-pro" data-tab="campanhas" onclick="tabSidebar('campanhas',this)"><span
-            class="sb-icon">📣</span>Campanhas</button>
+            class="sb-icon">ðŸ“£</span>Campanhas</button>
         <button class="sb-item tnav tab-plano-pro" data-tab="analytics" onclick="tabSidebar('analytics',this)"><span
-            class="sb-icon">📊</span>Analytics</button>
+            class="sb-icon">ðŸ“Š</span>Analytics</button>
         <button class="sb-item tnav" data-tab="pagina" onclick="tabSidebar('pagina',this)"> <span
-            class="sb-icon">⚙️</span>Configurações</button>
+            class="sb-icon">âš™ï¸</span>ConfiguraÃ§Ãµes</button>
 
       </nav>
     </aside>
@@ -3126,9 +3126,9 @@
             <circle cx="33" cy="65" r="10" fill="#FFFFFF" />
           </svg>
         </a>
-        <div class="topbar-name" id="hdrNome">Carregando…</div>
+        <div class="topbar-name" id="hdrNome">Carregandoâ€¦</div>
         <div class="topbar-actions">
-          <a class="topbar-link-btn" id="btnVerPag" href="#" target="_blank" title="Ver página pública" rel="noopener">
+          <a class="topbar-link-btn" id="btnVerPag" href="#" target="_blank" title="Ver pÃ¡gina pÃºblica" rel="noopener">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
               stroke-linecap="round">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
@@ -3144,17 +3144,17 @@
 
       <!-- Avatar dropdown -->
       <div id="avatarMenu" style="display:none" class="avatar-menu">
-        <div class="avatar-menu-item" onclick="irParaAba('pagina')">⚙️ Configurações</div>
+        <div class="avatar-menu-item" onclick="irParaAba('pagina')">âš™ï¸ ConfiguraÃ§Ãµes</div>
         <div class="avatar-menu-item danger" onclick="sair()">Sair</div>
       </div>
 
       <!-- Banners -->
-      <div id="bannerDemo">🎭 Conta demo — dados de exemplo</div>
+      <div id="bannerDemo">ðŸŽ­ Conta demo â€” dados de exemplo</div>
       <div id="bannerTrial"><span id="bannerTrialTxt"></span></div>
       <div id="bannerVencimento" style="display:none;padding:10px 14px;font-size:13px;font-weight:700;text-align:center"><span id="bannerVencimentoTxt"></span></div>
-      <div id="bannerNovo"><span id="bnovoTit">Bem-vindo! 👋</span></div>
+      <div id="bannerNovo"><span id="bnovoTit">Bem-vindo! ðŸ‘‹</span></div>
 
-      <!-- CONTEÚDO -->
+      <!-- CONTEÃšDO -->
       <div class="app-content">
         <div id="tb-agenda" class="tab-body on"></div>
         <div id="tb-clientes" class="tab-body"></div>
@@ -3169,49 +3169,49 @@
       <!-- BOTTOM NAV (mobile) -->
       <nav class="app-bottom">
         <button class="bnav-item tnav on" data-tab="agenda" onclick="tabBottom('agenda',this)"> <span
-            class="bnav-icon">📅</span>Agenda</button>
+            class="bnav-icon">ðŸ“…</span>Agenda</button>
         <button class="bnav-item tnav" data-tab="clientes" onclick="tabBottom('clientes',this)"> <span
-            class="bnav-icon">👥</span>Clientes</button>
+            class="bnav-icon">ðŸ‘¥</span>Clientes</button>
         <button class="bnav-item tnav" data-tab="servicos" onclick="tabBottom('servicos',this)"> <span
-            class="bnav-icon">✂️</span>Serviços</button>
+            class="bnav-icon">âœ‚ï¸</span>ServiÃ§os</button>
         <button class="bnav-item tnav" data-tab="equipe" onclick="tabBottom('equipe',this)"> <span
-            class="bnav-icon">👤</span>Equipe</button>
+            class="bnav-icon">ðŸ‘¤</span>Equipe</button>
         <button class="bnav-item tnav tab-plano-pro" data-tab="campanhas" onclick="tabBottom('campanhas',this)"> <span
-            class="bnav-icon">📣</span>Camp.</button>
+            class="bnav-icon">ðŸ“£</span>Camp.</button>
         <button class="bnav-item tnav" data-tab="pagina" onclick="tabBottom('pagina',this)"> <span
-            class="bnav-icon">⚙️</span>Config</button>
+            class="bnav-icon">âš™ï¸</span>Config</button>
       </nav>
 
     </div><!-- /app-main -->
   </div><!-- /appWrap -->
 
   <!-- FAB -->
-  <button class="fab" id="fabBtn" onclick="abrirManual()" aria-label="Novo agendamento">＋</button>
+  <button class="fab" id="fabBtn" onclick="abrirManual()" aria-label="Novo agendamento">ï¼‹</button>
 
   <!-- TOAST -->
   <div id="toastEl"></div>
 
-  <!-- ──────────────────────────────────────
+  <!-- â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
      MODAL: NOVO AGENDAMENTO
-────────────────────────────────────── -->
+â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
   <div class="overlay" id="ovManual">
     <div class="modal">
       <div class="mhdr">
-        <h3>📅 Novo agendamento</h3>
-        <button class="mclose" onclick="fecharManual()">✕</button>
+        <h3>ðŸ“… Novo agendamento</h3>
+        <button class="mclose" onclick="fecharManual()">âœ•</button>
       </div>
       <div class="merr" id="manErr"></div>
       <div class="conflict-box" id="conflictBox"
         style="display:none;background:var(--amber-bg);border:1px solid var(--amber-border);color:var(--amber);border-radius:var(--r-sm);padding:10px 14px;font-size:13px;font-weight:700;margin:0 16px 10px">
-        ⚠️ Já existe um agendamento neste horário.
+        âš ï¸ JÃ¡ existe um agendamento neste horÃ¡rio.
       </div>
       <div style="padding:0 16px 8px">
-        <p style="font-size:12px;color:var(--text-3);font-weight:600;margin-bottom:10px">Selecione o serviço:</p>
+        <p style="font-size:12px;color:var(--text-3);font-weight:600;margin-bottom:10px">Selecione o serviÃ§o:</p>
         <div id="srvOpLista" style="max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:6px"></div>
       </div>
       <div class="fg">
         <label class="fl" for="manNome">Nome do cliente</label>
-        <input class="fi" type="text" id="manNome" placeholder="Ex: João Silva" autocomplete="off">
+        <input class="fi" type="text" id="manNome" placeholder="Ex: JoÃ£o Silva" autocomplete="off">
       </div>
       <div class="fg">
         <label class="fl" for="manTel">WhatsApp</label>
@@ -3223,7 +3223,7 @@
           <input class="fi" type="date" id="manData">
         </div>
         <div>
-          <label class="fl" for="manHora">Horário</label>
+          <label class="fl" for="manHora">HorÃ¡rio</label>
           <select class="fi-sel fi" id="manHora"></select>
         </div>
       </div>
@@ -3234,20 +3234,20 @@
         </div>
       </div>
       <div style="padding:12px 16px 20px">
-        <button class="btn-sv" id="btnSvMan" onclick="salvarManual()" style="width:100%;margin:0">✓ Confirmar
+        <button class="btn-sv" id="btnSvMan" onclick="salvarManual()" style="width:100%;margin:0">âœ“ Confirmar
           agendamento</button>
       </div>
     </div>
   </div>
 
-  <!-- ──────────────────────────────────────
+  <!-- â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
      MODAL: SENHA ADMIN
-────────────────────────────────────── -->
+â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
   <div class="overlay" id="ovSenha">
     <div class="modal">
       <div class="mhdr">
         <h3 id="ovSenhaTit">Confirmar senha</h3>
-        <button class="mclose" onclick="_ovSenhaCancelar()">✕</button>
+        <button class="mclose" onclick="_ovSenhaCancelar()">âœ•</button>
       </div>
       <p id="ovSenhaDesc" style="font-size:13px;color:#666;padding:10px 16px 6px;line-height:1.5"></p>
       <div class="fg">
@@ -3264,29 +3264,29 @@
     </div>
   </div>
 
-  <!-- ──────────────────────────────────────
-     MODAL: SERVIÇO / PROFISSIONAL
-────────────────────────────────────── -->
+  <!-- â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+     MODAL: SERVIÃ‡O / PROFISSIONAL
+â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
   <div class="overlay" id="ovSrv">
     <div class="modal">
       <div class="mhdr">
-        <h3 id="srvTit">Novo serviço</h3>
-        <button class="mclose" onclick="fecharSrv()">✕</button>
+        <h3 id="srvTit">Novo serviÃ§o</h3>
+        <button class="mclose" onclick="fecharSrv()">âœ•</button>
       </div>
       <div class="merr" id="srvErr"></div>
       <div class="fg"><label class="fl" for="srvNome">Nome</label><input class="fi" type="text" id="srvNome"
           placeholder="Ex: Corte de cabelo"></div>
-      <div class="fg"><label class="fl">Ícone</label>
+      <div class="fg"><label class="fl">Ãcone</label>
         <div id="iconGrid" class="ico-grid"></div>
       </div>
       <div class="two" style="padding:0 16px">
-        <div><label class="fl" for="srvPreco">Preço (R$)</label><input class="fi" type="number" id="srvPreco"
+        <div><label class="fl" for="srvPreco">PreÃ§o (R$)</label><input class="fi" type="number" id="srvPreco"
             placeholder="Ex: 50.00" step="0.01" min="0"></div>
-        <div><label class="fl" for="srvDur">Duração (min)</label><input class="fi" type="number" id="srvDur"
+        <div><label class="fl" for="srvDur">DuraÃ§Ã£o (min)</label><input class="fi" type="number" id="srvDur"
             placeholder="30"></div>
       </div>
-      <div class="fg"><label class="fl" for="srvDesc">Descrição (opcional)</label><input class="fi" type="text"
-          id="srvDesc" placeholder="Breve descrição"></div>
+      <div class="fg"><label class="fl" for="srvDesc">DescriÃ§Ã£o (opcional)</label><input class="fi" type="text"
+          id="srvDesc" placeholder="Breve descriÃ§Ã£o"></div>
       <div style="padding:0 16px 20px;display:flex;gap:10px">
         <button onclick="fecharSrv()"
           style="flex:1;padding:12px;background:var(--surface-2);border:1px solid var(--sep);border-radius:var(--r-md);font-weight:700;font-size:14px;cursor:pointer;color:var(--text)">Cancelar</button>
@@ -3302,7 +3302,7 @@
       </div>
       <div id="fotoWrap" style="display:none">
         <div class="foto-wrap">
-          <div class="foto-preview" id="fotoPreview">👤</div>
+          <div class="foto-preview" id="fotoPreview">ðŸ‘¤</div>
           <div class="foto-btns">
             <label class="btn-foto">Alterar foto<input type="file" accept="image/*" style="display:none"
                 onchange="uploadFotoProfissional(this)"></label>
@@ -3312,14 +3312,14 @@
     </div>
   </div>
 
-  <!-- ──────────────────────────────────────
+  <!-- â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
      MODAL: REDEFINIR SENHA
-────────────────────────────────────── -->
+â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
   <div class="overlay" id="overlayEsq">
     <div class="modal">
       <div class="mhdr">
         <h3>Redefinir senha</h3>
-        <button class="mclose" onclick="fecharEsq()">✕</button>
+        <button class="mclose" onclick="fecharEsq()">âœ•</button>
       </div>
       <div class="steps-esq">
         <div class="esq-st">
@@ -3334,12 +3334,12 @@
         <div class="esq-ln" id="eqLn2"></div>
         <div class="esq-st">
           <div class="esq-d" id="eqD3">3</div>
-          <div class="esq-l" id="eqL3">Concluído</div>
+          <div class="esq-l" id="eqL3">ConcluÃ­do</div>
         </div>
       </div>
       <div id="eqEt1">
         <div class="lerr" id="eqErr1"></div>
-        <div class="fg"><label class="fl" for="eqSlug">Seu usuário</label><input class="fi" type="text" id="eqSlug"
+        <div class="fg"><label class="fl" for="eqSlug">Seu usuÃ¡rio</label><input class="fi" type="text" id="eqSlug"
             placeholder="ex: meu-salao" autocomplete="off"></div>
         <div class="fg"><label class="fl" for="eqTel">WhatsApp cadastrado</label><input class="fi" type="tel" id="eqTel"
             placeholder="(11) 99999-9999"></div>
@@ -3353,7 +3353,7 @@
         <p style="font-size:13px;font-weight:700;color:var(--primary);padding:0 16px 10px" id="eqNome"></p>
         <div class="lerr" id="eqErr2"></div>
         <div class="fg"><label class="fl" for="eqSenha">Nova senha</label><input class="fi" type="password" id="eqSenha"
-            placeholder="Mínimo 6 caracteres" autocomplete="new-password"></div>
+            placeholder="MÃ­nimo 6 caracteres" autocomplete="new-password"></div>
         <div class="fg"><label class="fl" for="eqSenha2">Confirmar</label><input class="fi" type="password"
             id="eqSenha2" placeholder="Repita a senha" autocomplete="new-password"></div>
         <div style="padding:0 16px 16px"><button class="btn-sv" id="btnEqS" style="width:100%;margin:0">Salvar nova
@@ -3361,7 +3361,7 @@
       </div>
       <div id="eqEt3" style="display:none">
         <div style="text-align:center;padding:30px 16px">
-          <div style="font-size:48px;margin-bottom:8px">✅</div>
+          <div style="font-size:48px;margin-bottom:8px">âœ…</div>
           <div style="font-family:var(--font-brand);font-size:17px;font-weight:700;color:var(--text)">Senha redefinida!
           </div>
           <div style="font-size:13px;color:var(--text-2);margin-top:6px">Redirecionando...</div>
@@ -3373,22 +3373,22 @@
     </div>
   </div>
 
-  <!-- ──────────────────────────────────────
-     MODAL: BLOQUEIO HORÁRIO
-────────────────────────────────────── -->
+  <!-- â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+     MODAL: BLOQUEIO HORÃRIO
+â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
   <div class="overlay" id="ovBloqueio">
     <div class="modal">
       <div class="mhdr">
-        <h3>🚫 Bloquear horário</h3>
-        <button class="mclose" onclick="fecharBloqueio()">✕</button>
+        <h3>ðŸš« Bloquear horÃ¡rio</h3>
+        <button class="mclose" onclick="fecharBloqueio()">âœ•</button>
       </div>
       <div style="padding:0 16px 16px">
         <div class="merr" id="bloqErr"></div>
-        <div class="fg" style="margin-top:10px"><label class="fl">Data início</label><input class="fi" type="date"
+        <div class="fg" style="margin-top:10px"><label class="fl">Data inÃ­cio</label><input class="fi" type="date"
             id="bloqIni"></div>
         <div class="fg"><label class="fl">Data fim (Opcional)</label><input class="fi" type="date" id="bloqFim"></div>
         <div class="fg"><label class="fl">Motivo (Opcional)</label><input class="fi" type="text" id="bloqMotivo"
-            placeholder="Ex: Férias, Feriado"></div>
+            placeholder="Ex: FÃ©rias, Feriado"></div>
         <button class="btn-sv" onclick="confirmarBloqueio()">Bloquear</button>
       </div>
     </div>
@@ -3397,8 +3397,8 @@
   <div class="overlay" id="ovExcluirBloq">
     <div class="modal">
       <div class="mhdr">
-        <h3>🚫 Excluir Bloqueio</h3>
-        <button class="mclose" onclick="document.getElementById('ovExcluirBloq').classList.remove('show')">✕</button>
+        <h3>ðŸš« Excluir Bloqueio</h3>
+        <button class="mclose" onclick="document.getElementById('ovExcluirBloq').classList.remove('show')">âœ•</button>
       </div>
       <div style="padding:16px">
         <p style="font-size:14px;color:var(--text);margin-bottom:20px;text-align:center">Deseja realmente remover este
@@ -3414,20 +3414,20 @@
     </div>
   </div>
 
-  <!-- ──────────────────────────────────────
+  <!-- â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
      SCRIPTS
-────────────────────────────────────── -->
-  <script src="/js/p-core.js?v=24"></script>
-  <script src="/js/p-agenda.js?v=24"></script>
-  <script src="/js/p-clientes.js?v=24"></script>
-  <script src="/js/p-servicos.js?v=24"></script>
-  <script src="/js/p-equipe.js?v=24"></script>
-  <script src="/js/p-config.js?v=24"></script>
-  <script src="/js/p-analytics.js?v=24"></script>
-  <script src="/js/p-tema.js?v=24"></script>
-  <script src="/js/p-upgrade.js?v=24"></script>
-  <script src="/js/p-push.js?v=24"></script>
-  <script src="/js/toast.js?v=24"></script>
+â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+  <script src="/js/p-core.js?v=25"></script>
+  <script src="/js/p-agenda.js?v=25"></script>
+  <script src="/js/p-clientes.js?v=25"></script>
+  <script src="/js/p-servicos.js?v=25"></script>
+  <script src="/js/p-equipe.js?v=25"></script>
+  <script src="/js/p-config.js?v=25"></script>
+  <script src="/js/p-analytics.js?v=25"></script>
+  <script src="/js/p-tema.js?v=25"></script>
+  <script src="/js/p-upgrade.js?v=25"></script>
+  <script src="/js/p-push.js?v=25"></script>
+  <script src="/js/toast.js?v=25"></script>
 
 </body>
 

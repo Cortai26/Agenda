@@ -10,9 +10,10 @@ export default async function handler(req, res) {
   const SUPA_KEY = process.env.SUPABASE_SERVICE_KEY;
   if (!SUPA_KEY) return res.status(500).json({ error: 'SUPABASE_SERVICE_KEY não configurada' });
 
+  const dataOverride = req.method === 'GET' && req.query && req.query.data ? req.query.data : null;
   const amanha = new Date();
   amanha.setDate(amanha.getDate() + 1);
-  const dataStr = amanha.toISOString().slice(0, 10);
+  const dataStr = dataOverride || amanha.toISOString().slice(0, 10);
 
   const H = { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY };
 
