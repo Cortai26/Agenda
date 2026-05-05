@@ -20,7 +20,8 @@
 <link rel="manifest" href="/manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Nunito+Sans:wght@300;400;600&family=Manrope:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/tokens.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
@@ -267,6 +268,17 @@ footer strong{color:var(--text);font-weight:800}
 /* Social proof numbers */
 .dep-g{font-family:'Sora',sans-serif;font-size:42px;font-weight:800;letter-spacing:-.04em;}
 .dep-l{font-size:13px;text-transform:uppercase;letter-spacing:.08em;opacity:.6;}
+
+/* ── P0: Hero secondary CTA → link-text ── */
+.btn-b.hero__link{background:none;border:none;color:var(--muted);font-weight:600;padding:12px 0;box-shadow:none}
+.btn-b.hero__link:hover{color:var(--primary);background:none;transform:none}
+
+/* ── P0: Plan card hierarchy ── */
+.plano.plan--solo{border-color:var(--border)}
+.plano.plan--team{border:2px solid var(--primary)}
+.plano.plan--team .plano-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--primary);margin-bottom:10px}
+.plano.plan--biz{padding:32px 24px;border-color:rgba(229,90,12,.35);box-shadow:0 8px 32px rgba(229,90,12,.12),0 2px 8px rgba(0,0,0,.2)}
+.plano.plan--biz .plano-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--primary);margin-bottom:10px}
 </style>
 </head>
 <body>
@@ -306,7 +318,7 @@ footer strong{color:var(--text);font-weight:800}
   <p class="hero-line rv" style="font-size:14px;opacity:.65;margin-top:-8px;font-weight:600">Sem caderno. Sem WhatsApp. Sem complicação.</p>
   <div class="hero-btns rv">
     <a href="cadastro.html" class="btn-a">📅 Criar minha Agenda grátis</a>
-    <a href="agendar.html?slug=barbershop" class="btn-b">Ver como o cliente vê →</a>
+    <a href="agendar.html?slug=barbershop" class="btn-b hero__link">Ver como o cliente vê →</a>
   </div>
   <div class="hero-proof rv">Sem cartão de crédito · <strong>14 dias grátis</strong> · Cancele quando quiser</div>
   <div class="mockup-wrap rv">
@@ -396,7 +408,7 @@ footer strong{color:var(--text);font-weight:800}
     <div class="sec-h rv" style="margin:0 auto">Sem taxa por agendamento.<br>Preço fixo todo mês.</div>
     <div class="planos-grid" style="margin-top:40px">
 
-      <div class="plano rv">
+      <div class="plano plan--solo rv">
         <div class="plano-n">Solo</div>
         <div class="plano-p"><sup>R$</sup>35<sub>/mês</sub></div>
         <div class="plano-desc">Para o profissional autônomo que quer parar de perder agendamento.</div>
@@ -409,7 +421,7 @@ footer strong{color:var(--text);font-weight:800}
         <a href="cadastro.html?plano=solo" class="btn-p btn-p-out">Testar 14 dias grátis</a>
       </div>
 
-      <div class="plano hot rv">
+      <div class="plano hot plan--team rv">
         <div class="plano-tag">🔥 Mais popular</div>
         <div class="plano-n">Equipe</div>
         <div class="plano-p"><sup>R$</sup>70<sub>/mês</sub></div>
@@ -424,7 +436,7 @@ footer strong{color:var(--text);font-weight:800}
         <a href="cadastro.html?plano=equipe" class="btn-p btn-p-fill">Começar agora →</a>
       </div>
 
-      <div class="plano top rv">
+      <div class="plano top plan--biz rv">
         <div class="plano-badge">✦ Melhor custo por vaga</div>
         <div class="plano-n">Negócio</div>
         <div class="plano-p"><sup>R$</sup>140<sub>/mês</sub></div>
@@ -502,5 +514,6 @@ document.querySelectorAll('.rv').forEach(function(el){obs.observe(el)});
     </a>
   </div>
 </section>
+<script src="/js/toast.js"></script>
 </body>
 </html>

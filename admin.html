@@ -12,7 +12,8 @@
 <link rel="manifest" href="/manifest-admin.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Nunito+Sans:wght@300;400;600&family=Manrope:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/tokens.css">
 <style>
 /* ═══ RESET ═══ */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -1061,7 +1062,16 @@ input.fi:focus{
 .kpi-valor{font-size:clamp(18px,5vw,36px);font-weight:800;line-height:1;word-break:break-all}
 @media(max-width:400px){.kpi-grid{grid-template-columns:1fr 1fr}.kpi-card:nth-child(3){grid-column:1/-1}}
 </style>
+<script src="/js/toast.js"></script>
 <script>
+(function(){
+  var _origAlert=window.alert;
+  window.alert=function(m){
+    if(!window.toast){_origAlert(m);return;}
+    var ok=m&&(m.startsWith('✅')||m.startsWith('✓')||m.startsWith('OK')||m.startsWith('Senha alterada'));
+    window.toast(ok?'success':'error',ok?'Sucesso':'Aviso',String(m).replace(/^✅\s*/,''));
+  };
+})();
 function enviarWhatsApp(tel, pix, nome, valor, venc, link){
   if(!tel){alert('Telefone do estabelecimento não cadastrado.');return;}
   var num=tel.replace(/\D/g,'');

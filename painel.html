@@ -11,8 +11,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800;900&family=Nunito+Sans:wght@400;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800;900&family=Nunito+Sans:wght@400;600;700;800&family=Manrope:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap"
     rel="stylesheet">
+  <link rel="stylesheet" href="/css/tokens.css">
   <style>
     /* ── RESET ── */
     * {
@@ -3009,6 +3010,26 @@
       border-color: var(--primary);
       color: #fff
     }
+
+    /* ── Cal-grid (modal novo agendamento) ── */
+    .cal-grid{background:var(--s1,#181818);border:1px solid var(--bd,rgba(255,255,255,.07));border-radius:var(--r-lg,12px);padding:20px;max-width:340px}
+    .cal-grid__head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+    .cal-grid__title{font:700 14px var(--font-h,'Manrope',sans-serif);color:var(--tx,#E5E2E1)}
+    .cal-nav{width:32px;height:32px;border-radius:8px;border:none;background:var(--s2,#212121);color:var(--tx2,#A09080);font:700 16px var(--font-h,'Manrope',sans-serif);cursor:pointer;transition:background .15s;flex-shrink:0}
+    .cal-nav:hover{background:var(--s3,#2C2C2C);color:var(--tx,#E5E2E1)}
+    .cal-grid__weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px}
+    .cal-grid__weekdays span{text-align:center;font:700 10px var(--font-h,'Manrope',sans-serif);color:var(--tx3,#5C5045);padding:4px;letter-spacing:.3px}
+    .cal-grid__days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+    .cal-day{aspect-ratio:1;border:none;border-radius:8px;background:transparent;color:var(--tx,#E5E2E1);font:500 13px var(--font-h,'Manrope',sans-serif);cursor:pointer;position:relative;transition:all .15s;min-height:36px}
+    .cal-day:hover:not(:disabled){background:var(--s2,#212121)}
+    .cal-day.is-today{background:var(--primary-bg,rgba(229,90,12,.1));color:var(--primary,#E55A0C);font-weight:700}
+    .cal-day.is-today::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--primary,#E55A0C)}
+    .cal-day.is-selected{background:var(--primary,#E55A0C);color:#fff;font-weight:700;box-shadow:0 4px 14px var(--primary-glow,rgba(229,90,12,.3))}
+    .cal-day.is-taken{color:var(--tx3,#5C5045);text-decoration:line-through;cursor:not-allowed}
+    .cal-day.is-other{opacity:.3;cursor:default}
+    .cal-grid__legend{margin-top:14px;padding-top:12px;border-top:1px solid var(--bd,rgba(255,255,255,.07));display:flex;gap:12px;font:400 10.5px var(--font-b,'Inter',sans-serif);color:var(--tx2,#A09080)}
+    .cal-legend{display:flex;align-items:center;gap:6px}
+    .cal-legend i{width:8px;height:8px;border-radius:50%;display:inline-block}
   </style>
 </head>
 
@@ -3402,6 +3423,7 @@
   <script src="/js/p-tema.js?v=21"></script>
   <script src="/js/p-upgrade.js?v=21"></script>
   <script src="/js/p-push.js?v=21"></script>
+  <script src="/js/toast.js"></script>
 
 </body>
 

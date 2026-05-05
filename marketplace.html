@@ -12,7 +12,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Nunito+Sans:wght@300;400;600&family=Manrope:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/tokens.css">
 <!-- Leaflet.js — OpenStreetMap (free, no API key) -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
@@ -359,7 +360,7 @@ function filtrar(){
 
 // ── Geolocation ──
 function localizarMe(){
-  if(!navigator.geolocation){alert('Geolocalização não suportada.');return;}
+  if(!navigator.geolocation){if(window.toast)window.toast('error','Indisponível','Geolocalização não suportada neste dispositivo.');else alert('Geolocalização não suportada.');return;}
   navigator.geolocation.getCurrentPosition(function(pos){
     var lat=pos.coords.latitude, lng=pos.coords.longitude;
     _map.setView([lat,lng],13,{animate:true});
@@ -383,7 +384,7 @@ function localizarMe(){
         }
       }).catch(function(){});
   },function(){
-    alert('Não foi possível obter sua localização. Verifique as permissões.');
+    if(window.toast)window.toast('error','Localização negada','Verifique as permissões do navegador.');else alert('Não foi possível obter sua localização. Verifique as permissões.');
   });
 }
 
@@ -391,5 +392,6 @@ function localizarMe(){
 initMap();
 carregar();
 </script>
+<script src="/js/toast.js"></script>
 </body>
 </html>

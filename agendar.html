@@ -17,7 +17,8 @@
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Nunito+Sans:wght@300;400;600&family=Manrope:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/tokens.css">
 <style>
 /* ═══════════════════════════════════════════════════════════════
    AGENDA — SISTEMA DE TEMAS v2
@@ -636,6 +637,7 @@ html.t-onyx .dia-card.ativo .d-mes { color: rgba(19,19,19,.7); }
   color: #FFFFFF;
   box-shadow: 0 4px 14px var(--c-primary-glow);
   font-weight: 700;
+  transform: scale(1.06);
 }
 
 /* Onyx: fundo carvão escuro, texto bege claro, selecionado laranja + branco */
@@ -1173,6 +1175,7 @@ html.t-crimson {
 
 <!-- TELA DE CONFIRMAÇÃO -->
 <div id="confirmScreen" class="confirm-screen" style="display:none">
+  <div class="confetti" id="confirmConfetti"></div>
   <div class="confirm-check" style="font-size:52px;margin-bottom:8px" id="cProfAvatar">✅</div>
   <div class="confirm-title" id="cTitle">Horário reservado!</div>
   <div class="confirm-sub" id="cSubTxt"></div>
@@ -1232,7 +1235,11 @@ html.t-crimson {
       <div class="ag-bloco-sel" id="selSrv"></div>
     </div>
     <div class="ag-srv-list" id="srvWrap">
-      <div class="loading">Carregando serviços…</div>
+      <div class="skel-list" aria-label="Carregando serviços">
+        <div class="skel-row"><div class="skel skel--avatar"></div><div class="skel-stack"><div class="skel skel--line skel--w70"></div><div class="skel skel--line skel--w40"></div></div></div>
+        <div class="skel-row"><div class="skel skel--avatar"></div><div class="skel-stack"><div class="skel skel--line skel--w70"></div><div class="skel skel--line skel--w40"></div></div></div>
+        <div class="skel-row"><div class="skel skel--avatar"></div><div class="skel-stack"><div class="skel skel--line skel--w70"></div><div class="skel skel--line skel--w40"></div></div></div>
+      </div>
     </div>
   </div>
 
@@ -1832,7 +1839,8 @@ document.getElementById('btnAg').onclick=async()=>{
       p_cliente_email:emailVal
     });
     if(!rpcRes||!rpcRes.ok){
-      alert(rpcRes?.erro||'Horário não disponível. Escolha outro.');
+      if(window.toast)window.toast('error','Horário indisponível',rpcRes?.erro||'Escolha outro horário e tente novamente.');
+      else alert(rpcRes?.erro||'Horário não disponível. Escolha outro.');
       btn.disabled=false; btn.textContent='✅ Confirmar agendamento';
       return;
     }
@@ -1871,8 +1879,13 @@ document.getElementById('btnAg').onclick=async()=>{
       }).catch(function(){});
     }
   }catch(e){
-    if(e.message.includes('unique')) alert('Esse horário acabou de ser ocupado! Escolha outro.');
-    else alert('Erro ao agendar: '+e.message);
+    if(e.message.includes('unique')){
+      if(window.toast)window.toast('error','Horário ocupado','Esse horário acabou de ser reservado. Escolha outro.');
+      else alert('Esse horário acabou de ser ocupado! Escolha outro.');
+    }else{
+      if(window.toast)window.toast('error','Erro ao agendar',e.message);
+      else alert('Erro ao agendar: '+e.message);
+    }
     btn.disabled=false; btn.textContent='✅ Confirmar agendamento';
   }
 };
@@ -2038,10 +2051,25 @@ function copiarPix(){
   });
 }
 
+function fireConfetti(host){
+  if(!host)return;
+  var colors=['#E55A0C','#22C55E','#FFC940','#60A5FA','#F472B6'];
+  host.innerHTML='';
+  for(var i=0;i<18;i++){
+    var p=document.createElement('i');
+    p.style.background=colors[i%colors.length];
+    var aNames=['confettiL','confettiC','confettiR'];
+    p.style.animation=aNames[i%3]+' '+(1.2+Math.random()*.8)+'s ease-out '+(i*30)+'ms forwards';
+    host.appendChild(p);
+  }
+}
+
 function showModal(ag){
   document.querySelector('.ag-page').style.display='none';
   const cs=document.getElementById('confirmScreen');
   cs.style.display='flex';
+  var _cfHost=document.getElementById('confirmConfetti');
+  if(_cfHost) fireConfetti(_cfHost);
   // ITEM 3: Emotional success screen
   var _firstName = S.nome.split(' ')[0];
   var _profDisplay = S.profNome || (profSelecionado&&profSelecionado!=='sem_preferencia'?profSelecionado.nome:null);
@@ -2161,6 +2189,6 @@ document.addEventListener('change', function(e){
   }
 });
 </script>
-
+<script src="/js/toast.js"></script>
 </body>
 </html>

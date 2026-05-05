@@ -6,9 +6,10 @@
 <title>Configurar minha Agenda</title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="stylesheet" href="/design-tokens.css?v=1">
+<link rel="stylesheet" href="/css/tokens.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Nunito+Sans:wght@300;400;600&family=Manrope:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--font-body,'Nunito Sans',sans-serif);background:#0C0A09;color:#fff;min-height:100vh;-webkit-font-smoothing:antialiased}
@@ -81,12 +82,40 @@ select.onb-input option{background:#1A1714;color:#fff}
 
 /* Success step */
 .onb-success-check{width:72px;height:72px;background:rgba(52,199,89,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:32px}
+
+/* ── Pip progress indicator ── */
+.onb-pips{display:flex;gap:4px;margin:12px 0 0;list-style:none;padding:0 20px}
+.onb-pips li{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;opacity:.38;transition:opacity .3s}
+.onb-pips li.is-done,.onb-pips li.is-current{opacity:1}
+.onb-pip-dot{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font:800 10px 'Manrope',sans-serif;display:flex;align-items:center;justify-content:center;transition:all .3s var(--ease-spring)}
+.onb-pips li.is-done .onb-pip-dot{background:var(--ok,#22C55E)}
+.onb-pips li.is-current .onb-pip-dot{background:var(--brand,#E55A0C);box-shadow:0 0 0 4px rgba(229,90,12,.2)}
+.onb-pip-lbl{font:700 9px 'Manrope',sans-serif;color:rgba(255,255,255,.5);text-align:center}
+.onb-pips li.is-current .onb-pip-lbl{color:#fff}
+
+/* ── Step transitions ── */
+.onb-step.active{animation:fadeIn .3s var(--ease-out) both}
+
+/* ── Enhanced progress bar ── */
+.onb-progress-track{height:3px;background:rgba(255,255,255,.1);position:sticky;top:0;z-index:100;overflow:visible}
+.onb-progress-fill{height:100%;background:var(--brand,#E55A0C);border-radius:2px;transition:width .5s var(--ease-out);box-shadow:0 0 6px rgba(229,90,12,.6)}
+
+/* ── Skip link ── */
+.onb-skip-link{display:block;text-align:center;padding:14px;font:600 12px 'Manrope',sans-serif;color:rgba(255,255,255,.3);text-decoration:none;cursor:pointer;border:none;background:none;width:100%}
+.onb-skip-link:hover{color:rgba(255,255,255,.6)}
 </style>
 </head>
 <body>
 <div class="onb-progress-track">
   <div class="onb-progress-fill" id="progressFill" style="width:20%"></div>
 </div>
+<ol class="onb-pips" id="onbPips">
+  <li class="is-current" data-pip="1"><span class="onb-pip-dot">1</span><span class="onb-pip-lbl">Negócio</span></li>
+  <li data-pip="2"><span class="onb-pip-dot">2</span><span class="onb-pip-lbl">Categoria</span></li>
+  <li data-pip="3"><span class="onb-pip-dot">3</span><span class="onb-pip-lbl">Serviços</span></li>
+  <li data-pip="4"><span class="onb-pip-dot">4</span><span class="onb-pip-lbl">Horários</span></li>
+  <li data-pip="5"><span class="onb-pip-dot">✓</span><span class="onb-pip-lbl">Pronto</span></li>
+</ol>
 
 <div class="onb-wrap">
   <!-- ETAPA 1: Boas-vindas -->
@@ -178,6 +207,8 @@ select.onb-input option{background:#1A1714;color:#fff}
     <button class="onb-btn-ghost" onclick="voltar(4)">← Voltar</button>
   </div>
 
+  <button class="onb-skip-link" id="onbSkipBtn" onclick="irParaPainel()" style="display:none">Pular e configurar depois</button>
+
   <!-- ETAPA 5: Pronto! -->
   <div class="onb-step" data-step="5">
     <div style="text-align:center;padding-top:20px">
@@ -225,6 +256,15 @@ function irParaEtapa(n){
   etapa=n;
   document.querySelector('[data-step="'+n+'"]').classList.add('active');
   document.getElementById('progressFill').style.width=(n*20)+'%';
+  // Sync pip states
+  document.querySelectorAll('#onbPips li').forEach(function(li){
+    var p=parseInt(li.dataset.pip);
+    li.classList.toggle('is-done',p<n);
+    li.classList.toggle('is-current',p===n);
+  });
+  // Show skip from step 3
+  var skip=document.getElementById('onbSkipBtn');
+  if(skip) skip.style.display=n>=3&&n<5?'block':'none';
   window.scrollTo(0,0);
   if(n===4) renderDias();
 }
@@ -232,11 +272,11 @@ function irParaEtapa(n){
 function avancar(atual){
   if(atual===1){
     var nome=document.getElementById('onbNome').value.trim();
-    if(!nome){alert('Por favor, insira o nome do seu negócio.');return;}
+    if(!nome){if(window.toast)window.toast('error','Campo obrigatório','Insira o nome do seu negócio.');else alert('Por favor, insira o nome do seu negócio.');return;}
     dados.nome=nome;
     salvarNome(nome);
   }
-  if(atual===2&&!dados.cat){alert('Selecione uma categoria.');return;}
+  if(atual===2&&!dados.cat){if(window.toast)window.toast('error','Selecione','Escolha uma categoria primeiro.');else alert('Selecione uma categoria.');return;}
   irParaEtapa(atual+1);
 }
 function voltar(atual){irParaEtapa(atual-1);}
@@ -285,7 +325,7 @@ async function salvarNome(nome){
 
 async function salvarServico(){
   var nome=document.getElementById('onbServNome').value.trim();
-  if(!nome){alert('Insira o nome do serviço.');return;}
+  if(!nome){if(window.toast)window.toast('error','Campo obrigatório','Insira o nome do serviço.');else alert('Insira o nome do serviço.');return;}
   var dur=parseInt(document.getElementById('onbServDur').value)||60;
   var preco=Math.round((parseFloat(document.getElementById('onbServPreco').value)||0)*100);
   try{
@@ -297,7 +337,7 @@ async function salvarServico(){
       body:JSON.stringify({salao_id:s.id,icone:'📋',nome:nome,preco:preco,duracao:dur,ativo:true,ordem:1})
     });
     irParaEtapa(4);
-  }catch(e){alert('Erro ao salvar. Tente novamente.');}
+  }catch(e){if(window.toast)window.toast('error','Erro ao salvar','Tente novamente em instantes.');else alert('Erro ao salvar. Tente novamente.');}
 }
 
 async function salvarHorarios(){
@@ -356,5 +396,6 @@ function irParaPainel(){window.location.href='/painel.html';}
   else{dados.slug=s.slug;}
 })();
 </script>
+<script src="/js/toast.js"></script>
 </body>
 </html>
