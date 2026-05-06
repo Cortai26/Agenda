@@ -42,6 +42,6 @@ function aplicarTemaSimples(cls){
   var temaObj={template:tpl,id:tpl,cores:{}};
   S._tema=temaObj;
   rpc('salvar_tema_salao',{p_slug:S.slug,p_senha:_pw||'',p_tema:temaObj}).then(function(){
-    toast('\u2713 Tema salvo!','ok'); renderTema();
-  }).catch(function(){ toast('\u2713 Tema aplicado','ok'); renderTema(); });
+    renderTema();
+  }).catch(function(){ renderTema(); });
 }
