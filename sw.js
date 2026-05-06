@@ -1,13 +1,11 @@
 /* ══════════════════════════════════════════════
-   Agenda — Service Worker v3.0
+   Agenda — Service Worker v5.0
    Cache offline + Push Notifications (RFC 8291)
 ══════════════════════════════════════════════ */
 
-const CACHE = 'agenda-v3'
+const CACHE = 'agenda-v5'
 
 const PRECACHE = [
-  '/painel.html',
-  '/agendar.html',
   '/manifest.json',
   '/icon-192.png',
   '/icon-512.png'
@@ -40,6 +38,23 @@ self.addEventListener('fetch', e => {
     || url.hostname.endsWith('fonts.gstatic.com')
   if (!ok) return
 
+  // HTML: sempre do servidor, nunca do cache
+  if (e.request.headers.get('accept')?.includes('text/html')) {
+    e.respondWith(
+      fetch(e.request).catch(() => caches.match(e.request))
+    )
+    return
+  }
+
+  // Assets versionados com ?v=: cache-first
+  if (url.search.includes('v=')) {
+    e.respondWith(
+      caches.match(e.request).then(cached => cached || fetch(e.request))
+    )
+    return
+  }
+
+  // Resto: network-first com fallback no cache
   e.respondWith(
     fetch(e.request)
       .then(res => {
@@ -70,12 +85,12 @@ self.addEventListener('push', e => {
     }
   }
 
-  const title   = data.title  || '📅 Cortaí'
+  const title   = data.title  || '📅 Agenda'
   const options = {
     body:               data.body  || 'Novo agendamento recebido',
     icon:               '/icon-192.png',
-    badge:              '/icon-96.png',
-    tag:                'cortai-ag',
+    badge:              '/icon-192.png',
+    tag:                'agenda-ag',
     renotify:           true,
     requireInteraction: false,
     data:               { url: '/painel.html' }
