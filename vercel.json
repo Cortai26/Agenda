@@ -119,7 +119,7 @@
     },
     {
       "path": "/api/sincronizar-pagamentos",
-      "schedule": "0 * * * *"
+      "schedule": "0 6 * * *"
     }
   ]
 }
