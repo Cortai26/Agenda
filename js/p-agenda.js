@@ -103,9 +103,7 @@ async function renderAgenda(){
     html+='</div>';
   }
 
-  /* SEÇÃO HOJE */
-  html+='<div class="sec-label">Hoje · '+parseInt(ds.split('-')[2])+' de '+MESES[hoje().getMonth()]+'</div>';
-  // Monthly revenue
+  /* SEÇÃO HOJE — métricas sempre visíveis */
   var _hoje2=new Date();
   var _y=_hoje2.getFullYear(),_m=_hoje2.getMonth()+1;
   var _d1=_y+'-'+String(_m).padStart(2,'0')+'-01';
@@ -121,16 +119,20 @@ async function renderAgenda(){
   html+='<div class="mc mc-V"><div class="mc-n">'+formatPrice(fat)+'</div><div class="mc-l">Faturamento hoje</div></div>';
   html+='<div class="mc mc-A mc-mes"><div class="mc-n">'+formatPrice(_fatMes)+'</div><div class="mc-l">Este mês</div></div>';
   html+='</div>';
-  html+='<div class="lista">'+renderListaAgs(agsHoje,true,'agenda')+'</div>';
 
-  /* SEÇÃO EM BREVE */
+  /* HOJE — lista colapsável */
+  var _hojeLbl='Hoje · '+parseInt(ds.split('-')[2])+' de '+MESES[hoje().getMonth()]+
+    (ativos.length?' <span style="background:var(--primary);color:#fff;border-radius:20px;padding:1px 8px;font-size:10px;font-weight:700;margin-left:6px">'+ativos.length+'</span>':'');
+  var _hC=localStorage.getItem('sec-hoje-collapsed')!=='0';
+  html+=_secGroup('sec-hoje',_hojeLbl,_hC,'<div class="lista">'+renderListaAgs(agsHoje,true,'agenda')+'</div>');
+
+  /* SEÇÃO EM BREVE — colapsável */
   if(proximos.length>0){
-    html+='<div class="sec-label">Em breve · próximos 7 dias</div>';
-    html+='<div class="lista"><div class="lista-hdr"><h3>🔜 Em breve</h3><span class="tag-c" style="background:rgba(45,106,79,.1);color:var(--VD)">'+proximos.length+' agendamento'+(proximos.length!==1?'s':'')+'</span></div>';
+    var _embreveLista='<div class="lista">';
     proximos.forEach(function(a){
       var dp=a.data.split('-');
       var dataFmt=pad(parseInt(dp[2]))+'/'+pad(parseInt(dp[1]));
-      html+=
+      _embreveLista+=
         '<div class="ag-card ag-card-prox">'+
           '<div class="ag-hora ag-hora-dt">'+
             '<div class="ag-dt-d">'+dataFmt+'</div>'+
@@ -149,7 +151,10 @@ async function renderAgenda(){
           '<div class="ag-preco">'+formatPrice(a.servico_preco||0)+'</div>'+
         '</div>';
     });
-    html+='</div>';
+    _embreveLista+='</div>';
+    var _ebLbl='Em breve · próximos 7 dias <span style="background:rgba(45,106,79,.15);color:var(--VD);border-radius:20px;padding:1px 8px;font-size:10px;font-weight:700;margin-left:6px">'+proximos.length+'</span>';
+    var _ebC=localStorage.getItem('sec-embreve-collapsed')!=='0';
+    html+=_secGroup('sec-embreve',_ebLbl,_ebC,_embreveLista);
   }
 
 
@@ -195,10 +200,10 @@ async function renderAgenda(){
     html+='</div></div>';
   }
 
-  /* SEÇÃO CALENDÁRIO */
-  html+='<div class="sec-label">Calendário · '+MESES[_calMes]+' '+_calAno+'</div>';
-  html+='<div id="calWrap"></div>';
-  html+='<div id="drillWrap"></div>';
+  /* SEÇÃO CALENDÁRIO — colapsável */
+  var _calLbl='Calendário · '+MESES[_calMes]+' '+_calAno;
+  var _calC=localStorage.getItem('sec-calendario-collapsed')==='1';
+  html+=_secGroup('sec-calendario',_calLbl,_calC,'<div id="calWrap"></div><div id="drillWrap"></div>');
 
   el.innerHTML=html;
   renderCalendar();
@@ -585,6 +590,19 @@ function abrirWalkin(ds){
   if(typeof abrirManual === 'function'){
     abrirManual(ds || agora.toISOString().split('T')[0], h, true);
   }
+}
+
+/* Helper: gera HTML de section colapsável */
+var _chevSVG='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>';
+function _secGroup(id,label,collapsed,body){
+  var c=collapsed?'collapsed':'';
+  return '<div class="section-group" data-section="'+id+'">'+
+    '<div class="section-group-header" onclick="toggleSection(\''+id+'\')">'+
+      '<span class="section-group-label">'+label+'</span>'+
+      '<span class="section-chevron '+c+'">'+_chevSVG+'</span>'+
+    '</div>'+
+    '<div class="section-group-body '+c+'">'+body+'</div>'+
+  '</div>';
 }
 
 /* ═══ CORREÇÃO 2: Collapsible sections ═══ */
