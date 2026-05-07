@@ -333,33 +333,34 @@ function _htmlSinalPix(d){
     '</div>';
 }
 
-function _htmlNotificacoes(d){
+function _htmlNotifPush(d){
   var notifNovo=d.notif_novo_ag!==false;
+  return '<div style="padding:12px 16px">'+
+    '<div id="pushStatusTxt" style="font-size:13px;color:var(--CZ);margin-bottom:10px">Verificando...</div>'+
+    '<button class="btn-add" style="width:100%;justify-content:center;padding:11px;margin-bottom:16px" onclick="testarPush(this)">🧪 Enviar notificação de teste</button>'+
+    '<div class="pgto-row" style="padding-top:12px;border-top:1px solid var(--sep)">'+
+    '<div><div style="font-size:14px;font-weight:700;color:var(--text)">Notificar novo agendamento</div>'+
+    '<div style="font-size:12px;color:var(--text-2)">Push ao receber novo agendamento</div></div>'+
+    '<button class="pgto-toggle '+(notifNovo?'on':'')+'" id="tgNotifNovo" onclick="salvarNotifNovo(this)"></button>'+
+    '</div>'+
+    '</div>';
+}
+
+function _htmlLembreteRetorno(d){
   var lembreAtivo=!!d.lembrete_retorno_ativo;
   var lembreDias=d.lembrete_retorno_dias||30;
   var lembreMsg=d.lembrete_retorno_msg||'';
   return '<div style="padding:12px 16px">'+
-    '<div id="pushStatusTxt" style="font-size:13px;color:var(--CZ);margin-bottom:10px">Verificando...</div>'+
-    '<button class="btn-add" style="width:100%;justify-content:center;padding:11px;margin-bottom:16px" onclick="testarPush(this)">🧪 Enviar notificação de teste</button>'+
-    '<div style="padding-top:16px;border-top:1px solid var(--sep)">'+
-    '<div class="pgto-row" style="margin-bottom:12px">'+
-    '<div><div style="font-size:14px;font-weight:700;color:var(--text)">Notificar novo agendamento</div>'+
-    '<div style="font-size:12px;color:var(--text-2)">Push ao receber novo agendamento</div></div>'+
-    '<button class="pgto-toggle '+(notifNovo?'on':'')+'" id="tgNotifNovo" onclick="this.classList.toggle(\'on\')"></button>'+
-    '</div>'+
-    '<div class="pgto-row" style="margin-bottom:12px">'+
-    '<div><div style="font-size:14px;font-weight:700;color:var(--text)">Lembrete de retorno</div>'+
+    '<div class="pgto-row" style="margin-bottom:14px">'+
+    '<div><div style="font-size:14px;font-weight:700;color:var(--text)">Ativar lembrete</div>'+
     '<div style="font-size:12px;color:var(--text-2)">Alerta para clientes sem agendar há X dias</div></div>'+
     '<button class="pgto-toggle '+(lembreAtivo?'on':'')+'" id="tgLembrete" onclick="this.classList.toggle(\'on\')"></button>'+
     '</div>'+
-    '<div class="two">'+
     '<div class="fg"><label class="fl">Dias sem agendamento</label>'+
-    '<input class="fi" type="number" id="lembreDias" value="'+lembreDias+'" min="7" max="365"></div>'+
-    '</div>'+
+    '<input class="fi" type="number" id="lembreDias" value="'+lembreDias+'" min="7" max="365" style="width:100px"></div>'+
     '<div class="fg"><label class="fl">Mensagem personalizada</label>'+
     '<textarea class="fi" id="lembreMsg" rows="2" style="resize:none;height:60px" placeholder="Ex: Sentimos sua falta!">'+esc(lembreMsg)+'</textarea></div>'+
-    '</div>'+
-    '<button class="btn-sv" onclick="salvarNotificacoes()" style="margin-top:8px;background:var(--primary)!important;color:#fff!important">Salvar notificações</button>'+
+    '<button class="btn-sv" onclick="salvarLembreteRetorno()" style="margin-top:8px;background:var(--primary)!important;color:#fff!important">Salvar lembrete</button>'+
     '</div>';
 }
 
@@ -456,16 +457,17 @@ async function renderPagina(){
   container.innerHTML='';
 
   var secoes=[
-    {id:'perfil',      icon:'📋', label:'Perfil público',         html:_htmlPerfil(d)},
-    {id:'localizacao', icon:'📍', label:'Localização',       html:_htmlLocalizacao(d)},
-    {id:'agenda',      icon:'🕐', label:'Agenda e horários',      html:_htmlAgenda(d)},
+    {id:'tema',        icon:'🎨', label:'Aparência',                   html:'<div id="temaWrap" style="padding:0 16px 12px"></div>'},
+    {id:'perfil',      icon:'📋', label:'Perfil público',              html:_htmlPerfil(d)},
+    {id:'localizacao', icon:'📍', label:'Localização',                 html:_htmlLocalizacao(d)},
+    {id:'agenda',      icon:'🕐', label:'Agenda e horários',           html:_htmlAgenda(d)},
     {id:'pgto-cli',    icon:'💳', label:'Formas de pagamento',         html:_htmlPagamentosClientes(d)},
     {id:'sinal',       icon:'📲', label:'Sinal antecipado',            html:_htmlSinalPix(d)},
-    {id:'notif',       icon:'🔔', label:'Notificações',      html:_htmlNotificacoes(d)},
-    {id:'marketplace', icon:'🌐', label:'Marketplace',                 html:_htmlMarketplace(d)},
-    {id:'tema',        icon:'🎨', label:'Aparência',              html:'<div id="temaWrap" style="padding:0 16px 12px"></div>'},
     {id:'faturamento', icon:'💰', label:'Dados de faturamento',        html:_htmlFaturamento(d)},
     {id:'bloqueios',   icon:'🔒', label:'Bloqueios de agenda',         html:null,async:true},
+    {id:'notif-push',  icon:'🔔', label:'Notificações push',           html:_htmlNotifPush(d)},
+    {id:'lembrete',    icon:'⏰', label:'Lembrete de retorno',         html:_htmlLembreteRetorno(d)},
+    {id:'marketplace', icon:'🌐', label:'Marketplace',                 html:_htmlMarketplace(d)},
     {id:'link',        icon:'🔗', label:'Link de agendamento',         html:_htmlLink()},
   ];
 
@@ -628,20 +630,31 @@ async function salvarSinalPix(){
   if(btn){btn.disabled=false;btn.textContent='Salvar sinal';}
 }
 
-/* ─── SAVE: NOTIFICAÇÕES ─── */
-async function salvarNotificacoes(){
-  var btn=document.querySelector('[onclick="salvarNotificacoes()"]');
+/* ─── SAVE: NOTIFICAÇÕES PUSH ─── */
+async function salvarNotifNovo(btn){
+  var wasOn=btn.classList.contains('on');
+  btn.classList.toggle('on');
+  try{
+    await _patch({notif_novo_ag:!wasOn});
+  }catch(e){
+    btn.classList.toggle('on');
+    toast('Erro ao salvar','err');
+  }
+}
+
+/* ─── SAVE: LEMBRETE DE RETORNO ─── */
+async function salvarLembreteRetorno(){
+  var btn=document.querySelector('[onclick="salvarLembreteRetorno()"]');
   if(btn){btn.disabled=true;btn.textContent='Salvando...';}
-  var notifNovo=document.getElementById('tgNotifNovo')?document.getElementById('tgNotifNovo').classList.contains('on'):true;
   var lembreAtivo=document.getElementById('tgLembrete')?document.getElementById('tgLembrete').classList.contains('on'):false;
   var lembreDias=document.getElementById('lembreDias')?parseInt(document.getElementById('lembreDias').value)||30:30;
   var lembreMsg=document.getElementById('lembreMsg')?document.getElementById('lembreMsg').value.trim():'';
   try{
-    await _patch({notif_novo_ag:notifNovo,lembrete_retorno_ativo:lembreAtivo,lembrete_retorno_dias:lembreDias,lembrete_retorno_msg:lembreMsg||null});
+    await _patch({lembrete_retorno_ativo:lembreAtivo,lembrete_retorno_dias:lembreDias,lembrete_retorno_msg:lembreMsg||null});
     S.lembrete_retorno_ativo=lembreAtivo;S.lembrete_retorno_dias=lembreDias;
-    toast('✓ Notificações salvas!','ok');
+    toast('✓ Lembrete salvo!','ok');
   }catch(e){toast('Erro: '+e.message,'err');}
-  if(btn){btn.disabled=false;btn.textContent='Salvar notificações';}
+  if(btn){btn.disabled=false;btn.textContent='Salvar lembrete';}
 }
 
 /* ─── SAVE: MARKETPLACE ─── */

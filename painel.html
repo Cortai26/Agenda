@@ -7,15 +7,15 @@
   <title>Painel — Agenda</title>
   <meta name="robots" content="noindex,nofollow">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png?v=29">
-  <link rel="apple-touch-icon" href="/icon-192.png?v=29">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png?v=30">
+  <link rel="apple-touch-icon" href="/icon-192.png?v=30">
   <link rel="manifest" href="/manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800;900&family=Nunito+Sans:wght@400;600;700;800&family=Manrope:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="/css/tokens.css?v=29">
+  <link rel="stylesheet" href="/css/tokens.css?v=30">
   <style>
     /* ── RESET ── */
     * {
@@ -1970,6 +1970,34 @@
       transform: translateX(18px)
     }
 
+    /* Pagamentos / Config toggles */
+    .pgto-toggle {
+      width: 40px; height: 22px; border-radius: 11px;
+      background: var(--surface-3, var(--s2));
+      border: 1.5px solid var(--sep);
+      cursor: pointer; position: relative;
+      transition: .25s; flex-shrink: 0
+    }
+    .pgto-toggle::after {
+      content: ''; position: absolute;
+      top: 2px; left: 2px;
+      width: 16px; height: 16px;
+      border-radius: 50%; background: #fff;
+      transition: .25s
+    }
+    .pgto-toggle.on { background: var(--primary); border-color: var(--primary) }
+    .pgto-toggle.on::after { left: calc(100% - 18px) }
+    .pgto-row {
+      display: flex; align-items: center;
+      justify-content: space-between; padding: 10px 0
+    }
+    .pgto-lbl { font-size: 14px; font-weight: 600; color: var(--text) }
+    .pgto-card {
+      background: var(--bg-card); border-radius: var(--r-lg);
+      padding: 16px; border: 1px solid var(--sep); margin-bottom: 12px
+    }
+    .pgto-tit { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 12px }
+
     /* Equipe */
     .eq-card {
       display: flex;
@@ -3496,17 +3524,17 @@
   <!-- ──────────────────────────────────────
      SCRIPTS
 ────────────────────────────────────── -->
-  <script src="/js/p-core.js?v=29"></script>
-  <script src="/js/p-agenda.js?v=29"></script>
-  <script src="/js/p-clientes.js?v=29"></script>
-  <script src="/js/p-servicos.js?v=29"></script>
-  <script src="/js/p-equipe.js?v=29"></script>
-  <script src="/js/p-config.js?v=29"></script>
-  <script src="/js/p-analytics.js?v=29"></script>
-  <script src="/js/p-tema.js?v=29"></script>
-  <script src="/js/p-upgrade.js?v=29"></script>
-  <script src="/js/p-push.js?v=29"></script>
-  <script src="/js/toast.js?v=29"></script>
+  <script src="/js/p-core.js?v=30"></script>
+  <script src="/js/p-agenda.js?v=30"></script>
+  <script src="/js/p-clientes.js?v=30"></script>
+  <script src="/js/p-servicos.js?v=30"></script>
+  <script src="/js/p-equipe.js?v=30"></script>
+  <script src="/js/p-config.js?v=30"></script>
+  <script src="/js/p-analytics.js?v=30"></script>
+  <script src="/js/p-tema.js?v=30"></script>
+  <script src="/js/p-upgrade.js?v=30"></script>
+  <script src="/js/p-push.js?v=30"></script>
+  <script src="/js/toast.js?v=30"></script>
 
 </body>
 
