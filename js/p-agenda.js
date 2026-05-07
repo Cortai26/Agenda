@@ -123,7 +123,7 @@ async function renderAgenda(){
   /* HOJE — lista colapsável */
   var _hojeLbl='Hoje · '+parseInt(ds.split('-')[2])+' de '+MESES[hoje().getMonth()]+
     (ativos.length?' <span style="background:var(--primary);color:#fff;border-radius:20px;padding:1px 8px;font-size:10px;font-weight:700;margin-left:6px">'+ativos.length+'</span>':'');
-  var _hC=localStorage.getItem('sec-hoje-collapsed')!=='0';
+  var _hC=localStorage.getItem('sec-hoje-collapsed')==='1'; // aberto por padrão
   html+=_secGroup('sec-hoje',_hojeLbl,_hC,'<div class="lista">'+renderListaAgs(agsHoje,true,'agenda')+'</div>');
 
   /* SEÇÃO EM BREVE — colapsável */
@@ -153,7 +153,7 @@ async function renderAgenda(){
     });
     _embreveLista+='</div>';
     var _ebLbl='Em breve · próximos 7 dias <span style="background:rgba(45,106,79,.15);color:var(--VD);border-radius:20px;padding:1px 8px;font-size:10px;font-weight:700;margin-left:6px">'+proximos.length+'</span>';
-    var _ebC=localStorage.getItem('sec-embreve-collapsed')!=='0';
+    var _ebC=localStorage.getItem('sec-embreve-collapsed')==='1'; // aberto por padrão
     html+=_secGroup('sec-embreve',_ebLbl,_ebC,_embreveLista);
   }
 
