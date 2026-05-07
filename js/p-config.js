@@ -1,6 +1,6 @@
 /* ═══ p-config.js — Configurações do Painel ═══ */
 
-var _pgtoState={dinheiro:true,pix:true,cartao:false,pixKey:'',pixTipo:'telefone',mostrarSinal:false,sinalObrig:false,sinalPct:30,cancelMin:120};
+var _pgtoState={dinheiro:true,pix:true,cartao:false,debito:false,pixKey:'',pixTipo:'telefone',mostrarSinal:false,sinalObrig:false,sinalPct:30,cancelMin:120};
 
 var HORARIO_PADRAO={'0':null,'1':{ini:'09:00',fim:'19:00'},'2':{ini:'09:00',fim:'19:00'},'3':{ini:'09:00',fim:'19:00'},'4':{ini:'09:00',fim:'19:00'},'5':{ini:'09:00',fim:'19:00'},'6':{ini:'09:00',fim:'14:00'}};
 var DIAS_SEMANA=['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
@@ -265,25 +265,36 @@ function _htmlPagamentosClientes(d){
   _pgtoState.dinheiro=d.aceita_dinheiro!==false;
   _pgtoState.pix=d.aceita_pix!==false;
   _pgtoState.cartao=!!d.aceita_cartao;
+  _pgtoState.debito=!!d.aceita_debito;
   _pgtoState.pixKey=d.pix_key||'';
   _pgtoState.pixTipo=d.pix_tipo||'telefone';
   return '<div style="padding:12px 16px">'+
-    '<div class="pgto-row"><div class="pgto-lbl">💵 Dinheiro</div>'+
-    '<button class="pgto-toggle '+(_pgtoState.dinheiro?'on':'')+'" id="tgDinheiro" data-tipo="dinheiro" onclick="togglePgto(this.dataset.tipo)"></button></div>'+
-    '<div class="pgto-row"><div class="pgto-lbl">📲 Pix</div>'+
-    '<button class="pgto-toggle '+(_pgtoState.pix?'on':'')+'" id="tgPix" data-tipo="pix" onclick="togglePgto(this.dataset.tipo)"></button></div>'+
+    '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--CZ);margin-bottom:10px">Métodos aceitos</div>'+
+    _formaRow('cartao','💳 Cartão de crédito',_pgtoState.cartao)+
+    _formaRow('debito','💳 Débito',_pgtoState.debito)+
+    _formaRow('dinheiro','💵 Dinheiro',_pgtoState.dinheiro)+
+    '<div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--sep)">'+
+    '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--CZ);margin-bottom:10px">📲 PIX</div>'+
+    '<div class="pgto-row" style="margin-bottom:10px"><div class="pgto-lbl">Aceitar PIX</div>'+
+    '<button class="pgto-toggle '+(_pgtoState.pix?'on':'')+'" id="tgPix" onclick="salvarForma(\'pix\',this)"></button></div>'+
     '<div id="pixSection" style="'+(!_pgtoState.pix?'display:none':'')+'">'+
-    '<div class="fg" style="margin-top:8px"><label class="fl">Tipo de chave PIX</label><select class="fi-sel" id="pixTipoSel">'+
+    '<div class="fg"><label class="fl">Tipo de chave</label><select class="fi-sel" id="pixTipoSel">'+
     ['telefone','email','cpf','cnpj','aleatoria'].map(function(t){
       var lbl={telefone:'Telefone',email:'E-mail',cpf:'CPF',cnpj:'CNPJ',aleatoria:'Chave aleatória'}[t];
       return '<option value="'+t+'"'+(_pgtoState.pixTipo===t?' selected':'')+'>'+lbl+'</option>';
     }).join('')+'</select></div>'+
     '<div class="fg"><label class="fl">Chave PIX</label>'+
     '<input class="fi" type="text" id="pixKeyInput" placeholder="Sua chave PIX" value="'+esc(_pgtoState.pixKey)+'"></div>'+
+    '<button class="btn-sv" onclick="salvarPagamentosClientes()" style="margin-top:8px;background:var(--primary)!important;color:#fff!important">Salvar chave PIX</button>'+
     '</div>'+
-    '<div class="pgto-row"><div class="pgto-lbl">💳 Cartão</div>'+
-    '<button class="pgto-toggle '+(_pgtoState.cartao?'on':'')+'" id="tgCartao" data-tipo="cartao" onclick="togglePgto(this.dataset.tipo)"></button></div>'+
-    '<button class="btn-sv" onclick="salvarPagamentosClientes()" style="margin-top:12px;background:var(--primary)!important;color:#fff!important">Salvar formas de pagamento</button>'+
+    '</div>'+
+    '</div>';
+}
+
+function _formaRow(tipo,label,ativo){
+  return '<div class="pgto-row" style="padding:10px 0;border-bottom:1px solid var(--sep)">'+
+    '<div class="pgto-lbl">'+label+'</div>'+
+    '<button class="pgto-toggle '+(ativo?'on':'')+'" id="tg-'+tipo+'" onclick="salvarForma(\''+tipo+'\',this)"></button>'+
     '</div>';
 }
 
@@ -429,7 +440,7 @@ async function renderPagina(){
 
   var d={};
   try{
-    var rows=await api('saloes?slug=eq.'+S.slug+'&select=nome,slug,responsavel,descricao,categoria,instagram_url,website_url,telefone,endereco,cep,cidade,bairro,numero,complemento,horario,intervalo_slots,max_ag_dia,cancelamento_min,aceita_dinheiro,aceita_pix,aceita_cartao,pix_key,pix_tipo,mostrar_sinal,sinal_percentual,sinal_obrigatorio,notif_novo_ag,lembrete_retorno_ativo,lembrete_retorno_dias,lembrete_retorno_msg,publico_marketplace,aceita_indicacao,fat_nome,fat_cpf_cnpj,fat_email,fat_empresa,fat_celular,fat_cep,fat_rua,fat_numero,fat_complemento,fat_bairro,fat_cidade,fat_estado,tema');
+    var rows=await api('saloes?slug=eq.'+S.slug+'&select=nome,slug,responsavel,descricao,categoria,instagram_url,website_url,telefone,endereco,cep,cidade,bairro,numero,complemento,horario,intervalo_slots,max_ag_dia,cancelamento_min,aceita_dinheiro,aceita_pix,aceita_cartao,aceita_debito,pix_key,pix_tipo,mostrar_sinal,sinal_percentual,sinal_obrigatorio,notif_novo_ag,lembrete_retorno_ativo,lembrete_retorno_dias,lembrete_retorno_msg,publico_marketplace,aceita_indicacao,fat_nome,fat_cpf_cnpj,fat_email,fat_empresa,fat_celular,fat_cep,fat_rua,fat_numero,fat_complemento,fat_bairro,fat_cidade,fat_estado,tema');
     d=rows&&rows[0]?rows[0]:{};
     if(d.tema&&!S._tema) S._tema=d.tema;
     if(d.horario&&!S.horario) S.horario=d.horario;
@@ -566,22 +577,40 @@ async function salvarAgenda(){
 }
 
 /* ─── SAVE: PAGAMENTOS CLIENTES ─── */
+async function salvarForma(tipo,btn){
+  var wasOn=btn.classList.contains('on');
+  btn.classList.toggle('on');
+  _pgtoState[tipo]=!wasOn;
+  var map={cartao:'aceita_cartao',debito:'aceita_debito',dinheiro:'aceita_dinheiro',pix:'aceita_pix'};
+  var patch={};patch[map[tipo]]=!wasOn;
+  var pixSec=document.getElementById('pixSection');
+  if(tipo==='pix'&&pixSec) pixSec.style.display=_pgtoState.pix?'':'none';
+  try{
+    await _patch(patch);
+  }catch(e){
+    btn.classList.toggle('on');
+    _pgtoState[tipo]=wasOn;
+    if(tipo==='pix'&&pixSec) pixSec.style.display=wasOn?'':'none';
+    toast('Erro ao salvar','err');
+  }
+}
+
 async function salvarPagamentosClientes(){
   var btn=document.querySelector('[onclick="salvarPagamentosClientes()"]');
   if(btn){btn.disabled=true;btn.textContent='Salvando...';}
   var pw=await getPw();
-  if(!pw){if(btn){btn.disabled=false;btn.textContent='Salvar formas de pagamento';}return;}
+  if(!pw){if(btn){btn.disabled=false;btn.textContent='Salvar chave PIX';}return;}
   var pixKey=document.getElementById('pixKeyInput')?document.getElementById('pixKeyInput').value.trim():'';
   var pixTipo=document.getElementById('pixTipoSel')?document.getElementById('pixTipoSel').value:'telefone';
   try{
     await rpc('salvar_pagamentos',{p_slug:S.slug,p_senha:pw,p_aceita_dinheiro:_pgtoState.dinheiro,p_aceita_pix:_pgtoState.pix,p_aceita_cartao:_pgtoState.cartao,p_pix_key:pixKey||null,p_pix_tipo:pixTipo});
     _pgtoState.pixKey=pixKey;_pgtoState.pixTipo=pixTipo;
-    toast('✓ Formas de pagamento salvas!','ok');
+    toast('✓ Chave PIX salva!','ok');
   }catch(e){
     if(e.message&&e.message.includes('Acesso negado')){_pw=null;toast('Senha incorreta','err');}
     else{toast('Erro: '+e.message,'err');}
   }
-  if(btn){btn.disabled=false;btn.textContent='Salvar formas de pagamento';}
+  if(btn){btn.disabled=false;btn.textContent='Salvar chave PIX';}
 }
 
 /* ─── SAVE: SINAL PIX ─── */
@@ -894,7 +923,7 @@ async function renderPagamentos(){
   var el=document.getElementById('tb-pagamentos');
   el.innerHTML='<div class="loading">Carregando...</div>';
 
-  var dadosPgto=await api('saloes?slug=eq.'+S.slug+'&select=pix_key,pix_tipo,aceita_dinheiro,aceita_pix,aceita_cartao,asaas_subscription_id,metodo_assinatura,assinatura_status,plano,sinal_percentual,sinal_obrigatorio,cancelamento_min,mostrar_sinal');
+  var dadosPgto=await api('saloes?slug=eq.'+S.slug+'&select=pix_key,pix_tipo,aceita_dinheiro,aceita_pix,aceita_cartao,aceita_debito,asaas_subscription_id,metodo_assinatura,assinatura_status,plano,sinal_percentual,sinal_obrigatorio,cancelamento_min,mostrar_sinal');
   var d=dadosPgto&&dadosPgto[0]?dadosPgto[0]:{};
   try{
     if(_pw){
@@ -905,6 +934,7 @@ async function renderPagamentos(){
   _pgtoState.dinheiro=d.aceita_dinheiro!==false;
   _pgtoState.pix=d.aceita_pix!==false;
   _pgtoState.cartao=!!d.aceita_cartao;
+  _pgtoState.debito=!!d.aceita_debito;
   _pgtoState.pixKey=d.pix_key||'';
   _pgtoState.pixTipo=d.pix_tipo||'telefone';
   _pgtoState.mostrarSinal=!!d.mostrar_sinal;
@@ -1101,14 +1131,15 @@ async function cancelarAssinatura(){
 function buildPagamentosUI(el){
   var html=
     '<div class="pgto-tit">💳 Formas de pagamento aceitas</div>'+
-    '<div class="pgto-row">'+
-      '<div class="pgto-lbl">💵 Dinheiro</div>'+
-      '<button class="pgto-toggle '+(_pgtoState.dinheiro?'on':'')+'" id="tgDinheiro" data-tipo="dinheiro" onclick="togglePgto(this.dataset.tipo)"></button>'+
-    '</div>'+
-    '<div class="pgto-row">'+
-      '<div class="pgto-lbl">📲 Pix</div>'+
-      '<button class="pgto-toggle '+(_pgtoState.pix?'on':'')+'" id="tgPix" data-tipo="pix" onclick="togglePgto(this.dataset.tipo)"></button>'+
-    '</div>'+
+    '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--CZ);margin-bottom:10px">Métodos aceitos</div>'+
+    _formaRow('cartao','💳 Cartão de crédito',_pgtoState.cartao)+
+    _formaRow('debito','💳 Débito',_pgtoState.debito)+
+    _formaRow('dinheiro','💵 Dinheiro',_pgtoState.dinheiro)+
+    '<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--bd)">'+
+    '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--CZ);margin-bottom:10px">📲 PIX</div>'+
+    '<div class="pgto-row" style="margin-bottom:10px"><div class="pgto-lbl">Aceitar PIX</div>'+
+    '<button class="pgto-toggle '+(_pgtoState.pix?'on':'')+'" id="tgPix" onclick="salvarForma(\'pix\',this)"></button></div>'+
+    '<div id="pixSection" style="'+(_pgtoState.pix?'':'display:none')+'">'+
     '<div id="pixSection" style="'+(_pgtoState.pix?'':'display:none')+'">'+
     '<div class="fg" style="margin:8px 0 0"><label class="fl">Tipo de chave PIX</label><select class="fi" id="pixTipoSel">'+
     ['telefone','email','cpf','cnpj','aleatoria'].map(function(t){
@@ -1151,11 +1182,7 @@ function buildPagamentosUI(el){
     '</div>'+
     '</div>'+
     '</div>'+
-    '<div class="pgto-row">'+
-      '<div class="pgto-lbl">💳 Cartão</div>'+
-      '<button class="pgto-toggle '+(_pgtoState.cartao?'on':'')+'" id="tgCartao" data-tipo="cartao" onclick="togglePgto(this.dataset.tipo)"></button>'+
-    '</div>'+
-    '<button class="btn-add" style="width:100%;justify-content:center;margin-top:12px;padding:11px" onclick="salvarPagamentos()">Salvar formas de pagamento</button>';
+    '<button class="btn-add" style="width:100%;justify-content:center;margin-top:12px;padding:11px" onclick="salvarPagamentos()">Salvar chave PIX</button>';
   el.innerHTML=html;
 }
 
@@ -1186,7 +1213,7 @@ async function salvarPagamentos(){
     var sinalObrig=document.getElementById('tgSinalObrig')?document.getElementById('tgSinalObrig').classList.contains('on'):false;
     var sinalPct=document.getElementById('sliderSinal')?parseInt(document.getElementById('sliderSinal').value):30;
     var cancelMin=document.getElementById('selCancelMin')?parseInt(document.getElementById('selCancelMin').value):120;
-    await _patch({mostrar_sinal:mostrarSinal,sinal_obrigatorio:sinalObrig,sinal_percentual:sinalPct,cancelamento_min:cancelMin}).catch(function(){});
+    await _patch({mostrar_sinal:mostrarSinal,sinal_obrigatorio:sinalObrig,sinal_percentual:sinalPct,cancelamento_min:cancelMin,aceita_debito:_pgtoState.debito}).catch(function(){});
     _pgtoState.mostrarSinal=mostrarSinal;_pgtoState.sinalObrig=sinalObrig;_pgtoState.sinalPct=sinalPct;_pgtoState.cancelMin=cancelMin;
     S.sinal_obrigatorio=sinalObrig;S.sinal_percentual=sinalPct;S.cancelamento_min=cancelMin;
   }catch(e){
