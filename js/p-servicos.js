@@ -80,6 +80,39 @@ var SERVICO_PRESETS = {
       {icone:'🧘',nome:'Pilates',preco:10000,dur:50},
       {icone:'🤸',nome:'Aula de dança',preco:8000,dur:60},
     ]
+  },
+  dentista: {
+    label:'🦷 Dentista / Odontologia',
+    servicos:[
+      {icone:'🦷',nome:'Consulta avaliativa',preco:20000,dur:30},
+      {icone:'🪥',nome:'Limpeza e profilaxia',preco:25000,dur:60},
+      {icone:'✨',nome:'Clareamento dental',preco:80000,dur:90},
+      {icone:'🦷',nome:'Restauração',preco:30000,dur:60},
+      {icone:'😁',nome:'Aparelho ortodôntico',preco:250000,dur:60},
+      {icone:'🏥',nome:'Extração',preco:35000,dur:45},
+    ]
+  },
+  cuidador: {
+    label:'🧓 Cuidador de Idosos',
+    servicos:[
+      {icone:'🧓',nome:'Cuidado diurno (4h)',preco:20000,dur:240},
+      {icone:'🧓',nome:'Cuidado diurno (8h)',preco:35000,dur:480},
+      {icone:'🌙',nome:'Cuidado noturno',preco:30000,dur:720},
+      {icone:'💊',nome:'Acompanhamento médico',preco:15000,dur:120},
+      {icone:'🏃',nome:'Fisioterapia domiciliar',preco:18000,dur:60},
+      {icone:'📋',nome:'Avaliação inicial',preco:10000,dur:60},
+    ]
+  },
+  limpeza: {
+    label:'🧹 Limpeza / Faxina',
+    servicos:[
+      {icone:'🧹',nome:'Faxina residencial',preco:20000,dur:240},
+      {icone:'🧹',nome:'Faxina completa',preco:35000,dur:480},
+      {icone:'🧽',nome:'Limpeza pós-obra',preco:45000,dur:480},
+      {icone:'🧺',nome:'Lavanderia / Roupa',preco:8000,dur:120},
+      {icone:'🌱',nome:'Jardinagem',preco:10000,dur:180},
+      {icone:'🪟',nome:'Limpeza de vidros',preco:15000,dur:120},
+    ]
   }
 };
 
@@ -154,7 +187,7 @@ function renderServicos(){
   var el=document.getElementById('tb-servicos');
   var ativos=_servicos.filter(function(s){return s.ativo;}).length;
   var html='<div class="srv-hdr"><h3>Meus Serviços</h3><button class="btn-add" onclick="abrirSrv()">+ Adicionar</button></div>';
-  html+='<div class="srv-info-txt">Serviços <strong>ativos</strong> aparecem na sua página. Use ⚪/🟢 para mostrar ou ocultar.</div>';
+  html+='<div class="srv-info-txt">Serviços <strong>ativos</strong> aparecem na sua página. Use o botão para mostrar ou ocultar.</div>';
   html+='<div style="font-size:11px;color:var(--text-3);font-weight:700;margin-bottom:10px;text-align:center">'+ativos+' de '+_servicos.length+' visível'+(ativos!==1?'s':'')+'</div>';
   html+='<div class="lista">';
   if(_servicos.length===0){

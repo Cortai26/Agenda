@@ -942,7 +942,7 @@ html.t-feminine .vg-plano { border-radius: 20px; }
 
 /* Table responsive wrapper */
 .table-scroll{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.table-scroll .adm-table{min-width:0}
+.table-scroll .adm-table{min-width:520px}
 .table-scroll 
 
 /* logout btn removed — using footer button instead */
@@ -992,7 +992,7 @@ html.t-feminine .adm-sidebar .adm-nav-item.active{color:var(--primary)!important
   --btn-primary-bg:#E55A0C; --btn-primary-text:#fff;
 }
 
-body { background:#0C0A09; color:#fff; font-family:'Nunito Sans',sans-serif; }
+body { background:var(--bg,#0C0A09); color:var(--tx,#fff); font-family:'Nunito Sans',sans-serif; }
 
 /* Radial glow */
 .login-wrap::before {
@@ -1188,7 +1188,12 @@ function enviarWhatsAppById(id){
     <div class="mobile-tabs" style="display:flex;align-items:center">
       <button class="mobile-tab on" onclick="navSidebar('visaogeral',this)">📊 Visão Geral</button>
       <button class="mobile-tab" onclick="navSidebar('cobrancas',this)">💳 Cobranças</button>
-      <button onclick="logout()" style="margin-left:auto;flex-shrink:0;padding:8px 14px;background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.2);border-radius:8px;color:#DC2626;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;margin-right:10px">↩ Sair</button>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:6px;padding-right:10px">
+        <div class="theme-dot" id="mtdot-onyx" style="background:#F2CA50;flex-shrink:0" onclick="setTheme('t-onyx')" title="Onyx"></div>
+        <div class="theme-dot" id="mtdot-feminine" style="background:#D81B60;flex-shrink:0" onclick="setTheme('t-feminine')" title="Feminine"></div>
+        <div class="theme-dot" id="mtdot-neutral" style="background:#005EB8;flex-shrink:0" onclick="setTheme('t-neutral')" title="Neutral"></div>
+        <button onclick="logout()" style="padding:8px 12px;background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.2);border-radius:8px;color:#DC2626;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap">↩</button>
+      </div>
     </div>
 
     <!-- CONTENT -->
@@ -1241,10 +1246,10 @@ function setTheme(cls){
   const html=document.documentElement;
   html.classList.remove('t-onyx','t-feminine','t-neutral');
   html.classList.add(cls);
-  // Atualiza dots ativos
+  // Atualiza dots ativos (sidebar + mobile)
   document.querySelectorAll('.theme-dot').forEach(d=>d.classList.remove('active'));
-  const dot=document.getElementById('tdot-'+cls.replace('t-',''));
-  if(dot) dot.classList.add('active');
+  const key=cls.replace('t-','');
+  ['tdot-'+key,'mtdot-'+key].forEach(function(id){var d=document.getElementById(id);if(d)d.classList.add('active');});
   // Persiste
   localStorage.setItem('cortai_admin_theme',cls);
 }
@@ -2285,9 +2290,13 @@ async function salvarCliente(id,slug){
 async function excluir(id,nome){
   if(!confirm('Excluir '+nome+'? Isso é irreversível.'))return;
   try{
-    await api('saloes?id=eq.'+id,{method:'DELETE'});
-    await carregar();
-    renderVisaoGeral(document.getElementById('mainContent'));
+    const res = await rpc('deletar_conta_salao', {p_id: id});
+    if(res.ok){
+      await carregar();
+      renderVisaoGeral(document.getElementById('mainContent'));
+    }else{
+      alert('Erro: '+res.erro);
+    }
   }catch(e){alert('Erro: '+e.message);}
 }
 async function resetarSenha(slug,nome){

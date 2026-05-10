@@ -247,6 +247,7 @@ body {
 html.t-onyx .ag-header { background: #0E0E0E; border-bottom-color: rgba(255,255,255,.06); }
 
 .ag-logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+@media(max-width:480px) { .ag-brand-word { display:none; } }
 .ag-logo-wordmark {
   font-family: var(--font-head);
   font-weight: 900;
@@ -1173,7 +1174,7 @@ html.t-crimson {
         <rect x="18" y="40" width="64" height="2" rx="1" fill="rgba(255,255,255,0.20)"/>
         <circle cx="33" cy="65" r="10" fill="#FFFFFF"/>
       </svg>
-      <span style="font-family:'Sora',sans-serif;font-weight:800;font-size:22px;letter-spacing:-.04em;color:#fff;display:inline-flex;align-items:baseline;line-height:1;user-select:none;pointer-events:none">Agenda<span style="display:inline-block;width:4px;height:4px;border-radius:50%;background:#E55A0C;margin-left:2px;position:relative;top:-11px"></span></span>
+      <span class="ag-brand-word" style="font-family:'Sora',sans-serif;font-weight:800;font-size:22px;letter-spacing:-.04em;color:#fff;display:inline-flex;align-items:baseline;line-height:1;user-select:none;pointer-events:none">Agenda<span style="display:inline-block;width:4px;height:4px;border-radius:50%;background:#E55A0C;margin-left:2px;position:relative;top:-11px"></span></span>
     </a>
   </div>
   <div class="ag-salon-name" id="hdrName">Carregando…</div>

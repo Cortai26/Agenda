@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(sed -n '3,20p' /c/Users/felip/Desktop/Agenda/painel.html)",
+      "Bash(sed -n '3180,3200p' /c/Users/felip/Desktop/Agenda/painel.html)",
+      "Bash(git checkout *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(git commit *)",
+      "WebFetch(domain:api.anthropic.com)",
+      "Bash(cp \"C:/Users/felip/.claude/projects/c--Users-felip-Desktop-Agenda/061a0aae-c5b1-4774-8931-7b97c9442970/tool-results/webfetch-1777569468886-ph47kc.bin\" /tmp/design.gz)",
+      "Bash(gunzip -f /tmp/design.gz)",
+      "Read(//tmp/**)",
+      "Bash(mkdir -p /tmp/design_extracted)",
+      "Bash(tar -xf /tmp/design -C /tmp/design_extracted)",
+      "mcp__claude_ai_Supabase__execute_sql",
+      "mcp__claude_ai_Supabase__list_edge_functions",
+      "mcp__claude_ai_Supabase__get_edge_function",
+      "mcp__claude_ai_Supabase__deploy_edge_function",
+      "Bash(git pull *)",
+      "mcp__claude_ai_Supabase__list_projects",
+      "mcp__claude_ai_Supabase__apply_migration",
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\felip\\\\Desktop\\\\Agenda\" -Recurse -File)",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(find \"c:\\\\\\\\Users\\\\\\\\felip\\\\\\\\Desktop\\\\\\\\Agenda\" -type f \\\\\\( -name \"*.json\" -o -name \"*.js\" -o -name \"*.html\" \\\\\\))",
+      "Bash(find \"c:\\\\\\\\Users\\\\\\\\felip\\\\\\\\Desktop\\\\\\\\Agenda\\\\\\\\api\" -name \"*.js\" -type f)",
+      "Bash(grep -r \"process.env\\\\|process\\\\.env\\\\|ENV\\\\|process\\\\.argv\" \"c:\\\\\\\\Users\\\\\\\\felip\\\\\\\\Desktop\\\\\\\\Agenda\\\\\\\\api\" --include=\"*.js\")",
+      "Bash(grep -n \"cortai\\\\|agendatop\\\\|TODO\\\\|FIXME\\\\|hardcoded\\\\|sandbox\\\\|test\" \"c:\\\\\\\\Users\\\\\\\\felip\\\\\\\\Desktop\\\\\\\\Agenda\\\\\\\\js\\\\\\\\p-upgrade.js\" -i)",
+      "Bash(grep -r \"https://agendatop\\\\|https://cortai\\\\|eyJ\\\\|Bearer\\\\|Authorization\" \"c:\\\\\\\\Users\\\\\\\\felip\\\\\\\\Desktop\\\\\\\\Agenda\\\\\\\\js\" --include=\"*.js\")",
+      "Bash(find \"c:\\\\\\\\Users\\\\\\\\felip\\\\\\\\Desktop\\\\\\\\Agenda\" -type f \\\\\\( -name \".env*\" -o -name \"*.md\" -o -name \"README*\" \\\\\\))",
+      "Bash(node -e \"console.log\\('node ok'\\)\")"
+    ]
+  }
+}

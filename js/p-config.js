@@ -187,6 +187,14 @@ function _htmlPerfil(d){
     {v:'clinica',l:'Clínica de estética'},
     {v:'tatuagem',l:'Tatuagem'},
     {v:'sobrancelha',l:'Design de sobrancelha'},
+    {v:'dentista',l:'Dentista / Odontologia'},
+    {v:'cuidador',l:'Cuidador de idosos'},
+    {v:'limpeza',l:'Limpeza / Faxina'},
+    {v:'personal',l:'Personal Trainer'},
+    {v:'fisio',l:'Fisioterapia'},
+    {v:'nutri',l:'Nutrição / Alimentação'},
+    {v:'pet',l:'Pet shop / Veterinário'},
+    {v:'massagem',l:'Massagem / SPA'},
     {v:'outros',l:'Outro'},
   ];
   var cat=d.categoria||'';
@@ -1152,7 +1160,6 @@ function buildPagamentosUI(el){
     '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--CZ);margin-bottom:10px">📲 PIX</div>'+
     '<div class="pgto-row" style="margin-bottom:10px"><div class="pgto-lbl">Aceitar PIX</div>'+
     '<button class="pgto-toggle '+(_pgtoState.pix?'on':'')+'" id="tgPix" onclick="salvarForma(\'pix\',this)"></button></div>'+
-    '<div id="pixSection" style="'+(_pgtoState.pix?'':'display:none')+'">'+
     '<div id="pixSection" style="'+(_pgtoState.pix?'':'display:none')+'">'+
     '<div class="fg" style="margin:8px 0 0"><label class="fl">Tipo de chave PIX</label><select class="fi" id="pixTipoSel">'+
     ['telefone','email','cpf','cnpj','aleatoria'].map(function(t){
