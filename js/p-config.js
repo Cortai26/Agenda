@@ -613,7 +613,7 @@ async function salvarPagamentosClientes(){
   var pixKey=document.getElementById('pixKeyInput')?document.getElementById('pixKeyInput').value.trim():'';
   var pixTipo=document.getElementById('pixTipoSel')?document.getElementById('pixTipoSel').value:'telefone';
   try{
-    await rpc('salvar_pagamentos',{p_slug:S.slug,p_senha:pw,p_aceita_dinheiro:_pgtoState.dinheiro,p_aceita_pix:_pgtoState.pix,p_aceita_cartao:_pgtoState.cartao,p_pix_key:pixKey||null,p_pix_tipo:pixTipo});
+    await rpc('salvar_pagamento_salao',{p_slug:S.slug,p_senha:pw,p_dinheiro:_pgtoState.dinheiro,p_pix:_pgtoState.pix,p_cartao:_pgtoState.cartao,p_debito:_pgtoState.debito,p_pix_key:pixKey||null,p_pix_tipo:pixTipo});
     _pgtoState.pixKey=pixKey;_pgtoState.pixTipo=pixTipo;
     toast('✓ Chave PIX salva!','ok');
   }catch(e){
@@ -1227,13 +1227,13 @@ async function salvarPagamentos(){
   var pixKey=document.getElementById('pixKeyInput')?document.getElementById('pixKeyInput').value.trim():'';
   var pixTipo=document.getElementById('pixTipoSel')?document.getElementById('pixTipoSel').value:'telefone';
   try{
-    await rpc('salvar_pagamentos',{p_slug:S.slug,p_senha:pw,p_aceita_dinheiro:_pgtoState.dinheiro,p_aceita_pix:_pgtoState.pix,p_aceita_cartao:_pgtoState.cartao,p_pix_key:pixKey||null,p_pix_tipo:pixTipo});
+    await rpc('salvar_pagamento_salao',{p_slug:S.slug,p_senha:pw,p_dinheiro:_pgtoState.dinheiro,p_pix:_pgtoState.pix,p_cartao:_pgtoState.cartao,p_debito:_pgtoState.debito,p_pix_key:pixKey||null,p_pix_tipo:pixTipo});
     toast('✓ Formas de pagamento salvas!','ok');
     var mostrarSinal=document.getElementById('tgMostrarSinal')?document.getElementById('tgMostrarSinal').classList.contains('on'):false;
     var sinalObrig=document.getElementById('tgSinalObrig')?document.getElementById('tgSinalObrig').classList.contains('on'):false;
     var sinalPct=document.getElementById('sliderSinal')?parseInt(document.getElementById('sliderSinal').value):30;
     var cancelMin=document.getElementById('selCancelMin')?parseInt(document.getElementById('selCancelMin').value):120;
-    await _patch({mostrar_sinal:mostrarSinal,sinal_obrigatorio:sinalObrig,sinal_percentual:sinalPct,cancelamento_min:cancelMin,aceita_debito:_pgtoState.debito}).catch(function(){});
+    await _patch({mostrar_sinal:mostrarSinal,sinal_obrigatorio:sinalObrig,sinal_percentual:sinalPct,cancelamento_min:cancelMin}).catch(function(){});
     _pgtoState.mostrarSinal=mostrarSinal;_pgtoState.sinalObrig=sinalObrig;_pgtoState.sinalPct=sinalPct;_pgtoState.cancelMin=cancelMin;
     S.sinal_obrigatorio=sinalObrig;S.sinal_percentual=sinalPct;S.cancelamento_min=cancelMin;
   }catch(e){
