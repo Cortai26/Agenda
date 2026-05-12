@@ -571,13 +571,15 @@ async function uploadFoto(input, tipo){
     });
     if(!r.ok){var etxt=await r.text();throw new Error(etxt);}
     var publicUrl=SUPA+'/storage/v1/object/public/fotos-estabelecimentos/'+path;
-    var patch=tipo==='capa'?{foto_capa_url:publicUrl}:{foto_url:publicUrl};
-    await _patch(patch);
+    var pw=await getPw();
+    if(!pw){if(area) area.style.opacity='';toast('Senha necessária para salvar','err');return;}
+    var ok=await rpc('salvar_foto_salao',{p_slug:S.slug,p_senha:pw,p_tipo:tipo,p_url:publicUrl});
+    if(!ok){if(area) area.style.opacity='';toast('Senha incorreta','err');return;}
     if(tipo==='capa') S.foto_capa_url=publicUrl;
     else S.foto_url=publicUrl;
     toast('✓ Foto salva!','ok');
     var secBody=document.getElementById('secbody-perfil');
-    if(secBody) secBody.innerHTML=_htmlPerfil(Object.assign({},S,patch));
+    if(secBody) secBody.innerHTML=_htmlPerfil(Object.assign({},S,{foto_capa_url:S.foto_capa_url,foto_url:S.foto_url}));
   }catch(e){
     if(area) area.style.opacity='';
     toast('Erro no upload: '+e.message,'err');
