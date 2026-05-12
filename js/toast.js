@@ -1,13 +1,17 @@
 window.toast = function(type, title, msg, ms) {
-  // Backwards-compat: old calls were toast(message, 'ok'|'err'|'warn')
+  // Compat: old signature was toast(message, 'ok'|'err'|'warn')
   var legacyMap = { ok: 'success', err: 'error', warn: 'info' };
   if (title in legacyMap) {
     var oldType = legacyMap[title];
     title = type;
     type = oldType;
     msg = undefined;
+  } else if (title === undefined || title === null) {
+    // Single-arg call: toast('message') → treat as success
+    title = type;
+    type = 'success';
   }
-  ms = ms || 3500;
+  ms = ms || 3000;
   var stack = document.getElementById('toast-stack');
   if (!stack) {
     stack = document.createElement('div');
@@ -16,7 +20,7 @@ window.toast = function(type, title, msg, ms) {
     stack.setAttribute('aria-live', 'polite');
     document.body.appendChild(stack);
   }
-  var icons = { success: '✓', error: '✕', info: 'ℹ' };
+  var icons = { success: '✓', error: '✕', info: '!' };
   var t = document.createElement('div');
   t.className = 'toast toast--' + type;
   t.innerHTML = '<div class="toast__icon">' + (icons[type] || '·') + '</div>'

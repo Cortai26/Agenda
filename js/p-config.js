@@ -557,9 +557,12 @@ async function salvarPerfil(){
 async function uploadFoto(input, tipo){
   var file=input&&input.files&&input.files[0];
   if(!file) return;
+  var inputId=tipo==='capa'?'inputFotoCapa':'inputFotoPerfil';
+  var area=document.getElementById(inputId)&&document.getElementById(inputId).previousElementSibling;
+  if(area) area.style.opacity='.5';
   var ext=(file.name||'img').split('.').pop().toLowerCase()||'jpg';
+  if(!['jpg','jpeg','png','webp'].includes(ext)) ext='jpg';
   var path=S.id+'/'+tipo+'.'+ext;
-  toast('Enviando foto...','ok');
   try{
     var r=await fetch(SUPA+'/storage/v1/object/fotos-estabelecimentos/'+path,{
       method:'POST',
@@ -567,15 +570,18 @@ async function uploadFoto(input, tipo){
       body:file
     });
     if(!r.ok){var etxt=await r.text();throw new Error(etxt);}
-    var publicUrl=SUPA+'/storage/v1/object/public/fotos-estabelecimentos/'+path+'?t='+Date.now();
-    var patch=tipo==='capa'?{foto_capa_url:SUPA+'/storage/v1/object/public/fotos-estabelecimentos/'+path}:{foto_url:SUPA+'/storage/v1/object/public/fotos-estabelecimentos/'+path};
+    var publicUrl=SUPA+'/storage/v1/object/public/fotos-estabelecimentos/'+path;
+    var patch=tipo==='capa'?{foto_capa_url:publicUrl}:{foto_url:publicUrl};
     await _patch(patch);
-    if(tipo==='capa') S.foto_capa_url=patch.foto_capa_url;
-    else S.foto_url=patch.foto_url;
+    if(tipo==='capa') S.foto_capa_url=publicUrl;
+    else S.foto_url=publicUrl;
     toast('✓ Foto salva!','ok');
-    var body=document.getElementById('secbody-perfil');
-    if(body) body.innerHTML=_htmlPerfil(Object.assign({},S,patch));
-  }catch(e){toast('Erro no upload: '+e.message,'err');}
+    var secBody=document.getElementById('secbody-perfil');
+    if(secBody) secBody.innerHTML=_htmlPerfil(Object.assign({},S,patch));
+  }catch(e){
+    if(area) area.style.opacity='';
+    toast('Erro no upload: '+e.message,'err');
+  }
 }
 
 /* ─── SAVE: LOCALIZAÇÃO ─── */
