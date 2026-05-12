@@ -1226,6 +1226,13 @@ html.t-onyx .sheet{background:#0E0E0E}
 .sheet-body .ag-page{padding-bottom:100px}
 .sheet-body .ag-confirm-bar{position:sticky;bottom:0;display:none}
 html.t-onyx .sheet-body .ag-confirm-bar.ativo{display:block}
+/* inline booking — sheet is a static page section */
+.sheet-overlay{display:none!important}
+.fab-wrapper{display:none!important}
+.sheet{position:static!important;transform:none!important;border-radius:0!important;max-height:none!important;box-shadow:none!important;border-top:1px solid var(--c-border)}
+.sheet-handle,.sheet-header{display:none!important}
+.sheet-body{overflow:visible!important;height:auto!important;flex:none!important}
+.sheet-body .ag-confirm-bar{position:fixed!important;bottom:0!important}
 .sheet-body .confirm-screen{min-height:auto;padding:28px 20px 20px}
 .confetti{position:relative;height:0;overflow:visible}
 .confetti i{display:inline-block;width:10px;height:10px;position:absolute;top:0;left:50%;border-radius:2px;opacity:0}
@@ -1524,12 +1531,8 @@ function unlock(id){const el=document.getElementById(id);if(!el)return;el.classL
 function scr(id){
   var el=document.getElementById(id); if(!el) return;
   setTimeout(function(){
-    var sb=document.getElementById('sheetBody');
-    if(sb&&sb.contains(el)){
-      var rect=el.getBoundingClientRect();
-      var sbRect=sb.getBoundingClientRect();
-      sb.scrollTo({top:Math.max(0,sb.scrollTop+(rect.top-sbRect.top)-16),behavior:'smooth'});
-    }
+    var rect=el.getBoundingClientRect();
+    window.scrollTo({top:Math.max(0,window.scrollY+rect.top-16),behavior:'smooth'});
   },100);
 }
 
@@ -2122,7 +2125,7 @@ function toast(msg){
 function fecharConfirmacao(){
   document.getElementById('confirmScreen').style.display='none';
   document.querySelector('.ag-page').style.display='block';
-  var sb=document.getElementById('sheetBody'); if(sb) sb.scrollTop=0;
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 // ── PIX EMV copia-e-cola generator (Brazilian Standard BACEN) ──
@@ -2262,7 +2265,7 @@ function showModal(ag){
   document.querySelector('.ag-page').style.display='none';
   const cs=document.getElementById('confirmScreen');
   cs.style.display='flex';
-  var sb=document.getElementById('sheetBody'); if(sb) sb.scrollTop=0;
+  window.scrollTo({top:0,behavior:'smooth'});
   var _cfHost=document.getElementById('confirmConfetti');
   if(_cfHost) fireConfetti(_cfHost);
   // ITEM 3: Emotional success screen
@@ -2375,10 +2378,6 @@ document.getElementById('btnNovo').onclick=()=>{
 
 // ═══ v33: PROFILE PAGE ═══
 function abrirSheet(srvId, profId){
-  document.getElementById('sheetOverlay').classList.add('show');
-  document.getElementById('sheet').classList.add('show');
-  document.body.style.overflow='hidden';
-  var sb=document.getElementById('sheetBody'); if(sb) sb.scrollTop=0;
   // ensure booking flow visible (not confirm screen)
   var cs=document.getElementById('confirmScreen');
   var ap=document.querySelector('.ag-page');
@@ -2397,12 +2396,11 @@ function abrirSheet(srvId, profId){
     var pf=profissionais.find(function(p){return p.id===profId;});
     if(pf){ profSelecionado=pf; buildProf(salao&&salao.plano); }
   }
+  document.getElementById('bSrv').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 function fecharSheet(){
-  document.getElementById('sheetOverlay').classList.remove('show');
-  document.getElementById('sheet').classList.remove('show');
-  document.body.style.overflow='';
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 function compartilhar(){
