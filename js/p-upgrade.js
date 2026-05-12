@@ -81,12 +81,14 @@ function iniciarUpgrade(planoNovo){
         '</div>' +
         '<div style="font-family:var(--font-d);font-size:22px;font-weight:900;color:var(--text)">R$'+info.preco+'<span style="font-size:11px;font-weight:600;color:var(--text-3)">/mês</span></div>' +
       '</div>' +
-      // Meses (só para avulso)
+      // Ciclo mensal/anual
       '<div id="upgMesesWrap" style="margin-bottom:18px">' +
-        '<div style="font-size:10px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Período</div>' +
-        '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px" id="upgMesesGrid">' +
-          _mesesBtn(1,'upgM1',true) + _mesesBtn(3,'upgM3',false) + _mesesBtn(6,'upgM6',false) + _mesesBtn(12,'upgM12',false) +
+        '<div style="font-size:10px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Ciclo de cobrança</div>' +
+        '<div style="display:flex;gap:8px;background:var(--surface-2);border-radius:10px;padding:4px">' +
+          '<button id="upgBtnMensal" onclick="_setCicloUpg(\'mensal\',\''+planoNovo+'\')" style="flex:1;padding:10px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:700;background:var(--primary);color:#fff">Mensal</button>' +
+          '<button id="upgBtnAnual" onclick="_setCicloUpg(\'anual\',\''+planoNovo+'\')" style="flex:1;padding:10px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:700;background:transparent;color:var(--text-3)">Anual <span style="color:#16a34a;font-size:11px">-17%</span></button>' +
         '</div>' +
+        '<div id="upgResumoPreco" style="margin-top:8px;font-size:12px;color:var(--text-3);text-align:center">Cobrado mensalmente · R$'+info.preco+'/mês</div>' +
       '</div>' +
       // Dados de faturamento
       '<div style="margin-bottom:18px">' +
@@ -153,7 +155,7 @@ async function _submeterUpgrade(planoNovo){
   var nome  = (document.getElementById('upgNome')?.value || '').trim();
   var cpfRaw= (document.getElementById('upgCpf')?.value  || '').replace(/\D/g,'');
   var email = (document.getElementById('upgEmail')?.value|| '').trim();
-  var meses = parseInt(document.querySelector('input[name="upgMeses"]:checked')?.value || '1');
+  var meses = _cicloUpg === 'anual' ? 12 : 1;
 
   errEl.style.display = 'none';
   if(!nome){ errEl.textContent='Nome é obrigatório'; errEl.style.display='block'; return; }
@@ -179,6 +181,7 @@ async function _submeterUpgrade(planoNovo){
       telefone:  val.telefone || undefined,
       action:    'criar_cobranca',
       meses:     meses,
+      ciclo:     _cicloUpg,
       tipo:      'PIX',
     };
 
@@ -243,3 +246,72 @@ function abrirModalPix(d, plano, meses){
   overlay.appendChild(modal);
   document.body.appendChild(overlay);
 }
+
+/* ─── CICLO MENSAL / ANUAL ─── */
+var _cicloUpg = 'mensal';
+var PRECOS_ANUAL = { basico:29, pro:58, salao:117 };
+
+function _setCicloUpg(ciclo, planoId) {
+  _cicloUpg = ciclo;
+  var btnM = document.getElementById('upgBtnMensal');
+  var btnA = document.getElementById('upgBtnAnual');
+  if (btnM) { btnM.style.background = ciclo==='mensal'?'var(--primary)':'transparent'; btnM.style.color = ciclo==='mensal'?'#fff':'var(--text-3)'; }
+  if (btnA) { btnA.style.background = ciclo==='anual'?'var(--primary)':'transparent'; btnA.style.color = ciclo==='anual'?'#fff':'var(--text-3)'; }
+  var resumo = document.getElementById('upgResumoPreco');
+  if (resumo && planoId) {
+    var mensal = (PLANOS_INFO[planoId]||{preco:35}).preco;
+    var anual  = PRECOS_ANUAL[planoId] || Math.round(mensal*0.83);
+    if (ciclo === 'anual') {
+      var economia = (mensal - anual) * 12;
+      resumo.innerHTML = 'Cobrado anualmente: <strong style="color:var(--text)">R$'+(anual*12)+'</strong> · <span style="color:#16a34a">Economize R$'+economia+'/ano</span>';
+    } else {
+      resumo.textContent = 'Cobrado mensalmente · R$'+mensal+'/mês';
+    }
+  }
+}
+window._setCicloUpg = _setCicloUpg;
+
+/* ─── LIMITES DE PLANO ─── */
+var PLANO_LIMITES = {
+  trial:  { nome:'Trial',   profissionais:1,   campanhas:false },
+  basico: { nome:'Solo',    profissionais:1,   campanhas:false },
+  pro:    { nome:'Equipe',  profissionais:3,   campanhas:true  },
+  salao:  { nome:'Negócio', profissionais:999, campanhas:true  },
+};
+
+function verificarLimite(recurso) {
+  var planoId = (window.S && window.S.plano) || 'basico';
+  var plano = PLANO_LIMITES[planoId] || PLANO_LIMITES.basico;
+  if (recurso === 'profissional_extra') {
+    var ativos = (window._profissionais||[]).filter(function(p){return p.ativo;}).length;
+    if (ativos >= plano.profissionais) { abrirModalUpgrade('profissional_extra', plano); return false; }
+  }
+  if (recurso === 'campanhas') {
+    if (!plano.campanhas) { abrirModalUpgrade('campanhas', plano); return false; }
+  }
+  return true;
+}
+
+function abrirModalUpgrade(motivo, planoAtual) {
+  if (document.getElementById('upgradeOverlay')) return;
+  var MSGS = {
+    profissional_extra: { titulo:'Limite de profissionais atingido', desc:'Seu plano '+planoAtual.nome+' permite até '+planoAtual.profissionais+' profissional'+(planoAtual.profissionais>1?'is':'')+'. Faça upgrade para adicionar mais.' },
+    campanhas: { titulo:'Campanhas: plano Equipe ou superior', desc:'Envie mensagens automáticas para reativar clientes inativos.' },
+  };
+  var m = MSGS[motivo] || { titulo:'Recurso bloqueado', desc:'Faça upgrade para acessar.' };
+  abrirUpgrade();
+  setTimeout(function(){
+    var modal = document.querySelector('#upgradeOverlay > div');
+    if (!modal) return;
+    var ctx = document.createElement('div');
+    ctx.style.cssText = 'background:rgba(229,90,12,.08);border:1px solid rgba(229,90,12,.2);border-radius:12px;padding:14px 16px;margin-bottom:16px;text-align:center';
+    ctx.innerHTML = '<div style="font-size:24px;margin-bottom:6px">🔒</div>'+
+      '<div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px">'+m.titulo+'</div>'+
+      '<div style="font-size:12px;color:var(--text-3)">'+m.desc+'</div>';
+    var planTitle = modal.querySelector('[style*="Escolha seu plano"]') || modal.firstChild;
+    modal.insertBefore(ctx, planTitle ? planTitle.nextSibling : null);
+  }, 30);
+}
+
+window.verificarLimite = verificarLimite;
+window.abrirModalUpgrade = abrirModalUpgrade;

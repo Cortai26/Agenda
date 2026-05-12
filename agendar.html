@@ -1806,8 +1806,43 @@ function selHora(slot){
 
 async function buscarProximos(){
   try{
+    const w=document.getElementById('horaWrap');
+    if(!w) return;
+    const le=document.createElement('div');
+    le.className='lista-espera-form';
+    le.style.cssText='background:var(--c-surface-2,rgba(255,255,255,.06));border:1px solid var(--c-border,rgba(255,255,255,.09));border-radius:12px;padding:20px;text-align:center;margin-top:16px';
+    le.innerHTML=
+      '<div style="font-size:24px;margin-bottom:10px">📋</div>'+
+      '<div style="font-size:15px;font-weight:700;color:var(--c-text,#e5e2e1);margin-bottom:6px">Nenhum horário disponível</div>'+
+      '<div style="font-size:13px;color:var(--c-text-2,#a09890);margin-bottom:16px">Entre na lista de espera e avisamos se abrir um horário</div>'+
+      '<input id="leNome" type="text" placeholder="Seu nome" style="width:100%;padding:12px;background:var(--c-surface,#1a1a1a);border:1px solid var(--c-border,rgba(255,255,255,.09));border-radius:8px;color:var(--c-text,#e5e2e1);font-size:14px;box-sizing:border-box;margin-bottom:8px">'+
+      '<input id="leTel" type="tel" placeholder="WhatsApp com DDD (ex: 11999999999)" style="width:100%;padding:12px;background:var(--c-surface,#1a1a1a);border:1px solid var(--c-border,rgba(255,255,255,.09));border-radius:8px;color:var(--c-text,#e5e2e1);font-size:14px;box-sizing:border-box;margin-bottom:12px">'+
+      '<button onclick="entrarListaEspera()" style="width:100%;padding:14px;background:var(--c-primary,#E55A0C);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer">Entrar na lista de espera</button>';
+    w.appendChild(le);
   }catch(e){}
 }
+
+async function entrarListaEspera(){
+  const nome=(document.getElementById('leNome')||{}).value||'';
+  const tel=(document.getElementById('leTel')||{}).value||'';
+  if(!nome.trim()||tel.replace(/\D/g,'').length<10){
+    alert('Preencha nome e WhatsApp com DDD.');return;
+  }
+  try{
+    const r=await supaRpc('entrar_lista_espera',{
+      p_slug:salao&&salao.slug,p_servico_id:S.srv&&S.srv.id,
+      p_data:S.dataStr,p_hora:null,p_nome:nome.trim(),p_tel:tel.replace(/\D/g,'')
+    });
+    const le=document.querySelector('.lista-espera-form');
+    if(le) le.innerHTML=
+      '<div style="text-align:center;padding:20px">'+
+      '<div style="font-size:36px;margin-bottom:12px">✅</div>'+
+      '<div style="font-size:15px;font-weight:700;color:var(--c-text,#e5e2e1);margin-bottom:6px">Você está na lista!</div>'+
+      '<div style="font-size:13px;color:var(--c-text-2,#a09890)">Te avisamos pelo WhatsApp se abrir um horário.</div>'+
+      '</div>';
+  }catch(e){ alert('Erro ao entrar na lista. Tente novamente.'); }
+}
+window.entrarListaEspera=entrarListaEspera;
 
 function updResumo(){
   const el=document.getElementById('resumo');

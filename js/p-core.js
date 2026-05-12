@@ -544,6 +544,7 @@ var _tabOk={agenda:false,clientes:false,servicos:false,equipe:false,pagamentos:f
 function tab(id,btn){
   var wrap=document.getElementById('appWrap');
   if(wrap&&wrap.getAttribute('data-locked')==='1'){abrirUpgrade();return;}
+  if(id==='campanhas' && typeof verificarLimite==='function' && !verificarLimite('campanhas')) return;
   document.querySelectorAll('.tnav').forEach(function(b){b.classList.remove('on');});
   if(btn) btn.classList.add('on');
   document.querySelectorAll('.tab-body').forEach(function(t){t.classList.remove('on');});
@@ -702,4 +703,26 @@ async function cancelAg(id, origem){
     if(e.message&&e.message.includes('Acesso negado')){_pw=null;}
     toast('Erro ao cancelar: '+e.message,'err');
   }
+}
+
+async function concluirAg(id){
+  var pw=await getPw(); if(!pw) return;
+  try{
+    await rpc('atualizar_status_agendamento',{p_slug:S.slug,p_senha:pw,p_ag_id:id,p_status:'concluido'});
+    toast('✓ Concluído!','ok');
+    if(_drillDia) await renderDrill(_drillDia);
+    else { _tabOk.agenda=false; await renderAgenda(); }
+    // Dispara avaliação em background (sem bloquear o fluxo)
+    _dispararAvaliacao(id);
+  }catch(e){
+    if(e.message&&e.message.includes('Acesso negado')){_pw=null;}
+    toast('Erro: '+e.message,'err');
+  }
+}
+
+async function _dispararAvaliacao(agId){
+  try{
+    if(!S||!S.plano||S.plano==='trial') return;
+    await rpc('criar_avaliacao_pendente',{p_ag_id:agId,p_slug:S.slug});
+  }catch(e){ /* silencioso — avaliação é opcional */ }
 }

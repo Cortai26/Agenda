@@ -59,7 +59,9 @@ async function renderEquipe(){
 }
 
 async function abrirProf(id){
-  id=id||null; _editProfId=id; _fotoFile=null; _fotoUrlOriginal=null;
+  id=id||null;
+  if(!id && typeof verificarLimite==='function' && !verificarLimite('profissional_extra')) return;
+  _editProfId=id; _fotoFile=null; _fotoUrlOriginal=null;
   var p=id?_profissionais.find(function(x){return x.id===id;}):null;
   var isBasico=(S.plano==='basico'||S.plano==='trial');
   var titulo=isBasico?'Meu Perfil':(id?'Editar Profissional':'Novo Profissional');

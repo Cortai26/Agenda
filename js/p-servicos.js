@@ -209,9 +209,12 @@ function renderServicos(){
   html+='</div>';
   el.innerHTML=html;
 }
+var _tipoServico='atendimento';
+
 async function abrirSrv(id){
   id=id||null; _editSrvId=id;
   var s=id?_servicos.find(function(x){return x.id===id;}):null;
+  _tipoServico=(s&&s.tipo==='evento')?'evento':'atendimento';
   document.getElementById('srvTit').textContent=id?'Editar Serviço':'Novo Serviço';
   document.getElementById('srvNome').value=s?s.nome:'';
   document.getElementById('srvDesc').value=s&&s.descricao?s.descricao:'';
@@ -220,9 +223,48 @@ async function abrirSrv(id){
   var errEl=document.getElementById('srvErr');
   if(errEl){errEl.style.display='none';errEl.classList.remove('show');}
   _icoSel=s?s.icone:'📋'; buildIcones();
+  _renderTipoServico(s);
   document.getElementById('ovSrv').classList.add('show');
   setTimeout(function(){document.getElementById('srvNome').focus();},300);
 }
+
+function _renderTipoServico(s){
+  var wrap=document.getElementById('srvTipoWrap');
+  if(!wrap) return;
+  var isEv=_tipoServico==='evento';
+  wrap.innerHTML=
+    '<div style="padding:0 16px 12px">'+
+    '<div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text-3);margin-bottom:8px">Tipo</div>'+
+    '<div style="display:flex;gap:8px;background:var(--surface-2);border-radius:10px;padding:4px;margin-bottom:12px">'+
+      '<button onclick="setTipoServico(\'atendimento\')" style="flex:1;padding:8px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:700;background:'+(isEv?'transparent':'var(--primary)')+';color:'+(isEv?'var(--text-3)':'#fff')+'">🗓️ Atendimento</button>'+
+      '<button onclick="setTipoServico(\'evento\')" style="flex:1;padding:8px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:700;background:'+(isEv?'var(--primary)':'transparent')+';color:'+(isEv?'#fff':'var(--text-3)')+'">🎟️ Evento</button>'+
+    '</div>'+
+    '<div id="srvEventoCampos" style="display:'+(isEv?'block':'none')+'">'+
+      '<div class="two" style="padding:0">'+
+        '<div class="fg"><label class="fl">Data do evento</label><input class="fi" type="date" id="eventoData" value="'+(s&&s.evento_data?s.evento_data:'')+'"></div>'+
+        '<div class="fg"><label class="fl">Horário</label><input class="fi" type="time" id="eventoHora" value="'+(s&&s.evento_hora?s.evento_hora.substring(0,5):'')+'"></div>'+
+      '</div>'+
+      '<div class="two" style="padding:0">'+
+        '<div class="fg"><label class="fl">Vagas máx.</label><input class="fi" type="number" id="eventoVagas" value="'+(s&&s.vagas_max?s.vagas_max:10)+'" min="1" max="9999" style="width:80px"></div>'+
+        '<div class="fg"><label class="fl">Local</label><input class="fi" type="text" id="eventoLocal" value="'+(s&&s.evento_local?s.evento_local:'')+'" placeholder="Endereço ou online"></div>'+
+      '</div>'+
+    '</div>'+
+    '</div>';
+}
+
+function setTipoServico(tipo){
+  _tipoServico=tipo;
+  var campos=document.getElementById('srvEventoCampos');
+  if(campos) campos.style.display=tipo==='evento'?'block':'none';
+  var btns=document.querySelectorAll('#srvTipoWrap button');
+  if(btns.length>=2){
+    btns[0].style.background=tipo==='atendimento'?'var(--primary)':'transparent';
+    btns[0].style.color=tipo==='atendimento'?'#fff':'var(--text-3)';
+    btns[1].style.background=tipo==='evento'?'var(--primary)':'transparent';
+    btns[1].style.color=tipo==='evento'?'#fff':'var(--text-3)';
+  }
+}
+window.setTipoServico=setTipoServico;
 async function fecharSrv(){document.getElementById('ovSrv').classList.remove('show');_editSrvId=null;}
 async function buildIcones(){
   var icEl = document.getElementById('iconGrid');
@@ -255,11 +297,23 @@ async function salvarServico(){
   try{
     if(!_icoSel) _icoSel = '📋';
     var precoCentavos = Math.round(preco*100);
+    var extraEvento = {};
+    if(_tipoServico==='evento'){
+      extraEvento={
+        tipo:'evento',
+        evento_data:document.getElementById('eventoData')?document.getElementById('eventoData').value||null:null,
+        evento_hora:document.getElementById('eventoHora')?document.getElementById('eventoHora').value||null:null,
+        vagas_max:document.getElementById('eventoVagas')?parseInt(document.getElementById('eventoVagas').value)||10:10,
+        evento_local:document.getElementById('eventoLocal')?document.getElementById('eventoLocal').value.trim()||null:null,
+      };
+    } else {
+      extraEvento={tipo:'atendimento'};
+    }
     if(_editSrvId){
       var atual=_servicos.find(function(s){return s.id===_editSrvId;});
-      await rpc('atualizar_servico',{p_slug:S.slug,p_senha:pw,p_servico_id:_editSrvId,p_icone:_icoSel,p_nome:nome,p_descricao:desc||null,p_preco:precoCentavos,p_duracao:dur,p_ativo:atual?atual.ativo:true});
+      await rpc('atualizar_servico',{p_slug:S.slug,p_senha:pw,p_servico_id:_editSrvId,p_icone:_icoSel,p_nome:nome,p_descricao:desc||null,p_preco:precoCentavos,p_duracao:dur,p_ativo:atual?atual.ativo:true,...extraEvento});
     } else {
-      await rpc('adicionar_servico',{p_slug:S.slug,p_senha:pw,p_icone:_icoSel,p_nome:nome,p_descricao:desc||null,p_preco:precoCentavos,p_duracao:dur,p_ordem:_servicos.length+1});
+      await rpc('adicionar_servico',{p_slug:S.slug,p_senha:pw,p_icone:_icoSel,p_nome:nome,p_descricao:desc||null,p_preco:precoCentavos,p_duracao:dur,p_ordem:_servicos.length+1,...extraEvento});
     }
     console.log('[salvarServico] sucesso!');
     fecharSrv(); await carregarServicos(); _tabOk.servicos=false; renderServicos(); toast('✓ Serviço salvo!','ok');

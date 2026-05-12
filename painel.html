@@ -965,6 +965,8 @@
     }
 
     /* ── MODALS / OVERLAYS ── */
+    @keyframes slideUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+
     .overlay {
       display: none;
       position: fixed;
@@ -3229,7 +3231,7 @@
         <button class="sb-item tnav" data-tab="clientes" onclick="tabSidebar('clientes',this)"> <span
             class="sb-icon">👤</span>Clientes</button>
         <button class="sb-item tnav" data-tab="servicos" onclick="tabSidebar('servicos',this)"> <span
-            class="sb-icon">✂️</span>Serviços</button>
+            class="sb-icon">🛎️</span>Serviços</button>
         <button class="sb-item tnav" data-tab="equipe" onclick="tabSidebar('equipe',this)"> <span
             class="sb-icon">👥</span>Equipe</button>
         <button class="sb-item tnav tab-plano-pro" data-tab="campanhas" onclick="tabSidebar('campanhas',this)"><span
@@ -3309,7 +3311,7 @@
         <button class="bnav-item tnav" data-tab="clientes" onclick="tabBottom('clientes',this)"> <span
             class="bnav-icon">👤</span>Clientes</button>
         <button class="bnav-item tnav" data-tab="servicos" onclick="tabBottom('servicos',this)"> <span
-            class="bnav-icon">✂️</span>Serviços</button>
+            class="bnav-icon">🛎️</span>Serviços</button>
         <button class="bnav-item tnav" data-tab="equipe" onclick="tabBottom('equipe',this)"> <span
             class="bnav-icon">👥</span>Equipe</button>
         <button class="bnav-item tnav tab-plano-pro" data-tab="campanhas" onclick="tabBottom('campanhas',this)"> <span
@@ -3410,6 +3412,7 @@
         <button class="mclose" onclick="fecharSrv()">✕</button>
       </div>
       <div class="merr" id="srvErr"></div>
+      <div id="srvTipoWrap"></div>
       <div class="fg"><label class="fl" for="srvNome">Nome</label><input class="fi" type="text" id="srvNome"
           placeholder="Ex: Corte de cabelo"></div>
       <div class="fg"><label class="fl">Ícone</label>

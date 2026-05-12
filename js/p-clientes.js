@@ -56,7 +56,7 @@ async function renderClientes(page){
   } else {
     inativos.forEach(function(c){
       var tel=c.telefone.replace(/\D/g,'');
-      var msg=encodeURIComponent('Oi '+c.nome.split(' ')[0]+'! 🤙\nTô com horário disponível na '+S.nome+'.\nQuer marcar? '+BASE+'/agendar.html?slug='+S.slug);
+      var msg=encodeURIComponent('Olá '+c.nome.split(' ')[0]+'! 👋\n\nSentimos sua falta aqui na '+S.nome+'! Que tal agendar um horário?\n\n📲 Clique aqui para marcar: '+BASE+'/agendar.html?slug='+S.slug+'\n\nAté logo! 😊');
       _inBody+=
         '<div class="ri-card">'+
           '<div class="ri-av">'+esc(c.nome).charAt(0).toUpperCase()+'</div>'+

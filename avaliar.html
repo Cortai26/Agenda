@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Avalie seu atendimento — Agenda</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#E55A0C">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0C0A09;color:#E5E2E1;font-family:'Manrope',system-ui,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{background:#1A1A1A;border-radius:20px;padding:36px 28px;max-width:420px;width:100%;text-align:center;border:1px solid rgba(255,255,255,.07)}
+.logo{font-size:13px;font-weight:800;color:#E55A0C;margin-bottom:20px;letter-spacing:.02em}
+.estrelas{display:flex;gap:10px;justify-content:center;margin:24px 0}
+.estrela{cursor:pointer;opacity:.25;transition:all .18s;user-select:none;font-size:38px}
+.estrela.ativa{opacity:1;transform:scale(1.12)}
+textarea{width:100%;padding:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);border-radius:12px;color:#E5E2E1;font-family:inherit;font-size:14px;resize:none;min-height:96px;margin-top:16px}
+textarea::placeholder{color:#6B6258}
+.btn{width:100%;padding:16px;background:#E55A0C;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;margin-top:14px;transition:opacity .15s}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.nota-label{font-size:13px;color:#A09890;min-height:18px;margin-top:4px}
+</style>
+</head>
+<body>
+<div class="card" id="app">
+  <div class="logo">Agenda.</div>
+  <div style="font-size:13px;color:#6B6258">Carregando...</div>
+</div>
+
+<script>
+const SUPA_URL='https://acldrisohnjfekjxgmoh.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFjbGRyaXNvaG5qZmVranhnbW9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1ODA1MzcsImV4cCI6MjA4OTE1NjUzN30.etojz12x1oVNvbW_fPeVpNx2OFuJ72C1YioFBlCLS2Y';
+const H={'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json'};
+let _nota=0;
+const token=new URLSearchParams(location.search).get('token');
+const NOTAS=['','Muito ruim 😞','Ruim 😕','Regular 😐','Bom 😊','Excelente! 🤩'];
+
+async function init(){
+  if(!token){mostrarErro('Link inválido.');return;}
+  const r=await fetch(SUPA_URL+'/rest/v1/avaliacoes?token=eq.'+token+'&select=id,respondido_em,saloes(nome)',{headers:H});
+  const data=await r.json();
+  const av=data&&data[0];
+  if(!av){mostrarErro('Link inválido ou expirado.');return;}
+  if(av.respondido_em){mostrarJaRespondido();return;}
+  const salaoNome=av.saloes&&av.saloes.nome?av.saloes.nome:'o estabelecimento';
+  document.getElementById('app').innerHTML=
+    '<div class="logo">Agenda.</div>'+
+    '<div style="font-size:22px;margin-bottom:8px">⭐</div>'+
+    '<div style="font-size:18px;font-weight:700;margin-bottom:6px">Como foi seu atendimento?</div>'+
+    '<div style="font-size:13px;color:#A09890">Sua opinião ajuda <strong style="color:#E5E2E1">'+salaoNome+'</strong> a melhorar</div>'+
+    '<div class="estrelas" id="estrelas">'+
+      '<span class="estrela" onclick="setNota(1)">⭐</span>'+
+      '<span class="estrela" onclick="setNota(2)">⭐</span>'+
+      '<span class="estrela" onclick="setNota(3)">⭐</span>'+
+      '<span class="estrela" onclick="setNota(4)">⭐</span>'+
+      '<span class="estrela" onclick="setNota(5)">⭐</span>'+
+    '</div>'+
+    '<div class="nota-label" id="notaLabel"></div>'+
+    '<textarea id="comentario" placeholder="Conte mais sobre sua experiência (opcional)..."></textarea>'+
+    '<button class="btn" onclick="enviar()" id="btnEnviar" disabled>Enviar avaliação</button>';
+}
+
+function setNota(n){
+  _nota=n;
+  document.querySelectorAll('.estrela').forEach(function(el,i){el.classList.toggle('ativa',i<n);});
+  document.getElementById('notaLabel').textContent=NOTAS[n]||'';
+  var btn=document.getElementById('btnEnviar');
+  if(btn){btn.disabled=false;}
+}
+
+async function enviar(){
+  if(!_nota)return;
+  var comentario=(document.getElementById('comentario')||{}).value||'';
+  comentario=comentario.trim()||null;
+  var btn=document.getElementById('btnEnviar');
+  if(btn){btn.textContent='Enviando...';btn.disabled=true;}
+  try{
+    const r=await fetch(SUPA_URL+'/rest/v1/rpc/responder_avaliacao',{
+      method:'POST',headers:H,
+      body:JSON.stringify({p_token:token,p_nota:_nota,p_comentario:comentario})
+    });
+    const res=await r.json();
+    if(res&&res.ok){
+      document.getElementById('app').innerHTML=
+        '<div class="logo">Agenda.</div>'+
+        '<div style="font-size:52px;margin-bottom:16px">🎉</div>'+
+        '<div style="font-size:18px;font-weight:700;margin-bottom:8px">Obrigado pela avaliação!</div>'+
+        '<div style="font-size:13px;color:#A09890">Sua opinião ajuda profissionais a melhorarem cada vez mais.</div>';
+    } else {
+      mostrarErro((res&&res.erro)||'Erro ao enviar. Tente novamente.');
+    }
+  }catch(e){mostrarErro('Erro de conexão. Tente novamente.');}
+}
+
+function mostrarJaRespondido(){
+  document.getElementById('app').innerHTML=
+    '<div class="logo">Agenda.</div>'+
+    '<div style="font-size:52px;margin-bottom:16px">✅</div>'+
+    '<div style="font-size:18px;font-weight:700">Avaliação já enviada</div>'+
+    '<div style="font-size:13px;color:#A09890;margin-top:8px">Você já avaliou este atendimento. Obrigado!</div>';
+}
+
+function mostrarErro(msg){
+  document.getElementById('app').innerHTML=
+    '<div class="logo">Agenda.</div>'+
+    '<div style="font-size:52px;margin-bottom:16px">❌</div>'+
+    '<div style="font-size:14px;color:#A09890">'+msg+'</div>';
+}
+
+window.setNota=setNota;
+window.enviar=enviar;
+init();
+</script>
+</body>
+</html>
