@@ -615,76 +615,22 @@
     }
 
     .topbar-sair-mob {
-      display: none;
+      display: flex;
       width: 32px;
       height: 32px;
       border-radius: 8px;
-      background: rgba(220,38,38,.1);
-      color: #DC2626;
+      background: transparent;
+      color: var(--text-2);
       align-items: center;
       justify-content: center;
-      border: 1px solid rgba(220,38,38,.2);
+      border: 1px solid var(--sep);
       cursor: pointer;
       font-size: 14px;
       transition: .15s;
       flex-shrink: 0;
     }
-    .topbar-sair-mob:hover { background: rgba(220,38,38,.2); }
-    @media(max-width:480px) {
-      .topbar-sair-mob { display: flex; }
-    }
+    .topbar-sair-mob:hover { background: rgba(220,38,38,.1); color: #DC2626; border-color: rgba(220,38,38,.3); }
 
-    .topbar-avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: var(--primary);
-      color: #fff;
-      font-family: var(--font-brand);
-      font-size: 12px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      border: 2px solid var(--sep);
-      flex-shrink: 0;
-    }
-
-    .avatar-menu {
-      position: fixed;
-      top: calc(56px + env(safe-area-inset-top, 0px));
-      right: 12px;
-      background: var(--bg-card);
-      border: 1px solid var(--sep);
-      border-radius: var(--r-md);
-      overflow: hidden;
-      z-index: 300;
-      min-width: 160px;
-      box-shadow: var(--sh-md);
-    }
-
-    .avatar-menu-item {
-      padding: 14px 16px;
-      font-family: var(--font-body);
-      font-size: 15px;
-      color: var(--text);
-      cursor: pointer;
-      border-bottom: 1px solid var(--sep);
-      transition: .15s;
-    }
-
-    .avatar-menu-item:last-child {
-      border-bottom: none
-    }
-
-    .avatar-menu-item:hover {
-      background: var(--surface-2)
-    }
-
-    .avatar-menu-item.danger {
-      color: var(--red)
-    }
 
     /* ── MAIN AREA ── */
     .app-main {
@@ -3274,17 +3220,8 @@
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
             </svg>
           </button>
-          <div class="topbar-avatar" id="topbarAvatar" title="Conta">
-            <span id="topbarIniciais">?</span>
-          </div>
         </div>
       </header>
-
-      <!-- Avatar dropdown -->
-      <div id="avatarMenu" style="display:none" class="avatar-menu">
-        <div class="avatar-menu-item" onclick="irParaAba('pagina')">⚙️ Configurações</div>
-        <div class="avatar-menu-item danger" onclick="sair()">Sair</div>
-      </div>
 
       <!-- Banners -->
       <div id="bannerDemo">🎭 Conta demo — dados de exemplo</div>

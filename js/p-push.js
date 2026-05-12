@@ -38,7 +38,7 @@ async function registrarPush(slug, senha){
     }
   }catch(e){
     console.error('[Push] Erro ao registrar:', e.message);
-    toast('Erro ao registrar push: '+e.message,'erro');
+    toast('Erro ao registrar push: '+e.message,'err');
   }
 }
 
@@ -56,7 +56,7 @@ async function pedirPermissaoPush(slug, senha){
 // Chamada DIRETAMENTE pelo botão (gesto do usuário garantido)
 async function ativarNotificacoes(){
   if(!('Notification' in window)){
-    toast('Notificações não suportadas neste dispositivo','erro'); return;
+    toast('Notificações não suportadas neste dispositivo','err'); return;
   }
   try{
     const perm = await Notification.requestPermission();
@@ -64,10 +64,10 @@ async function ativarNotificacoes(){
       await registrarPush(S.slug, _pw||'');
       setTimeout(atualizarStatusPush, 1000);
     } else {
-      toast('Permissão negada — verifique as configurações do iPhone','erro');
+      toast('Permissão negada — verifique as configurações do iPhone','err');
     }
   }catch(e){
-    toast('Erro ao pedir permissão: '+e.message,'erro');
+    toast('Erro ao pedir permissão: '+e.message,'err');
   }
 }
 

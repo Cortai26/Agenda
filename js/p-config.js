@@ -27,7 +27,6 @@ async function atualizarStatusPush(){
     if(sub){el.innerHTML='✅ <strong style="color:#4ADE80">Notificações ativas!</strong> Você receberá avisos de novos agendamentos.';}
     else{
       el.innerHTML='⚠️ Permissão OK mas não registrado. <button class="btn-add" style="margin-top:8px;width:100%;justify-content:center" onclick="registrarPush(S.slug,_pw||\'\')">Registrar agora</button>';
-      await registrarPush(S.slug,_pw||'');
     }
   }catch(e){el.innerHTML='❌ Erro: '+e.message;}
 }
@@ -198,7 +197,24 @@ function _htmlPerfil(d){
     {v:'outros',l:'Outro'},
   ];
   var cat=d.categoria||'';
+  var capaUrl=d.foto_capa_url||'';
+  var perfilUrl=d.foto_url||'';
   return '<div style="padding:12px 16px">'+
+    '<div style="margin-bottom:16px">'+
+    '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--CZ);margin-bottom:8px">Foto de capa</div>'+
+    '<div style="width:100%;height:76px;background:var(--s2);border:1.5px dashed var(--bd);border-radius:10px;overflow:hidden;cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative" onclick="document.getElementById(\'inputFotoCapa\').click()">'+
+    (capaUrl?'<img src="'+capaUrl+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px">':'')+
+    '<span style="font-size:12px;color:var(--CZ);z-index:1;background:rgba(0,0,0,.45);padding:3px 10px;border-radius:6px">'+(capaUrl?'✎ Alterar capa':'📷 Adicionar capa')+'</span>'+
+    '</div>'+
+    '<input type="file" id="inputFotoCapa" accept="image/*" style="display:none" onchange="uploadFoto(this,\'capa\')">'+
+    '<div style="display:flex;align-items:center;gap:12px;margin-top:12px">'+
+    '<div style="width:56px;height:56px;background:var(--s2);border:1.5px dashed var(--bd);border-radius:50%;overflow:hidden;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0" onclick="document.getElementById(\'inputFotoPerfil\').click()">'+
+    (perfilUrl?'<img src="'+perfilUrl+'" style="width:100%;height:100%;object-fit:cover">':'<span style="font-size:20px">📷</span>')+
+    '</div>'+
+    '<div style="font-size:12px;color:var(--CZ)"><div style="font-weight:700;color:var(--text);margin-bottom:2px">Foto de perfil</div>Toque no círculo para alterar</div>'+
+    '</div>'+
+    '<input type="file" id="inputFotoPerfil" accept="image/*" style="display:none" onchange="uploadFoto(this,\'perfil\')">'+
+    '</div>'+
     '<div class="fg"><label class="fl">Nome do estabelecimento</label>'+
     '<input class="fi" type="text" id="pfNome" value="'+esc(d.nome||S.nome||'')+'" placeholder="Nome do seu negócio"></div>'+
     '<div class="fg"><label class="fl">Link (slug)</label>'+
@@ -278,13 +294,13 @@ function _htmlPagamentosClientes(d){
   _pgtoState.pixTipo=d.pix_tipo||'telefone';
   return '<div style="padding:12px 16px">'+
     '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--CZ);margin-bottom:10px">Métodos aceitos</div>'+
-    _formaRow('cartao','💳 Cartão de crédito',_pgtoState.cartao)+
-    _formaRow('debito','💳 Débito',_pgtoState.debito)+
-    _formaRow('dinheiro','💵 Dinheiro',_pgtoState.dinheiro)+
+    _formaRow('cartao','💳 Cartão de crédito','Visa, Master, Elo e outros',_pgtoState.cartao)+
+    _formaRow('debito','💳 Cartão de débito','Débito à vista',_pgtoState.debito)+
+    _formaRow('dinheiro','💵 Dinheiro','Pagamento em espécie',_pgtoState.dinheiro)+
     '<div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--sep)">'+
     '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--CZ);margin-bottom:10px">📲 PIX</div>'+
     '<div class="pgto-row" style="margin-bottom:10px"><div class="pgto-lbl">Aceitar PIX</div>'+
-    '<button class="pgto-toggle '+(_pgtoState.pix?'on':'')+'" id="tgPix" onclick="salvarForma(\'pix\',this)"></button></div>'+
+    '<button class="pgto-toggle '+(_pgtoState.pix?'on':'')+'" id="tg-pix" onclick="_togglePgtoForma(\'pix\')"></button></div>'+
     '<div id="pixSection" style="'+(!_pgtoState.pix?'display:none':'')+'">'+
     '<div class="fg"><label class="fl">Tipo de chave</label><select class="fi-sel" id="pixTipoSel">'+
     ['telefone','email','cpf','cnpj','aleatoria'].map(function(t){
@@ -299,10 +315,12 @@ function _htmlPagamentosClientes(d){
     '</div>';
 }
 
-function _formaRow(tipo,label,ativo){
+function _formaRow(tipo,label,sub,ativo){
   return '<div class="pgto-row" style="padding:10px 0;border-bottom:1px solid var(--sep)">'+
-    '<div class="pgto-lbl">'+label+'</div>'+
-    '<button class="pgto-toggle '+(ativo?'on':'')+'" id="tg-'+tipo+'" onclick="salvarForma(\''+tipo+'\',this)"></button>'+
+    '<div><div class="pgto-lbl">'+label+'</div>'+
+    (sub?'<div style="font-size:11px;color:var(--CZ);margin-top:1px">'+sub+'</div>':'')+
+    '</div>'+
+    '<button class="pgto-toggle '+(ativo?'on':'')+'" id="tg-'+tipo+'" onclick="_togglePgtoForma(\''+tipo+'\')"></button>'+
     '</div>';
 }
 
@@ -449,7 +467,7 @@ async function renderPagina(){
 
   var d={};
   try{
-    var rows=await api('saloes?slug=eq.'+S.slug+'&select=nome,slug,responsavel,descricao,categoria,instagram_url,website_url,telefone,endereco,cep,cidade,bairro,numero,complemento,horario,intervalo_slots,max_ag_dia,cancelamento_min,aceita_dinheiro,aceita_pix,aceita_cartao,aceita_debito,pix_key,pix_tipo,mostrar_sinal,sinal_percentual,sinal_obrigatorio,notif_novo_ag,lembrete_retorno_ativo,lembrete_retorno_dias,lembrete_retorno_msg,publico_marketplace,aceita_indicacao,fat_nome,fat_cpf_cnpj,fat_email,fat_empresa,fat_celular,fat_cep,fat_rua,fat_numero,fat_complemento,fat_bairro,fat_cidade,fat_estado,tema');
+    var rows=await api('saloes?slug=eq.'+S.slug+'&select=nome,slug,responsavel,descricao,categoria,instagram_url,website_url,foto_url,foto_capa_url,telefone,endereco,cep,cidade,bairro,numero,complemento,horario,intervalo_slots,max_ag_dia,cancelamento_min,aceita_dinheiro,aceita_pix,aceita_cartao,aceita_debito,pix_key,pix_tipo,mostrar_sinal,sinal_percentual,sinal_obrigatorio,notif_novo_ag,lembrete_retorno_ativo,lembrete_retorno_dias,lembrete_retorno_msg,publico_marketplace,aceita_indicacao,fat_nome,fat_cpf_cnpj,fat_email,fat_empresa,fat_celular,fat_cep,fat_rua,fat_numero,fat_complemento,fat_bairro,fat_cidade,fat_estado,tema');
     d=rows&&rows[0]?rows[0]:{};
     if(d.tema&&!S._tema) S._tema=d.tema;
     if(d.horario&&!S.horario) S.horario=d.horario;
@@ -535,6 +553,31 @@ async function salvarPerfil(){
   if(btn){btn.disabled=false;btn.textContent='Salvar perfil';}
 }
 
+/* ─── UPLOAD FOTO ─── */
+async function uploadFoto(input, tipo){
+  var file=input&&input.files&&input.files[0];
+  if(!file) return;
+  var ext=(file.name||'img').split('.').pop().toLowerCase()||'jpg';
+  var path=S.id+'/'+tipo+'.'+ext;
+  toast('Enviando foto...','ok');
+  try{
+    var r=await fetch(SUPA+'/storage/v1/object/fotos-estabelecimentos/'+path,{
+      method:'POST',
+      headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':file.type||'image/jpeg','x-upsert':'true'},
+      body:file
+    });
+    if(!r.ok){var etxt=await r.text();throw new Error(etxt);}
+    var publicUrl=SUPA+'/storage/v1/object/public/fotos-estabelecimentos/'+path+'?t='+Date.now();
+    var patch=tipo==='capa'?{foto_capa_url:SUPA+'/storage/v1/object/public/fotos-estabelecimentos/'+path}:{foto_url:SUPA+'/storage/v1/object/public/fotos-estabelecimentos/'+path};
+    await _patch(patch);
+    if(tipo==='capa') S.foto_capa_url=patch.foto_capa_url;
+    else S.foto_url=patch.foto_url;
+    toast('✓ Foto salva!','ok');
+    var body=document.getElementById('secbody-perfil');
+    if(body) body.innerHTML=_htmlPerfil(Object.assign({},S,patch));
+  }catch(e){toast('Erro no upload: '+e.message,'err');}
+}
+
 /* ─── SAVE: LOCALIZAÇÃO ─── */
 async function salvarLocalizacao(){
   var btn=document.querySelector('[onclick="salvarLocalizacao()"]');
@@ -587,20 +630,22 @@ async function salvarAgenda(){
 }
 
 /* ─── SAVE: PAGAMENTOS CLIENTES ─── */
-async function salvarForma(tipo,btn){
-  var wasOn=btn.classList.contains('on');
-  btn.classList.toggle('on');
+async function salvarFormasPagamento(){
+  await _patch({aceita_dinheiro:_pgtoState.dinheiro,aceita_cartao:_pgtoState.cartao,aceita_debito:_pgtoState.debito,aceita_pix:_pgtoState.pix});
+}
+
+async function _togglePgtoForma(tipo){
+  var btn=document.getElementById('tg-'+tipo);
+  var wasOn=!!_pgtoState[tipo];
   _pgtoState[tipo]=!wasOn;
-  var map={cartao:'aceita_cartao',debito:'aceita_debito',dinheiro:'aceita_dinheiro',pix:'aceita_pix'};
-  var patch={};patch[map[tipo]]=!wasOn;
-  var pixSec=document.getElementById('pixSection');
-  if(tipo==='pix'&&pixSec) pixSec.style.display=_pgtoState.pix?'':'none';
+  if(btn) btn.className='pgto-toggle'+(_pgtoState[tipo]?' on':'');
+  if(tipo==='pix'){var pixSec=document.getElementById('pixSection');if(pixSec) pixSec.style.display=_pgtoState.pix?'':'none';}
   try{
-    await _patch(patch);
+    await salvarFormasPagamento();
   }catch(e){
-    btn.classList.toggle('on');
     _pgtoState[tipo]=wasOn;
-    if(tipo==='pix'&&pixSec) pixSec.style.display=wasOn?'':'none';
+    if(btn) btn.className='pgto-toggle'+(wasOn?' on':'');
+    if(tipo==='pix'){var pixSec2=document.getElementById('pixSection');if(pixSec2) pixSec2.style.display=wasOn?'':'none';}
     toast('Erro ao salvar','err');
   }
 }
@@ -616,6 +661,8 @@ async function salvarPagamentosClientes(){
     await rpc('salvar_pagamento_salao',{p_slug:S.slug,p_senha:pw,p_dinheiro:_pgtoState.dinheiro,p_pix:_pgtoState.pix,p_cartao:_pgtoState.cartao,p_debito:_pgtoState.debito,p_pix_key:pixKey||null,p_pix_tipo:pixTipo});
     _pgtoState.pixKey=pixKey;_pgtoState.pixTipo=pixTipo;
     toast('✓ Chave PIX salva!','ok');
+    var sinalBody=document.getElementById('secbody-sinal');
+    if(sinalBody) sinalBody.innerHTML=_htmlSinalPix({pix_key:pixKey,mostrar_sinal:_pgtoState.mostrarSinal,sinal_percentual:_pgtoState.sinalPct,sinal_obrigatorio:_pgtoState.sinalObrig});
   }catch(e){
     if(e.message&&e.message.includes('Acesso negado')){_pw=null;toast('Senha incorreta','err');}
     else{toast('Erro: '+e.message,'err');}
@@ -722,19 +769,22 @@ async function preencherEndFat(cep){
 /* ─── BLOQUEIOS (config tab inline) ─── */
 async function _renderBloqueios(){
   try{
-    var bloqueios=await api('bloqueios_agenda?salao_id=eq.'+S.id+'&order=data_inicio&limit=50')||[];
+    var hoje=new Date();
+    var dIni=hoje.getFullYear()+'-'+String(hoje.getMonth()+1).padStart(2,'0')+'-'+String(hoje.getDate()).padStart(2,'0');
+    var dFim=(hoje.getFullYear()+2)+'-12-31';
+    var bloqueios=await rpc('listar_bloqueios',{p_slug:S.slug,p_data_ini:dIni,p_data_fim:dFim})||[];
     var html='';
     if(!bloqueios.length){
       html='<div style="padding:16px;font-size:13px;color:var(--text-2)">Nenhum bloqueio cadastrado.<br>'+
         '<small>Use bloqueios para marcar férias, folgas ou feriados.</small></div>';
     }else{
       html=bloqueios.map(function(b){
-        var ini=b.data_inicio?new Date(b.data_inicio+'T12:00:00').toLocaleDateString('pt-BR'):'—';
+        var ini=b.data_ini?new Date(b.data_ini+'T12:00:00').toLocaleDateString('pt-BR'):'—';
         var fim=b.data_fim?new Date(b.data_fim+'T12:00:00').toLocaleDateString('pt-BR'):ini;
         return '<div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--sep)">'+
           '<div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">'+(b.motivo||'Bloqueio')+'</div>'+
           '<div style="font-size:12px;color:var(--text-2)">'+ini+(fim!==ini?' → '+fim:'')+'</div></div>'+
-          '<button onclick="_excluirBloqueio('+b.id+')" style="background:var(--error-bg,rgba(255,59,48,.1));color:var(--error,#FF3B30);border:none;border-radius:8px;padding:6px 10px;font-size:12px;font-weight:700;cursor:pointer">\xd7</button>'+
+          '<button onclick="_excluirBloqueio(\''+b.id+'\')" style="background:var(--error-bg,rgba(255,59,48,.1));color:var(--error,#FF3B30);border:none;border-radius:8px;padding:6px 10px;font-size:12px;font-weight:700;cursor:pointer">\xd7</button>'+
           '</div>';
       }).join('');
     }
@@ -751,24 +801,27 @@ async function _renderBloqueios(){
 var _bloqExcluirId=null;
 async function _excluirBloqueio(id){
   _bloqExcluirId=id;
+  var ovEl=document.getElementById('ovExcluirBloq');
+  if(!ovEl) return;
   var btn=document.getElementById('btnConfExcluirBloq');
-  if(!btn){
-    var ovEl=document.getElementById('ovExcluirBloq');
-    if(!ovEl) return;
-    ovEl.classList.add('show');
-    return;
+  if(btn){
+    btn.onclick=async function(){
+      btn.disabled=true;btn.textContent='Removendo...';
+      var pw=await getPw();
+      if(!pw){btn.disabled=false;btn.textContent='Remover';return;}
+      try{
+        await rpc('excluir_bloqueio',{p_slug:S.slug,p_senha:pw,p_bloqueio_id:_bloqExcluirId});
+        if(typeof toast==='function') toast('Bloqueio removido','ok');
+        ovEl.classList.remove('show');
+        _tabOk.pagina=false;renderPagina();
+      }catch(e){
+        if(e.message&&e.message.includes('Acesso negado')){_pw=null;}
+        if(typeof toast==='function') toast('Erro: '+e.message,'err');
+      }
+      btn.disabled=false;btn.textContent='Remover';
+    };
   }
-  btn.onclick=async function(){
-    btn.disabled=true;btn.textContent='Removendo...';
-    try{
-      await api('bloqueios_agenda?id=eq.'+_bloqExcluirId,{method:'DELETE'});
-      if(typeof toast==='function') toast('Bloqueio removido','ok');
-      document.getElementById('ovExcluirBloq').classList.remove('show');
-      _tabOk.pagina=false;renderPagina();
-    }catch(e){if(typeof toast==='function') toast('Erro: '+e.message,'err');}
-    btn.disabled=false;btn.textContent='Remover';
-  };
-  document.getElementById('ovExcluirBloq').classList.add('show');
+  ovEl.classList.add('show');
 }
 
 function fecharBloqueio(){
@@ -793,14 +846,19 @@ async function confirmarBloqueio(){
   if(!ini||!/^\d{4}-\d{2}-\d{2}$/.test(ini)){
     errEl.textContent='Data início inválida.';errEl.style.display='block';return;
   }
+  var pw=await getPw();
+  if(!pw) return;
   var btn=document.querySelector('#ovBloqueio .btn-sv');
   btn.disabled=true;btn.textContent='Bloqueando...';
   try{
-    await api('bloqueios_agenda',{method:'POST',body:JSON.stringify({salao_id:S.id,data_inicio:ini,data_fim:fim||ini,motivo:motivo||null})});
+    await rpc('criar_bloqueio',{p_slug:S.slug,p_senha:pw,p_data_ini:ini,p_data_fim:fim||ini,p_motivo:motivo||null});
     if(typeof toast==='function') toast('✓ Bloqueio adicionado!','ok');
     fecharBloqueio();
     _tabOk.pagina=false;renderPagina();
-  }catch(e){errEl.textContent='Erro: '+e.message;errEl.style.display='block';}
+  }catch(e){
+    if(e.message&&e.message.includes('Acesso negado')){_pw=null;}
+    errEl.textContent='Erro: '+e.message;errEl.style.display='block';
+  }
   btn.disabled=false;btn.textContent='Bloquear';
 }
 
@@ -1153,13 +1211,13 @@ function buildPagamentosUI(el){
   var html=
     '<div class="pgto-tit">💳 Formas de pagamento aceitas</div>'+
     '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--CZ);margin-bottom:10px">Métodos aceitos</div>'+
-    _formaRow('cartao','💳 Cartão de crédito',_pgtoState.cartao)+
-    _formaRow('debito','💳 Débito',_pgtoState.debito)+
-    _formaRow('dinheiro','💵 Dinheiro',_pgtoState.dinheiro)+
+    _formaRow('cartao','💳 Cartão de crédito','Visa, Master, Elo e outros',_pgtoState.cartao)+
+    _formaRow('debito','💳 Cartão de débito','Débito à vista',_pgtoState.debito)+
+    _formaRow('dinheiro','💵 Dinheiro','Pagamento em espécie',_pgtoState.dinheiro)+
     '<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--bd)">'+
     '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--CZ);margin-bottom:10px">📲 PIX</div>'+
     '<div class="pgto-row" style="margin-bottom:10px"><div class="pgto-lbl">Aceitar PIX</div>'+
-    '<button class="pgto-toggle '+(_pgtoState.pix?'on':'')+'" id="tgPix" onclick="salvarForma(\'pix\',this)"></button></div>'+
+    '<button class="pgto-toggle '+(_pgtoState.pix?'on':'')+'" id="tg-pix" onclick="_togglePgtoForma(\'pix\')"></button></div>'+
     '<div id="pixSection" style="'+(_pgtoState.pix?'':'display:none')+'">'+
     '<div class="fg" style="margin:8px 0 0"><label class="fl">Tipo de chave PIX</label><select class="fi" id="pixTipoSel">'+
     ['telefone','email','cpf','cnpj','aleatoria'].map(function(t){
@@ -1206,13 +1264,6 @@ function buildPagamentosUI(el){
   el.innerHTML=html;
 }
 
-function togglePgto(tipo){
-  _pgtoState[tipo]=!_pgtoState[tipo];
-  var btn=document.getElementById('tg'+tipo.charAt(0).toUpperCase()+tipo.slice(1));
-  if(btn) btn.className='pgto-toggle'+(_pgtoState[tipo]?' on':'');
-  var pixSec=document.getElementById('pixSection');
-  if(pixSec) pixSec.style.display=_pgtoState.pix?'':'none';
-}
 
 function toggleMostrarSinal(btn){
   btn.classList.toggle('on');

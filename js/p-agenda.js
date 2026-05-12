@@ -404,6 +404,8 @@ async function renderDrill(ds){
         if(ag.status!=='concluido'){
           btns+='<button class="gs-btn gs-done" data-id="'+ag.id+'" onclick="concluirAg(this.dataset.id)">✔ Concluído</button>';
         }
+        var _tel2=(ag.cliente_tel||'').replace(/\D/g,'');
+        if(_tel2){var _h2=(ag.hora||'').slice(0,5);var _wamsg=encodeURIComponent('Olá '+(ag.cliente_nome||'')+'! Lembrete: '+(ag.servico_nome||'')+' às '+_h2+'. Até logo!');btns+='<a class="gs-btn" href="https://wa.me/55'+_tel2+'?text='+_wamsg+'" target="_blank" rel="noopener" style="color:#25D366;text-decoration:none">📲</a>';}
         btns+='<button class="gs-btn gs-canc" data-id="'+ag.id+'" onclick="cancelAg(this.dataset.id,\'drill\')">✕</button>';
       }
       var sinalHtml='';
