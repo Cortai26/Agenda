@@ -1576,7 +1576,7 @@ function updateBar(){
 // ── INIT ──
 async function init(){
   try {
-    const dados = await supa(`saloes?slug=eq.${slug}&select=id,slug,nome,responsavel,plano,status,descricao,endereco,cancelamento_min,pix_key,pix_tipo,aceita_pix,aceita_dinheiro,aceita_cartao,aceita_debito,tema,trial_expira,horario,sinal_percentual,sinal_obrigatorio,mostrar_sinal`);
+    const dados = await supa(`saloes?slug=eq.${slug}&select=id,slug,nome,responsavel,plano,status,descricao,endereco,cancelamento_min,pix_key,pix_tipo,aceita_pix,aceita_dinheiro,aceita_cartao,aceita_debito,tema,trial_expira,horario,sinal_percentual,sinal_obrigatorio,mostrar_sinal,foto_url,foto_capa_url,instagram_url,website_url`);
     if(!dados||dados.length===0){ document.getElementById('srvWrap').innerHTML='<div class="erro">Salão não encontrado</div>'; return; }
     salao = dados[0];
     document.title = salao.nome+' — Agendamento';
@@ -2421,10 +2421,16 @@ function renderizarPerfil(){
   var letra=(salao.nome||'?')[0].toUpperCase();
   var heroEl=document.getElementById('heroSection');
   if(heroEl){
+    var capaStyle=salao.foto_capa_url
+      ?'background:url('+salao.foto_capa_url+') center/cover no-repeat'
+      :'background:linear-gradient(135deg,var(--c-primary-light),var(--c-surface-2))';
+    var avatarHtml=salao.foto_url
+      ?'<img src="'+salao.foto_url+'" alt="'+esc(salao.nome)+'" style="width:100%;height:100%;object-fit:cover;border-radius:inherit">'
+      :letra;
     heroEl.innerHTML=
-      '<div style="height:120px;background:linear-gradient(135deg,var(--c-primary-light),var(--c-surface-2));display:flex;align-items:center;justify-content:center;font-size:56px;opacity:.35">'+letra+'</div>'+
+      '<div style="height:120px;'+capaStyle+'"></div>'+
       '<div class="hero-info">'+
-        '<div class="hero-avatar">'+letra+'</div>'+
+        '<div class="hero-avatar" style="overflow:hidden">'+avatarHtml+'</div>'+
         '<div class="hero-name">'+esc(salao.nome)+'</div>'+
         (salao.descricao?'<div class="hero-desc">'+esc(salao.descricao)+'</div>':'')+
         (salao.endereco?'<div style="font-size:12px;color:var(--c-text-3);margin-top:6px">📍 '+esc(salao.endereco)+'</div>':'')+
