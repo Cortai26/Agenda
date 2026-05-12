@@ -1,29 +1,29 @@
 {
   "name": "Agenda",
   "short_name": "Agenda",
-  "description": "Agendamento online para qualquer profissional. Compartilhe um link, seu cliente escolhe o horário.",
+  "description": "Agendamento online para profissionais",
   "start_url": "/painel.html",
   "display": "standalone",
-  "theme_color": "#E55A0C",
   "background_color": "#0C0A09",
+  "theme_color": "#E55A0C",
   "icons": [
     {
-      "src": "/icon-192.png?v=25",
-      "sizes": "192x192",
-      "type": "image/png",
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "/icon-512.png?v=25",
-      "sizes": "512x512",
+      "src": "/icon-192.png",
+      "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/icon-1024.png?v=25",
-      "sizes": "1024x1024",
+      "src": "/icon-512.png",
+      "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     }
   ]
 }

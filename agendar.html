@@ -1167,13 +1167,7 @@ html.t-crimson {
 <header class="ag-header">
   <div class="ag-logo">
     <a href="/" class="brand-lockup" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none">
-      <svg width="32" height="32" viewBox="0 0 100 100" fill="none">
-        <rect width="100" height="100" rx="22" fill="#E55A0C"/>
-        <rect y="0" width="100" height="32" rx="22" fill="#C44D08"/>
-        <rect y="22" width="100" height="10" fill="#C44D08"/>
-        <rect x="18" y="40" width="64" height="2" rx="1" fill="rgba(255,255,255,0.20)"/>
-        <circle cx="33" cy="65" r="10" fill="#FFFFFF"/>
-      </svg>
+      <svg width="32" height="32" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" rx="18" fill="#E55A0C"/><rect x="24" y="5" width="13" height="17" rx="4" fill="#FFFFFF"/><rect x="59" y="5" width="13" height="17" rx="4" fill="#FFFFFF"/><text x="48" y="68" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-weight="700" font-size="54" fill="#FFFFFF">a</text><polyline points="26,84 38,96 70,68" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span class="ag-brand-word" style="font-family:'Sora',sans-serif;font-weight:800;font-size:22px;letter-spacing:-.04em;color:#fff;display:inline-flex;align-items:baseline;line-height:1;user-select:none;pointer-events:none">Agenda<span style="display:inline-block;width:4px;height:4px;border-radius:50%;background:#E55A0C;margin-left:2px;position:relative;top:-11px"></span></span>
     </a>
   </div>
@@ -1424,7 +1418,7 @@ function updateBar(){
 // ── INIT ──
 async function init(){
   try {
-    const dados = await supa(`saloes?slug=eq.${slug}&select=id,slug,nome,responsavel,plano,status,descricao,endereco,cancelamento_min,pix_key,pix_tipo,aceita_pix,aceita_dinheiro,aceita_cartao,tema,trial_expira,horario,sinal_percentual,sinal_obrigatorio,mostrar_sinal`);
+    const dados = await supa(`saloes?slug=eq.${slug}&select=id,slug,nome,responsavel,plano,status,descricao,endereco,cancelamento_min,pix_key,pix_tipo,aceita_pix,aceita_dinheiro,aceita_cartao,aceita_debito,tema,trial_expira,horario,sinal_percentual,sinal_obrigatorio,mostrar_sinal`);
     if(!dados||dados.length===0){ document.getElementById('srvWrap').innerHTML='<div class="erro">Salão não encontrado</div>'; return; }
     salao = dados[0];
     document.title = salao.nome+' — Agendamento';
@@ -1512,7 +1506,8 @@ async function init(){
       const formas=[];
       if(salao.aceita_dinheiro!==false)formas.push('💵 Dinheiro');
       if(salao.aceita_pix!==false)formas.push('📲 Pix');
-      if(salao.aceita_cartao)formas.push('💳 Cartão');
+      if(salao.aceita_cartao)formas.push('💳 Crédito');
+      if(salao.aceita_debito)formas.push('💳 Débito');
       if(formas.length) document.getElementById('perfilPgto').innerHTML=formas.map(f=>'<span class="pgto-tag">'+f+'</span>').join('');
       if(salao.descricao||salao.endereco||formas.length) p.style.display='';
     })();

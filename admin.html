@@ -1104,15 +1104,7 @@ function enviarWhatsAppById(id){
   <div class="login-card">
     <div class="login-logo">
       <div class="login-logo-row">
-        <svg width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect width="100" height="100" rx="22" fill="#E55A0C"/>
-    <rect y="0" width="100" height="32" rx="22" fill="#C44D08"/>
-    <rect y="22" width="100" height="10" fill="#C44D08"/>
-    <rect x="18" y="40" width="64" height="2" rx="1" fill="rgba(255,255,255,0.20)"/>
-    <rect x="47" y="52" width="30" height="6" rx="3" fill="rgba(255,255,255,0.18)"/>
-    <rect x="47" y="63" width="20" height="5" rx="2.5" fill="rgba(255,255,255,0.10)"/>
-    <circle cx="33" cy="65" r="10" fill="#FFFFFF"/>
-  </svg>
+        <svg width="28" height="28" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" rx="18" fill="#E55A0C"/><rect x="24" y="5" width="13" height="17" rx="4" fill="#FFFFFF"/><rect x="59" y="5" width="13" height="17" rx="4" fill="#FFFFFF"/><text x="48" y="68" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-weight="700" font-size="54" fill="#FFFFFF">a</text><polyline points="26,84 38,96 70,68" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span style="font-family:'Sora',sans-serif;font-weight:800;font-size:28px;letter-spacing:-.04em;color:#fff;display:inline-flex;align-items:baseline;line-height:1;user-select:none;cursor:default">Agenda<span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:#E55A0C;margin-left:2px;position:relative;top:-14px"></span></span>
       </div>
       <div class="login-line"></div>
@@ -1139,7 +1131,7 @@ function enviarWhatsAppById(id){
   <!-- SIDEBAR -->
   <aside class="adm-sidebar">
     <a class="adm-sidebar-logo" href="/admin.html" style="text-decoration:none;cursor:pointer">
-      <img src="/icon-192.png?v=30" width="28" height="28" alt="Agenda" style="object-fit:contain;border-radius:6px">
+      <svg width="28" height="28" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><rect width="96" height="96" rx="18" fill="#E55A0C"/><rect x="24" y="5" width="13" height="17" rx="4" fill="#FFFFFF"/><rect x="59" y="5" width="13" height="17" rx="4" fill="#FFFFFF"/><text x="48" y="68" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-weight="700" font-size="54" fill="#FFFFFF">a</text><polyline points="26,84 38,96 70,68" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span class="adm-sidebar-brand">Agenda Admin</span>
     </a>
 
@@ -1729,7 +1721,7 @@ async function cancelarCobAsaas(asaas_id){
     body:JSON.stringify({action:'cancelar',payment_id:asaas_id})
   });
   const d=await r.json();
-  if(d&&d.ok){toast('✓ Cobrança cancelada','ok');navSidebar('cobrancas',null);}
+  if(d&&d.ok){toast('success','✓ Cobrança cancelada');navSidebar('cobrancas',null);}
   else{alert('Erro ao cancelar: '+(d.erro||JSON.stringify(d)));}
 }
 
@@ -1749,7 +1741,7 @@ async function confirmarPagamentoAdmin(asaasId){
     const proximoVenc=new Date();proximoVenc.setDate(proximoVenc.getDate()+30);
     const proximoVencStr=proximoVenc.toISOString().split('T')[0];
     await api('saloes?id=eq.'+d.salaoId,{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:'ativo',plano:plano,assinatura_status:'ACTIVE',trial_expira:null,vencimento:proximoVencStr})});
-    toast('✅ Pagamento confirmado e salão ativado!','ok');
+    toast('success','✅ Pagamento confirmado e salão ativado!');
     navSidebar('cobrancas',null);
   }catch(e){alert('Erro: '+e.message);}
 }
@@ -1760,7 +1752,7 @@ async function toggleAtivoSalao(salaoId,statusAtual){
   if(!confirm(msg)) return;
   try{
     await api('saloes?id=eq.'+salaoId,{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:novoStatus})});
-    toast(novoStatus==='ativo'?'🔓 Acesso liberado!':'🔒 Salão bloqueado!','ok');
+    toast('success',novoStatus==='ativo'?'🔓 Acesso liberado!':'🔒 Salão bloqueado!');
     navSidebar('visaogeral',null);
   }catch(e){alert('Erro: '+e.message);}
 }
@@ -1776,13 +1768,13 @@ async function sincronizarPagamentos(){
     const d=await res.json();
     if(!res.ok) throw new Error(d.error||'Erro desconhecido');
     if(d.sincronizados>0){
-      toast(`✅ ${d.sincronizados} pagamento(s) reconciliado(s)!`,'ok');
+      toast('success',`✅ ${d.sincronizados} pagamento(s) reconciliado(s)!`);
       navSidebar('cobrancas',null);
     } else {
-      toast(`Nenhum pagamento novo confirmado (${d.pendentes} pendente(s) verificado(s))`,'ok');
+      toast('info',`Nenhum pagamento novo confirmado (${d.pendentes} pendente(s) verificado(s))`);
     }
   }catch(e){
-    toast('Erro ao sincronizar: '+e.message,'err');
+    toast('error','Erro ao sincronizar: '+e.message);
   }finally{
     if(btn){btn.disabled=false;btn.textContent='🔄 Sincronizar';}
   }
@@ -1799,7 +1791,7 @@ function openLink(url){
 function copiarPix(texto){
   if(!texto){alert('Chave PIX não disponível');return;}
   navigator.clipboard.writeText(texto).then(()=>{
-    toast('✓ PIX copiado!','ok');
+    toast('success','✓ PIX copiado!');
   }).catch(()=>{
     // fallback para browsers sem clipboard API
     const ta=document.createElement('textarea');
@@ -1809,7 +1801,7 @@ function copiarPix(texto){
     ta.select();
     document.execCommand('copy');
     document.body.removeChild(ta);
-    toast('✓ PIX copiado!','ok');
+    toast('success','✓ PIX copiado!');
   });
 }
 
@@ -2122,7 +2114,7 @@ async function confirmarAssinatura(){
     const d=await r.json();
     if(d&&d.ok){
       fecharModal();
-      toast('✓ Assinatura recorrente criada!','ok');
+      toast('success','✓ Assinatura recorrente criada!');
       navSidebar('cobrancas',null);
     } else {
       console.error('[criarAssinatura] resposta Asaas:',JSON.stringify(d));
