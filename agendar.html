@@ -1157,6 +1157,81 @@ html.t-crimson {
 }
 
 
+/* ═══ v33: PROFILE PAGE ═══ */
+.prof-hero{background:var(--c-surface);border-bottom:1px solid var(--c-border)}
+.hero-info{padding:16px 18px 18px;position:relative}
+.hero-avatar{width:64px;height:64px;border-radius:var(--r-lg);background:var(--c-primary);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:26px;font-weight:800;color:#fff;border:3px solid var(--c-surface);margin-top:-32px;position:relative;z-index:1}
+.hero-name{font-family:var(--font-head);font-size:20px;font-weight:800;color:var(--c-text);margin-top:10px}
+.hero-desc{font-size:13px;color:var(--c-text-2);margin-top:4px;line-height:1.5}
+.status-bar{padding:10px 18px;border-bottom:1px solid var(--c-border);font-size:12px;font-weight:700;display:flex;align-items:center;gap:8px}
+.status-open{color:var(--c-green)}
+.status-closed{color:var(--c-red)}
+.cta-bar{padding:12px 16px;background:var(--c-surface);border-bottom:1px solid var(--c-border);position:sticky;top:57px;z-index:40;box-shadow:var(--sh-sm)}
+.btn-cta{width:100%;padding:14px;background:var(--c-primary);color:#fff;border:none;border-radius:var(--r-xl);font-size:16px;font-weight:800;font-family:var(--font-head);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px var(--c-primary-glow);transition:.15s}
+.btn-cta:hover{filter:brightness(1.07);transform:translateY(-1px)}
+.prof-section{padding:20px 18px;border-bottom:1px solid var(--c-border)}
+.prof-section-title{font-family:var(--font-head);font-size:16px;font-weight:800;color:var(--c-text);margin-bottom:14px}
+.svc-scroll{overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin:0 -18px;padding:0 18px 4px}
+.svc-scroll::-webkit-scrollbar{display:none}
+.svc-list{display:flex;gap:10px;min-width:max-content}
+.svc-card{flex:0 0 148px;background:var(--c-surface);border:1.5px solid var(--c-border);border-radius:var(--r-lg);padding:14px 12px;cursor:pointer;transition:.15s;box-shadow:var(--sh-sm)}
+.svc-card:hover,.svc-card:active{border-color:var(--c-primary);background:var(--c-primary-light)}
+.svc-card-ico{font-size:24px;margin-bottom:8px}
+.svc-card-name{font-family:var(--font-head);font-size:13px;font-weight:700;color:var(--c-text);margin-bottom:4px;line-height:1.3}
+.svc-card-price{font-size:15px;font-weight:800;color:var(--c-primary)}
+.svc-card-dur{font-size:11px;color:var(--c-text-3);margin-top:2px}
+html.t-neutral .svc-card-price{color:#C04A08}
+html.t-feminine .svc-card-price{color:#AD1457}
+html.t-clinic .svc-card-price{color:#1A4E7A}
+.team-scroll{overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin:0 -18px;padding:0 18px 4px}
+.team-scroll::-webkit-scrollbar{display:none}
+.team-list{display:flex;gap:10px;min-width:max-content}
+.team-card{flex:0 0 90px;text-align:center;cursor:pointer;padding:12px 8px;background:var(--c-surface);border:1.5px solid var(--c-border);border-radius:var(--r-lg);transition:.15s}
+.team-card:hover{border-color:var(--c-primary)}
+.team-foto{width:52px;height:52px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;overflow:hidden;border:2px solid var(--c-border)}
+.team-foto img{width:100%;height:100%;object-fit:cover;display:block}
+.team-nome{font-size:12px;font-weight:700;color:var(--c-text)}
+.team-esp{font-size:10px;color:var(--c-text-3);margin-top:2px}
+.avg-rating{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.avg-num{font-family:var(--font-head);font-size:36px;font-weight:800;color:var(--c-text)}
+.avg-stars{color:#F59E0B;font-size:18px}
+.avg-total{font-size:12px;color:var(--c-text-3)}
+.reviews-list{display:flex;flex-direction:column;gap:10px}
+.review-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-lg);padding:14px}
+.review-stars{color:#F59E0B;font-size:13px;margin-bottom:6px}
+.review-text{font-size:13px;color:var(--c-text-2);line-height:1.5}
+.review-author{font-size:11px;color:var(--c-text-3);margin-top:6px;font-weight:600}
+.hours-list{display:flex;flex-direction:column}
+.hours-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--c-border);font-size:13px}
+.hours-row:last-child{border-bottom:none}
+.hours-day{color:var(--c-text-2);font-weight:600}
+.hours-time{color:var(--c-text);font-weight:700}
+.hours-closed{color:var(--c-text-3);font-style:italic}
+.pay-chips{display:flex;flex-wrap:wrap;gap:8px}
+.pay-chip{padding:6px 14px;background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-full);font-size:12px;font-weight:600;color:var(--c-text-2)}
+.loc-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-lg);padding:14px 16px;display:flex;align-items:flex-start;gap:12px}
+.fab-wrapper{position:fixed;bottom:24px;right:18px;z-index:45}
+.fab{background:var(--c-primary);color:#fff;border:none;border-radius:var(--r-full);padding:14px 22px;font-size:15px;font-weight:800;font-family:var(--font-head);cursor:pointer;box-shadow:0 6px 24px var(--c-primary-glow);display:flex;align-items:center;gap:8px;transition:.2s;white-space:nowrap}
+.fab:hover{filter:brightness(1.1);transform:translateY(-2px)}
+.sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:80;opacity:0;pointer-events:none;transition:opacity .28s}
+.sheet-overlay.show{opacity:1;pointer-events:all}
+.sheet{position:fixed;bottom:0;left:0;right:0;z-index:90;background:var(--c-bg);border-radius:var(--r-xl) var(--r-xl) 0 0;max-height:92vh;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .32s cubic-bezier(.32,0,.67,1);box-shadow:0 -8px 40px rgba(0,0,0,.25)}
+html.t-onyx .sheet{background:#0E0E0E}
+.sheet.show{transform:translateY(0)}
+.sheet-handle{width:40px;height:4px;background:var(--c-border);border-radius:2px;margin:10px auto 0;flex-shrink:0}
+.sheet-header{display:flex;align-items:center;justify-content:space-between;padding:12px 18px 10px;flex-shrink:0;border-bottom:1px solid var(--c-border)}
+.sheet-title{font-family:var(--font-head);font-size:15px;font-weight:800;color:var(--c-text)}
+.sheet-close{background:var(--c-surface-2);border:none;border-radius:50%;width:30px;height:30px;font-size:15px;cursor:pointer;color:var(--c-text-2);display:flex;align-items:center;justify-content:center;line-height:1}
+.sheet-body{overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch}
+.sheet-body .ag-page{padding-bottom:100px}
+.sheet-body .ag-confirm-bar{position:sticky;bottom:0;display:none}
+html.t-onyx .sheet-body .ag-confirm-bar.ativo{display:block}
+.sheet-body .confirm-screen{min-height:auto;padding:28px 20px 20px}
+.confetti{position:relative;height:0;overflow:visible}
+.confetti i{display:inline-block;width:10px;height:10px;position:absolute;top:0;left:50%;border-radius:2px;opacity:0}
+@keyframes confettiL{0%{transform:translate(-50%,0) rotate(0);opacity:1}100%{transform:translate(-180px,120px) rotate(720deg);opacity:0}}
+@keyframes confettiC{0%{transform:translate(-50%,0) rotate(0);opacity:1}100%{transform:translate(-50%,140px) rotate(-360deg);opacity:0}}
+@keyframes confettiR{0%{transform:translate(-50%,0) rotate(0);opacity:1}100%{transform:translate(80px,110px) rotate(540deg);opacity:0}}
 </style>
   <meta property="og:image" content="https://agendatop.vercel.app/icon-512.png">
   <meta name="twitter:image" content="https://agendatop.vercel.app/icon-512.png">
@@ -1172,8 +1247,84 @@ html.t-crimson {
     </a>
   </div>
   <div class="ag-salon-name" id="hdrName">Carregando…</div>
-  <a id="btnMeusAgs" href="#" class="btn-meus-ags">📅 Meus agendamentos</a>
+  <div style="display:flex;gap:6px;flex-shrink:0;align-items:center">
+    <button onclick="compartilhar()" id="btnCompartilhar" class="btn-meus-ags" style="display:none" aria-label="Compartilhar">⬆️</button>
+    <a id="btnMeusAgs" href="#" class="btn-meus-ags" style="display:none">📅</a>
+  </div>
 </header>
+
+<!-- PERFIL -->
+<div id="perfilPage">
+
+  <div class="prof-hero" id="heroSection">
+    <div style="height:120px;background:linear-gradient(135deg,var(--c-primary-light),var(--c-surface-2))"></div>
+    <div class="hero-info">
+      <div class="hero-avatar" id="heroAvatar">⌛</div>
+      <div class="hero-name" id="heroName">Carregando…</div>
+    </div>
+  </div>
+
+  <div id="statusBar" class="status-bar" style="display:none"></div>
+
+  <div class="cta-bar">
+    <button onclick="abrirSheet()" class="btn-cta">📅 Agendar agora</button>
+    <div style="text-align:center;margin-top:8px">
+      <a id="btnMeusAgs2" href="#" style="font-size:12px;color:var(--c-text-3);font-weight:600;text-decoration:none;display:none">📅 Ver meus agendamentos →</a>
+    </div>
+  </div>
+
+  <section class="prof-section" id="secServicos">
+    <div class="prof-section-title">Serviços</div>
+    <div class="svc-scroll"><div class="svc-list" id="svcListPerfil">
+      <div class="svc-card" style="opacity:.4;pointer-events:none"><div class="svc-card-ico">·</div></div>
+      <div class="svc-card" style="opacity:.3;pointer-events:none"><div class="svc-card-ico">·</div></div>
+    </div></div>
+  </section>
+
+  <section class="prof-section" id="secEquipe" style="display:none">
+    <div class="prof-section-title">Equipe</div>
+    <div class="team-scroll"><div class="team-list" id="teamListPerfil"></div></div>
+  </section>
+
+  <section class="prof-section" id="secAvaliacoes" style="display:none">
+    <div class="prof-section-title">Avaliações</div>
+    <div id="avaliacoesContent"></div>
+  </section>
+
+  <section class="prof-section" id="secHorarios" style="display:none">
+    <div class="prof-section-title">Horário de funcionamento</div>
+    <div class="hours-list" id="horariosList"></div>
+  </section>
+
+  <section class="prof-section" id="secPagamentos" style="display:none">
+    <div class="prof-section-title">Formas de pagamento</div>
+    <div class="pay-chips" id="pagamentosList"></div>
+  </section>
+
+  <section class="prof-section" id="secLocalizacao" style="display:none">
+    <div class="prof-section-title">Localização</div>
+    <div id="localizacaoContent"></div>
+  </section>
+
+  <div style="height:100px"></div>
+</div><!-- /perfilPage -->
+
+<!-- FAB -->
+<div class="fab-wrapper">
+  <button class="fab" onclick="abrirSheet()">📅 Agendar</button>
+</div>
+
+<!-- SHEET OVERLAY -->
+<div class="sheet-overlay" id="sheetOverlay" onclick="fecharSheet()"></div>
+
+<!-- SHEET -->
+<div class="sheet" id="sheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-header">
+    <span class="sheet-title" id="sheetTitle">Agendar serviço</span>
+    <button class="sheet-close" onclick="fecharSheet()">✕</button>
+  </div>
+  <div class="sheet-body" id="sheetBody">
 
 <!-- TELA DE CONFIRMAÇÃO -->
 <div id="confirmScreen" class="confirm-screen" style="display:none">
@@ -1190,6 +1341,7 @@ html.t-crimson {
     Salvar no WhatsApp
   </button>
   <button id="btnNovo" class="btn-close-confirm">Agendar outro horário</button>
+  <button onclick="fecharSheet()" class="btn-close-confirm" style="margin-top:6px;opacity:.65">← Voltar ao perfil</button>
 </div>
 
 <!-- FLUXO PRINCIPAL -->
@@ -1320,7 +1472,7 @@ html.t-crimson {
   </div><!-- /page -->
 </div><!-- /ag-page -->
 
-<!-- ONYX: BOTTOM BAR (mostra seleção atual) -->
+<!-- ONYX: BOTTOM BAR (dentro do sheet) -->
 <div class="ag-confirm-bar" id="agConfirmBar">
   <div class="ag-confirm-bar-inner">
     <div class="ag-cb-info">
@@ -1333,6 +1485,9 @@ html.t-crimson {
     <div class="ag-cb-price" id="cbPrice">—</div>
   </div>
 </div>
+
+  </div><!-- /sheet-body -->
+</div><!-- /sheet -->
 
 <script>
 // ═══════════════════════════════════════════════════════════════
@@ -1367,14 +1522,14 @@ const SEM=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
 function fmt(d){return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
 function unlock(id){const el=document.getElementById(id);if(!el)return;el.classList.remove('locked');el.style.opacity='';el.classList.add('ag-entrando');setTimeout(function(){el.classList.remove('ag-entrando');},300);}
 function scr(id){
-  const el=document.getElementById(id); if(!el) return;
+  var el=document.getElementById(id); if(!el) return;
   setTimeout(function(){
-    const bar=document.getElementById('agConfirmBar');
-    const barH=(bar&&bar.classList.contains('ativo'))?bar.offsetHeight:0;
-    const hdr=document.querySelector('.ag-header');
-    const hdrH=hdr?hdr.offsetHeight:60;
-    const top=el.getBoundingClientRect().top+window.scrollY-hdrH-12;
-    window.scrollTo({top:top,behavior:'smooth'});
+    var sb=document.getElementById('sheetBody');
+    if(sb&&sb.contains(el)){
+      var rect=el.getBoundingClientRect();
+      var sbRect=sb.getBoundingClientRect();
+      sb.scrollTo({top:Math.max(0,sb.scrollTop+(rect.top-sbRect.top)-16),behavior:'smooth'});
+    }
   },100);
 }
 
@@ -1543,6 +1698,7 @@ async function init(){
         buildProf(salao.plano);
       }
     }
+    renderizarPerfil();
   } catch(e){
     document.getElementById('srvWrap').innerHTML=`<div class="erro">Erro ao carregar: ${e.message}</div>`;
   }
@@ -1966,7 +2122,7 @@ function toast(msg){
 function fecharConfirmacao(){
   document.getElementById('confirmScreen').style.display='none';
   document.querySelector('.ag-page').style.display='block';
-  window.scrollTo(0,0);
+  var sb=document.getElementById('sheetBody'); if(sb) sb.scrollTop=0;
 }
 
 // ── PIX EMV copia-e-cola generator (Brazilian Standard BACEN) ──
@@ -2106,6 +2262,7 @@ function showModal(ag){
   document.querySelector('.ag-page').style.display='none';
   const cs=document.getElementById('confirmScreen');
   cs.style.display='flex';
+  var sb=document.getElementById('sheetBody'); if(sb) sb.scrollTop=0;
   var _cfHost=document.getElementById('confirmConfetti');
   if(_cfHost) fireConfetti(_cfHost);
   // ITEM 3: Emotional success screen
@@ -2214,8 +2371,230 @@ document.getElementById('btnNovo').onclick=()=>{
   ['bDia','bHora','bDados'].forEach(id=>document.getElementById(id).classList.add('locked'));
   document.getElementById('horaWrap').innerHTML='';
   updateSteps(); buildSrv(); buildDias();
-  window.scrollTo({top:0,behavior:'smooth'});
 };
+
+// ═══ v33: PROFILE PAGE ═══
+function abrirSheet(srvId, profId){
+  document.getElementById('sheetOverlay').classList.add('show');
+  document.getElementById('sheet').classList.add('show');
+  document.body.style.overflow='hidden';
+  var sb=document.getElementById('sheetBody'); if(sb) sb.scrollTop=0;
+  // ensure booking flow visible (not confirm screen)
+  var cs=document.getElementById('confirmScreen');
+  var ap=document.querySelector('.ag-page');
+  if(cs&&cs.style.display!=='none'){ cs.style.display='none'; if(ap) ap.style.display='block'; }
+  if(srvId && servicos.length>0){
+    var sv=servicos.find(function(s){return s.id===srvId;});
+    if(sv && (!S.srv||S.srv.id!==srvId)){
+      S.srv=sv; S.hora=null;
+      buildSrv();
+      document.getElementById('selSrv').textContent=sv.icone+' '+sv.nome;
+      unlock('bDia'); buildDias();
+      updateSteps(); updateBar();
+    }
+  }
+  if(profId && profissionais.length>0){
+    var pf=profissionais.find(function(p){return p.id===profId;});
+    if(pf){ profSelecionado=pf; buildProf(salao&&salao.plano); }
+  }
+}
+
+function fecharSheet(){
+  document.getElementById('sheetOverlay').classList.remove('show');
+  document.getElementById('sheet').classList.remove('show');
+  document.body.style.overflow='';
+}
+
+function compartilhar(){
+  var url=window.location.href;
+  var nome=salao&&salao.nome||'Agenda';
+  var desc=salao&&salao.descricao||'Agende online em segundos!';
+  if(navigator.share){
+    navigator.share({title:nome,text:desc,url:url}).catch(function(){});
+  } else {
+    navigator.clipboard&&navigator.clipboard.writeText(url).then(function(){
+      toast('Link copiado!');
+    }).catch(function(){ toast('Link: '+url); });
+  }
+}
+
+function renderizarPerfil(){
+  if(!salao) return;
+  var letra=(salao.nome||'?')[0].toUpperCase();
+  var heroEl=document.getElementById('heroSection');
+  if(heroEl){
+    heroEl.innerHTML=
+      '<div style="height:120px;background:linear-gradient(135deg,var(--c-primary-light),var(--c-surface-2));display:flex;align-items:center;justify-content:center;font-size:56px;opacity:.35">'+letra+'</div>'+
+      '<div class="hero-info">'+
+        '<div class="hero-avatar">'+letra+'</div>'+
+        '<div class="hero-name">'+esc(salao.nome)+'</div>'+
+        (salao.descricao?'<div class="hero-desc">'+esc(salao.descricao)+'</div>':'')+
+        (salao.endereco?'<div style="font-size:12px;color:var(--c-text-3);margin-top:6px">📍 '+esc(salao.endereco)+'</div>':'')+
+        '<div id="heroStars" style="margin-top:8px"></div>'+
+      '</div>';
+  }
+  document.getElementById('hdrName').textContent=salao.nome;
+  var bc=document.getElementById('btnCompartilhar'); if(bc) bc.style.display='';
+  var bma=document.getElementById('btnMeusAgs');
+  if(bma){ bma.href='meus-agendamentos.html?slug='+slug; bma.style.display=''; }
+  var bma2=document.getElementById('btnMeusAgs2');
+  if(bma2){ bma2.href='meus-agendamentos.html?slug='+slug; bma2.style.display=''; }
+  _renderStatusBar();
+  _renderServicosSection();
+  if(profissionais.length>0) _renderEquipeSection();
+  if(salao.horario) _renderHorariosSection();
+  _renderPagamentosSection();
+  if(salao.endereco) _renderLocalizacaoSection();
+  carregarAvaliacoes();
+}
+
+function _renderStatusBar(){
+  var el=document.getElementById('statusBar'); if(!el) return;
+  var h=salao.horario;
+  if(!h){el.style.display='none';return;}
+  var now=new Date();
+  var cfg=h[String(now.getDay())];
+  if(!cfg){el.innerHTML='<span class="status-closed">🔴 Fechado hoje</span>';el.style.display='flex';return;}
+  var nowMin=now.getHours()*60+now.getMinutes();
+  var ap=cfg.abre?cfg.abre.split(':').map(Number):[8,0];
+  var fp=cfg.fecha?cfg.fecha.split(':').map(Number):[19,0];
+  var abreMin=ap[0]*60+ap[1], fechaMin=fp[0]*60+fp[1];
+  if(nowMin>=abreMin&&nowMin<fechaMin){
+    el.innerHTML='<span class="status-open">🟢 Aberto agora</span><span style="font-size:11px;color:var(--c-text-3);font-weight:400">· Fecha às '+cfg.fecha+'</span>';
+  } else if(nowMin<abreMin){
+    el.innerHTML='<span class="status-closed">🔴 Fechado</span><span style="font-size:11px;color:var(--c-text-3);font-weight:400">· Abre às '+cfg.abre+'</span>';
+  } else {
+    el.innerHTML='<span class="status-closed">🔴 Fechado por hoje</span>';
+  }
+  el.style.display='flex';
+}
+
+function _renderServicosSection(){
+  var listEl=document.getElementById('svcListPerfil'); if(!listEl) return;
+  if(servicos.length===0){listEl.innerHTML='<div style="font-size:13px;color:var(--c-text-3);padding:8px 0">Nenhum serviço cadastrado</div>';return;}
+  var MAX=6;
+  var vis=servicos.slice(0,MAX);
+  listEl.innerHTML=vis.map(function(sv){
+    return '<div class="svc-card" onclick="abrirSheet(\''+sv.id+'\')">'+
+      '<div class="svc-card-ico">'+esc(sv.icone||'📋')+'</div>'+
+      '<div class="svc-card-name">'+esc(sv.nome)+'</div>'+
+      '<div class="svc-card-price">R$ '+(sv.preco/100).toFixed(0)+'</div>'+
+      '<div class="svc-card-dur">'+sv.duracao+' min</div>'+
+    '</div>';
+  }).join('');
+  if(servicos.length>MAX){
+    listEl.innerHTML+='<div class="svc-card" onclick="mostrarTodosServicos()" style="background:var(--c-surface-2);border-style:dashed;align-items:center;justify-content:center;min-height:80px">'+
+      '<div style="font-size:13px;font-weight:700;color:var(--c-text-2);text-align:center">+'+(servicos.length-MAX)+'<br><span style="font-size:11px;font-weight:400;color:var(--c-text-3)">ver todos</span></div>'+
+    '</div>';
+  }
+}
+
+function mostrarTodosServicos(){
+  var listEl=document.getElementById('svcListPerfil'); if(!listEl) return;
+  listEl.innerHTML=servicos.map(function(sv){
+    return '<div class="svc-card" onclick="abrirSheet(\''+sv.id+'\')">'+
+      '<div class="svc-card-ico">'+esc(sv.icone||'📋')+'</div>'+
+      '<div class="svc-card-name">'+esc(sv.nome)+'</div>'+
+      '<div class="svc-card-price">R$ '+(sv.preco/100).toFixed(0)+'</div>'+
+      '<div class="svc-card-dur">'+sv.duracao+' min</div>'+
+    '</div>';
+  }).join('');
+}
+
+function _renderEquipeSection(){
+  var listEl=document.getElementById('teamListPerfil');
+  var sec=document.getElementById('secEquipe');
+  if(!listEl||!sec) return;
+  sec.style.display='';
+  listEl.innerHTML=profissionais.map(function(p){
+    var fotoHtml=p.foto_url
+      ?'<div class="team-foto"><img src="'+p.foto_url+'" alt="'+esc(p.nome)+'" loading="lazy"></div>'
+      :'<div class="team-foto" style="background:'+(p.cor||'var(--c-primary)')+'"><span style="color:#fff;font-size:20px;font-weight:800">'+esc(p.nome)[0]+'</span></div>';
+    return '<div class="team-card" onclick="abrirSheet(null,\''+p.id+'\')">'+
+      fotoHtml+'<div class="team-nome">'+esc(p.nome)+'</div>'+
+      (p.especialidade?'<div class="team-esp">'+esc(p.especialidade)+'</div>':'')+
+    '</div>';
+  }).join('');
+}
+
+function _renderHorariosSection(){
+  var listEl=document.getElementById('horariosList');
+  var sec=document.getElementById('secHorarios');
+  if(!listEl||!sec||!salao.horario) return;
+  var dias=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  listEl.innerHTML=dias.map(function(d,i){
+    var cfg=salao.horario[String(i)];
+    return '<div class="hours-row"><span class="hours-day">'+d+'</span>'+
+      (cfg?'<span class="hours-time">'+cfg.abre+' – '+cfg.fecha+'</span>':'<span class="hours-closed">Fechado</span>')+
+    '</div>';
+  }).join('');
+  sec.style.display='';
+}
+
+function _renderPagamentosSection(){
+  var listEl=document.getElementById('pagamentosList');
+  var sec=document.getElementById('secPagamentos');
+  if(!listEl||!sec) return;
+  var chips=[];
+  if(salao.aceita_dinheiro!==false) chips.push('💵 Dinheiro');
+  if(salao.aceita_pix!==false) chips.push('📲 PIX');
+  if(salao.aceita_cartao) chips.push('💳 Crédito');
+  if(salao.aceita_debito) chips.push('💳 Débito');
+  if(!chips.length){sec.style.display='none';return;}
+  listEl.innerHTML=chips.map(function(c){return'<span class="pay-chip">'+c+'</span>';}).join('');
+  sec.style.display='';
+}
+
+function _renderLocalizacaoSection(){
+  var el=document.getElementById('localizacaoContent');
+  var sec=document.getElementById('secLocalizacao');
+  if(!el||!sec||!salao.endereco) return;
+  var q=encodeURIComponent(salao.endereco);
+  el.innerHTML='<div class="loc-card">'+
+    '<div style="font-size:24px;flex-shrink:0">📍</div>'+
+    '<div><div style="font-size:13px;font-weight:600;color:var(--c-text)">'+esc(salao.endereco)+'</div>'+
+    '<a href="https://maps.google.com/?q='+q+'" target="_blank" rel="noopener" style="font-size:12px;color:var(--c-primary);font-weight:700;text-decoration:none;display:inline-block;margin-top:4px">Ver no mapa →</a></div>'+
+  '</div>';
+  sec.style.display='';
+}
+
+async function carregarAvaliacoes(){
+  var sec=document.getElementById('secAvaliacoes');
+  var el=document.getElementById('avaliacoesContent');
+  if(!sec||!el||!salao) return;
+  try{
+    var avs=await supa('avaliacoes?salao_id=eq.'+salao.id+'&respondido_em=not.is.null&nota=not.is.null&order=respondido_em.desc&limit=10&select=nota,comentario,respondido_em');
+    if(!avs||avs.length===0){sec.style.display='none';return;}
+    var soma=avs.reduce(function(s,a){return s+(a.nota||0);},0);
+    var avg=(soma/avs.length).toFixed(1);
+    var nStars=function(n){var s='';for(var i=0;i<Math.round(n);i++)s+='⭐';return s;};
+    var html='<div class="avg-rating">'+
+      '<div class="avg-num">'+avg+'</div>'+
+      '<div><div class="avg-stars">'+nStars(Math.round(parseFloat(avg)))+'</div>'+
+      '<div class="avg-total">'+avs.length+' avaliação'+(avs.length!==1?'s':'')+'</div></div>'+
+    '</div><div class="reviews-list">';
+    avs.slice(0,3).forEach(function(a){
+      var data=a.respondido_em?new Date(a.respondido_em).toLocaleDateString('pt-BR',{month:'short',year:'numeric'}):'';
+      html+='<div class="review-card">'+
+        '<div class="review-stars">'+nStars(a.nota)+'</div>'+
+        (a.comentario?'<div class="review-text">'+esc(a.comentario)+'</div>':'')+
+        '<div class="review-author">'+data+'</div>'+
+      '</div>';
+    });
+    html+='</div>';
+    var hs=document.getElementById('heroStars');
+    if(hs) hs.innerHTML='<span style="color:#F59E0B;font-size:13px">'+nStars(Math.round(parseFloat(avg)))+'</span>'+
+      ' <strong style="font-size:13px;color:var(--c-text)">'+avg+'</strong>'+
+      ' <span style="font-size:12px;color:var(--c-text-3)">('+avs.length+')</span>';
+    el.innerHTML=html;
+    sec.style.display='';
+  }catch(e){sec.style.display='none';}
+}
+
+window.abrirSheet=abrirSheet;
+window.fecharSheet=fecharSheet;
+window.compartilhar=compartilhar;
+window.mostrarTodosServicos=mostrarTodosServicos;
 
 applyTheme();
 init();
