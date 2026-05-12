@@ -3,7 +3,7 @@
    Cache offline + Push Notifications (RFC 8291)
 ══════════════════════════════════════════════ */
 
-const CACHE = 'agenda-v5'
+const CACHE = 'agenda-v6'
 
 const PRECACHE = [
   '/manifest.json',
