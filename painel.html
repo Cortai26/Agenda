@@ -6,14 +6,15 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>Painel — Agenda</title>
   <meta name="robots" content="noindex,nofollow">
-  <link rel="icon" type="image/png" href="/favicon.png">
-  <link rel="apple-touch-icon" href="/icon-192.png">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="alternate icon" href="/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#E55A0C">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800;900&family=Nunito+Sans:wght@400;600;700;800&family=Manrope:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Sora:wght@600;700;800;900&family=Nunito+Sans:wght@400;600;700;800&family=Manrope:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/tokens.css?v=30">
   <style>
     /* ── RESET ── */
@@ -3123,8 +3124,8 @@
   <div id="loginWrap">
     <div class="lbox">
       <div class="llogo">
-        <img src="/favicon.png" width="36" height="36" alt="Agenda" style="border-radius:8px;display:block;flex-shrink:0">
-        <span class="wordmark" style="font-size:22px;color:#fff">Agenda<span class="wm-dot"></span></span>
+        <img src="/brand/agenda-mark-small.svg" alt="" width="36" height="36" style="display:block;flex-shrink:0;border-radius:8px">
+        <span style="font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:500;font-size:24px;letter-spacing:-.01em;color:#F0EDE8;line-height:1">agenda</span>
       </div>
       <p class="lsub">Painel de gestão</p>
       <div class="login-erro" id="loginErro"></div>
@@ -3161,12 +3162,12 @@
     <!-- SIDEBAR (desktop) -->
     <aside class="app-sidebar">
       <a class="sb-logo" href="#" onclick="tabSidebar('agenda',document.querySelector('[data-tab=agenda]'));return false" style="text-decoration:none;cursor:pointer">
-        <img src="/favicon.png" width="28" height="28" alt="Agenda" style="border-radius:6px;display:block;flex-shrink:0">
-        <span class="sb-brand">AGENDA</span>
+        <img src="/brand/agenda-mark-small.svg" alt="" width="28" height="28" style="border-radius:6px;display:block;flex-shrink:0">
+        <span class="sb-brand" style="font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:500;letter-spacing:-.01em">agenda</span>
       </a>
       <nav class="sb-nav">
         <button class="sb-item tnav on" data-tab="agenda" onclick="tabSidebar('agenda',this)"> <span
-            class="sb-icon"><img src="/favicon.png" width="20" height="20" alt="" style="border-radius:5px;display:block"></span>Agenda</button>
+            class="sb-icon"><img src="/brand/agenda-mark-small.svg" alt="" width="20" height="20" style="border-radius:5px;display:block"></span>Agenda</button>
         <button class="sb-item tnav" data-tab="clientes" onclick="tabSidebar('clientes',this)"> <span
             class="sb-icon">👤</span>Clientes</button>
         <button class="sb-item tnav" data-tab="servicos" onclick="tabSidebar('servicos',this)"> <span
@@ -3190,7 +3191,7 @@
       <header class="topbar">
         <a class="topbar-logo-link" href="#"
           onclick="tabBottom('agenda',document.querySelector('[data-tab=agenda]'));return false">
-          <img src="/favicon.png" width="28" height="28" alt="Agenda" style="border-radius:6px;display:block">
+          <img src="/brand/agenda-mark-small.svg" alt="" width="28" height="28" style="border-radius:6px;display:block">
         </a>
         <div class="topbar-name" id="hdrNome">Carregando…</div>
         <div class="topbar-actions">
@@ -3231,7 +3232,7 @@
       <!-- BOTTOM NAV (mobile) -->
       <nav class="app-bottom">
         <button class="bnav-item tnav on" data-tab="agenda" onclick="tabBottom('agenda',this)"> <span
-            class="bnav-icon"><img src="/favicon.png" width="22" height="22" alt="" style="border-radius:5px;display:block"></span>Agenda</button>
+            class="bnav-icon"><img src="/brand/agenda-mark-small.svg" alt="" width="22" height="22" style="border-radius:5px;display:block"></span>Agenda</button>
         <button class="bnav-item tnav" data-tab="clientes" onclick="tabBottom('clientes',this)"> <span
             class="bnav-icon">👤</span>Clientes</button>
         <button class="bnav-item tnav" data-tab="servicos" onclick="tabBottom('servicos',this)"> <span

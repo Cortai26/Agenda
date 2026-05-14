@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&amp;display=swap');
+      .mk-letter { font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif; font-style: italic; font-weight: 500; fill: #F0EDE8; }
+    </style>
+  </defs>
+  <rect width="200" height="200" fill="#E55A0C"/>
+  <text class="mk-letter" x="92" y="148" font-size="184" text-anchor="middle">a</text>
+</svg>

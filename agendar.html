@@ -12,10 +12,14 @@
 <meta name="twitter:title" id="twTitle" content="Agende seu horário — Agenda">
 <meta name="description" content="Agende seu horário online. Escolha o serviço, dia e horário em menos de 1 minuto.">
 <meta name="robots" content="index,follow">
-<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="alternate icon" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#E55A0C">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Nunito+Sans:wght@300;400;600&family=Manrope:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Sora:wght@300;400;600;700;800&family=Nunito+Sans:wght@300;400;600&family=Manrope:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/tokens.css?v=30">
 <style>
 /* ═══════════════════════════════════════════════════════════════
@@ -1011,9 +1015,10 @@ html.t-feminine .ag-confirm-bar { display: none; }
 }
 
 
-.wordmark{font-family:'Sora',sans-serif;font-weight:800;letter-spacing:-.04em;color:var(--text,#1D1D1F);display:inline-flex;align-items:baseline;line-height:1}
-.wm-dot{display:inline-block;width:.2em;height:.2em;border-radius:50%;background:#E55A0C;margin-left:2px;position:relative;top:-.52em;flex-shrink:0}
-.brand-lockup{display:inline-flex;align-items:center;gap:10px;text-decoration:none}
+.brand-lockup{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
+.brand-mark{display:block;height:32px;width:32px;flex-shrink:0;border-radius:7px}
+.brand-wordmark{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:500;font-size:22px;letter-spacing:-.01em;color:#fff;line-height:1}
+@media(max-width:480px){.brand-mark{height:28px;width:28px}.brand-wordmark{font-size:19px}}
 
 /* ── New theme system (Agenda v2) ── */
 html.t-azure{--c-primary:#3B82F6;--c-bg:#F0F4FF;--c-card:#fff;--c-text:#0F172A;--c-text2:#475569}
@@ -1353,17 +1358,19 @@ html.t-feminine .ws-srv-price{color:#AD1457}
 .cart-total-lbl{font-size:14px;color:var(--c-text-2);font-weight:600}
 .cart-total-val{font-family:var(--font-head);font-size:20px;font-weight:800;color:var(--c-text)}
 </style>
-  <meta property="og:image" content="https://agendatop.vercel.app/icon-512.png">
-  <meta name="twitter:image" content="https://agendatop.vercel.app/icon-512.png">
+  <meta property="og:image" content="https://agendatop.vercel.app/og/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://agendatop.vercel.app/og/og-image.png">
 </head>
 <body>
 
 <!-- HEADER -->
 <header class="ag-header">
   <div class="ag-logo">
-    <a href="/" class="brand-lockup" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none">
-      <img src="/favicon.png" width="32" height="32" alt="Agenda" style="border-radius:7px;display:block;flex-shrink:0">
-      <span class="ag-brand-word" style="font-family:'Sora',sans-serif;font-weight:800;font-size:22px;letter-spacing:-.04em;color:#fff;display:inline-flex;align-items:baseline;line-height:1;user-select:none;pointer-events:none">Agenda<span style="display:inline-block;width:4px;height:4px;border-radius:50%;background:#E55A0C;margin-left:2px;position:relative;top:-11px"></span></span>
+    <a href="/" class="brand-lockup">
+      <img src="/brand/agenda-mark-small.svg" alt="" class="brand-mark">
+      <span class="brand-wordmark">agenda</span>
     </a>
   </div>
   <div class="ag-salon-name" id="hdrName">Carregando…</div>

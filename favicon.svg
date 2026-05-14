@@ -1,12 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
-  <rect width="96" height="96" rx="18" fill="#E55A0C"/>
-  <rect x="24" y="5" width="13" height="17" rx="4" fill="#FFFFFF"/>
-  <rect x="59" y="5" width="13" height="17" rx="4" fill="#FFFFFF"/>
-  <text x="48" y="68" text-anchor="middle"
-    font-family="Georgia, 'Times New Roman', serif"
-    font-style="italic" font-weight="700"
-    font-size="54" fill="#FFFFFF">a</text>
-  <polyline points="26,84 38,96 70,68"
-    fill="none" stroke="#FFFFFF" stroke-width="5"
-    stroke-linecap="round" stroke-linejoin="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <style>
+      .mk-letter { font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-weight: 700; fill: #F0EDE8; }
+    </style>
+  </defs>
+  <rect width="200" height="200" rx="40" fill="#E55A0C"/>
+  <text class="mk-letter" x="92" y="152" font-size="184" text-anchor="middle">a</text>
 </svg>
