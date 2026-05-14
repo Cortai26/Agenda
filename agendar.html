@@ -19,9 +19,25 @@
 <meta name="theme-color" content="#E55A0C">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Sora:wght@300;400;600;700;800&family=Nunito+Sans:wght@300;400;600&family=Manrope:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/tokens.css?v=30">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,400;1,500;1,600&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/tokens.css?v=31">
 <style>
+/* ── AGENDA TOKENS v2 ── */
+:root {
+  --ink:#0E0E0F; --ink-2:#15151A; --ink-3:#1E1E22;
+  --bone:#F0EDE8; --bone-2:#DCD7CC;
+  --stone:#A09890; --stone-2:#6A6462;
+  --brand:#E55A0C; --brand-soft:rgba(229,90,12,0.12);
+  --ok:#22C55E; --warn:#F59E0B; --crit:#EF4444;
+  --rule:rgba(240,237,232,0.08); --rule-2:rgba(240,237,232,0.14);
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Manrope',system-ui,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+html.t-neutral { --ink:#F8F4EF; --ink-2:#FFFFFF; --ink-3:#F0EBE4; --bone:#1A0E06; --bone-2:#4A3728; --stone:#7A6050; --stone-2:#9A8070; --brand:#E55A0C; --rule:rgba(26,14,6,0.10); --rule-2:rgba(26,14,6,0.18); }
+html.t-feminine { --ink:#FFF5F8; --ink-2:#FFFFFF; --ink-3:#FCE4EC; --bone:#1A0613; --bone-2:#5A1A35; --stone:#AA5070; --stone-2:#D8708A; --brand:#D81B60; --rule:rgba(216,27,96,0.12); --rule-2:rgba(216,27,96,0.22); }
+html.t-clinic { --ink:#F4F8FB; --ink-2:#FFFFFF; --ink-3:#E8F1F8; --bone:#1C3A5E; --bone-2:#3A6080; --stone:#6A90AA; --stone-2:#5A7A9A; --brand:#2C6FAA; --rule:rgba(44,111,170,0.12); --rule-2:rgba(44,111,170,0.22); }
+
 /* ═══════════════════════════════════════════════════════════════
    AGENDA — SISTEMA DE TEMAS v2
    Três identidades: onyx (barbearia luxo) · feminine (salão) · neutral (básico)
@@ -1357,6 +1373,100 @@ html.t-feminine .ws-srv-price{color:#AD1457}
 .cart-total-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0 0;border-top:1.5px solid var(--c-border);margin-top:8px}
 .cart-total-lbl{font-size:14px;color:var(--c-text-2);font-weight:600}
 .cart-total-val{font-family:var(--font-head);font-size:20px;font-weight:800;color:var(--c-text)}
+
+/* ── STICKY HEADER ── */
+.sticky-header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(14,14,15,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule);padding:10px 16px;display:flex;align-items:center;gap:10px;transition:transform .3s;}
+html.t-neutral .sticky-header{background:rgba(248,244,239,0.92);}
+html.t-feminine .sticky-header{background:rgba(255,245,248,0.92);}
+html.t-clinic .sticky-header{background:rgba(244,248,251,0.92);}
+.sticky-header-nome{flex:1;font-family:var(--serif);font-style:italic;font-size:16px;color:var(--bone);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sticky-header-btn{padding:7px 14px;background:var(--brand);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;}
+
+/* ── LIVRO DE BORDO (resumo persistente no sheet) ── */
+.livro-bordo{border:1px solid var(--brand);margin:12px 20px;padding:0 14px;display:none;}
+.lb-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--rule);font-size:13px;}
+.lb-row:last-child{border-bottom:none;}
+.lb-label{color:var(--stone);}
+.lb-valor{color:var(--bone);font-weight:600;}
+.lb-vazio{color:var(--stone-2);font-family:var(--serif);font-style:italic;font-weight:400;}
+
+/* ── STEPPER (new sheet stepper) ── */
+.sheet-stepper{display:flex;gap:10px;padding:10px 20px;border-bottom:1px solid var(--rule);overflow-x:auto;}
+.ss-step{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--stone);white-space:nowrap;}
+.ss-num{width:18px;height:18px;border-radius:50%;background:var(--ink-3);color:var(--stone);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;}
+.ss-step.done .ss-num{background:var(--ok);color:#fff;}
+.ss-step.current .ss-num{background:var(--brand);color:#fff;box-shadow:0 0 0 3px var(--brand-soft);}
+.ss-step.current{color:var(--bone);font-weight:600;}
+
+/* ── HERO (new design) ── */
+.ws-hero-v2{position:relative;}
+.ws-hero-v2-cover{height:220px;background:var(--ink-3);position:relative;overflow:hidden;}
+.ws-hero-v2-cover img{width:100%;height:100%;object-fit:cover;}
+.ws-hero-v2-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:72px;opacity:0.12;}
+.ws-hero-v2-grad{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,var(--ink) 100%);pointer-events:none;}
+.ws-hero-v2-badge{position:absolute;top:14px;right:14px;background:var(--brand);color:#fff;font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:.5px;}
+.ws-hero-v2-content{padding:0 16px 16px;margin-top:-40px;position:relative;z-index:1;}
+.ws-hero-v2-avatar{width:72px;height:72px;border-radius:18px;border:3px solid var(--brand);background:var(--ink-3);overflow:hidden;margin-bottom:10px;display:flex;align-items:center;justify-content:center;font-size:32px;}
+.ws-hero-v2-avatar img{width:100%;height:100%;object-fit:cover;}
+.ws-hero-v2-nome{font-family:var(--serif);font-style:italic;font-size:clamp(24px,6vw,36px);color:var(--bone);letter-spacing:-0.02em;line-height:1.1;}
+.ws-hero-v2-sub{font-size:13px;color:var(--stone);margin-top:4px;}
+.ws-hero-v2-rating{display:flex;align-items:center;gap:6px;margin-top:6px;}
+.ws-hero-v2-status{display:flex;align-items:center;gap:8px;padding:9px 16px;background:var(--ink-2);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);}
+.ws-hero-v2-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.ws-hero-v2-dot.open{background:var(--ok);}
+.ws-hero-v2-dot.closed{background:var(--crit);}
+.ws-hero-v2-status-lbl{font-size:12px;font-weight:700;}
+.ws-hero-v2-status-lbl.open{color:var(--ok);}
+.ws-hero-v2-status-lbl.closed{color:var(--crit);}
+.ws-hero-v2-status-hrs{font-size:12px;color:var(--stone-2);margin-left:auto;}
+
+/* ── CTA BAR (new) ── */
+.cta-bar-v2{padding:12px 16px;display:flex;gap:8px;align-items:center;}
+.btn-ag-main{flex:1;padding:14px;background:var(--brand);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;transition:all .15s;}
+.btn-ag-main:active{transform:scale(0.97);}
+.social-btns-row{display:flex;gap:6px;}
+.btn-social-sm{width:48px;height:48px;background:var(--ink-2);border:1px solid var(--rule);border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;color:var(--stone);font-size:18px;flex-shrink:0;}
+
+/* ── SECTION (new) ── */
+.ws-section-v2{padding:20px 16px;border-top:1px solid var(--rule);}
+.ws-section-v2-title{font-size:11px;font-weight:700;color:var(--stone-2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:14px;}
+.ws-section-v2-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+
+/* ── SERVICE CARDS (new website view) ── */
+.ws-srv-v2{display:flex;align-items:center;gap:12px;padding:14px;background:var(--ink-2);border:1px solid var(--rule);border-radius:10px;margin-bottom:8px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;}
+.ws-srv-v2:last-child{margin-bottom:0;}
+.ws-srv-v2:active{border-color:var(--brand);background:var(--brand-soft);}
+.ws-srv-v2-ico{width:42px;height:42px;background:var(--brand-soft);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.ws-srv-v2-name{font-size:14px;font-weight:700;color:var(--bone);}
+.ws-srv-v2-meta{font-size:12px;color:var(--stone);margin-top:2px;}
+.ws-srv-v2-price{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--brand);flex-shrink:0;}
+
+/* ── TEAM (new) ── */
+.ws-team-v2-scroll{display:flex;gap:16px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;}
+.ws-team-v2-card{text-align:center;flex-shrink:0;cursor:pointer;}
+.ws-team-v2-avatar{width:60px;height:60px;border-radius:50%;border:2px solid var(--rule);background:var(--ink-3);overflow:hidden;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:24px;}
+.ws-team-v2-avatar img{width:100%;height:100%;object-fit:cover;}
+.ws-team-v2-nome{font-size:12px;font-weight:700;color:var(--bone);}
+.ws-team-v2-role{font-size:11px;color:var(--stone-2);}
+
+/* ── CTA FINAL (new) ── */
+.cta-final-v2{padding:28px 16px;text-align:center;background:var(--ink-2);border-top:1px solid var(--rule);}
+.cta-final-v2-title{font-family:var(--serif);font-style:italic;font-size:24px;color:var(--bone);margin-bottom:6px;}
+.cta-final-v2-sub{font-size:13px;color:var(--stone);margin-bottom:20px;}
+
+/* ── FAB (new) ── */
+.fab-v2{position:fixed;bottom:0;left:0;right:0;padding:12px 16px;padding-bottom:max(12px,env(safe-area-inset-bottom));background:linear-gradient(to top,var(--ink) 60%,transparent);z-index:99;}
+.fab-v2-btn{width:100%;padding:16px;background:var(--brand);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 4px 20px rgba(229,90,12,.35);}
+@media(min-width:780px){.fab-v2{display:none;}}
+
+/* ── SUCESSO V2 ── */
+.sucesso-v2-check{width:72px;height:72px;border-radius:50%;background:var(--ok);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;animation:pop .5s cubic-bezier(0.34,1.56,0.64,1);}
+@keyframes pop{0%{transform:scale(0)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+.sucesso-v2-title{font-family:var(--serif);font-style:italic;font-size:32px;color:var(--bone);letter-spacing:-0.01em;text-align:center;margin-bottom:8px;}
+.sucesso-v2-acoes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px;}
+.sucesso-v2-acao{padding:13px 12px;background:var(--ink-3);border:1px solid var(--rule);border-radius:8px;font-size:13px;font-weight:600;color:var(--bone);text-decoration:none;display:flex;align-items:center;gap:8px;transition:background .15s;}
+.sucesso-v2-acao:hover{background:var(--ink-2);}
+.sucesso-v2-acao.wa{color:#25D366;border-color:rgba(37,211,102,.25);background:rgba(37,211,102,.06);}
 </style>
   <meta property="og:image" content="https://agendatop.vercel.app/og/og-image.png">
   <meta property="og:image:width" content="1200">
@@ -1366,7 +1476,7 @@ html.t-feminine .ws-srv-price{color:#AD1457}
 <body>
 
 <!-- HEADER -->
-<header class="ag-header">
+<header class="ag-header" id="agHeader" style="display:none">
   <div class="ag-logo">
     <a href="/" class="brand-lockup">
       <img src="/brand/agenda-mark-small.svg" alt="" class="brand-mark">
@@ -1379,6 +1489,11 @@ html.t-feminine .ws-srv-price{color:#AD1457}
     <a id="btnMeusAgs" href="#" class="btn-meus-ags" style="display:none">📅</a>
   </div>
 </header>
+<header class="sticky-header" id="stickyHeader" style="transform:translateY(-100%)">
+  <img src="/favicon.png" width="26" height="26" style="border-radius:6px;flex-shrink:0" alt="">
+  <span class="sticky-header-nome" id="stickyNome">Agenda</span>
+  <button onclick="abrirSheet()" class="sticky-header-btn">Agendar</button>
+</header>
 
 <!-- PERFIL — renderizado em renderizarPerfil() -->
 <div id="perfilPage"></div>
@@ -1386,6 +1501,9 @@ html.t-feminine .ws-srv-price{color:#AD1457}
 <!-- FAB -->
 <div class="fab-wrapper">
   <button class="fab" onclick="abrirSheet()">📅 Agendar</button>
+</div>
+<div class="fab-v2" id="fabV2">
+  <button onclick="abrirSheet()" class="fab-v2-btn">📅 Agendar agora</button>
 </div>
 
 <!-- CART FAB -->
@@ -1417,6 +1535,13 @@ html.t-feminine .ws-srv-price{color:#AD1457}
   <div class="sheet-header">
     <span class="sheet-title" id="sheetTitle">Agendar serviço</span>
     <button class="sheet-close" onclick="fecharSheet()">✕</button>
+  </div>
+  <div class="livro-bordo" id="livroBordo">
+    <div class="lb-row" id="lbServico"><span class="lb-label">Serviço</span><span class="lb-valor lb-vazio">selecione →</span></div>
+    <div class="lb-row" id="lbProfissional" style="display:none"><span class="lb-label">Com</span><span class="lb-valor lb-vazio">selecione →</span></div>
+    <div class="lb-row" id="lbDia"><span class="lb-label">Dia</span><span class="lb-valor lb-vazio">escolha →</span></div>
+    <div class="lb-row" id="lbHora"><span class="lb-label">Hora</span><span class="lb-valor lb-vazio">escolha →</span></div>
+    <div class="lb-row"><span class="lb-label">Total</span><span class="lb-valor" id="lbTotal" style="color:var(--brand);font-family:var(--mono);font-weight:700">—</span></div>
   </div>
   <div class="sheet-body" id="sheetBody">
 
@@ -2488,6 +2613,7 @@ function abrirSheet(srvId, profId){
   var overlay=document.getElementById('sheetOverlay');
   if(sheet) sheet.classList.add('show');
   if(overlay) overlay.classList.add('show');
+  atualizarLivroBordo();
   document.body.style.overflow='hidden';
   var sb=document.getElementById('sheetBody'); if(sb) sb.scrollTop=0;
 }
@@ -2527,15 +2653,15 @@ function renderizarPerfil(){
   window._wsProdutosData=salao.produtos||[];
 
   var html='';
-  html+=_wsHero();
+  html+=_wsHeroV2();
   html+=_wsCtaBar();
   html+=_wsSectionNav();
   // 1. Serviços: primeira seção — maior driver de conversão
-  html+=_wsServicos();
+  html+=_wsServicosV2();
   // 2. Sobre: quem é o estabelecimento, contatos sociais
   html+=_wsSobre();
   // 3. Equipe: cria conexão pessoal com o profissional
-  if(profissionais.length>0) html+=_wsEquipe();
+  if(profissionais.length>0) html+=_wsEquipeV2();
   // 4. Produtos: se houver
   if(window._wsProdutosData.length) html+=_wsProdutos();
   // 5. Galeria: prova visual do trabalho
@@ -2552,7 +2678,7 @@ function renderizarPerfil(){
   html+=_wsPagamentos();
   // 11. Avaliações
   html+='<div class="ws-section-wrap"><section class="ws-section" id="secAvaliacoes" style="display:none"><div class="ws-section-title">Avaliações</div><div id="avaliacoesContent"></div></section></div>';
-  html+=_wsCtaFinal();
+  html+=_wsCtaFinalV2();
   html+='<div class="ws-footer"><div class="ws-footer-txt">Agendamento online por <a href="/" class="ws-footer-brand">Agenda</a></div></div>';
   html+='<div style="height:40px"></div>';
 
@@ -2635,11 +2761,14 @@ function _wsHero(){
 }
 
 function _wsCtaBar(){
-  return '<div class="cta-bar">'+
-    '<button onclick="abrirSheet()" class="btn-cta">Agendar agora</button>'+
-    '<div style="text-align:center;margin-top:8px">'+
-    '<a id="btnMeusAgs2" href="#" style="font-size:12px;color:var(--c-text-3);font-weight:600;text-decoration:none;display:none">Ver meus agendamentos →</a>'+
-    '</div></div>';
+  var socials='';
+  if(salao.whatsapp_url){var wa=(salao.whatsapp_url||'').replace(/\D/g,'');if(wa)socials+='<a href="https://wa.me/'+wa+'" target="_blank" class="btn-social-sm" title="WhatsApp">💬</a>';}
+  if(salao.instagram_url){var igUrl=salao.instagram_url.startsWith('http')?salao.instagram_url:'https://instagram.com/'+salao.instagram_url;socials+='<a href="'+igUrl+'" target="_blank" class="btn-social-sm" title="Instagram">📷</a>';}
+  socials+='<button onclick="compartilhar()" class="btn-social-sm" title="Compartilhar">🔗</button>';
+  return '<div class="cta-bar-v2">'+
+    '<button onclick="abrirSheet()" class="btn-ag-main">📅 Agendar agora</button>'+
+    '<div class="social-btns-row">'+socials+'</div>'+
+  '</div>';
 }
 
 function _wsSectionNav(){
@@ -3222,7 +3351,214 @@ document.addEventListener('change', function(e){
     if(info) info.style.display=e.target.checked?'block':'none';
   }
 });
+
+/* ── STICKY HEADER SCROLL ── */
+window.addEventListener('scroll', function(){
+  var h=document.getElementById('stickyHeader');
+  if(!h) return;
+  h.style.transform=window.scrollY>200?'translateY(0)':'translateY(-100%)';
+},{passive:true});
+
+/* ── LIVRO DE BORDO UPDATE ── */
+function atualizarLivroBordo(){
+  var lb=document.getElementById('livroBordo');
+  if(!lb) return;
+  var hasSomething=!!(S.srv||S.dataStr||S.hora);
+  lb.style.display=hasSomething?'block':'none';
+
+  var rowSrv=document.getElementById('lbServico');
+  if(rowSrv&&S.srv){
+    var sp=rowSrv.querySelector('.lb-valor');
+    if(sp){sp.textContent=S.srv.nome;sp.classList.remove('lb-vazio');}
+  }
+
+  var rowProf=document.getElementById('lbProfissional');
+  if(rowProf){
+    if(profissionais.length>1&&profSelecionado){
+      rowProf.style.display='flex';
+      var sp2=rowProf.querySelector('.lb-valor');
+      if(sp2){
+        sp2.textContent=profSelecionado==='sem_preferencia'?'Sem preferência':(profSelecionado.nome||'');
+        sp2.classList.remove('lb-vazio');
+      }
+    }
+  }
+
+  var rowDia=document.getElementById('lbDia');
+  if(rowDia&&S.dataStr){
+    var sp3=rowDia.querySelector('.lb-valor');
+    if(sp3){sp3.textContent=S.dataLbl||S.dataStr;sp3.classList.remove('lb-vazio');}
+  }
+
+  var rowHora=document.getElementById('lbHora');
+  if(rowHora&&S.hora){
+    var sp4=rowHora.querySelector('.lb-valor');
+    if(sp4){sp4.textContent=S.hora.slice(0,5);sp4.classList.remove('lb-vazio');}
+  }
+
+  var lbTotal=document.getElementById('lbTotal');
+  if(lbTotal&&S.srv&&S.srv.preco>0){
+    lbTotal.textContent='R$ '+(S.srv.preco/100).toFixed(2).replace('.',',');
+  }
+}
+
+/* ── NEW HERO V2 ── */
+function _wsHeroV2(){
+  var cats={beleza:'✂️',saude:'🏥',fitness:'💪',estetica:'💆',pet:'🐾',barbearia:'💈'};
+  var ico=cats[salao.categoria]||'📅';
+
+  var bgHtml=salao.foto_capa_url
+    ?'<img src="'+esc(salao.foto_capa_url)+'" alt="'+esc(salao.nome)+'" loading="eager">'
+    :(salao.foto_url?'<img src="'+esc(salao.foto_url)+'" alt="'+esc(salao.nome)+'" loading="eager">':'');
+
+  var avatarHtml=salao.foto_url
+    ?'<div class="ws-hero-v2-avatar"><img src="'+esc(salao.foto_url)+'" alt="'+esc(salao.nome)+'"></div>'
+    :'<div class="ws-hero-v2-avatar">'+ico+'</div>';
+
+  var badgeHtml=salao.tag_destaque
+    ?'<span class="ws-hero-v2-badge">'+esc(salao.tag_destaque)+'</span>'
+    :'';
+
+  var ratingHtml='';
+  if(salao.nota_media&&salao.total_avaliacoes>=3){
+    var n=Math.round(salao.nota_media);
+    var stars='';for(var k=0;k<n;k++)stars+='★';for(var k2=n;k2<5;k2++)stars+='☆';
+    ratingHtml='<div class="ws-hero-v2-rating">'+
+      '<span style="color:#F59E0B;font-size:13px">'+stars+'</span>'+
+      '<span style="font-size:14px;font-weight:700;color:var(--bone)">'+salao.nota_media.toFixed(1)+'</span>'+
+      '<span style="font-size:12px;color:var(--stone)">('+salao.total_avaliacoes+')</span>'+
+    '</div>';
+  }
+
+  // Status
+  var statusHtml='';
+  if(salao.horario){
+    var now=new Date();
+    var cfg=salao.horario[String(now.getDay())];
+    if(!cfg){
+      statusHtml='<span class="ws-hero-v2-dot closed"></span><span class="ws-hero-v2-status-lbl closed">Fechado hoje</span>';
+    } else {
+      var iniStr=cfg.ini||cfg.abre||'09:00',fimStr=cfg.fim||cfg.fecha||'19:00';
+      var iniP=iniStr.split(':'),fimP=fimStr.split(':');
+      var nowMin=now.getHours()*60+now.getMinutes();
+      var iniMin=+iniP[0]*60+(+iniP[1]||0),fimMin=+fimP[0]*60+(+fimP[1]||0);
+      var aberto=nowMin>=iniMin&&nowMin<fimMin;
+      statusHtml='<span class="ws-hero-v2-dot '+(aberto?'open':'closed')+'"></span>'+
+        '<span class="ws-hero-v2-status-lbl '+(aberto?'open':'closed')+'">'+(aberto?'Aberto agora':'Fechado agora')+'</span>'+
+        '<span class="ws-hero-v2-status-hrs">Hoje: '+iniStr.slice(0,5)+' – '+fimStr.slice(0,5)+'</span>';
+    }
+  }
+
+  // Populate stickyHeader nome
+  var sn=document.getElementById('stickyNome');
+  if(sn) sn.textContent=salao.nome;
+
+  return '<div class="ws-hero-v2">'+
+    '<div class="ws-hero-v2-cover">'+bgHtml+
+      '<div class="ws-hero-v2-placeholder">'+ico+'</div>'+
+      '<div class="ws-hero-v2-grad"></div>'+
+      badgeHtml+
+    '</div>'+
+    '<div class="ws-hero-v2-content">'+
+      avatarHtml+
+      '<div class="ws-hero-v2-nome">'+esc(salao.nome)+'</div>'+
+      '<div class="ws-hero-v2-sub">'+esc([salao.categoria,salao.cidade].filter(Boolean).join(' · '))+'</div>'+
+      ratingHtml+
+    '</div>'+
+    (statusHtml?'<div class="ws-hero-v2-status">'+statusHtml+'</div>':'')+
+  '</div>';
+}
+
+/* ── NEW SERVICES SECTION V2 (cards bonitos no perfil) ── */
+function _wsServicosV2(){
+  if(!servicos.length) return '';
+  var MAX=8;
+  var cards=servicos.slice(0,MAX).map(function(sv){
+    var preco=sv.preco>0?'R$ '+(sv.preco/100).toFixed(0):'A consultar';
+    var dur=sv.duracao>=60?Math.floor(sv.duracao/60)+'h'+(sv.duracao%60>0?sv.duracao%60+'min':''):sv.duracao+'min';
+    return '<div class="ws-srv-v2" onclick="abrirSheet(\''+sv.id+'\')">'+
+      '<div class="ws-srv-v2-ico">'+esc(sv.icone||'📋')+'</div>'+
+      '<div style="flex:1;min-width:0">'+
+        '<div class="ws-srv-v2-name">'+esc(sv.nome)+'</div>'+
+        '<div class="ws-srv-v2-meta">'+dur+'</div>'+
+      '</div>'+
+      '<div style="text-align:right">'+
+        '<div class="ws-srv-v2-price">'+preco+'</div>'+
+        '<div style="font-size:10px;color:var(--stone);margin-top:2px">Agendar →</div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+  var maisHtml=servicos.length>MAX
+    ?'<button onclick="_wsExpandirServicosV2(this)" style="width:100%;padding:10px;background:var(--ink-2);border:1px dashed var(--rule-2);border-radius:10px;font-size:13px;font-weight:700;color:var(--stone);cursor:pointer;margin-top:8px">+'+(servicos.length-MAX)+' serviços →</button>'
+    :'';
+  return '<div class="ws-section-wrap"><section class="ws-section ws-section-v2" id="secServicos">'+
+    '<div class="ws-section-v2-header">'+
+      '<div class="ws-section-v2-title" style="margin-bottom:0">Serviços</div>'+
+      '<span style="font-size:12px;color:var(--stone)">'+servicos.length+' disponíveis</span>'+
+    '</div>'+
+    '<div id="wsSrvList">'+cards+'</div>'+
+    maisHtml+
+  '</section></div>';
+}
+
+function _wsExpandirServicosV2(btn){
+  var list=document.getElementById('wsSrvList');
+  if(!list) return;
+  list.innerHTML=servicos.map(function(sv){
+    var preco=sv.preco>0?'R$ '+(sv.preco/100).toFixed(0):'A consultar';
+    var dur=sv.duracao>=60?Math.floor(sv.duracao/60)+'h'+(sv.duracao%60>0?sv.duracao%60+'min':''):sv.duracao+'min';
+    return '<div class="ws-srv-v2" onclick="abrirSheet(\''+sv.id+'\')">'+
+      '<div class="ws-srv-v2-ico">'+esc(sv.icone||'📋')+'</div>'+
+      '<div style="flex:1;min-width:0">'+
+        '<div class="ws-srv-v2-name">'+esc(sv.nome)+'</div>'+
+        '<div class="ws-srv-v2-meta">'+dur+'</div>'+
+      '</div>'+
+      '<div style="text-align:right">'+
+        '<div class="ws-srv-v2-price">'+preco+'</div>'+
+        '<div style="font-size:10px;color:var(--stone);margin-top:2px">Agendar →</div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+  if(btn) btn.remove();
+}
+window._wsExpandirServicosV2=_wsExpandirServicosV2;
+
+/* ── NEW EQUIPE V2 ── */
+function _wsEquipeV2(){
+  if(!profissionais.length) return '';
+  var cards=profissionais.map(function(p){
+    var fotoHtml=p.foto_url
+      ?'<div class="ws-team-v2-avatar"><img src="'+esc(p.foto_url)+'" alt="'+esc(p.nome)+'"></div>'
+      :'<div class="ws-team-v2-avatar" style="background:'+(p.cor||'var(--brand)')+'"><span style="color:#fff;font-size:20px;font-weight:800">'+esc(p.nome||'?')[0]+'</span></div>';
+    return '<div class="ws-team-v2-card" onclick="abrirSheet(null,\''+p.id+'\')">'+
+      fotoHtml+
+      '<div class="ws-team-v2-nome">'+esc(p.nome)+'</div>'+
+      (p.especialidade?'<div class="ws-team-v2-role">'+esc(p.especialidade)+'</div>':'')+
+    '</div>';
+  }).join('');
+  return '<div class="ws-section-wrap"><section class="ws-section ws-section-v2" id="secEquipe">'+
+    '<div class="ws-section-v2-title">Equipe</div>'+
+    '<div class="ws-team-v2-scroll">'+cards+'</div>'+
+  '</section></div>';
+}
+
+/* ── CTA FINAL V2 ── */
+function _wsCtaFinalV2(){
+  return '<div class="cta-final-v2">'+
+    '<div class="cta-final-v2-title">Pronto para agendar?</div>'+
+    '<div class="cta-final-v2-sub">Reserve em menos de 1 minuto, sem ligação.</div>'+
+    '<button onclick="abrirSheet()" class="btn-ag-main" style="max-width:320px">📅 Agendar agora</button>'+
+  '</div>';
+}
+
+/* ── HOOK livro de bordo INTO existing state changes ── */
+var _origBuildSrv=buildSrv;
+buildSrv=function(){_origBuildSrv.apply(this,arguments);atualizarLivroBordo();};
+var _origBuildDias=buildDias;
+buildDias=function(){_origBuildDias.apply(this,arguments);atualizarLivroBordo();};
+var _origBuildHoras=buildHoras;
+buildHoras=function(){return _origBuildHoras.apply(this,arguments).then?_origBuildHoras.apply(this,arguments).then(function(){atualizarLivroBordo();}):_origBuildHoras.apply(this,arguments);};
 </script>
-<script src="/js/toast.js?v=30"></script>
+<script src="/js/toast.js?v=31"></script>
 </body>
 </html>
