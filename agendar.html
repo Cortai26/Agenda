@@ -1224,19 +1224,139 @@ html.t-onyx .sheet{background:#0E0E0E}
 .sheet-body .ag-page{padding-bottom:100px}
 .sheet-body .ag-confirm-bar{position:sticky;bottom:0;display:none}
 html.t-onyx .sheet-body .ag-confirm-bar.ativo{display:block}
-/* inline booking — sheet is a static page section */
-.sheet-overlay{display:none!important}
-.fab-wrapper{display:none!important}
-.sheet{position:static!important;transform:none!important;border-radius:0!important;max-height:none!important;box-shadow:none!important;border-top:1px solid var(--c-border)}
-.sheet-handle,.sheet-header{display:none!important}
-.sheet-body{overflow:visible!important;height:auto!important;flex:none!important}
-.sheet-body .ag-confirm-bar{position:fixed!important;bottom:0!important}
-.sheet-body .confirm-screen{min-height:auto;padding:28px 20px 20px}
 .confetti{position:relative;height:0;overflow:visible}
 .confetti i{display:inline-block;width:10px;height:10px;position:absolute;top:0;left:50%;border-radius:2px;opacity:0}
 @keyframes confettiL{0%{transform:translate(-50%,0) rotate(0);opacity:1}100%{transform:translate(-180px,120px) rotate(720deg);opacity:0}}
 @keyframes confettiC{0%{transform:translate(-50%,0) rotate(0);opacity:1}100%{transform:translate(-50%,140px) rotate(-360deg);opacity:0}}
 @keyframes confettiR{0%{transform:translate(-50%,0) rotate(0);opacity:1}100%{transform:translate(80px,110px) rotate(540deg);opacity:0}}
+/* ═══ v40: BIG-TECH WEBSITE ═══ */
+.ws-hero{position:relative;overflow:hidden;min-height:320px;display:flex;align-items:flex-end;background:#111}
+.ws-hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,var(--c-primary-light),#111);z-index:0}
+.ws-hero-bg img{width:100%;height:100%;object-fit:cover;display:block;opacity:.85}
+.ws-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.78) 0%,rgba(0,0,0,.32) 55%,rgba(0,0,0,.08) 100%);z-index:1}
+.ws-hero-content{position:relative;z-index:2;padding:24px 20px 28px;width:100%;max-width:700px;box-sizing:border-box}
+.ws-tag{display:inline-block;background:var(--c-primary);color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:var(--r-full);letter-spacing:.6px;text-transform:uppercase;margin-bottom:10px}
+.ws-name{font-family:var(--font-head);font-size:clamp(26px,7vw,42px);font-weight:800;color:#fff;line-height:1.1;margin-bottom:6px;text-shadow:0 2px 12px rgba(0,0,0,.4)}
+.ws-addr{font-size:13px;color:rgba(255,255,255,.75);margin-bottom:10px;display:flex;align-items:center;gap:5px}
+.ws-rating{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ws-status-dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex-shrink:0}
+.ws-status-dot.open{background:#4ADE80}
+.ws-status-dot.closed{background:#F87171}
+.ws-status-txt{font-size:12px;font-weight:600;color:rgba(255,255,255,.85)}
+/* section nav */
+.ws-nav{background:var(--c-bg);border-bottom:1.5px solid var(--c-border);position:sticky;top:52px;z-index:70;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.ws-nav::-webkit-scrollbar{display:none}
+.ws-nav-inner{display:flex;gap:2px;padding:0 14px;min-width:max-content}
+.ws-nav-btn{padding:12px 14px;font-size:13px;font-weight:700;color:var(--c-text-2);background:none;border:none;border-bottom:2.5px solid transparent;cursor:pointer;white-space:nowrap;transition:.15s;font-family:var(--font-body)}
+.ws-nav-btn:hover,.ws-nav-btn.active{color:var(--c-primary);border-bottom-color:var(--c-primary)}
+/* sections */
+.ws-section{padding:40px 20px;border-top:1px solid var(--c-border);max-width:720px;margin:0 auto;box-sizing:border-box}
+.ws-section-wrap{width:100%;border-top:1px solid var(--c-border)}
+.ws-section-title{font-family:var(--font-head);font-size:clamp(18px,4vw,24px);font-weight:800;color:var(--c-text);margin-bottom:20px;letter-spacing:-.02em}
+.ws-name-row{display:none}
+.ws-cat{display:none}
+.dif-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+.dif-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-lg);padding:14px 12px;text-align:center}
+.dif-ico{font-size:28px;margin-bottom:8px}
+.dif-title{font-family:var(--font-head);font-size:13px;font-weight:700;color:var(--c-text);margin-bottom:4px}
+.dif-desc{font-size:11px;color:var(--c-text-3);line-height:1.4}
+.sobre-text{font-size:14px;color:var(--c-text-2);line-height:1.6;overflow:hidden;position:relative}
+.sobre-text.collapsed{max-height:72px}
+.sobre-text.collapsed::after{content:'';position:absolute;bottom:0;left:0;right:0;height:28px;background:linear-gradient(transparent,var(--c-bg))}
+.sobre-toggle{font-size:13px;font-weight:700;color:var(--c-primary);margin-top:8px;cursor:pointer;background:none;border:none;padding:0;display:block;font-family:var(--font-body)}
+.sobre-meta{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}
+.sobre-meta-chip{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-full);font-size:11px;font-weight:600;color:var(--c-text-2)}
+.video-wrap{position:relative;width:100%;padding-top:56.25%;border-radius:var(--r-lg);overflow:hidden}
+.video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.ws-srv-list{display:flex;flex-direction:column;gap:10px}
+.ws-srv-card{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--c-surface);border:1.5px solid var(--c-border);border-radius:var(--r-lg);cursor:pointer;transition:.15s}
+.ws-srv-card:hover{border-color:var(--c-primary);background:var(--c-primary-light)}
+.ws-srv-ico{font-size:22px;flex-shrink:0;width:30px;text-align:center}
+.ws-srv-info{flex:1;min-width:0}
+.ws-srv-name{font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--c-text)}
+.ws-srv-dur{font-size:11px;color:var(--c-text-3);margin-top:2px}
+.ws-srv-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0}
+.ws-srv-price{font-family:var(--font-head);font-size:15px;font-weight:800;color:var(--c-primary)}
+html.t-neutral .ws-srv-price{color:#C04A08}
+html.t-feminine .ws-srv-price{color:#AD1457}
+.ws-srv-btn{font-size:11px;font-weight:700;color:var(--c-primary)}
+.galeria-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;border-radius:var(--r-lg);overflow:hidden}
+.galeria-item{aspect-ratio:1;overflow:hidden;cursor:pointer;position:relative;background:var(--c-surface-2)}
+.galeria-item img{width:100%;height:100%;object-fit:cover;display:block;transition:.2s}
+.galeria-item:hover img{transform:scale(1.04)}
+.galeria-item.mais{display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--c-text-2);background:var(--c-surface-3)}
+.galeria-lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:200;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.galeria-lightbox img{max-width:96vw;max-height:88vh;object-fit:contain;border-radius:var(--r-md)}
+.galeria-lightbox-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.15);border:none;border-radius:50%;width:40px;height:40px;font-size:18px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:201}
+.faq-list{display:flex;flex-direction:column;gap:8px}
+.faq-item{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-lg);overflow:hidden}
+.faq-q{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;font-size:14px;font-weight:700;color:var(--c-text);gap:12px;user-select:none}
+.faq-q-icon{font-size:20px;font-weight:300;color:var(--c-primary);flex-shrink:0;transition:transform .2s;line-height:1;display:inline-block}
+.faq-item.open .faq-q-icon{transform:rotate(45deg)}
+.faq-a{font-size:13px;color:var(--c-text-2);line-height:1.6;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .2s ease;padding:0 16px}
+.faq-item.open .faq-a{max-height:600px;padding:0 16px 14px}
+.hours-today .hours-day{font-weight:800;color:var(--c-text)}
+.hours-today .hours-time{color:var(--c-primary);font-weight:800}
+.contato-cards{display:flex;flex-direction:column;gap:8px}
+.contato-card{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-lg);text-decoration:none;transition:.15s;color:inherit}
+.contato-card:hover{border-color:var(--c-primary)}
+.contato-ico{font-size:20px;flex-shrink:0;width:28px;text-align:center}
+.contato-label{font-size:13px;font-weight:700;color:var(--c-text)}
+.contato-value{font-size:12px;color:var(--c-text-3);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px}
+.contato-arrow{margin-left:auto;font-size:14px;color:var(--c-text-3);flex-shrink:0}
+.cta-final{padding:56px 20px;text-align:center;border-top:1px solid var(--c-border)}
+.cta-final-inner{max-width:480px;margin:0 auto}
+.cta-final-title{font-family:var(--font-head);font-size:clamp(22px,5vw,32px);font-weight:800;color:var(--c-text);margin-bottom:8px;letter-spacing:-.02em}
+.cta-final-sub{font-size:14px;color:var(--c-text-2);margin-bottom:24px;line-height:1.5}
+.ws-footer{padding:20px 18px;text-align:center;border-top:1px solid var(--c-border);background:var(--c-surface-2)}
+.ws-footer-txt{font-size:11px;color:var(--c-text-3)}
+.ws-footer-brand{font-weight:700;color:var(--c-primary);text-decoration:none}
+/* cta bar */
+.cta-bar{padding:14px 20px 10px;background:var(--c-bg);border-bottom:1px solid var(--c-border)}
+.btn-cta{width:100%;padding:14px 20px;background:var(--c-primary);color:#fff;border:none;border-radius:var(--r-lg);font-size:15px;font-weight:800;font-family:var(--font-head);cursor:pointer;box-shadow:0 4px 20px var(--c-primary-glow);transition:.15s;letter-spacing:-.01em}
+.btn-cta:hover{filter:brightness(1.1)}
+/* sobre */
+.sobre-body{font-size:15px;color:var(--c-text-2);line-height:1.65;overflow:hidden;position:relative}
+.sobre-body.collapsed{max-height:80px}
+.sobre-body.collapsed::after{content:'';position:absolute;bottom:0;left:0;right:0;height:32px;background:linear-gradient(transparent,var(--c-bg))}
+.sobre-toggle{font-size:13px;font-weight:700;color:var(--c-primary);margin-top:10px;cursor:pointer;background:none;border:none;padding:0;display:inline-block;font-family:var(--font-body)}
+.sobre-meta{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px}
+.sobre-meta-chip{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-full);font-size:12px;font-weight:600;color:var(--c-text-2)}
+.sobre-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.sobre-link{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--c-surface-2);border:1.5px solid var(--c-border);border-radius:var(--r-full);font-size:13px;font-weight:700;color:var(--c-text);text-decoration:none;transition:.15s}
+.sobre-link:hover{border-color:var(--c-primary);color:var(--c-primary)}
+/* produtos */
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px}
+.prod-card{background:var(--c-surface);border:1.5px solid var(--c-border);border-radius:var(--r-xl);overflow:hidden;display:flex;flex-direction:column;transition:.15s}
+.prod-card:hover{border-color:var(--c-primary);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.prod-foto{aspect-ratio:1;overflow:hidden;background:var(--c-surface-2);display:flex;align-items:center;justify-content:center;font-size:40px}
+.prod-foto img{width:100%;height:100%;object-fit:cover;display:block}
+.prod-body{padding:12px;flex:1;display:flex;flex-direction:column}
+.prod-nome{font-family:var(--font-head);font-size:13px;font-weight:700;color:var(--c-text);line-height:1.3;margin-bottom:4px}
+.prod-desc{font-size:11px;color:var(--c-text-3);line-height:1.4;margin-bottom:8px;flex:1}
+.prod-preco{font-family:var(--font-head);font-size:16px;font-weight:800;color:var(--c-primary);margin-bottom:10px}
+.prod-add-btn{width:100%;padding:8px;background:var(--c-primary);color:#fff;border:none;border-radius:var(--r-md);font-size:12px;font-weight:700;cursor:pointer;transition:.15s;font-family:var(--font-body)}
+.prod-add-btn:hover{filter:brightness(1.1)}
+/* cart FAB */
+.cart-fab{position:fixed;bottom:88px;right:18px;z-index:46;background:var(--c-primary);color:#fff;border:none;border-radius:var(--r-full);padding:12px 18px;font-size:14px;font-weight:800;font-family:var(--font-head);cursor:pointer;box-shadow:0 6px 20px var(--c-primary-glow);display:none;align-items:center;gap:8px;transition:.2s}
+.cart-fab.show{display:flex}
+.cart-fab:hover{filter:brightness(1.1);transform:translateY(-2px)}
+.cart-badge{background:#fff;color:var(--c-primary);border-radius:var(--r-full);font-size:11px;font-weight:800;min-width:18px;height:18px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+/* cart sheet */
+.cart-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--c-border)}
+.cart-item:last-child{border-bottom:none}
+.cart-item-foto{width:52px;height:52px;border-radius:var(--r-md);overflow:hidden;background:var(--c-surface-2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:22px}
+.cart-item-foto img{width:100%;height:100%;object-fit:cover}
+.cart-item-info{flex:1;min-width:0}
+.cart-item-nome{font-weight:700;font-size:13px;color:var(--c-text)}
+.cart-item-preco{font-size:12px;color:var(--c-text-3);margin-top:2px}
+.cart-qty{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.cart-qty-btn{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--c-border);background:var(--c-surface);font-size:16px;font-weight:700;color:var(--c-text);cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;transition:.15s}
+.cart-qty-btn:hover{border-color:var(--c-primary);color:var(--c-primary)}
+.cart-qty-num{font-weight:800;font-size:14px;min-width:20px;text-align:center;color:var(--c-text)}
+.cart-total-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0 0;border-top:1.5px solid var(--c-border);margin-top:8px}
+.cart-total-lbl{font-size:14px;color:var(--c-text-2);font-weight:600}
+.cart-total-val{font-family:var(--font-head);font-size:20px;font-weight:800;color:var(--c-text)}
 </style>
   <meta property="og:image" content="https://agendatop.vercel.app/icon-512.png">
   <meta name="twitter:image" content="https://agendatop.vercel.app/icon-512.png">
@@ -1258,65 +1378,32 @@ html.t-onyx .sheet-body .ag-confirm-bar.ativo{display:block}
   </div>
 </header>
 
-<!-- PERFIL -->
-<div id="perfilPage">
-
-  <div class="prof-hero" id="heroSection">
-    <div style="height:120px;background:linear-gradient(135deg,var(--c-primary-light),var(--c-surface-2))"></div>
-    <div class="hero-info">
-      <div class="hero-avatar" id="heroAvatar">⌛</div>
-      <div class="hero-name" id="heroName">Carregando…</div>
-    </div>
-  </div>
-
-  <div id="statusBar" class="status-bar" style="display:none"></div>
-
-  <div class="cta-bar">
-    <button onclick="abrirSheet()" class="btn-cta">📅 Agendar agora</button>
-    <div style="text-align:center;margin-top:8px">
-      <a id="btnMeusAgs2" href="#" style="font-size:12px;color:var(--c-text-3);font-weight:600;text-decoration:none;display:none">📅 Ver meus agendamentos →</a>
-    </div>
-  </div>
-
-  <section class="prof-section" id="secServicos">
-    <div class="prof-section-title">Serviços</div>
-    <div class="svc-scroll"><div class="svc-list" id="svcListPerfil">
-      <div class="svc-card" style="opacity:.4;pointer-events:none"><div class="svc-card-ico">·</div></div>
-      <div class="svc-card" style="opacity:.3;pointer-events:none"><div class="svc-card-ico">·</div></div>
-    </div></div>
-  </section>
-
-  <section class="prof-section" id="secEquipe" style="display:none">
-    <div class="prof-section-title">Equipe</div>
-    <div class="team-scroll"><div class="team-list" id="teamListPerfil"></div></div>
-  </section>
-
-  <section class="prof-section" id="secAvaliacoes" style="display:none">
-    <div class="prof-section-title">Avaliações</div>
-    <div id="avaliacoesContent"></div>
-  </section>
-
-  <section class="prof-section" id="secHorarios" style="display:none">
-    <div class="prof-section-title">Horário de funcionamento</div>
-    <div class="hours-list" id="horariosList"></div>
-  </section>
-
-  <section class="prof-section" id="secPagamentos" style="display:none">
-    <div class="prof-section-title">Formas de pagamento</div>
-    <div class="pay-chips" id="pagamentosList"></div>
-  </section>
-
-  <section class="prof-section" id="secLocalizacao" style="display:none">
-    <div class="prof-section-title">Localização</div>
-    <div id="localizacaoContent"></div>
-  </section>
-
-  <div style="height:100px"></div>
-</div><!-- /perfilPage -->
+<!-- PERFIL — renderizado em renderizarPerfil() -->
+<div id="perfilPage"></div>
 
 <!-- FAB -->
 <div class="fab-wrapper">
   <button class="fab" onclick="abrirSheet()">📅 Agendar</button>
+</div>
+
+<!-- CART FAB -->
+<button class="cart-fab" id="cartFab" onclick="abrirCarrinho()">🛒 <span id="cartFabLabel">Carrinho</span><span class="cart-badge" id="cartBadge">0</span></button>
+
+<!-- CART OVERLAY -->
+<div class="sheet-overlay" id="cartOverlay" onclick="fecharCarrinho()"></div>
+
+<!-- CART SHEET -->
+<div class="sheet" id="cartSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-header">
+    <span class="sheet-title">🛒 Carrinho</span>
+    <button class="sheet-close" onclick="fecharCarrinho()">✕</button>
+  </div>
+  <div class="sheet-body" id="cartBody">
+    <div class="ag-page">
+      <div class="page" id="cartContent"></div>
+    </div>
+  </div>
 </div>
 
 <!-- SHEET OVERLAY -->
@@ -1528,7 +1615,9 @@ function fmt(d){return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0
 function unlock(id){const el=document.getElementById(id);if(!el)return;el.classList.remove('locked');el.style.opacity='';el.classList.add('ag-entrando');setTimeout(function(){el.classList.remove('ag-entrando');},300);}
 function scr(id){
   var el=document.getElementById(id); if(!el) return;
+  var sb=document.getElementById('sheetBody');
   setTimeout(function(){
+    if(sb){ sb.scrollTop=Math.max(0,el.offsetTop-16); return; }
     var rect=el.getBoundingClientRect();
     window.scrollTo({top:Math.max(0,window.scrollY+rect.top-16),behavior:'smooth'});
   },100);
@@ -1574,7 +1663,7 @@ function updateBar(){
 // ── INIT ──
 async function init(){
   try {
-    const dados = await supa(`saloes?slug=eq.${slug}&select=id,slug,nome,responsavel,plano,status,descricao,endereco,cancelamento_min,pix_key,pix_tipo,aceita_pix,aceita_dinheiro,aceita_cartao,aceita_debito,tema,trial_expira,horario,sinal_percentual,sinal_obrigatorio,mostrar_sinal,foto_url,foto_capa_url,instagram_url,website_url`);
+    const dados = await supa(`saloes?slug=eq.${slug}&select=id,slug,nome,responsavel,plano,status,descricao,endereco,cancelamento_min,pix_key,pix_tipo,aceita_pix,aceita_dinheiro,aceita_cartao,aceita_debito,tema,trial_expira,horario,sinal_percentual,sinal_obrigatorio,mostrar_sinal,foto_url,foto_capa_url,instagram_url,website_url,whatsapp_url,tiktok_url,facebook_url,video_url,galeria_fotos,diferenciais,faq,produtos,nota_media,total_avaliacoes,tag_destaque,fundado_em`);
     if(!dados||dados.length===0){ document.getElementById('srvWrap').innerHTML='<div class="erro">Salão não encontrado</div>'; return; }
     salao = dados[0];
     document.title = salao.nome+' — Agendamento';
@@ -2123,7 +2212,7 @@ function toast(msg){
 function fecharConfirmacao(){
   document.getElementById('confirmScreen').style.display='none';
   document.querySelector('.ag-page').style.display='block';
-  window.scrollTo({top:0,behavior:'smooth'});
+  var sb=document.getElementById('sheetBody'); if(sb) sb.scrollTop=0;
 }
 
 // ── PIX EMV copia-e-cola generator (Brazilian Standard BACEN) ──
@@ -2263,7 +2352,7 @@ function showModal(ag){
   document.querySelector('.ag-page').style.display='none';
   const cs=document.getElementById('confirmScreen');
   cs.style.display='flex';
-  window.scrollTo({top:0,behavior:'smooth'});
+  var sb=document.getElementById('sheetBody'); if(sb) sb.scrollTop=0;
   var _cfHost=document.getElementById('confirmConfetti');
   if(_cfHost) fireConfetti(_cfHost);
   // ITEM 3: Emotional success screen
@@ -2374,9 +2463,8 @@ document.getElementById('btnNovo').onclick=()=>{
   updateSteps(); buildSrv(); buildDias();
 };
 
-// ═══ v33: PROFILE PAGE ═══
+// ═══ v40: PROFILE PAGE ═══
 function abrirSheet(srvId, profId){
-  // ensure booking flow visible (not confirm screen)
   var cs=document.getElementById('confirmScreen');
   var ap=document.querySelector('.ag-page');
   if(cs&&cs.style.display!=='none'){ cs.style.display='none'; if(ap) ap.style.display='block'; }
@@ -2394,11 +2482,20 @@ function abrirSheet(srvId, profId){
     var pf=profissionais.find(function(p){return p.id===profId;});
     if(pf){ profSelecionado=pf; buildProf(salao&&salao.plano); }
   }
-  document.getElementById('bSrv').scrollIntoView({behavior:'smooth',block:'start'});
+  var sheet=document.getElementById('sheet');
+  var overlay=document.getElementById('sheetOverlay');
+  if(sheet) sheet.classList.add('show');
+  if(overlay) overlay.classList.add('show');
+  document.body.style.overflow='hidden';
+  var sb=document.getElementById('sheetBody'); if(sb) sb.scrollTop=0;
 }
 
 function fecharSheet(){
-  window.scrollTo({top:0,behavior:'smooth'});
+  var sheet=document.getElementById('sheet');
+  var overlay=document.getElementById('sheetOverlay');
+  if(sheet) sheet.classList.remove('show');
+  if(overlay) overlay.classList.remove('show');
+  document.body.style.overflow='';
 }
 
 function compartilhar(){
@@ -2416,38 +2513,402 @@ function compartilhar(){
 
 function renderizarPerfil(){
   if(!salao) return;
-  var letra=(salao.nome||'?')[0].toUpperCase();
-  var heroEl=document.getElementById('heroSection');
-  if(heroEl){
-    var capaStyle=salao.foto_capa_url
-      ?'background:url('+salao.foto_capa_url+') center/cover no-repeat'
-      :'background:linear-gradient(135deg,var(--c-primary-light),var(--c-surface-2))';
-    var avatarHtml=salao.foto_url
-      ?'<img src="'+salao.foto_url+'" alt="'+esc(salao.nome)+'" style="width:100%;height:100%;object-fit:cover;border-radius:inherit">'
-      :letra;
-    heroEl.innerHTML=
-      '<div style="height:120px;'+capaStyle+'"></div>'+
-      '<div class="hero-info">'+
-        '<div class="hero-avatar" style="overflow:hidden">'+avatarHtml+'</div>'+
-        '<div class="hero-name">'+esc(salao.nome)+'</div>'+
-        (salao.descricao?'<div class="hero-desc">'+esc(salao.descricao)+'</div>':'')+
-        (salao.endereco?'<div style="font-size:12px;color:var(--c-text-3);margin-top:6px">📍 '+esc(salao.endereco)+'</div>':'')+
-        '<div id="heroStars" style="margin-top:8px"></div>'+
-      '</div>';
-  }
+  var pfl=document.getElementById('perfilPage');
+  if(!pfl) return;
+
   document.getElementById('hdrName').textContent=salao.nome;
   var bc=document.getElementById('btnCompartilhar'); if(bc) bc.style.display='';
   var bma=document.getElementById('btnMeusAgs');
   if(bma){ bma.href='meus-agendamentos.html?slug='+slug; bma.style.display=''; }
+
+  window._galeriaFotos=salao.galeria_fotos||[];
+  window._wsProdutosData=salao.produtos||[];
+
+  var html='';
+  html+=_wsHero();
+  html+=_wsCtaBar();
+  html+=_wsSectionNav();
+  if(window._wsProdutosData.length) html+=_wsProdutos();
+  if(salao.diferenciais&&salao.diferenciais.length) html+=_wsDiferenciais();
+  html+=_wsSobre();
+  html+=_wsServicos();
+  if(profissionais.length>0) html+=_wsEquipe();
+  if(window._galeriaFotos.length) html+=_wsGaleria();
+  if(salao.video_url) html+=_wsVideo();
+  if(salao.faq&&salao.faq.length) html+=_wsFaq();
+  html+=_wsLocalizacaoHorarios();
+  html+=_wsPagamentos();
+  html+=_wsContato();
+  html+='<div class="ws-section-wrap"><section class="ws-section" id="secAvaliacoes" style="display:none"><div class="ws-section-title">Avaliações</div><div id="avaliacoesContent"></div></section></div>';
+  html+=_wsCtaFinal();
+  html+='<div class="ws-footer"><div class="ws-footer-txt">Agendamento online por <a href="/" class="ws-footer-brand">Agenda</a></div></div>';
+  html+='<div style="height:40px"></div>';
+
+  pfl.innerHTML=html;
+
   var bma2=document.getElementById('btnMeusAgs2');
   if(bma2){ bma2.href='meus-agendamentos.html?slug='+slug; bma2.style.display=''; }
-  _renderStatusBar();
-  _renderServicosSection();
-  if(profissionais.length>0) _renderEquipeSection();
-  if(salao.horario) _renderHorariosSection();
-  _renderPagamentosSection();
-  if(salao.endereco) _renderLocalizacaoSection();
+
   carregarAvaliacoes();
+}
+
+function _wsHero(){
+  var bgImgUrl=salao.foto_capa_url||salao.foto_url||'';
+  var bgHtml=bgImgUrl?'<img src="'+bgImgUrl+'" alt="capa">':'';
+  var statusHtml='';
+  if(salao.horario){
+    var now=new Date();
+    var cfg=salao.horario[String(now.getDay())];
+    if(!cfg){
+      statusHtml='<span class="ws-status-dot closed"></span><span class="ws-status-txt">Fechado hoje</span>';
+    } else {
+      var nowMin=now.getHours()*60+now.getMinutes();
+      var iniStr=cfg.ini||cfg.abre||'09:00', fimStr=cfg.fim||cfg.fecha||'19:00';
+      var iniP=iniStr.split(':'), fimP=fimStr.split(':');
+      var iniMin=+iniP[0]*60+(+iniP[1]||0), fimMin=+fimP[0]*60+(+fimP[1]||0);
+      if(nowMin>=iniMin&&nowMin<fimMin){
+        statusHtml='<span class="ws-status-dot open"></span><span class="ws-status-txt">Aberto · fecha às '+fimStr+'</span>';
+      } else if(nowMin<iniMin){
+        statusHtml='<span class="ws-status-dot closed"></span><span class="ws-status-txt">Abre às '+iniStr+'</span>';
+      } else {
+        statusHtml='<span class="ws-status-dot closed"></span><span class="ws-status-txt">Fechado por hoje</span>';
+      }
+    }
+  }
+  var tagHtml=salao.tag_destaque?'<div><span class="ws-tag">'+esc(salao.tag_destaque)+'</span></div>':'';
+  var addrHtml=salao.endereco?'<div class="ws-addr">📍 '+esc(salao.endereco)+'</div>':'';
+  var statusRow=statusHtml?'<div class="ws-rating"><span style="display:flex;align-items:center;gap:6px">'+statusHtml+'</span></div>':'';
+  return '<div class="ws-hero">'+
+    '<div class="ws-hero-bg">'+bgHtml+'</div>'+
+    '<div class="ws-hero-overlay"></div>'+
+    '<div class="ws-hero-content">'+
+      tagHtml+
+      '<div class="ws-name">'+esc(salao.nome)+'</div>'+
+      addrHtml+
+      '<div id="heroStars"></div>'+
+      statusRow+
+    '</div>'+
+  '</div>';
+}
+
+function _wsCtaBar(){
+  return '<div class="cta-bar">'+
+    '<button onclick="abrirSheet()" class="btn-cta">Agendar agora</button>'+
+    '<div style="text-align:center;margin-top:8px">'+
+    '<a id="btnMeusAgs2" href="#" style="font-size:12px;color:var(--c-text-3);font-weight:600;text-decoration:none;display:none">Ver meus agendamentos →</a>'+
+    '</div></div>';
+}
+
+function _wsSectionNav(){
+  var tabs=[];
+  if(window._wsProdutosData&&window._wsProdutosData.length) tabs.push({id:'secProdutos',lbl:'Produtos'});
+  if(servicos.length) tabs.push({id:'secServicos',lbl:'Serviços'});
+  if(profissionais.length) tabs.push({id:'secEquipe',lbl:'Equipe'});
+  if(window._galeriaFotos&&window._galeriaFotos.length) tabs.push({id:'secGaleria',lbl:'Galeria'});
+  tabs.push({id:'secLocalizacao',lbl:'Horários'});
+  if(!tabs.length) return '';
+  var btns=tabs.map(function(t){
+    return '<button class="ws-nav-btn" onclick="wsNavTo(\''+t.id+'\')">'+t.lbl+'</button>';
+  }).join('');
+  return '<nav class="ws-nav"><div class="ws-nav-inner">'+btns+'</div></nav>';
+}
+
+function _wsDiferenciais(){
+  var difs=salao.diferenciais||[];
+  if(!difs.length) return '';
+  var cards=difs.map(function(d){
+    return '<div class="dif-card">'+
+      '<div class="dif-ico">'+esc(d.icone||'⭐')+'</div>'+
+      '<div class="dif-title">'+esc(d.titulo||'')+'</div>'+
+      (d.descricao?'<div class="dif-desc">'+esc(d.descricao)+'</div>':'')+
+    '</div>';
+  }).join('');
+  return '<div class="ws-section-wrap"><section class="ws-section">'+
+    '<div class="ws-section-title">Nossos diferenciais</div>'+
+    '<div class="dif-cards">'+cards+'</div>'+
+  '</section></div>';
+}
+
+function _wsProdutos(){
+  var prods=window._wsProdutosData||[];
+  if(!prods.length) return '';
+  var cards=prods.map(function(p,i){
+    var fotoHtml=p.foto_url
+      ?'<div class="prod-foto"><img src="'+p.foto_url+'" alt="'+esc(p.nome)+'" loading="lazy"></div>'
+      :'<div class="prod-foto">'+esc(p.icone||'📦')+'</div>';
+    return '<div class="prod-card">'+
+      fotoHtml+
+      '<div class="prod-body">'+
+        '<div class="prod-nome">'+esc(p.nome||'')+'</div>'+
+        (p.descricao?'<div class="prod-desc">'+esc(p.descricao)+'</div>':'')+
+        '<div class="prod-preco">R$ '+(p.preco/100).toFixed(2).replace('.',',')+'</div>'+
+        '<button class="prod-add-btn" onclick="cartAdd(window._wsProdutosData['+i+'])">Adicionar ao carrinho</button>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+  return '<div class="ws-section-wrap"><section class="ws-section" id="secProdutos">'+
+    '<div class="ws-section-title">Produtos</div>'+
+    '<div class="prod-grid">'+cards+'</div>'+
+  '</section></div>';
+}
+
+function _wsSobre(){
+  var hasContent=salao.descricao||salao.responsavel||salao.fundado_em||
+    salao.whatsapp_url||salao.instagram_url||salao.tiktok_url||salao.facebook_url;
+  if(!hasContent) return '';
+  var html='<div class="ws-section-wrap"><section class="ws-section" id="secSobre">'+
+    '<div class="ws-section-title">Sobre</div>';
+  if(salao.descricao){
+    html+='<div id="wssobreText" class="sobre-body collapsed">'+esc(salao.descricao)+'</div>'+
+      '<button class="sobre-toggle" onclick="toggleSobre(\'wssobreText\',this)">Ver mais ↓</button>';
+  }
+  var chips='';
+  if(salao.responsavel) chips+='<span class="sobre-meta-chip">👤 '+esc(salao.responsavel)+'</span>';
+  if(salao.fundado_em) chips+='<span class="sobre-meta-chip">📅 Desde '+esc(salao.fundado_em)+'</span>';
+  if(chips) html+='<div class="sobre-meta">'+chips+'</div>';
+  var links='';
+  if(salao.whatsapp_url){
+    var wa=(salao.whatsapp_url||'').replace(/\D/g,'');
+    if(wa) links+='<a class="sobre-link" href="https://wa.me/'+wa+'" target="_blank" rel="noopener">📱 WhatsApp</a>';
+  }
+  if(salao.instagram_url){
+    var igUrl=salao.instagram_url.startsWith('http')?salao.instagram_url:'https://instagram.com/'+salao.instagram_url;
+    links+='<a class="sobre-link" href="'+igUrl+'" target="_blank" rel="noopener">📸 Instagram</a>';
+  }
+  if(salao.tiktok_url){
+    var ttUrl=salao.tiktok_url.startsWith('http')?salao.tiktok_url:'https://tiktok.com/@'+salao.tiktok_url.replace('@','');
+    links+='<a class="sobre-link" href="'+ttUrl+'" target="_blank" rel="noopener">🎵 TikTok</a>';
+  }
+  if(links) html+='<div class="sobre-links">'+links+'</div>';
+  html+='</section></div>';
+  return html;
+}
+
+function _wsServicos(){
+  if(!servicos.length) return '';
+  var MAX=8;
+  var vis=servicos.slice(0,MAX);
+  var cards=vis.map(function(sv){
+    return '<div class="ws-srv-card" onclick="abrirSheet(\''+sv.id+'\')">'+
+      '<div class="ws-srv-ico">'+esc(sv.icone||'📋')+'</div>'+
+      '<div class="ws-srv-info">'+
+        '<div class="ws-srv-name">'+esc(sv.nome)+'</div>'+
+        '<div class="ws-srv-dur">'+sv.duracao+' min</div>'+
+      '</div>'+
+      '<div class="ws-srv-right">'+
+        '<div class="ws-srv-price">R$ '+(sv.preco/100).toFixed(0)+'</div>'+
+        '<div class="ws-srv-btn">Agendar →</div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+  var maisHtml=servicos.length>MAX
+    ?'<button onclick="_wsExpandirServicos(this)" style="width:100%;padding:10px;background:var(--c-surface-2);border:1.5px dashed var(--c-border);border-radius:var(--r-lg);font-size:13px;font-weight:700;color:var(--c-text-2);cursor:pointer;margin-top:8px">+'+(servicos.length-MAX)+' serviços →</button>'
+    :'';
+  return '<div class="ws-section-wrap"><section class="ws-section" id="secServicos">'+
+    '<div class="ws-section-title">Serviços</div>'+
+    '<div class="ws-srv-list" id="wsSrvList">'+cards+'</div>'+
+    maisHtml+
+  '</section></div>';
+}
+
+function _wsEquipe(){
+  if(!profissionais.length) return '';
+  var cards=profissionais.map(function(p){
+    var fotoHtml=p.foto_url
+      ?'<div class="team-foto"><img src="'+p.foto_url+'" alt="'+esc(p.nome)+'" loading="lazy"></div>'
+      :'<div class="team-foto" style="background:'+(p.cor||'var(--c-primary)')+'"><span style="color:#fff;font-size:20px;font-weight:800">'+esc(p.nome)[0]+'</span></div>';
+    return '<div class="team-card" onclick="abrirSheet(null,\''+p.id+'\')">'+
+      fotoHtml+'<div class="team-nome">'+esc(p.nome)+'</div>'+
+      (p.especialidade?'<div class="team-esp">'+esc(p.especialidade)+'</div>':'')+
+    '</div>';
+  }).join('');
+  return '<div class="ws-section-wrap"><section class="ws-section" id="secEquipe">'+
+    '<div class="ws-section-title">Equipe</div>'+
+    '<div class="team-scroll"><div class="team-list">'+cards+'</div></div>'+
+  '</section></div>';
+}
+
+function _wsGaleria(){
+  var fotos=window._galeriaFotos||[];
+  if(!fotos.length) return '';
+  var MAX=4;
+  var items=fotos.slice(0,MAX).map(function(url,i){
+    var isLast=i===MAX-1&&fotos.length>MAX;
+    if(isLast) return '<div class="galeria-item mais" onclick="abrirLightbox('+i+')">+'+fotos.length+'<br><span style="font-size:10px;font-weight:400">fotos</span></div>';
+    return '<div class="galeria-item" onclick="abrirLightbox('+i+')"><img src="'+url+'" alt="Galeria" loading="lazy"></div>';
+  }).join('');
+  return '<div class="ws-section-wrap"><section class="ws-section" id="secGaleria">'+
+    '<div class="ws-section-title">Galeria</div>'+
+    '<div class="galeria-grid">'+items+'</div>'+
+  '</section></div>';
+}
+
+function _wsVideo(){
+  if(!salao.video_url) return '';
+  var m=salao.video_url.match(/[?&]v=([^&]+)/)||salao.video_url.match(/youtu\.be\/([^?]+)/)||salao.video_url.match(/\/embed\/([^?]+)/);
+  var vid=m?m[1]:null;
+  if(!vid) return '';
+  return '<div class="ws-section-wrap"><section class="ws-section">'+
+    '<div class="ws-section-title">Vídeo</div>'+
+    '<div class="video-wrap"><iframe src="https://www.youtube.com/embed/'+vid+'" allowfullscreen loading="lazy"></iframe></div>'+
+  '</section></div>';
+}
+
+function _wsFaq(){
+  var faq=salao.faq||[];
+  if(!faq.length) return '';
+  var items=faq.map(function(f,i){
+    return '<div class="faq-item" id="faq-item-'+i+'">'+
+      '<div class="faq-q" onclick="toggleFaq('+i+')">'+
+        '<span>'+esc(f.pergunta||f.q||'')+'</span>'+
+        '<span class="faq-q-icon">+</span>'+
+      '</div>'+
+      '<div class="faq-a">'+esc(f.resposta||f.a||'')+'</div>'+
+    '</div>';
+  }).join('');
+  return '<div class="ws-section-wrap"><section class="ws-section" id="secFaq">'+
+    '<div class="ws-section-title">Perguntas frequentes</div>'+
+    '<div class="faq-list">'+items+'</div>'+
+  '</section></div>';
+}
+
+function _wsLocalizacaoHorarios(){
+  var hasLoc=!!salao.endereco, hasHor=!!salao.horario;
+  if(!hasLoc&&!hasHor) return '';
+  var html='<div class="ws-section-wrap"><section class="ws-section" id="secLocalizacao"><div class="ws-section-title">Localização e Horários</div>';
+  if(hasLoc){
+    var q=encodeURIComponent(salao.endereco);
+    html+='<a href="https://maps.google.com/?q='+q+'" target="_blank" rel="noopener" class="contato-card" style="margin-bottom:14px;display:flex;text-decoration:none">'+
+      '<div class="contato-ico">📍</div>'+
+      '<div style="flex:1;min-width:0">'+
+        '<div class="contato-label">'+esc(salao.endereco)+'</div>'+
+        '<div class="contato-value" style="color:var(--c-primary)">Abrir no Google Maps →</div>'+
+      '</div></a>';
+  }
+  if(hasHor){
+    var dias=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+    var hoje=new Date().getDay();
+    html+='<div class="hours-list">';
+    for(var i=0;i<7;i++){
+      var cfg=salao.horario[String(i)];
+      var isHoje=i===hoje;
+      var iniH=cfg&&(cfg.ini||cfg.abre)||'';
+      var fimH=cfg&&(cfg.fim||cfg.fecha)||'';
+      html+='<div class="hours-row'+(isHoje?' hours-today':'')+'">'+
+        '<span class="hours-day">'+dias[i]+(isHoje?' <span style="font-size:9px;background:var(--c-primary);color:#fff;border-radius:3px;padding:1px 5px;font-weight:700">hoje</span>':'')+'</span>'+
+        (cfg&&iniH?'<span class="hours-time">'+iniH+' – '+fimH+'</span>':'<span class="hours-closed">Fechado</span>')+
+      '</div>';
+    }
+    html+='</div>';
+  }
+  html+='</section></div>';
+  return html;
+}
+
+function _wsPagamentos(){
+  var chips=[];
+  if(salao.aceita_dinheiro!==false) chips.push('💵 Dinheiro');
+  if(salao.aceita_pix!==false) chips.push('📲 PIX');
+  if(salao.aceita_cartao) chips.push('💳 Crédito');
+  if(salao.aceita_debito) chips.push('💳 Débito');
+  if(!chips.length) return '';
+  return '<div class="ws-section-wrap"><section class="ws-section">'+
+    '<div class="ws-section-title">Pagamentos aceitos</div>'+
+    '<div class="pay-chips">'+chips.map(function(c){return'<span class="pay-chip">'+c+'</span>';}).join('')+'</div>'+
+  '</section></div>';
+}
+
+function _wsContato(){
+  var links=[];
+  if(salao.whatsapp_url){
+    var wa=(salao.whatsapp_url||'').replace(/\D/g,'');
+    if(wa) links.push({ico:'📱',label:'WhatsApp',value:'+'+wa,href:'https://wa.me/'+wa});
+  }
+  if(salao.instagram_url){
+    var igUrl=salao.instagram_url.startsWith('http')?salao.instagram_url:'https://instagram.com/'+salao.instagram_url;
+    var igVal=salao.instagram_url.replace(/^https?:\/\/(www\.)?instagram\.com\//,'').replace(/\/$/,'');
+    links.push({ico:'📸',label:'Instagram',value:'@'+igVal,href:igUrl});
+  }
+  if(salao.tiktok_url){
+    var ttUrl=salao.tiktok_url.startsWith('http')?salao.tiktok_url:'https://tiktok.com/'+salao.tiktok_url;
+    links.push({ico:'🎵',label:'TikTok',value:salao.tiktok_url.replace(/^https?:\/\/(www\.)?tiktok\.com\//,'').replace(/\/$/,''),href:ttUrl});
+  }
+  if(salao.facebook_url){
+    var fbUrl=salao.facebook_url.startsWith('http')?salao.facebook_url:'https://facebook.com/'+salao.facebook_url;
+    links.push({ico:'👥',label:'Facebook',value:salao.facebook_url.replace(/^https?:\/\/(www\.)?facebook\.com\//,'').replace(/\/$/,''),href:fbUrl});
+  }
+  if(salao.website_url){
+    var wsUrl=salao.website_url.startsWith('http')?salao.website_url:'https://'+salao.website_url;
+    links.push({ico:'🌐',label:'Site',value:salao.website_url.replace(/^https?:\/\//,''),href:wsUrl});
+  }
+  if(!links.length) return '';
+  var cards=links.map(function(l){
+    return '<a href="'+l.href+'" target="_blank" rel="noopener" class="contato-card">'+
+      '<div class="contato-ico">'+l.ico+'</div>'+
+      '<div style="flex:1;min-width:0">'+
+        '<div class="contato-label">'+l.label+'</div>'+
+        '<div class="contato-value">'+esc(l.value)+'</div>'+
+      '</div>'+
+      '<div class="contato-arrow">→</div>'+
+    '</a>';
+  }).join('');
+  return '<div class="ws-section-wrap"><section class="ws-section">'+
+    '<div class="ws-section-title">Contato & Redes</div>'+
+    '<div class="contato-cards">'+cards+'</div>'+
+  '</section></div>';
+}
+
+function _wsCtaFinal(){
+  return '<div class="cta-final">'+
+    '<div class="cta-final-inner">'+
+    '<div class="cta-final-title">Pronto para agendar?</div>'+
+    '<div class="cta-final-sub">Reserve seu horário em menos de 1 minuto, sem ligação e sem espera.</div>'+
+    '<button onclick="abrirSheet()" class="btn-cta">Agendar agora</button>'+
+    '</div></div>';
+}
+
+function toggleSobre(id,btn){
+  var el=document.getElementById(id);
+  if(!el) return;
+  el.classList.toggle('collapsed');
+  btn.textContent=el.classList.contains('collapsed')?'Ver mais ↓':'Ver menos ↑';
+}
+
+function toggleFaq(idx){
+  var item=document.getElementById('faq-item-'+idx);
+  if(!item) return;
+  item.classList.toggle('open');
+}
+
+function _wsExpandirServicos(btn){
+  var list=document.getElementById('wsSrvList');
+  if(!list) return;
+  list.innerHTML=servicos.map(function(sv){
+    return '<div class="ws-srv-card" onclick="abrirSheet(\''+sv.id+'\')">'+
+      '<div class="ws-srv-ico">'+esc(sv.icone||'📋')+'</div>'+
+      '<div class="ws-srv-info">'+
+        '<div class="ws-srv-name">'+esc(sv.nome)+'</div>'+
+        '<div class="ws-srv-dur">'+sv.duracao+' min</div>'+
+      '</div>'+
+      '<div class="ws-srv-right">'+
+        '<div class="ws-srv-price">R$ '+(sv.preco/100).toFixed(0)+'</div>'+
+        '<div class="ws-srv-btn">Agendar →</div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+  if(btn) btn.remove();
+}
+
+function abrirLightbox(idx){
+  var fotos=window._galeriaFotos||[];
+  if(!fotos.length) return;
+  var i=Math.min(Math.max(idx,0),fotos.length-1);
+  var el=document.createElement('div');
+  el.className='galeria-lightbox';
+  el.innerHTML='<img src="'+fotos[i]+'" alt="foto '+(i+1)+'" onclick="event.stopPropagation()">'+
+    '<button class="galeria-lightbox-close" onclick="this.parentNode.remove()">✕</button>';
+  el.onclick=function(){el.remove();};
+  document.body.appendChild(el);
 }
 
 function _renderStatusBar(){
@@ -2458,13 +2919,13 @@ function _renderStatusBar(){
   var cfg=h[String(now.getDay())];
   if(!cfg){el.innerHTML='<span class="status-closed">🔴 Fechado hoje</span>';el.style.display='flex';return;}
   var nowMin=now.getHours()*60+now.getMinutes();
-  var ap=cfg.abre?cfg.abre.split(':').map(Number):[8,0];
-  var fp=cfg.fecha?cfg.fecha.split(':').map(Number):[19,0];
-  var abreMin=ap[0]*60+ap[1], fechaMin=fp[0]*60+fp[1];
+  var iniStr=cfg.ini||cfg.abre||'09:00', fimStr=cfg.fim||cfg.fecha||'19:00';
+  var ap=iniStr.split(':').map(Number), fp=fimStr.split(':').map(Number);
+  var abreMin=ap[0]*60+(ap[1]||0), fechaMin=fp[0]*60+(fp[1]||0);
   if(nowMin>=abreMin&&nowMin<fechaMin){
-    el.innerHTML='<span class="status-open">🟢 Aberto agora</span><span style="font-size:11px;color:var(--c-text-3);font-weight:400">· Fecha às '+cfg.fecha+'</span>';
+    el.innerHTML='<span class="status-open">🟢 Aberto agora</span><span style="font-size:11px;color:var(--c-text-3);font-weight:400">· Fecha às '+fimStr+'</span>';
   } else if(nowMin<abreMin){
-    el.innerHTML='<span class="status-closed">🔴 Fechado</span><span style="font-size:11px;color:var(--c-text-3);font-weight:400">· Abre às '+cfg.abre+'</span>';
+    el.innerHTML='<span class="status-closed">🔴 Fechado</span><span style="font-size:11px;color:var(--c-text-3);font-weight:400">· Abre às '+iniStr+'</span>';
   } else {
     el.innerHTML='<span class="status-closed">🔴 Fechado por hoje</span>';
   }
@@ -2593,10 +3054,120 @@ async function carregarAvaliacoes(){
   }catch(e){sec.style.display='none';}
 }
 
+// ═══ CART ═══
+var _cart=[];
+function cartAdd(prod){
+  var found=_cart.find(function(i){return i.id===prod.id;});
+  if(found){ found.qty++; } else { _cart.push({id:prod.id,nome:prod.nome,preco:prod.preco,foto_url:prod.foto_url||null,icone:prod.icone||'📦',qty:1}); }
+  _cartSync();
+  toast('Adicionado ao carrinho!');
+}
+function cartRemove(id){
+  _cart=_cart.filter(function(i){return i.id!==id;});
+  _cartSync();
+  _renderCartContent();
+}
+function cartQty(id,delta){
+  var found=_cart.find(function(i){return i.id===id;});
+  if(!found) return;
+  found.qty=Math.max(0,found.qty+delta);
+  if(found.qty===0) _cart=_cart.filter(function(i){return i.id!==id;});
+  _cartSync();
+  _renderCartContent();
+}
+function _cartSync(){
+  var total=_cart.reduce(function(s,i){return s+i.qty;},0);
+  var fab=document.getElementById('cartFab');
+  var badge=document.getElementById('cartBadge');
+  var lbl=document.getElementById('cartFabLabel');
+  if(badge) badge.textContent=total;
+  if(fab){ if(total>0) fab.classList.add('show'); else fab.classList.remove('show'); }
+  if(lbl) lbl.textContent=total>0?'Carrinho':'Carrinho';
+}
+function abrirCarrinho(){
+  _renderCartContent();
+  var s=document.getElementById('cartSheet');
+  var o=document.getElementById('cartOverlay');
+  if(s) s.classList.add('show');
+  if(o) o.classList.add('show');
+  document.body.style.overflow='hidden';
+}
+function fecharCarrinho(){
+  var s=document.getElementById('cartSheet');
+  var o=document.getElementById('cartOverlay');
+  if(s) s.classList.remove('show');
+  if(o) o.classList.remove('show');
+  document.body.style.overflow='';
+}
+function _renderCartContent(){
+  var el=document.getElementById('cartContent');
+  if(!el) return;
+  if(!_cart.length){
+    el.innerHTML='<div style="text-align:center;padding:40px 20px;color:var(--c-text-3)"><div style="font-size:48px;margin-bottom:12px">🛒</div><div style="font-size:15px;font-weight:600">Seu carrinho está vazio</div><div style="font-size:13px;margin-top:6px">Adicione produtos para continuar</div></div>';
+    return;
+  }
+  var total=_cart.reduce(function(s,i){return s+i.preco*i.qty;},0);
+  var items=_cart.map(function(i){
+    var fotoHtml=i.foto_url
+      ?'<div class="cart-item-foto"><img src="'+i.foto_url+'" alt="'+esc(i.nome)+'"></div>'
+      :'<div class="cart-item-foto">'+esc(i.icone)+'</div>';
+    return '<div class="cart-item">'+
+      fotoHtml+
+      '<div class="cart-item-info">'+
+        '<div class="cart-item-nome">'+esc(i.nome)+'</div>'+
+        '<div class="cart-item-preco">R$ '+(i.preco/100).toFixed(2).replace('.',',')+'</div>'+
+      '</div>'+
+      '<div class="cart-qty">'+
+        '<button class="cart-qty-btn" onclick="cartQty(\''+i.id+'\',-1)">−</button>'+
+        '<span class="cart-qty-num">'+i.qty+'</span>'+
+        '<button class="cart-qty-btn" onclick="cartQty(\''+i.id+'\',1)">+</button>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+  var totalFmt='R$ '+(total/100).toFixed(2).replace('.',',');
+  el.innerHTML='<div style="padding:16px">'+
+    items+
+    '<div class="cart-total-row">'+
+      '<span class="cart-total-lbl">Total</span>'+
+      '<span class="cart-total-val">'+totalFmt+'</span>'+
+    '</div>'+
+    '<div style="margin-top:16px;font-size:12px;color:var(--c-text-3);text-align:center;margin-bottom:12px">💳 Pagamento realizado no estabelecimento</div>'+
+    '<button onclick="cartFinalizar()" class="btn-cta" style="margin-top:4px">Finalizar pedido</button>'+
+  '</div>';
+}
+function cartFinalizar(){
+  if(!_cart.length) return;
+  var items=_cart.map(function(i){return i.qty+'x '+i.nome;}).join('\n');
+  var total=_cart.reduce(function(s,i){return s+i.preco*i.qty;},0);
+  var totalFmt='R$ '+(total/100).toFixed(2).replace('.',',');
+  var wa=(salao.whatsapp_url||'').replace(/\D/g,'');
+  var msg=encodeURIComponent('Olá, gostaria de reservar os produtos:\n\n'+items+'\n\nTotal: '+totalFmt+'\n\nPagamento no estabelecimento.');
+  if(wa){ window.open('https://wa.me/'+wa+'?text='+msg,'_blank'); }
+  else { toast('Pedido: '+items+' · '+totalFmt); }
+}
+
+function wsNavTo(id){
+  var el=document.getElementById(id);
+  if(!el) return;
+  var offset=el.getBoundingClientRect().top+window.scrollY-110;
+  window.scrollTo({top:Math.max(0,offset),behavior:'smooth'});
+}
+
 window.abrirSheet=abrirSheet;
 window.fecharSheet=fecharSheet;
 window.compartilhar=compartilhar;
 window.mostrarTodosServicos=mostrarTodosServicos;
+window.toggleSobre=toggleSobre;
+window.toggleFaq=toggleFaq;
+window._wsExpandirServicos=_wsExpandirServicos;
+window.abrirLightbox=abrirLightbox;
+window.cartAdd=cartAdd;
+window.cartRemove=cartRemove;
+window.cartQty=cartQty;
+window.abrirCarrinho=abrirCarrinho;
+window.fecharCarrinho=fecharCarrinho;
+window.cartFinalizar=cartFinalizar;
+window.wsNavTo=wsNavTo;
 
 applyTheme();
 init();

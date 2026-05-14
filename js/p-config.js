@@ -232,8 +232,20 @@ function _htmlPerfil(d){
     '</select></div>'+
     '<div class="fg"><label class="fl">Instagram</label>'+
     '<input class="fi" type="text" id="pfInsta" value="'+esc(d.instagram_url||'')+'" placeholder="https://instagram.com/seu_perfil"></div>'+
+    '<div class="fg"><label class="fl">WhatsApp (apenas dígitos, ex: 5511999999999)</label>'+
+    '<input class="fi" type="text" id="pfWhats" value="'+esc(d.whatsapp_url||'')+'" placeholder="5511999999999"></div>'+
+    '<div class="fg"><label class="fl">TikTok</label>'+
+    '<input class="fi" type="text" id="pfTiktok" value="'+esc(d.tiktok_url||'')+'" placeholder="https://tiktok.com/@perfil"></div>'+
+    '<div class="fg"><label class="fl">Facebook</label>'+
+    '<input class="fi" type="text" id="pfFb" value="'+esc(d.facebook_url||'')+'" placeholder="https://facebook.com/pagina"></div>'+
     '<div class="fg"><label class="fl">Website</label>'+
     '<input class="fi" type="text" id="pfSite" value="'+esc(d.website_url||'')+'" placeholder="https://seusite.com.br"></div>'+
+    '<div class="fg"><label class="fl">Vídeo YouTube</label>'+
+    '<input class="fi" type="text" id="pfVideo" value="'+esc(d.video_url||'')+'" placeholder="https://youtu.be/..."></div>'+
+    '<div class="fg"><label class="fl">Tag destaque</label>'+
+    '<input class="fi" type="text" id="pfTag" value="'+esc(d.tag_destaque||'')+'" placeholder="Em alta, Mais procurado..."></div>'+
+    '<div class="fg"><label class="fl">Ano de fundação</label>'+
+    '<input class="fi" type="text" id="pfFundado" value="'+esc(d.fundado_em||'')+'" placeholder="2020"></div>'+
     '<button class="btn-sv" onclick="salvarPerfil()" style="margin-top:8px;background:var(--primary)!important;color:#fff!important">Salvar perfil</button>'+
     '</div>';
 }
@@ -467,7 +479,7 @@ async function renderPagina(){
 
   var d={};
   try{
-    var rows=await api('saloes?slug=eq.'+S.slug+'&select=nome,slug,responsavel,descricao,categoria,instagram_url,website_url,foto_url,foto_capa_url,telefone,endereco,cep,cidade,bairro,numero,complemento,horario,intervalo_slots,max_ag_dia,cancelamento_min,aceita_dinheiro,aceita_pix,aceita_cartao,aceita_debito,pix_key,pix_tipo,mostrar_sinal,sinal_percentual,sinal_obrigatorio,notif_novo_ag,lembrete_retorno_ativo,lembrete_retorno_dias,lembrete_retorno_msg,publico_marketplace,aceita_indicacao,fat_nome,fat_cpf_cnpj,fat_email,fat_empresa,fat_celular,fat_cep,fat_rua,fat_numero,fat_complemento,fat_bairro,fat_cidade,fat_estado,tema');
+    var rows=await api('saloes?slug=eq.'+S.slug+'&select=nome,slug,responsavel,descricao,categoria,instagram_url,website_url,whatsapp_url,tiktok_url,facebook_url,video_url,tag_destaque,fundado_em,foto_url,foto_capa_url,galeria_fotos,diferenciais,faq,produtos,telefone,endereco,cep,cidade,bairro,numero,complemento,horario,intervalo_slots,max_ag_dia,cancelamento_min,aceita_dinheiro,aceita_pix,aceita_cartao,aceita_debito,pix_key,pix_tipo,mostrar_sinal,sinal_percentual,sinal_obrigatorio,notif_novo_ag,lembrete_retorno_ativo,lembrete_retorno_dias,lembrete_retorno_msg,publico_marketplace,aceita_indicacao,fat_nome,fat_cpf_cnpj,fat_email,fat_empresa,fat_celular,fat_cep,fat_rua,fat_numero,fat_complemento,fat_bairro,fat_cidade,fat_estado,tema');
     d=rows&&rows[0]?rows[0]:{};
     if(d.tema&&!S._tema) S._tema=d.tema;
     if(d.horario&&!S.horario) S.horario=d.horario;
@@ -485,6 +497,10 @@ async function renderPagina(){
   var secoes=[
     {id:'tema',        icon:'🎨', label:'Aparência',                   html:'<div id="temaWrap" style="padding:0 16px 12px"></div>'},
     {id:'perfil',      icon:'📋', label:'Perfil público',              html:_htmlPerfil(d)},
+    {id:'galeria',     icon:'📸', label:'Galeria de fotos',            html:_htmlGaleria(d)},
+    {id:'diferenciais',icon:'✨', label:'Diferenciais',                html:_htmlDiferenciais(d)},
+    {id:'faq',         icon:'❓', label:'FAQ (Perguntas frequentes)',  html:_htmlFaq(d)},
+    {id:'produtos',    icon:'🛍️', label:'Produtos',                    html:_htmlProdutos(d)},
     {id:'localizacao', icon:'📍', label:'Localização',                 html:_htmlLocalizacao(d)},
     {id:'agenda',      icon:'🕐', label:'Agenda e horários',           html:_htmlAgenda(d)},
     {id:'pgto-cli',    icon:'💳', label:'Formas de pagamento',         html:_htmlPagamentosClientes(d)},
@@ -545,7 +561,13 @@ async function salvarPerfil(){
       descricao:g('pfDesc')||null,
       categoria:document.getElementById('pfCat')?document.getElementById('pfCat').value||null:null,
       instagram_url:g('pfInsta')||null,
-      website_url:g('pfSite')||null
+      whatsapp_url:g('pfWhats')||null,
+      tiktok_url:g('pfTiktok')||null,
+      facebook_url:g('pfFb')||null,
+      website_url:g('pfSite')||null,
+      video_url:g('pfVideo')||null,
+      tag_destaque:g('pfTag')||null,
+      fundado_em:g('pfFundado')||null
     });
     if(g('pfNome')) S.nome=g('pfNome');
     toast('✓ Perfil salvo!','ok');
@@ -1272,6 +1294,326 @@ function buildPagamentosUI(el){
   el.innerHTML=html;
 }
 
+
+/* ─── GALERIA ─── */
+function _htmlGaleria(d){
+  var fotos=(d.galeria_fotos||[]);
+  var fotosHtml=fotos.map(function(url,i){
+    return '<div style="position:relative;aspect-ratio:1;overflow:hidden;border-radius:10px;background:var(--s2)">'+
+      '<img src="'+url+'" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy">'+
+      '<button onclick="removerFotoGaleria('+i+')" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,.6);border:none;border-radius:50%;width:26px;height:26px;color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>'+
+    '</div>';
+  }).join('');
+  return '<div style="padding:14px 16px">'+
+    '<div style="font-size:12px;color:var(--CZ);margin-bottom:12px">Adicione até 8 fotos do seu espaço, serviços e trabalhos.</div>'+
+    (fotos.length?'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">'+fotosHtml+'</div>':'')+
+    (fotos.length<8?'<label style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--s2);border:1.5px dashed var(--bd);border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;color:var(--CZ)">'+
+      '<input type="file" accept="image/*" multiple style="display:none" onchange="adicionarFotosGaleria(this)">'+
+      '📷 Adicionar fotos</label>':'')+
+  '</div>';
+}
+
+async function adicionarFotosGaleria(input){
+  var files=Array.from(input.files||[]);
+  if(!files.length) return;
+  var fotos=(S.galeria_fotos||[]).slice();
+  var slots=8-fotos.length;
+  if(slots<=0){toast('Limite de 8 fotos atingido','warn');return;}
+  files=files.slice(0,slots);
+  var lbl=input.closest('label');
+  if(lbl) lbl.style.opacity='.5';
+  try{
+    for(var j=0;j<files.length;j++){
+      var file=files[j];
+      var ext=(file.name||'img').split('.').pop().toLowerCase()||'jpg';
+      if(!['jpg','jpeg','png','webp'].includes(ext)) ext='jpg';
+      var path=S.id+'/galeria_'+Date.now()+'_'+j+'.'+ext;
+      var r=await fetch(SUPA+'/storage/v1/object/fotos-estabelecimentos/'+path,{
+        method:'POST',
+        headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':file.type||'image/jpeg','x-upsert':'true'},
+        body:file
+      });
+      if(!r.ok) throw new Error(await r.text());
+      fotos.push(SUPA+'/storage/v1/object/public/fotos-estabelecimentos/'+path);
+    }
+    var pw=await getPw();
+    if(!pw){if(lbl)lbl.style.opacity='';toast('Senha necessária','err');return;}
+    var ok=await rpc('salvar_json_salao',{p_slug:S.slug,p_senha:pw,p_campo:'galeria_fotos',p_valor:fotos});
+    if(!ok){if(lbl)lbl.style.opacity='';toast('Senha incorreta','err');return;}
+    S.galeria_fotos=fotos;
+    toast('✓ Galeria salva!','ok');
+    var secBody=document.getElementById('secbody-galeria');
+    if(secBody) secBody.innerHTML=_htmlGaleria(Object.assign({},S));
+  }catch(e){
+    if(lbl) lbl.style.opacity='';
+    toast('Erro no upload: '+e.message,'err');
+  }
+}
+
+async function removerFotoGaleria(idx){
+  var fotos=(S.galeria_fotos||[]).slice();
+  fotos.splice(idx,1);
+  var pw=await getPw();
+  if(!pw){toast('Senha necessária','err');return;}
+  try{
+    await rpc('salvar_json_salao',{p_slug:S.slug,p_senha:pw,p_campo:'galeria_fotos',p_valor:fotos});
+    S.galeria_fotos=fotos;
+    toast('Foto removida','ok');
+    var secBody=document.getElementById('secbody-galeria');
+    if(secBody) secBody.innerHTML=_htmlGaleria(Object.assign({},S));
+  }catch(e){toast('Erro ao remover: '+e.message,'err');}
+}
+
+/* ─── DIFERENCIAIS ─── */
+function _htmlDiferenciais(d){
+  var difs=d.diferenciais||[];
+  var rows=difs.map(function(df,i){
+    return '<div style="display:flex;gap:8px;padding:10px 0;border-bottom:1px solid var(--bd);align-items:flex-start">'+
+      '<input class="fi" value="'+esc(df.icone||'⭐')+'" id="dif-ico-'+i+'" style="width:48px;padding:7px;text-align:center;font-size:18px;flex-shrink:0">'+
+      '<div style="flex:1;display:flex;flex-direction:column;gap:5px">'+
+        '<input class="fi" value="'+esc(df.titulo||'')+'" id="dif-titulo-'+i+'" placeholder="Título">'+
+        '<input class="fi" value="'+esc(df.descricao||'')+'" id="dif-desc-'+i+'" placeholder="Descrição curta">'+
+      '</div>'+
+      '<button onclick="removerDif('+i+')" style="background:var(--red-bg);border:none;border-radius:6px;padding:6px 8px;color:var(--red);font-size:14px;cursor:pointer;flex-shrink:0">✕</button>'+
+    '</div>';
+  }).join('');
+  return '<div style="padding:14px 16px">'+
+    '<div style="font-size:12px;color:var(--CZ);margin-bottom:12px">Até 4 diferenciais exibidos no site do seu negócio.</div>'+
+    '<div id="difList">'+rows+'</div>'+
+    (difs.length<4?'<button class="btn-add" onclick="adicionarDif()" style="margin-top:10px">+ Adicionar diferencial</button>':'')+
+    '<button class="btn-add" onclick="salvarDiferenciais()" style="width:100%;justify-content:center;margin-top:12px;padding:11px">Salvar diferenciais</button>'+
+  '</div>';
+}
+
+function adicionarDif(){
+  var list=document.getElementById('difList');if(!list) return;
+  var i=list.querySelectorAll('[id^="dif-ico-"]').length;
+  var div=document.createElement('div');
+  div.style.cssText='display:flex;gap:8px;padding:10px 0;border-bottom:1px solid var(--bd);align-items:flex-start';
+  div.innerHTML='<input class="fi" id="dif-ico-'+i+'" value="⭐" style="width:48px;padding:7px;text-align:center;font-size:18px;flex-shrink:0">'+
+    '<div style="flex:1;display:flex;flex-direction:column;gap:5px">'+
+      '<input class="fi" id="dif-titulo-'+i+'" placeholder="Título">'+
+      '<input class="fi" id="dif-desc-'+i+'" placeholder="Descrição curta">'+
+    '</div>'+
+    '<button onclick="removerDif('+i+')" style="background:var(--red-bg);border:none;border-radius:6px;padding:6px 8px;color:var(--red);font-size:14px;cursor:pointer;flex-shrink:0">✕</button>';
+  list.appendChild(div);
+}
+
+function _lerDifsDOM(){
+  var difs=[]; var i=0;
+  while(document.getElementById('dif-ico-'+i)){
+    difs.push({icone:document.getElementById('dif-ico-'+i).value,titulo:document.getElementById('dif-titulo-'+i).value,descricao:document.getElementById('dif-desc-'+i).value});
+    i++;
+  }
+  return difs;
+}
+
+function removerDif(idx){
+  var difs=_lerDifsDOM(); difs.splice(idx,1);
+  var list=document.getElementById('difList');if(!list) return;
+  list.innerHTML=difs.map(function(df,i){
+    return '<div style="display:flex;gap:8px;padding:10px 0;border-bottom:1px solid var(--bd);align-items:flex-start">'+
+      '<input class="fi" value="'+esc(df.icone||'⭐')+'" id="dif-ico-'+i+'" style="width:48px;padding:7px;text-align:center;font-size:18px;flex-shrink:0">'+
+      '<div style="flex:1;display:flex;flex-direction:column;gap:5px">'+
+        '<input class="fi" value="'+esc(df.titulo||'')+'" id="dif-titulo-'+i+'" placeholder="Título">'+
+        '<input class="fi" value="'+esc(df.descricao||'')+'" id="dif-desc-'+i+'" placeholder="Descrição curta">'+
+      '</div>'+
+      '<button onclick="removerDif('+i+')" style="background:var(--red-bg);border:none;border-radius:6px;padding:6px 8px;color:var(--red);font-size:14px;cursor:pointer;flex-shrink:0">✕</button>'+
+    '</div>';
+  }).join('');
+}
+
+async function salvarDiferenciais(){
+  var btn=document.querySelector('[onclick="salvarDiferenciais()"]');
+  if(btn){btn.disabled=true;btn.textContent='Salvando...';}
+  var difs=_lerDifsDOM().filter(function(d){return d.titulo.trim();});
+  var pw=await getPw();
+  if(!pw){if(btn){btn.disabled=false;btn.textContent='Salvar diferenciais';}return;}
+  try{
+    await rpc('salvar_json_salao',{p_slug:S.slug,p_senha:pw,p_campo:'diferenciais',p_valor:difs});
+    S.diferenciais=difs;
+    toast('✓ Diferenciais salvos!','ok');
+  }catch(e){
+    if(e.message&&e.message.includes('Acesso negado')){_pw=null;}
+    toast('Erro ao salvar','err');
+  }
+  if(btn){btn.disabled=false;btn.textContent='Salvar diferenciais';}
+}
+
+/* ─── FAQ ─── */
+function _htmlFaq(d){
+  var faq=d.faq||[];
+  var rows=faq.map(function(f,i){
+    return '<div id="faq-row-'+i+'" style="padding:10px 0;border-bottom:1px solid var(--bd)">'+
+      '<div style="display:flex;gap:6px;align-items:flex-start;margin-bottom:6px">'+
+        '<div style="flex:1"><input class="fi" id="faq-q-'+i+'" value="'+esc(f.pergunta||'')+'" placeholder="Pergunta"></div>'+
+        '<button onclick="removerFaq('+i+')" style="background:var(--red-bg);border:none;border-radius:6px;padding:6px 8px;color:var(--red);font-size:14px;cursor:pointer;flex-shrink:0">✕</button>'+
+      '</div>'+
+      '<textarea class="fi" id="faq-a-'+i+'" rows="2" placeholder="Resposta" style="width:100%;resize:vertical">'+esc(f.resposta||'')+'</textarea>'+
+    '</div>';
+  }).join('');
+  var sugestoes=['Como funciona o agendamento?','Posso cancelar meu horário?','Quais formas de pagamento?','Quanto tempo antes devo chegar?'];
+  var sugestoesHtml=sugestoes.filter(function(s){return !faq.some(function(f){return (f.pergunta||'').toLowerCase()===s.toLowerCase();});})
+    .map(function(s){return '<button onclick="usarSugestaoFaq(this)" data-q="'+esc(s)+'" style="padding:5px 10px;background:var(--s2);border:1px solid var(--bd);border-radius:6px;font-size:11px;cursor:pointer;color:var(--CZ)">'+esc(s)+'</button>';}).join('');
+  return '<div style="padding:14px 16px">'+
+    '<div style="font-size:12px;color:var(--CZ);margin-bottom:12px">Responda as dúvidas mais comuns dos seus clientes.</div>'+
+    '<div id="faqList">'+rows+'</div>'+
+    '<button class="btn-add" onclick="adicionarFaq()" style="margin-top:10px">+ Adicionar pergunta</button>'+
+    (sugestoesHtml?'<div style="margin-top:12px;padding:10px;background:var(--s2);border-radius:10px"><div style="font-size:11px;color:var(--CZ);font-weight:700;margin-bottom:8px">Sugestões:</div><div style="display:flex;flex-wrap:wrap;gap:6px">'+sugestoesHtml+'</div></div>':'')+
+    '<button class="btn-add" onclick="salvarFaq()" style="width:100%;justify-content:center;margin-top:12px;padding:11px">Salvar FAQ</button>'+
+  '</div>';
+}
+
+function adicionarFaq(){
+  var list=document.getElementById('faqList');if(!list) return;
+  var i=list.querySelectorAll('[id^="faq-q-"]').length;
+  var div=document.createElement('div');div.id='faq-row-'+i;
+  div.style.cssText='padding:10px 0;border-bottom:1px solid var(--bd)';
+  div.innerHTML='<div style="display:flex;gap:6px;align-items:flex-start;margin-bottom:6px">'+
+    '<div style="flex:1"><input class="fi" id="faq-q-'+i+'" placeholder="Pergunta"></div>'+
+    '<button onclick="removerFaq('+i+')" style="background:var(--red-bg);border:none;border-radius:6px;padding:6px 8px;color:var(--red);font-size:14px;cursor:pointer;flex-shrink:0">✕</button>'+
+    '</div>'+
+    '<textarea class="fi" id="faq-a-'+i+'" rows="2" placeholder="Resposta" style="width:100%;resize:vertical"></textarea>';
+  list.appendChild(div);
+}
+
+function usarSugestaoFaq(btn){
+  adicionarFaq();
+  var list=document.getElementById('faqList');if(!list) return;
+  var inputs=list.querySelectorAll('[id^="faq-q-"]');
+  var last=inputs[inputs.length-1];
+  if(last) last.value=btn.dataset.q||'';
+}
+
+function _lerFaqDOM(){
+  var faq=[]; var i=0;
+  while(document.getElementById('faq-q-'+i)){
+    faq.push({pergunta:document.getElementById('faq-q-'+i).value,resposta:(document.getElementById('faq-a-'+i)||{value:''}).value});
+    i++;
+  }
+  return faq;
+}
+
+function removerFaq(idx){
+  var faq=_lerFaqDOM(); faq.splice(idx,1);
+  var list=document.getElementById('faqList');if(!list) return;
+  list.innerHTML=faq.map(function(f,i){
+    return '<div id="faq-row-'+i+'" style="padding:10px 0;border-bottom:1px solid var(--bd)">'+
+      '<div style="display:flex;gap:6px;align-items:flex-start;margin-bottom:6px">'+
+        '<div style="flex:1"><input class="fi" id="faq-q-'+i+'" value="'+esc(f.pergunta)+'" placeholder="Pergunta"></div>'+
+        '<button onclick="removerFaq('+i+')" style="background:var(--red-bg);border:none;border-radius:6px;padding:6px 8px;color:var(--red);font-size:14px;cursor:pointer;flex-shrink:0">✕</button>'+
+      '</div>'+
+      '<textarea class="fi" id="faq-a-'+i+'" rows="2" placeholder="Resposta" style="width:100%;resize:vertical">'+esc(f.resposta)+'</textarea>'+
+    '</div>';
+  }).join('');
+}
+
+async function salvarFaq(){
+  var btn=document.querySelector('[onclick="salvarFaq()"]');
+  if(btn){btn.disabled=true;btn.textContent='Salvando...';}
+  var faq=_lerFaqDOM().filter(function(f){return f.pergunta.trim();});
+  var pw=await getPw();
+  if(!pw){if(btn){btn.disabled=false;btn.textContent='Salvar FAQ';}return;}
+  try{
+    await rpc('salvar_json_salao',{p_slug:S.slug,p_senha:pw,p_campo:'faq',p_valor:faq});
+    S.faq=faq;
+    toast('✓ FAQ salvo!','ok');
+  }catch(e){
+    if(e.message&&e.message.includes('Acesso negado')){_pw=null;}
+    toast('Erro ao salvar','err');
+  }
+  if(btn){btn.disabled=false;btn.textContent='Salvar FAQ';}
+}
+
+// ═══ PRODUTOS ═══
+function _htmlProdutos(d){
+  var prods=d.produtos||[];
+  var items=prods.map(function(p,i){return _htmlProdItem(p,i);}).join('');
+  return '<div style="padding:16px">'+
+    '<p style="font-size:13px;color:var(--c-text-2);margin-bottom:14px">Cadastre produtos vendidos no seu estabelecimento. Clientes podem adicionar ao carrinho e pagar na hora.</p>'+
+    '<div id="prodList">'+items+'</div>'+
+    '<button onclick="adicionarProduto()" class="btn-sec" style="width:100%;margin-top:8px">+ Adicionar produto</button>'+
+    '<div style="margin-top:12px"><button onclick="salvarProdutos()" class="btn-primary" style="width:100%">Salvar produtos</button></div>'+
+  '</div>';
+}
+
+function _htmlProdItem(p, i){
+  var id='prod-item-'+i;
+  return '<div class="faq-item-row" id="'+id+'" style="border:1.5px solid var(--c-border);border-radius:var(--r-lg);padding:14px;margin-bottom:10px">'+
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'+
+      '<span style="font-size:12px;font-weight:700;color:var(--c-text-3)">Produto '+(i+1)+'</span>'+
+      '<button onclick="removerProduto('+i+')" style="background:var(--c-surface-2);border:1px solid var(--c-border);border-radius:var(--r-full);padding:3px 10px;font-size:11px;cursor:pointer;color:var(--c-text-2)">Remover</button>'+
+    '</div>'+
+    '<input class="prod-campo" data-campo="icone" placeholder="Ícone (ex: 💆)" value="'+esc(p.icone||'')+ '" style="width:60px;margin-bottom:8px">'+
+    '<input class="prod-campo" data-campo="nome" placeholder="Nome do produto *" value="'+esc(p.nome||'')+'" style="width:calc(100% - 72px);margin-left:8px;margin-bottom:8px;box-sizing:border-box">'+
+    '<textarea class="prod-campo" data-campo="descricao" placeholder="Descrição breve" rows="2" style="width:100%;margin-bottom:8px">'+esc(p.descricao||'')+'</textarea>'+
+    '<div style="display:flex;gap:8px">'+
+      '<div style="flex:1"><label style="font-size:11px;font-weight:600;color:var(--c-text-3);display:block;margin-bottom:4px">Preço (R$)</label>'+
+      '<input class="prod-campo" data-campo="preco_str" type="number" step="0.01" min="0" placeholder="0,00" value="'+(p.preco?(p.preco/100).toFixed(2):'')+'" style="width:100%;box-sizing:border-box"></div>'+
+      '<div style="flex:2"><label style="font-size:11px;font-weight:600;color:var(--c-text-3);display:block;margin-bottom:4px">URL da foto (opcional)</label>'+
+      '<input class="prod-campo" data-campo="foto_url" placeholder="https://..." value="'+esc(p.foto_url||'')+'" style="width:100%;box-sizing:border-box"></div>'+
+    '</div>'+
+  '</div>';
+}
+
+function adicionarProduto(){
+  var list=document.getElementById('prodList');
+  if(!list) return;
+  var i=list.querySelectorAll('[id^="prod-item-"]').length;
+  var div=document.createElement('div');
+  div.innerHTML=_htmlProdItem({icone:'📦',nome:'',descricao:'',preco:0,foto_url:''},i);
+  list.appendChild(div.firstChild);
+}
+
+function removerProduto(idx){
+  var el=document.getElementById('prod-item-'+idx);
+  if(el) el.remove();
+  _reindexarProdutos();
+}
+
+function _reindexarProdutos(){
+  var list=document.getElementById('prodList');
+  if(!list) return;
+  var items=list.querySelectorAll('[id^="prod-item-"]');
+  items.forEach(function(item,i){
+    item.id='prod-item-'+i;
+    var lbl=item.querySelector('span');
+    if(lbl&&lbl.textContent.startsWith('Produto')) lbl.textContent='Produto '+(i+1);
+    var rmBtn=item.querySelector('button');
+    if(rmBtn) rmBtn.setAttribute('onclick','removerProduto('+i+')');
+  });
+}
+
+function _lerProdutosDOM(){
+  var list=document.getElementById('prodList');
+  if(!list) return [];
+  var prods=[];
+  list.querySelectorAll('[id^="prod-item-"]').forEach(function(item){
+    var get=function(campo){var el=item.querySelector('[data-campo="'+campo+'"]');return el?el.value.trim():''};
+    var nome=get('nome');
+    if(!nome) return;
+    var precoStr=get('preco_str');
+    var preco=precoStr?Math.round(parseFloat(precoStr.replace(',','.'))*100):0;
+    prods.push({id:nome.toLowerCase().replace(/\s+/g,'_').replace(/[^a-z0-9_]/g,'')+'_'+Date.now(),icone:get('icone')||'📦',nome:nome,descricao:get('descricao'),preco:preco,foto_url:get('foto_url')||null});
+  });
+  return prods;
+}
+
+async function salvarProdutos(){
+  var btn=document.querySelector('[onclick="salvarProdutos()"]');
+  if(btn){btn.disabled=true;btn.textContent='Salvando...';}
+  var produtos=_lerProdutosDOM();
+  var pw=await getPw();
+  if(!pw){if(btn){btn.disabled=false;btn.textContent='Salvar produtos';}return;}
+  try{
+    await rpc('salvar_json_salao',{p_slug:S.slug,p_senha:pw,p_campo:'produtos',p_valor:produtos});
+    toast('✓ Produtos salvos!','ok');
+  }catch(e){
+    if(e.message&&e.message.includes('Acesso negado')){_pw=null;}
+    toast('Erro ao salvar','err');
+  }
+  if(btn){btn.disabled=false;btn.textContent='Salvar produtos';}
+}
 
 function toggleMostrarSinal(btn){
   btn.classList.toggle('on');
