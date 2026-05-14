@@ -1529,31 +1529,74 @@ async function salvarFaq(){
 function _htmlProdutos(d){
   var prods=d.produtos||[];
   var items=prods.map(function(p,i){return _htmlProdItem(p,i);}).join('');
-  return '<div style="padding:16px">'+
-    '<p style="font-size:13px;color:var(--c-text-2);margin-bottom:14px">Cadastre produtos vendidos no seu estabelecimento. Clientes podem adicionar ao carrinho e pagar na hora.</p>'+
+  return '<div style="padding:14px 16px">'+
+    '<p style="font-size:13px;color:var(--CZ);margin-bottom:14px">Cadastre produtos vendidos no seu estabelecimento. Clientes podem adicionar ao carrinho e pagar na hora.</p>'+
     '<div id="prodList">'+items+'</div>'+
     '<button onclick="adicionarProduto()" class="btn-sec" style="width:100%;margin-top:8px">+ Adicionar produto</button>'+
-    '<div style="margin-top:12px"><button onclick="salvarProdutos()" class="btn-primary" style="width:100%">Salvar produtos</button></div>'+
+    '<div style="margin-top:10px"><button onclick="salvarProdutos()" class="btn-primary" style="width:100%">Salvar produtos</button></div>'+
   '</div>';
 }
 
 function _htmlProdItem(p, i){
-  var id='prod-item-'+i;
-  return '<div class="faq-item-row" id="'+id+'" style="border:1.5px solid var(--c-border);border-radius:var(--r-lg);padding:14px;margin-bottom:10px">'+
-    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'+
-      '<span style="font-size:12px;font-weight:700;color:var(--c-text-3)">Produto '+(i+1)+'</span>'+
-      '<button onclick="removerProduto('+i+')" style="background:var(--c-surface-2);border:1px solid var(--c-border);border-radius:var(--r-full);padding:3px 10px;font-size:11px;cursor:pointer;color:var(--c-text-2)">Remover</button>'+
+  var fotoHtml=p.foto_url
+    ? '<img src="'+esc(p.foto_url)+'" style="width:72px;height:72px;border-radius:10px;object-fit:cover;display:block">'
+    : '<span style="font-size:28px;line-height:72px;display:block;text-align:center">'+(p.icone||'📦')+'</span>';
+  return '<div id="prod-item-'+i+'" style="border:1.5px solid var(--bd);border-radius:12px;overflow:hidden;margin-bottom:10px">'+
+    '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--s2);border-bottom:1px solid var(--bd)">'+
+      '<span style="font-size:12px;font-weight:700;color:var(--CZ)">Produto '+(i+1)+'</span>'+
+      '<button onclick="removerProduto('+i+')" style="background:none;border:none;padding:0;font-size:12px;font-weight:600;color:var(--VM);cursor:pointer">Remover</button>'+
     '</div>'+
-    '<input class="prod-campo" data-campo="icone" placeholder="Ícone (ex: 💆)" value="'+esc(p.icone||'')+ '" style="width:60px;margin-bottom:8px">'+
-    '<input class="prod-campo" data-campo="nome" placeholder="Nome do produto *" value="'+esc(p.nome||'')+'" style="width:calc(100% - 72px);margin-left:8px;margin-bottom:8px;box-sizing:border-box">'+
-    '<textarea class="prod-campo" data-campo="descricao" placeholder="Descrição breve" rows="2" style="width:100%;margin-bottom:8px">'+esc(p.descricao||'')+'</textarea>'+
-    '<div style="display:flex;gap:8px">'+
-      '<div style="flex:1"><label style="font-size:11px;font-weight:600;color:var(--c-text-3);display:block;margin-bottom:4px">Preço (R$)</label>'+
-      '<input class="prod-campo" data-campo="preco_str" type="number" step="0.01" min="0" placeholder="0,00" value="'+(p.preco?(p.preco/100).toFixed(2):'')+'" style="width:100%;box-sizing:border-box"></div>'+
-      '<div style="flex:2"><label style="font-size:11px;font-weight:600;color:var(--c-text-3);display:block;margin-bottom:4px">URL da foto (opcional)</label>'+
-      '<input class="prod-campo" data-campo="foto_url" placeholder="https://..." value="'+esc(p.foto_url||'')+'" style="width:100%;box-sizing:border-box"></div>'+
+    '<div style="display:flex;gap:12px;padding:14px">'+
+      '<div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:6px">'+
+        '<div id="prod-foto-prev-'+i+'" onclick="document.getElementById(\'prod-file-'+i+'\').click()" '+
+          'style="width:72px;height:72px;border-radius:10px;background:var(--s2);border:1.5px solid var(--bd);cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center">'+
+          fotoHtml+
+        '</div>'+
+        '<label style="font-size:11px;font-weight:600;color:var(--cP);cursor:pointer">'+
+          'Foto'+
+          '<input type="file" id="prod-file-'+i+'" accept="image/*" style="display:none" onchange="uploadFotoProduto(this,'+i+')">'+
+        '</label>'+
+        '<input type="hidden" id="prod-foto-url-'+i+'" data-campo="foto_url" value="'+esc(p.foto_url||'')+'">'+
+      '</div>'+
+      '<div style="flex:1;display:flex;flex-direction:column;gap:8px">'+
+        '<input class="fi" id="prod-nome-'+i+'" data-campo="nome" placeholder="Nome do produto *" value="'+esc(p.nome||'')+'">'+
+        '<div style="display:flex;gap:8px">'+
+          '<input class="fi" id="prod-ico-'+i+'" data-campo="icone" placeholder="📦" value="'+esc(p.icone||'')+'" style="width:52px;text-align:center;flex-shrink:0">'+
+          '<input class="fi" id="prod-preco-'+i+'" data-campo="preco" type="number" step="0.01" min="0" placeholder="Preço (R$)" value="'+(p.preco?(p.preco/100).toFixed(2):'')+'" style="flex:1">'+
+        '</div>'+
+        '<textarea class="fi" id="prod-desc-'+i+'" data-campo="descricao" placeholder="Descrição breve" rows="2" style="resize:none">'+esc(p.descricao||'')+'</textarea>'+
+      '</div>'+
     '</div>'+
   '</div>';
+}
+
+async function uploadFotoProduto(input, idx){
+  var file=input.files&&input.files[0];
+  if(!file) return;
+  var prev=document.getElementById('prod-foto-prev-'+idx);
+  if(prev) prev.style.opacity='.5';
+  var ext=(file.name||'img').split('.').pop().toLowerCase()||'jpg';
+  if(!['jpg','jpeg','png','webp'].includes(ext)) ext='jpg';
+  var path=S.id+'/produto_'+idx+'_'+Date.now()+'.'+ext;
+  try{
+    var r=await fetch(SUPA+'/storage/v1/object/fotos-estabelecimentos/'+path,{
+      method:'POST',
+      headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':file.type||'image/jpeg','x-upsert':'true'},
+      body:file
+    });
+    if(!r.ok) throw new Error(await r.text());
+    var publicUrl=SUPA+'/storage/v1/object/public/fotos-estabelecimentos/'+path;
+    if(prev){
+      prev.style.opacity='';
+      prev.innerHTML='<img src="'+publicUrl+'" style="width:72px;height:72px;border-radius:10px;object-fit:cover;display:block">';
+    }
+    var hidden=document.getElementById('prod-foto-url-'+idx);
+    if(hidden) hidden.value=publicUrl;
+    toast('✓ Foto carregada!','ok');
+  }catch(e){
+    if(prev) prev.style.opacity='';
+    toast('Erro no upload: '+e.message,'err');
+  }
 }
 
 function adicionarProduto(){
@@ -1575,13 +1618,20 @@ function _reindexarProdutos(){
   var list=document.getElementById('prodList');
   if(!list) return;
   var items=list.querySelectorAll('[id^="prod-item-"]');
-  items.forEach(function(item,i){
-    item.id='prod-item-'+i;
-    var lbl=item.querySelector('span');
-    if(lbl&&lbl.textContent.startsWith('Produto')) lbl.textContent='Produto '+(i+1);
-    var rmBtn=item.querySelector('button');
-    if(rmBtn) rmBtn.setAttribute('onclick','removerProduto('+i+')');
+  var dados=[];
+  items.forEach(function(item){
+    var g=function(id){var el=document.getElementById(id);return el?el.value.trim():'';};
+    var oldIdx=item.id.replace('prod-item-','');
+    var precoVal=g('prod-preco-'+oldIdx);
+    dados.push({
+      icone:g('prod-ico-'+oldIdx)||'📦',
+      nome:g('prod-nome-'+oldIdx),
+      descricao:g('prod-desc-'+oldIdx),
+      preco:precoVal?Math.round(parseFloat(precoVal.replace(',','.'))*100):0,
+      foto_url:g('prod-foto-url-'+oldIdx)||''
+    });
   });
+  list.innerHTML=dados.map(function(p,i){return _htmlProdItem(p,i);}).join('');
 }
 
 function _lerProdutosDOM(){
@@ -1589,12 +1639,20 @@ function _lerProdutosDOM(){
   if(!list) return [];
   var prods=[];
   list.querySelectorAll('[id^="prod-item-"]').forEach(function(item){
-    var get=function(campo){var el=item.querySelector('[data-campo="'+campo+'"]');return el?el.value.trim():''};
-    var nome=get('nome');
+    var i=item.id.replace('prod-item-','');
+    var g=function(id){var el=document.getElementById(id);return el?el.value.trim():'';};
+    var nome=g('prod-nome-'+i);
     if(!nome) return;
-    var precoStr=get('preco_str');
-    var preco=precoStr?Math.round(parseFloat(precoStr.replace(',','.'))*100):0;
-    prods.push({id:nome.toLowerCase().replace(/\s+/g,'_').replace(/[^a-z0-9_]/g,'')+'_'+Date.now(),icone:get('icone')||'📦',nome:nome,descricao:get('descricao'),preco:preco,foto_url:get('foto_url')||null});
+    var precoVal=g('prod-preco-'+i);
+    var preco=precoVal?Math.round(parseFloat(precoVal.replace(',','.'))*100):0;
+    prods.push({
+      id:nome.toLowerCase().replace(/\s+/g,'_').replace(/[^a-z0-9_]/g,'')+'_'+Date.now(),
+      icone:g('prod-ico-'+i)||'📦',
+      nome:nome,
+      descricao:g('prod-desc-'+i),
+      preco:preco,
+      foto_url:g('prod-foto-url-'+i)||null
+    });
   });
   return prods;
 }
@@ -1607,6 +1665,7 @@ async function salvarProdutos(){
   if(!pw){if(btn){btn.disabled=false;btn.textContent='Salvar produtos';}return;}
   try{
     await rpc('salvar_json_salao',{p_slug:S.slug,p_senha:pw,p_campo:'produtos',p_valor:produtos});
+    S.produtos=produtos;
     toast('✓ Produtos salvos!','ok');
   }catch(e){
     if(e.message&&e.message.includes('Acesso negado')){_pw=null;}
