@@ -1752,10 +1752,14 @@ function scr(id){
   var el=document.getElementById(id); if(!el) return;
   var sb=document.getElementById('sheetBody');
   setTimeout(function(){
-    if(sb){ sb.scrollTop=Math.max(0,el.offsetTop-16); return; }
-    var rect=el.getBoundingClientRect();
-    window.scrollTo({top:Math.max(0,window.scrollY+rect.top-16),behavior:'smooth'});
-  },100);
+    if(sb){
+      var elR=el.getBoundingClientRect(),sbR=sb.getBoundingClientRect();
+      sb.scrollTo({top:Math.max(0,sb.scrollTop+elR.top-sbR.top-16),behavior:'smooth'});
+    } else {
+      var rect=el.getBoundingClientRect();
+      window.scrollTo({top:Math.max(0,window.scrollY+rect.top-16),behavior:'smooth'});
+    }
+  },120);
 }
 
 let S={srv:null,dataStr:null,dataLbl:null,hora:null,nome:'',tel:'',profNome:null};
@@ -2830,8 +2834,11 @@ function _wsProdutos(){
       '</div>'+
     '</div>';
   }).join('');
-  return '<div class="ws-section-wrap"><section class="ws-section" id="secProdutos">'+
-    '<div class="ws-section-title">Produtos</div>'+
+  return '<div class="ws-section-wrap"><section class="ws-section ws-section-v2" id="secProdutos">'+
+    '<div class="ws-section-v2-header">'+
+      '<div class="ws-section-v2-title" style="margin-bottom:0">Produtos</div>'+
+      '<span style="font-size:12px;color:var(--stone)">'+prods.length+' disponíveis</span>'+
+    '</div>'+
     '<div class="prod-grid">'+cards+'</div>'+
   '</section></div>';
 }
