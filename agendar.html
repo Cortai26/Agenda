@@ -504,9 +504,11 @@ html.t-onyx .ag-bloco-title {
   transition: .15s;
 }
 .srv-card:hover { border-color: var(--c-primary-light); background: var(--c-surface-3); }
+.srv-card:active { transform: scale(0.96); }
 .srv-card.ativo {
   background: var(--c-primary-light);
   border-color: var(--c-primary);
+  box-shadow: 0 0 0 1px var(--c-primary), 0 4px 20px var(--c-primary-glow);
 }
 
 /* ONYX: service cards com estética editorial */
@@ -601,7 +603,8 @@ html.t-feminine .srv-card.ativo { background: rgba(216,27,96,.08); }
   transition: .15s;
 }
 .dia-card:hover:not(.fechado):not(.bl) { border-color: var(--c-primary); background: var(--c-surface-3); }
-.dia-card.ativo { background: var(--c-primary); border-color: var(--c-primary); }
+.dia-card:active:not(.fechado):not(.bl) { transform: scale(0.93); }
+.dia-card.ativo { background: var(--c-primary); border-color: var(--c-primary); box-shadow: 0 4px 14px var(--c-primary-glow); }
 .dia-card.fechado,.dia-card.bl { opacity: .3; cursor: not-allowed; }
 .dia-card.bloqueado { opacity: .4; cursor: not-allowed; position: relative; }
 .dia-card.bloqueado::after { content: '🚫'; position: absolute; top: 1px; right: 1px; font-size: 8px; }
@@ -623,12 +626,31 @@ html.t-onyx .dia-card.ativo .d-sem,
 html.t-onyx .dia-card.ativo .d-mes { color: rgba(19,19,19,.7); }
 
 /* ── HORÁRIOS ── */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 .h-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(66px, 1fr));
   gap: 7px;
   padding: 0 14px 14px;
 }
+/* grade de horários por período (4 colunas fixas) */
+.horas-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.h-period-wrap { padding: 0 14px 6px; }
+.h-period-hdr {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 14px 0 8px;
+}
+.h-period-lbl { font-size: 12px; font-weight: 700; color: var(--c-text-2); }
+.h-period-range { font-size: 10px; color: var(--c-text-3); }
 /* ── CHIPS DE HORÁRIO — contraste garantido em todos os temas ── */
 .h-btn {
   display: flex;
@@ -666,15 +688,18 @@ html.t-onyx .dia-card.ativo .d-mes { color: rgba(19,19,19,.7); }
   color: var(--c-primary);
   background: var(--c-primary-light);
 }
+.h-btn:active:not(.oc):not(.sel) { transform: scale(0.93); }
 .h-btn.oc { opacity: .35; cursor: not-allowed; text-decoration: line-through; }
 .h-btn.sel {
   background: var(--c-primary);
   border-color: var(--c-primary);
   color: #FFFFFF;
-  box-shadow: 0 4px 14px var(--c-primary-glow);
+  box-shadow: 0 0 0 1px var(--c-primary), 0 4px 14px var(--c-primary-glow);
   font-weight: 700;
-  transform: scale(1.06);
+  transform: scale(1.04);
 }
+html.t-neutral .h-btn.sel { box-shadow: 0 0 0 1px var(--c-primary), 0 4px 14px rgba(192,74,8,.25); }
+html.t-neutral .srv-card.ativo { box-shadow: 0 0 0 1px var(--c-primary), 0 4px 20px rgba(192,74,8,.15); }
 
 /* Onyx: fundo carvão escuro, texto bege claro, selecionado laranja + branco */
 html.t-onyx .h-btn {
@@ -809,7 +834,7 @@ html.t-onyx .ag-input::placeholder { color: var(--c-text-3); }
 .btn-ag {
   width: 100%;
   padding: 16px;
-  background: var(--c-primary) !important;
+  background: linear-gradient(135deg,#E55A0C 0%,#C04A08 100%) !important;
   color: #FFFFFF !important;
   border: none;
   border-radius: var(--r-xl);
@@ -817,20 +842,22 @@ html.t-onyx .ag-input::placeholder { color: var(--c-text-3); }
   font-size: 16px;
   font-weight: 800;
   cursor: pointer;
-  transition: .2s;
-  box-shadow: 0 6px 20px var(--c-primary-glow);
+  transition: transform .1s ease, box-shadow .15s ease, filter .15s ease;
+  box-shadow: 0 4px 20px rgba(229,90,12,.35);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   margin-top: 4px;
   letter-spacing: .3px;
+  -webkit-tap-highlight-color: transparent;
 }
-.btn-ag:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); }
+.btn-ag:hover:not(:disabled) { filter: brightness(1.08); transform: translateY(-1px); box-shadow: 0 6px 24px rgba(229,90,12,.45); }
+.btn-ag:active:not(:disabled) { transform: scale(0.97); }
 .btn-ag:disabled { opacity: .35; cursor: not-allowed; box-shadow: none; transform: none; }
 html.t-onyx .btn-ag { color: #FFFFFF; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; font-size: 13px; }
-html.t-feminine .btn-ag { background: #D81B60 !important; color: #fff; }
-html.t-clinic .btn-ag { background: #E55A0C !important; color: #FFFFFF !important; }
+html.t-feminine .btn-ag { background: linear-gradient(135deg,#D81B60 0%,#AD1457 100%) !important; color: #fff; }
+html.t-clinic .btn-ag { background: linear-gradient(135deg,#2C6FAA 0%,#1A4E7A 100%) !important; color: #FFFFFF !important; }
 
 /* ── PRÓXIMOS SALÕES ── */
 .ag-proximos {
@@ -1240,8 +1267,9 @@ html.t-clinic .svc-card-price{color:#1A4E7A}
 .pay-chip{padding:6px 14px;background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-full);font-size:12px;font-weight:600;color:var(--c-text-2)}
 .loc-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-lg);padding:14px 16px;display:flex;align-items:flex-start;gap:12px}
 .fab-wrapper{position:fixed;bottom:24px;right:18px;z-index:45}
-.fab{background:var(--c-primary);color:#fff;border:none;border-radius:var(--r-full);padding:14px 22px;font-size:15px;font-weight:800;font-family:var(--font-head);cursor:pointer;box-shadow:0 6px 24px var(--c-primary-glow);display:flex;align-items:center;gap:8px;transition:.2s;white-space:nowrap}
-.fab:hover{filter:brightness(1.1);transform:translateY(-2px)}
+.fab{background:linear-gradient(135deg,#E55A0C 0%,#C04A08 100%);color:#fff;border:none;border-radius:var(--r-full);padding:14px 22px;font-size:15px;font-weight:800;font-family:var(--font-head);cursor:pointer;box-shadow:0 4px 20px rgba(229,90,12,.35);display:flex;align-items:center;gap:8px;transition:transform .1s ease,box-shadow .15s ease,filter .15s ease;white-space:nowrap;-webkit-tap-highlight-color:transparent}
+.fab:hover{filter:brightness(1.08);transform:translateY(-2px);box-shadow:0 6px 28px rgba(229,90,12,.45)}
+.fab:active{transform:scale(0.96)}
 .sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:80;opacity:0;pointer-events:none;transition:opacity .28s}
 .sheet-overlay.show{opacity:1;pointer-events:all}
 .sheet{position:fixed;bottom:0;left:0;right:0;z-index:90;background:var(--c-bg);border-radius:var(--r-xl) var(--r-xl) 0 0;max-height:92vh;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .32s cubic-bezier(.32,0,.67,1);box-shadow:0 -8px 40px rgba(0,0,0,.25)}
@@ -1390,10 +1418,12 @@ html.t-neutral .sticky-header{background:rgba(248,244,239,0.92);}
 html.t-feminine .sticky-header{background:rgba(255,245,248,0.92);}
 html.t-clinic .sticky-header{background:rgba(244,248,251,0.92);}
 .sticky-header-nome{flex:1;font-family:var(--serif);font-style:italic;font-size:16px;color:var(--bone);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.sticky-header-btn{padding:7px 14px;background:var(--brand);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;}
+.sticky-header-btn{padding:7px 14px;background:linear-gradient(135deg,#E55A0C 0%,#C04A08 100%);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:transform .1s ease;-webkit-tap-highlight-color:transparent;}
+.sticky-header-btn:active{transform:scale(0.95);}
 
 /* ── LIVRO DE BORDO (resumo persistente no sheet) ── */
 .livro-bordo{border:1px solid var(--brand);margin:12px 20px;padding:0 14px;display:none;}
+.livro-bordo.visible{animation:fadeSlideUp .3s ease-out;}
 .lb-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--rule);font-size:13px;}
 .lb-row:last-child{border-bottom:none;}
 .lb-label{color:var(--stone);}
@@ -1432,8 +1462,8 @@ html.t-clinic .sticky-header{background:rgba(244,248,251,0.92);}
 
 /* ── CTA BAR (new) ── */
 .cta-bar-v2{padding:12px 16px;display:flex;gap:8px;align-items:center;}
-.btn-ag-main{flex:1;padding:14px;background:var(--brand);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;transition:all .15s;}
-.btn-ag-main:active{transform:scale(0.97);}
+.btn-ag-main{flex:1;padding:14px;background:linear-gradient(135deg,#E55A0C 0%,#C04A08 100%);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;transition:transform .1s ease,box-shadow .15s ease;box-shadow:0 4px 18px rgba(229,90,12,.3);-webkit-tap-highlight-color:transparent;}
+.btn-ag-main:active{transform:scale(0.96);}
 .social-btns-row{display:flex;gap:6px;}
 .btn-social-sm{width:48px;height:48px;background:var(--ink-2);border:1px solid var(--rule);border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;color:var(--stone);font-size:18px;flex-shrink:0;}
 
@@ -1466,7 +1496,8 @@ html.t-clinic .sticky-header{background:rgba(244,248,251,0.92);}
 
 /* ── FAB (new) ── */
 .fab-v2{position:fixed;bottom:0;left:0;right:0;padding:12px 16px;padding-bottom:max(12px,env(safe-area-inset-bottom));background:linear-gradient(to top,var(--ink) 60%,transparent);z-index:99;}
-.fab-v2-btn{width:100%;padding:16px;background:var(--brand);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 4px 20px rgba(229,90,12,.35);}
+.fab-v2-btn{width:100%;padding:16px;background:linear-gradient(135deg,#E55A0C 0%,#C04A08 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 4px 20px rgba(229,90,12,.35);transition:transform .1s ease,box-shadow .15s ease;-webkit-tap-highlight-color:transparent;}
+.fab-v2-btn:active{transform:scale(0.97);}
 @media(min-width:780px){.fab-v2{display:none;}}
 
 /* ── SUCESSO V2 ── */
@@ -2160,18 +2191,29 @@ async function buildHoras(){
           }
         }
         const sel=S.hora===slot;
-        html2.push(`<button class="h-btn${ocup?' oc':''}${sel?' sel':''}" ${ocup?'disabled':''} onclick="selHora('${slot}')">${slot}</button>`);
+        html2.push({slot,ocup,sel,h:h2});
       }
     }
-    const livres=html2.filter(h=>!h.includes(' oc')).length;
-    const urgency=livres>0&&livres<3
-      ? '<div style="margin:0 0 10px;padding:8px 12px;background:rgba(255,92,26,.1);border:1px solid rgba(255,92,26,.3);border-radius:8px;font-size:12px;font-weight:700;color:var(--c-primary);text-align:center">⚡ Poucos horários disponíveis!</div>'
-      : '';
-    const grid=document.createElement('div');
-    grid.className='h-grid';
-    grid.innerHTML=html2.join('');
-    w.innerHTML=''; w.appendChild(grid);
-    if(!html2.some(h=>!h.includes('oc')&&!h.includes('disabled'))){
+    const livres=html2.filter(s=>!s.ocup).length;
+    // urgency banner
+    let urgencyHtml='';
+    if(livres>0&&livres<3) urgencyHtml='<div style="margin:0 14px 4px;padding:8px 12px;background:rgba(255,92,26,.1);border:1px solid rgba(255,92,26,.3);border-radius:8px;font-size:12px;font-weight:700;color:var(--c-primary);text-align:center">⚡ Poucos horários disponíveis!</div>';
+    // group by period
+    const periodos=[
+      {key:'manha', label:'🌅 Manhã', range:'06h–12h', min:6*60,  max:12*60},
+      {key:'tarde', label:'☀️ Tarde',  range:'12h–18h', min:12*60, max:18*60},
+      {key:'noite', label:'🌙 Noite',  range:'18h–23h', min:18*60, max:23*60},
+    ];
+    function btnHtml(s){return`<button class="h-btn${s.ocup?' oc':''}${s.sel?' sel':''}" ${s.ocup?'disabled':''} onclick="selHora('${s.slot}')">${s.slot}</button>`;}
+    let periodosHtml='';
+    periodos.forEach(function(p){
+      const livresPer=html2.filter(s=>!s.ocup&&s.h*60>=p.min&&s.h*60<p.max);
+      if(!livresPer.length) return;
+      const allPer=html2.filter(s=>s.h*60>=p.min&&s.h*60<p.max);
+      periodosHtml+=`<div class="h-period-hdr"><span class="h-period-lbl">${p.label}</span><span class="h-period-range">${p.range}</span></div><div class="horas-grid">${allPer.map(btnHtml).join('')}</div>`;
+    });
+    w.innerHTML=urgencyHtml+'<div class="h-period-wrap">'+periodosHtml+'</div>';
+    if(!livres){
       await buscarProximos();
     }
   }catch(e){
@@ -3196,7 +3238,7 @@ function _renderPagamentosSection(){
   if(salao.aceita_debito) chips.push('💳 Débito');
   if(!chips.length){sec.style.display='none';return;}
   listEl.innerHTML=chips.map(function(c){return'<span class="pay-chip">'+c+'</span>';}).join('');
-  sec.style.display='';
+  revelarSecao('secPagamentos');
 }
 
 function _renderLocalizacaoSection(){
@@ -3209,7 +3251,7 @@ function _renderLocalizacaoSection(){
     '<div><div style="font-size:13px;font-weight:600;color:var(--c-text)">'+esc(salao.endereco)+'</div>'+
     '<a href="https://maps.google.com/?q='+q+'" target="_blank" rel="noopener" style="font-size:12px;color:var(--c-primary);font-weight:700;text-decoration:none;display:inline-block;margin-top:4px">Ver no mapa →</a></div>'+
   '</div>';
-  sec.style.display='';
+  revelarSecao('secLocalizacao');
 }
 
 async function carregarAvaliacoes(){
@@ -3241,7 +3283,7 @@ async function carregarAvaliacoes(){
       ' <strong style="font-size:13px;color:var(--c-text)">'+avg+'</strong>'+
       ' <span style="font-size:12px;color:var(--c-text-3)">('+avs.length+')</span>';
     el.innerHTML=html;
-    sec.style.display='';
+    revelarSecao('secAvaliacoes');
   }catch(e){sec.style.display='none';}
 }
 
@@ -3394,7 +3436,9 @@ function atualizarLivroBordo(){
   var lb=document.getElementById('livroBordo');
   if(!lb) return;
   var hasSomething=!!(S.srv||S.dataStr||S.hora);
+  var wasHidden=lb.style.display==='none'||lb.style.display==='';
   lb.style.display=hasSomething?'block':'none';
+  if(hasSomething&&wasHidden){lb.classList.remove('visible');lb.offsetHeight;lb.classList.add('visible');}
 
   var rowSrv=document.getElementById('lbServico');
   if(rowSrv&&S.srv){
@@ -3614,6 +3658,16 @@ function _wsCtaFinalV2(){
     '<div class="cta-final-v2-sub">Reserve em menos de 1 minuto, sem ligação.</div>'+
     '<button onclick="abrirSheet()" class="btn-ag-main" style="max-width:320px">📅 Agendar agora</button>'+
   '</div>';
+}
+
+/* ── REVELAR SEÇÃO COM ANIMAÇÃO ── */
+function revelarSecao(id){
+  var el=document.getElementById(id);
+  if(!el) return;
+  el.style.display='block';
+  el.style.animation='none';
+  el.offsetHeight; // force reflow
+  el.style.animation='fadeSlideUp 0.35s ease-out';
 }
 
 /* ── HOOK livro de bordo INTO existing state changes ── */
