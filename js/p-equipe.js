@@ -112,27 +112,25 @@ function removerFoto(){
   if(prev){prev.style.backgroundImage='none';prev.innerHTML='<span style="font-size:24px">👤</span>';}
 }
 
-async function uploadFoto(salaoId,profId){
+async function _uploadFotoProf(salaoId,profId){
   if(!_fotoFile) return _fotoUrlOriginal==='__remover__'?null:undefined;
-  // Use edge function to validate credentials server-side before uploading
-  // This avoids exposing service_role key in client code (Sprint 0 security fix)
-  var pw=_pw||'';
-  if(!pw){toast('Senha não encontrada. Salve novamente.','err');return undefined;}
+  var ext=(_fotoFile.name||'img').split('.').pop().toLowerCase()||'jpg';
+  if(!['jpg','jpeg','png','webp'].includes(ext)) ext='jpg';
+  var path=salaoId+'/prof_'+profId+'_'+Date.now()+'.'+ext;
   try{
-    var r=await fetch('https://acldrisohnjfekjxgmoh.supabase.co/functions/v1/upload-foto-profissional',{
+    var r=await fetch(SUPA+'/storage/v1/object/fotos-estabelecimentos/'+path,{
       method:'POST',
       headers:{
-        'Content-Type':_fotoFile.type,
-        'x-slug':S.slug,
-        'x-senha':pw,
-        'x-prof-id':profId
+        'apikey':KEY,
+        'Authorization':'Bearer '+KEY,
+        'Content-Type':_fotoFile.type||'image/jpeg',
+        'x-upsert':'true'
       },
       body:_fotoFile
     });
-    var d=await r.json();
-    if(!d.ok){console.error('[foto] upload failed',d.erro);toast('Erro no upload: '+(d.erro||'tente novamente'),'err');return undefined;}
-    return d.url;
-  }catch(e){console.error('[foto] upload error',e);return undefined;}
+    if(!r.ok){var err=await r.text();console.error('[foto-prof] upload failed',err);toast('Erro no upload da foto','err');return undefined;}
+    return SUPA+'/storage/v1/object/public/fotos-estabelecimentos/'+path;
+  }catch(e){console.error('[foto-prof] upload error',e);toast('Erro no upload: '+e.message,'err');return undefined;}
 }
 
 /* ─── SALVAR PROFISSIONAL ─── */
@@ -148,7 +146,7 @@ async function salvarProf(){
   try{
     if(_editProfId){
       // Upload foto se mudou
-      var fotoUrl=await uploadFoto(S.id,_editProfId);
+      var fotoUrl=await _uploadFotoProf(S.id,_editProfId);
       var upd={nome:nome.trim(),especialidade:esp.trim()||null};
       if(fotoUrl!==undefined) upd.foto_url=fotoUrl;
       await rpc('atualizar_profissional',{p_slug:S.slug,p_senha:pw,p_prof_id:_editProfId,p_dados:upd});
@@ -158,7 +156,7 @@ async function salvarProf(){
       // Novo profissional: cria primeiro, depois faz upload com o id gerado
       var novo=await rpc('criar_profissional',{p_slug:S.slug,p_senha:pw,p_nome:nome.trim(),p_especialidade:esp.trim()||null});
       if(novo&&novo.id){
-        var fotoUrlNovo=await uploadFoto(S.id,novo.id);
+        var fotoUrlNovo=await _uploadFotoProf(S.id,novo.id);
         if(fotoUrlNovo!==undefined){
           await rpc('atualizar_profissional',{p_slug:S.slug,p_senha:pw,p_prof_id:novo.id,p_dados:{foto_url:fotoUrlNovo}});
           novo.foto_url=fotoUrlNovo;

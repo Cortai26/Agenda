@@ -32,7 +32,7 @@ body{background:var(--bg);color:var(--tx);font-family:var(--font-b)}
 .adm-topbar{background:var(--topbar-bg);border-bottom:1px solid var(--bd);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0}
 .mobile-tabs{display:flex;flex-shrink:0;overflow-x:auto;scrollbar-width:none;background:var(--topbar-bg);border-bottom:1px solid var(--bd)}
 .mobile-tabs::-webkit-scrollbar{display:none}
-.adm-content{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;padding:14px 14px 32px;-webkit-overflow-scrolling:touch}
+.adm-content{flex:1;min-height:0;overflow-y:auto;overflow-x:clip;overscroll-behavior:contain;padding:14px 14px 32px;-webkit-overflow-scrolling:touch}
 .adm-sidebar{display:none;width:220px;flex-shrink:0;background:var(--sidebar-bg);border-right:1px solid var(--sidebar-border);flex-direction:column;padding:28px 0 20px;overflow-y:auto;scrollbar-width:none}
 .adm-sidebar::-webkit-scrollbar{display:none}
 
@@ -44,19 +44,25 @@ body{background:var(--bg);color:var(--tx);font-family:var(--font-b)}
 }
 
 
-/* Mobile table: hide Vencimento column */
-.adm-table th:nth-child(4),
-.adm-table td:nth-child(4){display:none}
+/* Mobile table: hide Status, Plano, Vencimento columns — mantém Estabelecimento + Ações */
+.adm-table th:nth-child(2),.adm-table td:nth-child(2),
+.adm-table th:nth-child(3),.adm-table td:nth-child(3),
+.adm-table th:nth-child(4),.adm-table td:nth-child(4){display:none}
 /* Compact actions on mobile */
-.adm-table .t-actions{font-size:14px;padding:2px 4px}
+.adm-table .t-actions{font-size:15px;padding:5px 7px}
 /* Tighter name column */
-.t-biz-name{font-size:12px;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.t-biz-loc{font-size:10px;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.t-biz-name{font-size:12px;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.t-biz-loc{font-size:10px;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .t-biz-icon{width:28px;height:28px;font-size:13px;flex-shrink:0}
+/* Remove min-width no mobile — tabela ocupa 100% sem scroll */
+.table-scroll .adm-table{min-width:0}
 
 @media(min-width:1024px){
   .app.show{flex-direction:row}
+  .adm-table th:nth-child(2),.adm-table td:nth-child(2),
+  .adm-table th:nth-child(3),.adm-table td:nth-child(3),
   .adm-table th:nth-child(4),.adm-table td:nth-child(4){display:table-cell}
+  .table-scroll .adm-table{min-width:520px}
   .t-biz-name{max-width:none;white-space:normal}
   .t-biz-loc{max-width:none;white-space:normal}
   .t-biz-icon{width:36px;height:36px;font-size:16px}
@@ -1106,8 +1112,8 @@ function enviarWhatsAppById(id){
   <div class="login-card">
     <div class="login-logo">
       <div class="login-logo-row">
-        <img src="/favicon.png" width="28" height="28" alt="Agenda" style="border-radius:6px;display:block;flex-shrink:0">
-      <span style="font-family:'Sora',sans-serif;font-weight:800;font-size:28px;letter-spacing:-.04em;color:#fff;display:inline-flex;align-items:baseline;line-height:1;user-select:none;cursor:default">Agenda<span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:#E55A0C;margin-left:2px;position:relative;top:-14px"></span></span>
+        <img src="/brand/agenda-mark-small.svg" width="36" height="36" alt="Agenda" style="border-radius:8px;display:block;flex-shrink:0">
+        <span style="font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:500;font-size:30px;letter-spacing:-.01em;color:#fff;line-height:1;user-select:none;cursor:default">agenda</span>
       </div>
       <div class="login-line"></div>
     </div>
@@ -1133,7 +1139,7 @@ function enviarWhatsAppById(id){
   <!-- SIDEBAR -->
   <aside class="adm-sidebar">
     <a class="adm-sidebar-logo" href="/admin.html" style="text-decoration:none;cursor:pointer">
-      <img src="/favicon.png" width="28" height="28" alt="Agenda" style="border-radius:6px;display:block;flex-shrink:0">
+      <img src="/brand/agenda-mark-small.svg" width="28" height="28" alt="Agenda" style="border-radius:6px;display:block;flex-shrink:0">
       <span class="adm-sidebar-brand">Agenda Admin</span>
     </a>
 
@@ -1203,14 +1209,52 @@ function enviarWhatsAppById(id){
   <div class="modal" id="modalBox"></div>
 </div>
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-var CHART_MENSAL=[{h:'35%',l:'Jan'},{h:'50%',l:'Fev'},{h:'72%',l:'Mar'},{h:'62%',l:'Abr'},{h:'82%',l:'Mai'},{h:'100%',l:'Jun'}];
-var CHART_TRIM=[{h:'45%',l:'T1'},{h:'65%',l:'T2'},{h:'78%',l:'T3'},{h:'100%',l:'T4'}];
+var MESES_ABR=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+var TRIM_NOMES=['T1','T2','T3','T4'];
+
+function _buildChartData(period){
+  var now=new Date();
+  if(period==='trimestral'){
+    var trimData=[0,0,0,0];
+    (clientes||[]).forEach(function(c){
+      var d=new Date(c.criado_em);
+      if(isNaN(d)) return;
+      var dif=((now.getFullYear()-d.getFullYear())*12)+(now.getMonth()-d.getMonth());
+      if(dif>=0&&dif<12){
+        var trim=Math.floor((11-dif)/3);
+        if(trim>=0&&trim<4) trimData[trim]++;
+      }
+    });
+    // reorder: T1 oldest → T4 current
+    trimData.reverse();
+    var maxT=Math.max.apply(null,trimData)||1;
+    return trimData.map(function(v,i){return {h:Math.round(v/maxT*100)+'%',l:'T'+(i+1),v:v};});
+  } else {
+    var months=[];
+    for(var i=5;i>=0;i--){
+      var d=new Date(now.getFullYear(),now.getMonth()-i,1);
+      months.push({y:d.getFullYear(),m:d.getMonth(),l:MESES_ABR[d.getMonth()],v:0});
+    }
+    (clientes||[]).forEach(function(c){
+      var d=new Date(c.criado_em);
+      if(isNaN(d)) return;
+      for(var i=0;i<months.length;i++){
+        if(d.getFullYear()===months[i].y&&d.getMonth()===months[i].m){months[i].v++;break;}
+      }
+    });
+    var maxM=Math.max.apply(null,months.map(function(x){return x.v;}))||1;
+    return months.map(function(x){return {h:Math.max(4,Math.round(x.v/maxM*100))+'%',l:x.l,v:x.v};});
+  }
+}
+
 function setChartPeriod(period,btn){
-  var data=period==='trimestral'?CHART_TRIM:CHART_MENSAL;
+  var data=_buildChartData(period);
   document.querySelectorAll('.chart-toggle-btn').forEach(function(b){b.classList.remove('active');});
   if(btn) btn.classList.add('active');
   var wrap=document.querySelector('.chart-wrap');
-  if(wrap) wrap.innerHTML='<div class="chart-dot-grid"></div>'+data.map(function(d,i){return '<div class="chart-bar'+(i===data.length-1?' active':'')+'" style="height:'+d.h+'"></div>';}).join('');
+  if(wrap) wrap.innerHTML='<div class="chart-dot-grid"></div>'+data.map(function(d,i){
+    return '<div class="chart-bar'+(i===data.length-1?' active':'')+'" style="height:'+d.h+'" title="'+d.l+': '+d.v+' cadastro'+(d.v!==1?'s':'')+'"></div>';
+  }).join('');
   var lbls=document.querySelector('.chart-labels');
   if(lbls) lbls.innerHTML=data.map(function(d){return '<span class="chart-lbl">'+d.l+'</span>';}).join('');
 }
@@ -1227,6 +1271,7 @@ const PNOME={trial:'Trial',basico:'Básico',pro:'Profissional',salao:'Salão'};
 const SK='cortai_admin_v2';
 const ASAAS_FN='https://acldrisohnjfekjxgmoh.supabase.co/functions/v1/asaas-billing';
 let SESSION=null,clientes=[],activeTab='visaogeral',filtroStatus='todos',filtroPlano='todos',editId=null,ocultarDemo=false;
+let _cobCache=null, _cobCacheAt=0;
 
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
@@ -1449,7 +1494,8 @@ function renderVisaoGeral(el){
   html+='<div class="adm-2col">';
   html+='<div class="adm-2col-main">';
 
-  // Growth Chart (apenas visual, dados reais via carregarUso)
+  // Growth Chart — dados reais dos últimos 6 meses
+  const _chartD=_buildChartData('mensal');
   html+=`<div class="adm-card">
     <div class="adm-card-hdr">
       <span class="adm-card-title">Desempenho de Crescimento</span>
@@ -1461,20 +1507,10 @@ function renderVisaoGeral(el){
     <div class="adm-card-body" style="padding-bottom:8px">
       <div class="chart-wrap">
         <div class="chart-dot-grid"></div>
-        <div class="chart-bar" style="height:35%"></div>
-        <div class="chart-bar" style="height:50%"></div>
-        <div class="chart-bar" style="height:72%"></div>
-        <div class="chart-bar" style="height:62%"></div>
-        <div class="chart-bar" style="height:82%"></div>
-        <div class="chart-bar active" style="height:100%"></div>
+        ${_chartD.map((d,i)=>`<div class="chart-bar${i===_chartD.length-1?' active':''}" style="height:${d.h}" title="${d.l}: ${d.v} cadastro${d.v!==1?'s':''}"></div>`).join('')}
       </div>
       <div class="chart-labels">
-        <span class="chart-lbl">Jan</span>
-        <span class="chart-lbl">Fev</span>
-        <span class="chart-lbl">Mar</span>
-        <span class="chart-lbl">Abr</span>
-        <span class="chart-lbl">Mai</span>
-        <span class="chart-lbl">Jun</span>
+        ${_chartD.map(d=>`<span class="chart-lbl">${d.l}</span>`).join('')}
       </div>
     </div>
   </div>`;
@@ -1615,21 +1651,28 @@ function renderVisaoGeral(el){
 }
 
 // ── RENDER COBRANÇAS ──
-async function renderCobrancas(el){
-  el.innerHTML='<div class="loading">Carregando...</div>';
-  const tok=SESSION&&SESSION.access_token?SESSION.access_token:KEY;
+async function renderCobrancas(el, forceRefresh){
+  const TTL=90000; // 90s cache
+  const now=Date.now();
+  let saloes, list, total;
 
-  // Load saloes (for WhatsApp phone) in parallel with Asaas
-  const [saloesRes, asaasRes] = await Promise.all([
-    api('saloes?select=id,slug,nome,fat_celular,telefone').catch(()=>[]),
-    fetch(ASAAS_FN,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok},
-      body:JSON.stringify({action:'listar_cobrancas',limit:100,offset:0})
-    }).then(r=>r.json()).catch(()=>({ok:false,cobrancas:[]}))
-  ]);
-
-  const saloes = saloesRes||[];
-  const list = (asaasRes.ok&&asaasRes.cobrancas)||[];
-  const total = asaasRes.total||list.length;
+  if(!forceRefresh && _cobCache && (now-_cobCacheAt)<TTL){
+    // usa cache — renderiza instantaneamente
+    ({saloes,list,total}=_cobCache);
+  } else {
+    el.innerHTML='<div class="loading">Carregando cobranças...</div>';
+    const tok=SESSION&&SESSION.access_token?SESSION.access_token:KEY;
+    const [saloesRes, asaasRes] = await Promise.all([
+      api('saloes?select=id,slug,nome,fat_celular,telefone').catch(()=>[]),
+      fetch(ASAAS_FN,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok},
+        body:JSON.stringify({action:'listar_cobrancas',limit:100,offset:0})
+      }).then(r=>r.json()).catch(()=>({ok:false,cobrancas:[]}))
+    ]);
+    saloes=saloesRes||[];
+    list=(asaasRes.ok&&asaasRes.cobrancas)||[];
+    total=asaasRes.total||list.length;
+    _cobCache={saloes,list,total}; _cobCacheAt=Date.now();
+  }
 
   const STATUS_LABEL={
     PENDING:'Pendente', RECEIVED:'Recebido', CONFIRMED:'Confirmado',
@@ -1661,6 +1704,7 @@ async function renderCobrancas(el){
       <button class="btn-add" onclick="criarAssinatura()" style="background:var(--primary-bg);color:var(--primary);border:1px solid var(--primary)">♻️ Recorrente</button>
       <button class="btn-add" onclick="exportarRelatorio()" style="background:var(--s2);color:var(--tx)">📊 Exportar</button>
       <button class="btn-add" id="btnSincronizar" onclick="sincronizarPagamentos()" style="background:var(--s2);color:var(--tx)">🔄 Sincronizar</button>
+      <button class="btn-add" onclick="_cobCache=null;renderCobrancas(document.getElementById('mainContent'),true)" style="background:var(--s2);color:var(--tx)">↺ Recarregar</button>
     </div>
   </div>`;
 
@@ -1700,13 +1744,15 @@ async function renderCobrancas(el){
         <td style="font-size:13px">${tipoIco}</td>
         <td><span class="badge badge-${statusCls}">${statusLbl}</span></td>
         <td style="color:${vencido?'var(--red)':'var(--tx3)'};font-weight:700;font-size:12px">${venc}</td>
-        <td style="text-align:right;display:flex;gap:4px;justify-content:flex-end;flex-wrap:wrap">
+        <td style="text-align:right">
+          <div style="display:flex;gap:4px;justify-content:flex-end;flex-wrap:nowrap;align-items:center">
           ${c.link_pagamento?`<button class="t-actions" title="Abrir link" onclick="openLink('${c.link_pagamento}')">🔗</button>`:''}
           ${c.pix_copia_cola?`<button class="t-actions" title="Copiar PIX" onclick="copiarPix('${c.pix_copia_cola.replace(/'/g,'').replace(/`/g,'')}')">📋</button>`:''}
           ${hasWa?`<button class="t-actions" title="Enviar WhatsApp" onclick="enviarWhatsAppById('${asaas_id}')" style="background:#25D366;color:#fff">📲</button>`:''}
           ${(c.status==='PENDING'||c.status==='OVERDUE')&&asaas_id?`<button class="t-actions" title="Confirmar pago manualmente" onclick="confirmarPagamentoAdmin('${asaas_id}')" style="background:#16a34a;color:#fff">✅</button>`:''}
           ${c.status!=='RECEIVED'&&c.status!=='CONFIRMED'&&c.status!=='CANCELLED'&&asaas_id?`<button class="t-actions" title="Cancelar" onclick="cancelarCobAsaas('${asaas_id}')">❌</button>`:''}
           ${c.status==='RECEIVED'||c.status==='CONFIRMED'?`<span style="font-size:11px;color:#4ADE80;font-weight:700">✓ Pago</span>`:''}
+          </div>
         </td>
       </tr>`;
     });
@@ -1723,7 +1769,7 @@ async function cancelarCobAsaas(asaas_id){
     body:JSON.stringify({action:'cancelar',payment_id:asaas_id})
   });
   const d=await r.json();
-  if(d&&d.ok){toast('success','✓ Cobrança cancelada');navSidebar('cobrancas',null);}
+  if(d&&d.ok){_cobCache=null;toast('success','✓ Cobrança cancelada');navSidebar('cobrancas',null);}
   else{alert('Erro ao cancelar: '+(d.erro||JSON.stringify(d)));}
 }
 
@@ -1743,6 +1789,7 @@ async function confirmarPagamentoAdmin(asaasId){
     const proximoVenc=new Date();proximoVenc.setDate(proximoVenc.getDate()+30);
     const proximoVencStr=proximoVenc.toISOString().split('T')[0];
     await api('saloes?id=eq.'+d.salaoId,{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:'ativo',plano:plano,assinatura_status:'ACTIVE',trial_expira:null,vencimento:proximoVencStr})});
+    _cobCache=null;
     toast('success','✅ Pagamento confirmado e salão ativado!');
     navSidebar('cobrancas',null);
   }catch(e){alert('Erro: '+e.message);}
@@ -1770,6 +1817,7 @@ async function sincronizarPagamentos(){
     const d=await res.json();
     if(!res.ok) throw new Error(d.error||'Erro desconhecido');
     if(d.sincronizados>0){
+      _cobCache=null;
       toast('success',`✅ ${d.sincronizados} pagamento(s) reconciliado(s)!`);
       navSidebar('cobrancas',null);
     } else {
