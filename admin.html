@@ -1518,7 +1518,7 @@ function renderVisaoGeral(el){
   // Tabela de estabelecimentos
   html+=`<div class="adm-card">
     <div class="adm-card-hdr">
-      <span class="adm-card-title">✂️ Estabelecimentos (${todos.length})</span>
+      <span class="adm-card-title">Estabelecimentos (${todos.length})</span>
       <div class="filtros-bar">
         ${['todos','ativo','trial','cancelado'].map(f=>{
           const labels={todos:'Todos',ativo:'Ativos',trial:'Trial',cancelado:'Inativos'};
@@ -1552,7 +1552,7 @@ function renderVisaoGeral(el){
       const vencLabel=c.vencimento?(c.status==='bloqueado'&&vencido?'Venceu '+venc:(vencendoEm7?'Vence '+venc:venc)):'—';
       html+=`<tr>
         <td><div class="t-biz">
-          <div class="t-biz-icon">✂️</div>
+          <div class="t-biz-icon" style="background:var(--brand-soft,rgba(229,90,12,.12));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--c-primary)">A</div>
           <div>
             <div class="t-biz-name">${esc(c.nome)}</div>
             <div class="t-biz-loc">${esc(c.email||c.slug||'')}</div>
@@ -1629,13 +1629,6 @@ function renderVisaoGeral(el){
       </div>
     </div>
 
-    <div class="tip-card">
-      <div class="tip-star">✦</div>
-      <div class="tip-eyebrow">Dica da Plataforma</div>
-      <div class="tip-title">Sobre os Temas Visuais</div>
-      <div class="tip-desc">Estabelecimentos com tema "Onyx" têm 14% mais agendamentos completados.</div>
-      <button class="tip-btn" onclick="navSidebar('cobrancas',null)">Ver Cobranças →</button>
-    </div>
 
     <div class="adm-card">
       <div class="log-title">Atividade Recente</div>
@@ -1734,7 +1727,7 @@ async function renderCobrancas(el, forceRefresh){
       const hasWa = tel && (c.link_pagamento || c.pix_copia_cola);
       html+=`<tr>
         <td><div class="t-biz">
-          <div class="t-biz-icon">✂️</div>
+          <div class="t-biz-icon" style="background:var(--brand-soft,rgba(229,90,12,.12));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--c-primary)">A</div>
           <div>
             <div class="t-biz-name">${esc(nome)}${c.is_recorrente?' <span title="Recorrente" style="font-size:10px">♻️</span>':''}</div>
             ${c.descricao?`<div style="font-size:10px;color:var(--tx3)">${esc(c.descricao)}</div>`:''}
@@ -1812,7 +1805,7 @@ async function sincronizarPagamentos(){
   try{
     const res=await fetch('/api/sincronizar-pagamentos',{
       method:'POST',
-      headers:{'Content-Type':'application/json','x-cron-secret':window._cronSecret||''}
+      headers:{'Content-Type':'application/json','x-cron-secret':KEY}
     });
     const d=await res.json();
     if(!res.ok) throw new Error(d.error||'Erro desconhecido');

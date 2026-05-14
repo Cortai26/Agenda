@@ -1540,30 +1540,25 @@ function _htmlProdutos(d){
 function _htmlProdItem(p, i){
   var fotoHtml=p.foto_url
     ? '<img src="'+esc(p.foto_url)+'" style="width:72px;height:72px;border-radius:10px;object-fit:cover;display:block">'
-    : '<span style="font-size:28px;line-height:72px;display:block;text-align:center">'+(p.icone||'📦')+'</span>';
+    : '<div style="font-size:11px;font-weight:600;color:var(--CZ);text-align:center;line-height:1.3;padding:4px">Clique para<br>adicionar<br>foto</div>';
   return '<div id="prod-item-'+i+'" style="border:1.5px solid var(--bd);border-radius:12px;overflow:hidden;margin-bottom:10px">'+
     '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--s2);border-bottom:1px solid var(--bd)">'+
       '<span style="font-size:12px;font-weight:700;color:var(--CZ)">Produto '+(i+1)+'</span>'+
       '<button onclick="removerProduto('+i+')" style="background:none;border:none;padding:0;font-size:12px;font-weight:600;color:var(--VM);cursor:pointer">Remover</button>'+
     '</div>'+
     '<div style="display:flex;gap:12px;padding:14px">'+
-      '<div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:6px">'+
+      '<div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px">'+
         '<div id="prod-foto-prev-'+i+'" onclick="document.getElementById(\'prod-file-'+i+'\').click()" '+
-          'style="width:72px;height:72px;border-radius:10px;background:var(--s2);border:1.5px solid var(--bd);cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center">'+
+          'style="width:72px;height:72px;border-radius:10px;background:var(--s2);border:1.5px dashed var(--bd);cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center">'+
           fotoHtml+
         '</div>'+
-        '<label style="font-size:11px;font-weight:600;color:var(--cP);cursor:pointer">'+
-          'Foto'+
-          '<input type="file" id="prod-file-'+i+'" accept="image/*" style="display:none" onchange="uploadFotoProduto(this,'+i+')">'+
-        '</label>'+
+        '<span style="font-size:10px;color:var(--CZ)">JPG / PNG / WebP</span>'+
+        '<input type="file" id="prod-file-'+i+'" accept="image/*" style="display:none" onchange="uploadFotoProduto(this,'+i+')">'+
         '<input type="hidden" id="prod-foto-url-'+i+'" data-campo="foto_url" value="'+esc(p.foto_url||'')+'">'+
       '</div>'+
       '<div style="flex:1;display:flex;flex-direction:column;gap:8px">'+
         '<input class="fi" id="prod-nome-'+i+'" data-campo="nome" placeholder="Nome do produto *" value="'+esc(p.nome||'')+'">'+
-        '<div style="display:flex;gap:8px">'+
-          '<input class="fi" id="prod-ico-'+i+'" data-campo="icone" placeholder="📦" value="'+esc(p.icone||'')+'" style="width:52px;text-align:center;flex-shrink:0">'+
-          '<input class="fi" id="prod-preco-'+i+'" data-campo="preco" type="number" step="0.01" min="0" placeholder="Preço (R$)" value="'+(p.preco?(p.preco/100).toFixed(2):'')+'" style="flex:1">'+
-        '</div>'+
+        '<input class="fi" id="prod-preco-'+i+'" data-campo="preco" type="number" step="0.01" min="0" placeholder="Preço (R$)" value="'+(p.preco?(p.preco/100).toFixed(2):'')+'" style="width:100%">'+
         '<textarea class="fi" id="prod-desc-'+i+'" data-campo="descricao" placeholder="Descrição breve" rows="2" style="resize:none">'+esc(p.descricao||'')+'</textarea>'+
       '</div>'+
     '</div>'+
@@ -1624,7 +1619,7 @@ function _reindexarProdutos(){
     var oldIdx=item.id.replace('prod-item-','');
     var precoVal=g('prod-preco-'+oldIdx);
     dados.push({
-      icone:g('prod-ico-'+oldIdx)||'📦',
+      icone:'',
       nome:g('prod-nome-'+oldIdx),
       descricao:g('prod-desc-'+oldIdx),
       preco:precoVal?Math.round(parseFloat(precoVal.replace(',','.'))*100):0,
@@ -1647,7 +1642,7 @@ function _lerProdutosDOM(){
     var preco=precoVal?Math.round(parseFloat(precoVal.replace(',','.'))*100):0;
     prods.push({
       id:nome.toLowerCase().replace(/\s+/g,'_').replace(/[^a-z0-9_]/g,'')+'_'+Date.now(),
-      icone:g('prod-ico-'+i)||'📦',
+      icone:'',
       nome:nome,
       descricao:g('prod-desc-'+i),
       preco:preco,

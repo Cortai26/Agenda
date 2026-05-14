@@ -1400,7 +1400,7 @@ html.t-clinic .sticky-header{background:rgba(244,248,251,0.92);}
 
 /* ── HERO (new design) ── */
 .ws-hero-v2{position:relative;}
-.ws-hero-v2-cover{height:220px;background:var(--ink-3);position:relative;overflow:hidden;}
+.ws-hero-v2-cover{height:260px;background:var(--ink-3);position:relative;overflow:hidden;}
 .ws-hero-v2-cover img{width:100%;height:100%;object-fit:cover;}
 .ws-hero-v2-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:72px;opacity:0.12;}
 .ws-hero-v2-grad{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,var(--ink) 100%);pointer-events:none;}
@@ -2768,6 +2768,9 @@ function _wsCtaBar(){
   return '<div class="cta-bar-v2">'+
     '<button onclick="abrirSheet()" class="btn-ag-main">📅 Agendar agora</button>'+
     '<div class="social-btns-row">'+socials+'</div>'+
+  '</div>'+
+  '<div style="text-align:center;padding:6px 16px 0">'+
+    '<a id="btnMeusAgs2" href="#" style="font-size:12px;color:var(--stone);font-weight:600;text-decoration:none;display:none">Ver meus agendamentos →</a>'+
   '</div>';
 }
 
@@ -3298,14 +3301,26 @@ function _renderCartContent(){
     '</div>';
   }).join('');
   var totalFmt='R$ '+(total/100).toFixed(2).replace('.',',');
+  var pixHtml='';
+  if(salao&&salao.pix_key){
+    var sinalPct=salao.sinal_percentual||30;
+    var sinalVal=Math.round(total*sinalPct/100);
+    var sinalFmt='R$ '+(sinalVal/100).toFixed(2).replace('.',',');
+    pixHtml='<div style="margin:14px 0;padding:12px 14px;background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.25);border-radius:8px">'+
+      '<div style="font-size:12px;font-weight:700;color:#22C55E;margin-bottom:6px">● Sinal via PIX — '+sinalFmt+' ('+sinalPct+'%)</div>'+
+      '<div style="font-size:11px;color:var(--c-text-3);margin-bottom:6px">Chave: <span style="font-family:var(--font-mono,monospace)">'+esc(salao.pix_key)+'</span></div>'+
+      '<button onclick="navigator.clipboard.writeText(\''+esc(salao.pix_key)+'\').then(function(){toast(\'Chave copiada!\');})" style="background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);color:#22C55E;font-size:11px;font-weight:700;padding:4px 10px;border-radius:5px;cursor:pointer">Copiar chave</button>'+
+    '</div>';
+  }
   el.innerHTML='<div style="padding:16px">'+
     items+
     '<div class="cart-total-row">'+
       '<span class="cart-total-lbl">Total</span>'+
       '<span class="cart-total-val">'+totalFmt+'</span>'+
     '</div>'+
-    '<div style="margin-top:16px;font-size:12px;color:var(--c-text-3);text-align:center;margin-bottom:12px">💳 Pagamento realizado no estabelecimento</div>'+
-    '<button onclick="cartFinalizar()" class="btn-cta" style="margin-top:4px">Finalizar pedido</button>'+
+    pixHtml+
+    '<div style="margin-top:12px;font-size:12px;color:var(--c-text-3);text-align:center;margin-bottom:10px">Pagamento finalizado no estabelecimento</div>'+
+    '<button onclick="cartFinalizar()" class="btn-cta" style="margin-top:4px">Reservar via WhatsApp</button>'+
   '</div>';
 }
 function cartFinalizar(){
@@ -3405,8 +3420,9 @@ function atualizarLivroBordo(){
 /* ── NEW HERO V2 ── */
 function _wsHeroV2(){
   var cats={beleza:'✂️',saude:'🏥',fitness:'💪',estetica:'💆',pet:'🐾',barbearia:'💈'};
-  var ico=cats[salao.categoria]||'📅';
+  var ico=cats[salao.categoria]||'';
 
+  var hasBg=!!(salao.foto_capa_url||salao.foto_url);
   var bgHtml=salao.foto_capa_url
     ?'<img src="'+esc(salao.foto_capa_url)+'" alt="'+esc(salao.nome)+'" loading="eager">'
     :(salao.foto_url?'<img src="'+esc(salao.foto_url)+'" alt="'+esc(salao.nome)+'" loading="eager">':'');
@@ -3455,7 +3471,7 @@ function _wsHeroV2(){
 
   return '<div class="ws-hero-v2">'+
     '<div class="ws-hero-v2-cover">'+bgHtml+
-      '<div class="ws-hero-v2-placeholder">'+ico+'</div>'+
+      (!hasBg&&ico?'<div class="ws-hero-v2-placeholder">'+ico+'</div>':'')+
       '<div class="ws-hero-v2-grad"></div>'+
       badgeHtml+
     '</div>'+
