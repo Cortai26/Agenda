@@ -1530,10 +1530,10 @@ function _htmlProdutos(d){
   var prods=d.produtos||[];
   var items=prods.map(function(p,i){return _htmlProdItem(p,i);}).join('');
   return '<div style="padding:14px 16px">'+
-    '<p style="font-size:13px;color:var(--CZ);margin-bottom:14px">Cadastre produtos vendidos no seu estabelecimento. Clientes podem adicionar ao carrinho e pagar na hora.</p>'+
+    '<p style="font-size:13px;color:var(--tx2);margin-bottom:14px">Cadastre produtos vendidos no seu estabelecimento. Clientes podem adicionar ao carrinho e pagar na hora.</p>'+
     '<div id="prodList">'+items+'</div>'+
-    '<button onclick="adicionarProduto()" class="btn-sec" style="width:100%;margin-top:8px">+ Adicionar produto</button>'+
-    '<div style="margin-top:10px"><button onclick="salvarProdutos()" class="btn-primary" style="width:100%">Salvar produtos</button></div>'+
+    '<button onclick="adicionarProduto()" class="btn-add" style="width:100%;margin-top:8px;justify-content:center;padding:10px">+ Adicionar produto</button>'+
+    '<div style="margin-top:10px"><button onclick="salvarProdutos()" class="btn-sv">Salvar produtos</button></div>'+
   '</div>';
 }
 
@@ -1543,8 +1543,8 @@ function _htmlProdItem(p, i){
     : '<div style="font-size:11px;font-weight:600;color:var(--CZ);text-align:center;line-height:1.3;padding:4px">Clique para<br>adicionar<br>foto</div>';
   return '<div id="prod-item-'+i+'" style="border:1.5px solid var(--bd);border-radius:12px;overflow:hidden;margin-bottom:10px">'+
     '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--s2);border-bottom:1px solid var(--bd)">'+
-      '<span style="font-size:12px;font-weight:700;color:var(--CZ)">Produto '+(i+1)+'</span>'+
-      '<button onclick="removerProduto('+i+')" style="background:none;border:none;padding:0;font-size:12px;font-weight:600;color:var(--VM);cursor:pointer">Remover</button>'+
+      '<span style="font-size:12px;font-weight:700;color:var(--tx2)">Produto '+(i+1)+'</span>'+
+      '<button onclick="removerProduto('+i+')" class="bsrv" style="font-size:11px;font-weight:700;color:var(--red);border-color:rgba(248,113,113,.25);padding:4px 10px">Remover</button>'+
     '</div>'+
     '<div style="display:flex;gap:12px;padding:14px">'+
       '<div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px">'+
