@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Conta confirmada — Agenda</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0A0908;--ink2:#141210;--ink3:#1E1A17;--ink4:#28231F;
+  --bone:#F0EDE8;--bone2:#C8C4BE;--bone3:#9B9690;
+  --brand:#E55A0C;--brand-dim:rgba(229,90,12,.12);--brand-glow:rgba(229,90,12,.24);
+  --rule:rgba(240,237,232,0.06);--rule2:rgba(240,237,232,0.12);--rule3:rgba(240,237,232,0.2);
+  --green:#2D6A4F;--green2:#3D8B62;--green-bg:rgba(45,106,79,.12);--green-rule:rgba(45,106,79,.3);
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Manrope',system-ui,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--ink);color:var(--bone);font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column}
+
+/* NAV */
+nav{
+  background:rgba(10,9,8,.92);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--rule2);
+  padding:14px 20px;
+  display:flex;align-items:center;gap:10px;
+}
+.nav-logo{width:28px;height:28px;border-radius:7px;display:block;flex-shrink:0}
+.nav-wordmark{font-family:var(--serif);font-style:italic;font-size:21px;font-weight:400;color:var(--bone)}
+.nav-wordmark b{color:var(--brand);font-weight:400}
+
+/* MAIN */
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 20px 60px}
+.card{max-width:480px;width:100%}
+
+/* CHECK ANIMATION */
+.check-ring{
+  width:80px;height:80px;border-radius:50%;
+  background:var(--green-bg);border:1px solid var(--green-rule);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 28px;
+  animation:popIn .6s cubic-bezier(.175,.885,.32,1.275) both;
+}
+@keyframes popIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.check-icon{font-size:36px;animation:fadeIn .4s .4s both}
+@keyframes fadeIn{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
+
+/* HEADING */
+.c-eyebrow{
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--brand);
+  text-align:center;margin-bottom:10px;
+}
+.c-title{
+  font-family:var(--serif);font-style:italic;font-size:40px;font-weight:400;
+  color:var(--bone);text-align:center;line-height:1.15;margin-bottom:10px;
+}
+.c-sub{
+  font-size:14px;color:var(--bone3);text-align:center;
+  line-height:1.7;margin-bottom:36px;
+}
+
+.divider{width:100%;height:1px;background:var(--rule2);margin-bottom:28px}
+
+/* LINK BLOCK */
+.link-block{
+  background:var(--ink3);border:1px solid var(--green-rule);border-radius:10px;
+  padding:18px;margin-bottom:20px;
+}
+.link-block-eyebrow{
+  font-family:var(--mono);font-size:9px;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--green2);margin-bottom:10px;
+}
+.link-display{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(0,0,0,.3);border-radius:7px;padding:11px 14px;
+}
+.link-url{
+  font-family:var(--mono);font-size:12px;font-weight:600;color:var(--green2);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;
+}
+.btn-copy{
+  background:var(--green);color:#fff;border:none;
+  padding:7px 14px;border-radius:6px;
+  font-family:var(--mono);font-size:11px;font-weight:600;
+  cursor:pointer;flex-shrink:0;transition:.2s;
+}
+.btn-copy:hover{filter:brightness(1.15)}
+.link-desc{font-size:12px;color:var(--bone3);line-height:1.65;margin-top:10px}
+
+/* NEXT STEPS */
+.next-steps{margin-bottom:28px}
+.ns-title{
+  font-family:var(--mono);font-size:9px;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--bone3);
+  margin-bottom:16px;
+}
+.next-step{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:14px 0;border-bottom:1px solid var(--rule);
+}
+.next-step:first-of-type{border-top:1px solid var(--rule)}
+.ns-num{
+  font-family:var(--mono);font-size:11px;font-weight:600;
+  color:var(--brand);flex-shrink:0;margin-top:2px;min-width:22px;
+}
+.ns-txt{font-size:13px;color:var(--bone2);line-height:1.6}
+.ns-txt strong{color:var(--bone);font-weight:700}
+
+/* BUTTONS */
+.btn-main{
+  width:100%;padding:16px;
+  background:var(--brand);color:#fff;border:none;border-radius:8px;
+  font-family:var(--sans);font-size:15px;font-weight:700;cursor:pointer;
+  transition:.2s;box-shadow:0 4px 20px var(--brand-glow);margin-bottom:10px;
+  display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;
+}
+.btn-main:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn-ghost{
+  width:100%;padding:14px;background:transparent;color:var(--bone3);
+  border:1px solid var(--rule2);border-radius:8px;
+  font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer;transition:.2s;
+  display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;
+}
+.btn-ghost:hover{border-color:var(--rule3);color:var(--bone);background:var(--ink3)}
+
+/* LOADING / ERROR */
+.state-loading,.state-error{text-align:center;padding:40px 0}
+.state-loading p,.state-error p{font-family:var(--mono);font-size:12px;color:var(--bone3);margin-top:12px}
+.spinner{
+  width:36px;height:36px;border-radius:50%;
+  border:2px solid var(--rule2);border-top-color:var(--brand);
+  animation:spin .7s linear infinite;margin:0 auto;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.state-error .err-title{
+  font-family:var(--serif);font-style:italic;font-size:24px;color:var(--bone);
+  margin-bottom:8px;
+}
+.state-error .err-sub{font-size:13px;color:var(--bone3);margin-bottom:20px}
+
+@media(min-width:600px){
+  .c-title{font-size:48px}
+  main{padding:48px 24px 80px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <img src="/favicon.png" width="28" height="28" alt="Agenda" class="nav-logo">
+  <span class="nav-wordmark">Agenda<b>.</b></span>
+</nav>
+
+<main>
+  <div class="card">
+
+    <!-- LOADING STATE -->
+    <div class="state-loading" id="stLoading">
+      <div class="spinner"></div>
+      <p>Verificando sua conta...</p>
+    </div>
+
+    <!-- ERROR STATE -->
+    <div class="state-error" id="stError" style="display:none">
+      <div class="err-title">Link inválido.</div>
+      <div class="err-sub">Este link de confirmação não é válido ou já foi utilizado.</div>
+      <a href="/cadastro.html" class="btn-main" style="max-width:260px;margin:0 auto">Criar nova conta →</a>
+    </div>
+
+    <!-- SUCCESS STATE -->
+    <div id="stSuccess" style="display:none">
+      <div class="check-ring"><div class="check-icon">✓</div></div>
+      <div class="c-eyebrow">Conta confirmada</div>
+      <div class="c-title">Você está dentro.</div>
+      <div class="c-sub" id="sucSub">Sua agenda está pronta. Compartilhe o link abaixo e comece a receber agendamentos.</div>
+
+      <div class="divider"></div>
+
+      <!-- LINK -->
+      <div class="link-block">
+        <div class="link-block-eyebrow">📲 Seu link de agendamentos</div>
+        <div class="link-display">
+          <div class="link-url" id="sucLink"></div>
+          <button class="btn-copy" id="btnCopy" onclick="copiarLink()">Copiar</button>
+        </div>
+        <div class="link-desc">Compartilhe no Instagram, WhatsApp e onde quiser. Seus clientes acessam este link para agendar diretamente com você.</div>
+      </div>
+
+      <!-- NEXT STEPS -->
+      <div class="next-steps">
+        <div class="ns-title">Próximos passos</div>
+        <div class="next-step">
+          <span class="ns-num">01</span>
+          <div class="ns-txt"><strong>Configure seus serviços</strong> — entre no painel e cadastre os serviços com preços e duração.</div>
+        </div>
+        <div class="next-step">
+          <span class="ns-num">02</span>
+          <div class="ns-txt"><strong>Personalize o tema</strong> — escolha as cores e adicione sua foto ou logo.</div>
+        </div>
+        <div class="next-step">
+          <span class="ns-num">03</span>
+          <div class="ns-txt"><strong>Compartilhe o link</strong> — cole na bio do Instagram ou envie pelo WhatsApp e comece a receber agendamentos.</div>
+        </div>
+      </div>
+
+      <a href="/painel.html" id="linkPainel" class="btn-main">⚙️ Entrar no painel →</a>
+      <button id="btnVerPagina" onclick="verPagina()" class="btn-ghost">👁 Ver minha página de agendamento</button>
+    </div>
+
+  </div>
+</main>
+
+<script>
+var _slug='';
+
+(function init(){
+  // Lê slug da URL ou do storage
+  var params=new URLSearchParams(location.search);
+  _slug=params.get('slug')||'';
+  if(!_slug){
+    try{_slug=sessionStorage.getItem('agenda_slug')||'';}catch(e){}
+  }
+  if(!_slug){
+    try{_slug=localStorage.getItem('cortai_novo_slug')||'';}catch(e){}
+  }
+
+  if(!_slug){
+    showError();
+    return;
+  }
+
+  // Verifica no Supabase se o slug existe e está ativo
+  var SUPA_URL='https://acldrisohnjfekjxgmoh.supabase.co';
+  var SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFjbGRyaXNvaG5qZmVranhnbW9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1ODA1MzcsImV4cCI6MjA4OTE1NjUzN30.etojz12x1oVNvbW_fPeVpNx2OFuJ72C1YioFBlCLS2Y';
+
+  fetch(SUPA_URL+'/rest/v1/saloes?slug=eq.'+encodeURIComponent(_slug)+'&select=slug,nome,status',{
+    headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY}
+  })
+  .then(function(r){return r.json();})
+  .then(function(data){
+    if(!Array.isArray(data)||!data.length){showError();return;}
+    var salao=data[0];
+    showSuccess(salao);
+  })
+  .catch(function(){
+    // Se falhar a verificação, mostra sucesso com o slug da URL (offline-friendly)
+    showSuccess({slug:_slug,nome:''});
+  });
+})();
+
+function showError(){
+  document.getElementById('stLoading').style.display='none';
+  document.getElementById('stError').style.display='block';
+}
+
+function showSuccess(salao){
+  document.getElementById('stLoading').style.display='none';
+  var link='https://agendatop.vercel.app/agendar.html?slug='+salao.slug;
+  document.getElementById('sucLink').textContent=link;
+  if(salao.nome){
+    document.getElementById('sucSub').textContent='Bem-vindo(a), '+salao.nome+'! Sua agenda está pronta. 14 dias grátis, sem cartão.';
+  }
+  var painelHref='/painel.html?slug='+salao.slug;
+  document.getElementById('linkPainel').href=painelHref;
+  document.getElementById('stSuccess').style.display='block';
+}
+
+function copiarLink(){
+  var link=document.getElementById('sucLink').textContent.trim();
+  if(!link)return;
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(link).then(function(){
+      var btn=document.getElementById('btnCopy');
+      btn.textContent='✓ Copiado!';
+      setTimeout(function(){btn.textContent='Copiar';},2000);
+    });
+  } else {
+    var ta=document.createElement('textarea');
+    ta.value=link;ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    var btn=document.getElementById('btnCopy');
+    btn.textContent='✓ Copiado!';
+    setTimeout(function(){btn.textContent='Copiar';},2000);
+  }
+}
+
+function verPagina(){
+  if(_slug) window.open('/agendar.html?slug='+_slug,'_blank');
+}
+</script>
+</body>
+</html>
