@@ -1443,7 +1443,7 @@ html.t-clinic .sticky-header{background:rgba(244,248,251,0.92);}
 .ws-hero-v2-cover{height:260px;background:var(--ink-3);position:relative;overflow:hidden;}
 .ws-hero-v2-cover img{width:100%;height:100%;object-fit:cover;}
 .ws-hero-v2-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:72px;opacity:0.12;}
-.ws-hero-v2-grad{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,var(--ink) 100%);pointer-events:none;}
+.ws-hero-v2-grad{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.08) 0%,rgba(0,0,0,.30) 45%,rgba(10,9,8,.85) 100%);pointer-events:none;}
 .ws-hero-v2-badge{position:absolute;top:14px;right:14px;background:var(--brand);color:#fff;font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:.5px;}
 .ws-hero-v2-content{padding:0 16px 16px;margin-top:-40px;position:relative;z-index:1;}
 .ws-hero-v2-avatar{width:72px;height:72px;border-radius:18px;border:3px solid var(--brand);background:var(--ink-3);overflow:hidden;margin-bottom:10px;display:flex;align-items:center;justify-content:center;font-size:32px;}
@@ -1589,6 +1589,23 @@ html.t-clinic .ws-chapter-title{color:var(--c-text);}
 
 /* hero: taller cover */
 .ws-hero-v2-cover{height:min(380px,58vh) !important;}
+
+/* ── NOME OVERLAY: nome sobre a foto quando não há avatar ── */
+.ws-hero-nome-capa{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:20px 16px 16px;
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(32px,8vw,56px);
+  color:#fff;line-height:1.1;letter-spacing:-0.02em;
+  text-shadow:0 2px 24px rgba(0,0,0,.55);
+  z-index:2;pointer-events:none;
+}
+/* sub-info abaixo do nome quando sem avatar */
+.ws-hero-v2-content.sem-avatar{
+  padding:8px 16px 14px;margin-top:0;
+}
+.ws-hero-v2-content.sem-avatar .ws-hero-v2-sub{font-size:12px;color:var(--stone);margin-top:2px;}
+.ws-hero-v2-content.sem-avatar .ws-hero-v2-rating{margin-top:6px;}
 </style>
   <meta property="og:image" content="https://agendatop.vercel.app/og/og-image.png">
   <meta property="og:image:width" content="1200">
@@ -3617,13 +3634,23 @@ function _wsHeroV2(){
   var ico=cats[salao.categoria]||'';
 
   var hasBg=!!(salao.foto_capa_url||salao.foto_url);
+  // REGRA CRÍTICA: só usa foto_url como avatar se ela existir
+  var hasFoto=!!salao.foto_url;
+
   var bgHtml=salao.foto_capa_url
     ?'<img src="'+esc(salao.foto_capa_url)+'" alt="'+esc(salao.nome)+'" loading="eager">'
     :(salao.foto_url?'<img src="'+esc(salao.foto_url)+'" alt="'+esc(salao.nome)+'" loading="eager">':'');
 
-  var avatarHtml=salao.foto_url
-    ?'<div class="ws-hero-v2-avatar"><img src="'+esc(salao.foto_url)+'" alt="'+esc(salao.nome)+'"></div>'
-    :'<div class="ws-hero-v2-avatar">'+ico+'</div>';
+  // Quando há foto_url → avatar quadrado flutuante
+  // Quando NÃO há foto_url → NÃO renderizar nenhum quadrado; nome fica sobreposto na capa
+  var avatarHtml = hasFoto
+    ? '<div class="ws-hero-v2-avatar"><img src="'+esc(salao.foto_url)+'" alt="'+esc(salao.nome)+'"></div>'
+    : '';
+
+  // Nome sobreposto na foto quando não há avatar
+  var nomeNaCapaHtml = !hasFoto
+    ? '<div class="ws-hero-nome-capa">'+esc(salao.nome)+'</div>'
+    : '';
 
   var badgeHtml=salao.tag_destaque
     ?'<span class="ws-hero-v2-badge">'+esc(salao.tag_destaque)+'</span>'
@@ -3663,16 +3690,20 @@ function _wsHeroV2(){
   var sn=document.getElementById('stickyNome');
   if(sn) sn.textContent=salao.nome;
 
+  // Sub info (cidade + categoria)
+  var subTxt=esc([salao.categoria,salao.cidade].filter(Boolean).join(' · '));
+
   return '<div class="ws-hero-v2">'+
     '<div class="ws-hero-v2-cover">'+bgHtml+
       (!hasBg&&ico?'<div class="ws-hero-v2-placeholder">'+ico+'</div>':'')+
       '<div class="ws-hero-v2-grad"></div>'+
       badgeHtml+
+      nomeNaCapaHtml+
     '</div>'+
-    '<div class="ws-hero-v2-content">'+
+    '<div class="ws-hero-v2-content'+(hasFoto?'':' sem-avatar')+'">'+
       avatarHtml+
-      '<div class="ws-hero-v2-nome">'+esc(salao.nome)+'</div>'+
-      '<div class="ws-hero-v2-sub">'+esc([salao.categoria,salao.cidade].filter(Boolean).join(' · '))+'</div>'+
+      (hasFoto?'<div class="ws-hero-v2-nome">'+esc(salao.nome)+'</div>':'')+
+      (subTxt?'<div class="ws-hero-v2-sub">'+subTxt+'</div>':'')+
       ratingHtml+
     '</div>'+
     (statusHtml?'<div class="ws-hero-v2-status">'+statusHtml+'</div>':'')+
