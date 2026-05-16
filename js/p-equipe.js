@@ -43,6 +43,7 @@ async function renderEquipe(){
         '<div class="eq-info-d">'+
           '<div class="eq-nm">'+esc(p.nome)+(p.ativo?'':'<span class="eq-badge-inativo" style="margin-left:6px">inativo</span>')+'</div>'+
           '<div class="eq-sp">'+esc(p.especialidade||'Profissional')+'</div>'+
+          (p.comissao_pct!=null?'<div style="font-size:11px;font-weight:700;color:var(--VD);margin-top:2px;cursor:pointer" onclick="abrirProf(\''+p.id+'\')">Comissão: '+p.comissao_pct+'%</div>':'')+
         '</div>'+
         '<div class="eq-ctrl">'+
           (isBasico?

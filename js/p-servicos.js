@@ -182,28 +182,51 @@ async function carregarServicos(){
     try{_servicos=await api('servicos?salao_id=eq.'+S.id+'&order=ordem')||[];}catch(e2){_servicos=[];}
   }
 }
-function renderServicos(){
+async function renderServicos(){
   _tabOk.servicos=true;
   var el=document.getElementById('tb-servicos');
-  var ativos=_servicos.filter(function(s){return s.ativo;}).length;
-  var html='<div class="srv-hdr"><h3>Meus Serviços</h3><button class="btn-add" onclick="abrirSrv()">+ Adicionar</button></div>';
-  html+='<div class="srv-info-txt">Serviços <strong>ativos</strong> aparecem na sua página. Use o botão para mostrar ou ocultar.</div>';
-  html+='<div style="font-size:11px;color:var(--text-3);font-weight:700;margin-bottom:10px;text-align:center">'+ativos+' de '+_servicos.length+' visível'+(ativos!==1?'s':'')+'</div>';
+  var strip=renderProfStrip();
+
+  // Quando profissional selecionado, filtra os serviços dele
+  var lista=_servicos.slice();
+  var profNome='';
+  if(_profFiltro){
+    var prof=_profs.find(function(p){return p.id===_profFiltro;});
+    profNome=prof?prof.nome:'';
+    try{
+      var ps=await api('profissional_servicos?profissional_id=eq.'+_profFiltro+'&select=servico_id,ativo');
+      if(Array.isArray(ps) && ps.length){
+        var psMap={};
+        ps.forEach(function(r){ psMap[r.servico_id]=r.ativo!==false; });
+        lista=lista.filter(function(s){ return psMap[s.id]!==false; });
+      }
+    }catch(e){}
+  }
+
+  var ativos=lista.filter(function(s){return s.ativo;}).length;
+  var titulo=profNome?'Serviços de '+profNome.split(' ')[0]:'Meus Serviços';
+  var html=strip+
+    '<div class="srv-hdr"><h3>'+esc(titulo)+'</h3>'+(!_profFiltro?'<button class="btn-add" onclick="abrirSrv()">+ Adicionar</button>':'')+'</div>';
+  if(!_profFiltro) html+='<div class="srv-info-txt">Serviços <strong>ativos</strong> aparecem na sua página. Use o botão para mostrar ou ocultar.</div>';
+  html+='<div style="font-size:11px;color:var(--text-3);font-weight:700;margin-bottom:10px;text-align:center">'+ativos+' de '+lista.length+' visível'+(ativos!==1?'s':'')+'</div>';
   html+='<div class="lista">';
-  if(_servicos.length===0){
-    html+='<div class="srv-empty">Nenhum serviço ainda.<br><strong>Toque em "+ Adicionar" para começar!</strong></div>';
+  if(lista.length===0){
+    html+=_profFiltro
+      ? '<div class="srv-empty">Nenhum serviço ativo para este profissional.<br><small style="color:var(--text-3)">Configure em Equipe → editar profissional.</small></div>'
+      : '<div class="srv-empty">Nenhum serviço ainda.<br><strong>Toque em "+ Adicionar" para começar!</strong></div>';
   } else {
-    _servicos.forEach(function(s){
+    lista.forEach(function(s){
       html+='<div class="srv-card'+(s.ativo?'':' inativo')+'">'+
         '<div class="srv-ico">'+s.icone+'</div>'+
         '<div class="srv-dados"><div class="srv-nm">'+esc(s.nome)+(s.ativo?'':'<span class="toculto">oculto</span>')+'</div>'+
         '<div class="srv-mt">⏱ '+s.duracao+' min'+(s.descricao?' · '+esc(s.descricao):'')+'</div></div>'+
         '<div class="srv-pr">'+formatPrice(s.preco)+'</div>'+
-        '<div class="srv-ctrl">'+
-        '<button class="bsrv bedit" onclick="abrirSrv(\''+s.id+'\')">✏️</button>'+
-        '<button class="bsrv bdel" onclick="excluirSrv(\''+s.id+'\')">🗑️</button>'+
-        '<button class="toggle '+(s.ativo?'on':'')+'" onclick="toggleSrv(\''+s.id+'\')"></button>'+
-        '</div></div>';
+        (!_profFiltro?'<div class="srv-ctrl">'+
+          '<button class="bsrv bedit" onclick="abrirSrv(\''+s.id+'\')">✏️</button>'+
+          '<button class="bsrv bdel" onclick="excluirSrv(\''+s.id+'\')">🗑️</button>'+
+          '<button class="toggle '+(s.ativo?'on':'')+'" onclick="toggleSrv(\''+s.id+'\')"></button>'+
+          '</div>':'')+
+        '</div>';
     });
   }
   html+='</div>';

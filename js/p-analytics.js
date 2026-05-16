@@ -106,33 +106,44 @@ function mudarPeriodo(dias){
 }
 
 /* ═══ CAMPANHAS ═══ */
+var _campCustom=[];
+(function(){try{var s=localStorage.getItem('agenda_camp_custom');if(s)_campCustom=JSON.parse(s)||[];}catch(e){}}());
+
 function renderCampanhas(){
   _tabOk.campanhas=true;
   var el=document.getElementById('tb-campanhas');
   if(!el) return;
-  el.innerHTML=
-    '<div class="wrap">'+
-    '<div style="font-family:var(--font-brand);font-size:20px;font-weight:800;color:var(--text);margin-bottom:4px">📣 Campanhas</div>'+
-    '<div style="font-size:13px;color:var(--text-2);margin-bottom:20px">Envie mensagens de reengajamento pelo WhatsApp ou Email para sua base de clientes.</div>'+
-    _templateCampanha('Clientes inativos','Clientes que não agendam há mais de 30 dias','cliente_inativo','Olá {nome}! 😊 Sentimos sua falta no {salao}. Que tal marcar um horário? Acesse: {link}')+
-    _templateCampanha('Lembrete de retorno','Clientes que costumam voltar mas ainda não agendaram','lembrete_retorno','Oi {nome}! Tá na hora de cuidar de você! 💆 Agende agora em {salao}: {link}')+
-    _templateCampanha('Promoção especial','Envie uma oferta para toda sua base de clientes','promocao','{nome}, temos uma novidade especial para você! Confira: {link}')+
-    _templateCampanha('Aniversariantes do mês','Clientes que fazem aniversário este mês','aniversario','Feliz aniversário, {nome}! 🎂 Ganhe um desconto especial no seu próximo atendimento em {salao}: {link}')+
-    '</div>';
+  var html='<div class="wrap">'+
+    '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">'+
+    '<div style="font-family:var(--font-brand);font-size:20px;font-weight:800;color:var(--text)">📣 Campanhas</div>'+
+    '<button onclick="abrirNovaCampanha()" style="padding:7px 14px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer">+ Nova</button>'+
+    '</div>'+
+    '<div style="font-size:13px;color:var(--text-2);margin-bottom:20px">Edite as mensagens abaixo e envie pelo WhatsApp ou Email. Use {nome}, {salao} e {link} como variáveis.</div>'+
+    _templateCampanha('Clientes inativos','Clientes que não agendam há mais de 30 dias','cliente_inativo')+
+    _templateCampanha('Lembrete de retorno','Clientes que costumam voltar mas ainda não agendaram','lembrete_retorno')+
+    _templateCampanha('Promoção especial','Envie uma oferta para toda sua base de clientes','promocao')+
+    _templateCampanha('Aniversariantes do mês','Clientes que fazem aniversário este mês','aniversario');
+  _campCustom.forEach(function(c){
+    html+=_templateCampanha(c.titulo,c.desc,c.tipo);
+  });
+  html+='</div>';
+  el.innerHTML=html;
 }
 
-function _templateCampanha(titulo,desc,tipo,template){
-  var link='https://agendatop.vercel.app/agendar.html?slug='+(S?S.slug:'');
-  var preview=template
-    .replace('{nome}','Cliente')
-    .replace('{salao}',S?S.nome:'seu negócio')
-    .replace('{link}',link);
+function _templateCampanha(titulo,desc,tipo){
+  var txt=_campTemplates[tipo]||'{link}';
+  var isCustom=tipo.startsWith('custom_');
   return '<div style="background:var(--bg-card);border-radius:var(--r-lg);padding:16px;margin-bottom:12px;border:1px solid var(--sep)">'+
-    '<div style="font-family:var(--font-brand);font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px">'+titulo+'</div>'+
-    '<div style="font-size:12px;color:var(--text-2);margin-bottom:12px">'+desc+'</div>'+
-    '<div style="background:var(--bg-card-2);border-radius:var(--r-sm);padding:12px;margin-bottom:12px">'+
-      '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-bottom:6px">Prévia</div>'+
-      '<div style="font-size:13px;color:var(--text);line-height:1.5">'+escHtmlCamp(preview)+'</div>'+
+    '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px">'+
+    '<div style="font-family:var(--font-brand);font-size:15px;font-weight:700;color:var(--text)">'+esc(titulo)+'</div>'+
+    (isCustom?'<button onclick="_excluirCampCustom(\''+tipo+'\')" style="background:none;border:none;color:var(--text-3);cursor:pointer;font-size:14px;padding:0 0 0 8px" title="Excluir">🗑️</button>':'')+
+    '</div>'+
+    '<div style="font-size:12px;color:var(--text-2);margin-bottom:10px">'+esc(desc)+'</div>'+
+    '<div style="margin-bottom:12px">'+
+      '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-bottom:5px">Mensagem · edite abaixo</div>'+
+      '<textarea id="camp-txt-'+tipo+'" rows="3" oninput="_campSalvar(\''+tipo+'\',this.value)" '+
+        'style="width:100%;font-size:13px;color:var(--text);background:var(--bg-card-2);border:1px solid var(--sep);border-radius:var(--r-sm);padding:10px 12px;resize:vertical;font-family:var(--font-body);line-height:1.55;outline:none">'+escHtmlCamp(txt)+'</textarea>'+
+      '<div style="font-size:10px;color:var(--text-3);margin-top:4px">Variáveis: <code>{nome}</code> · <code>{salao}</code> · <code>{link}</code></div>'+
     '</div>'+
     '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">'+
       '<button onclick="campCopiar(\''+tipo+'\')" style="padding:9px 4px;background:var(--bg-card-2);border:1px solid var(--sep);border-radius:var(--r-sm);color:var(--text-2);font-size:12px;font-weight:700;cursor:pointer">📋 Copiar</button>'+
@@ -141,6 +152,31 @@ function _templateCampanha(titulo,desc,tipo,template){
     '</div>'+
   '</div>';
 }
+
+function _campSalvar(tipo,valor){
+  _campTemplates[tipo]=valor;
+  // Persiste customizações no localStorage
+  try{
+    var key='agenda_camp_tpl_'+tipo;
+    localStorage.setItem(key,valor);
+  }catch(e){}
+}
+
+// Restaura templates customizados do localStorage ao iniciar
+(function(){
+  try{
+    var tipos=['cliente_inativo','lembrete_retorno','promocao','aniversario'];
+    tipos.forEach(function(t){
+      var v=localStorage.getItem('agenda_camp_tpl_'+t);
+      if(v) _campTemplates[t]=v;
+    });
+    // Restaura nomes de campanhas customizadas
+    _campCustom.forEach(function(c){
+      var v=localStorage.getItem('agenda_camp_tpl_'+c.tipo);
+      if(v) _campTemplates[c.tipo]=v;
+    });
+  }catch(e){}
+}());
 
 function escHtmlCamp(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
@@ -160,6 +196,9 @@ function _campMsg(tipo,nome){
 }
 
 function campCopiar(tipo){
+  // Lê do textarea se existir (para capturar edições em tempo real)
+  var ta=document.getElementById('camp-txt-'+tipo);
+  if(ta) _campTemplates[tipo]=ta.value;
   var texto=_campMsg(tipo,'Cliente');
   if(navigator.clipboard&&navigator.clipboard.writeText){
     navigator.clipboard.writeText(texto).then(function(){toast('Mensagem copiada!','ok');}).catch(function(){_campFallbackCopy(texto);});
@@ -174,7 +213,13 @@ function _campFallbackCopy(texto){
   document.body.removeChild(ta);
 }
 
+function _campSyncTa(tipo){
+  var ta=document.getElementById('camp-txt-'+tipo);
+  if(ta) _campTemplates[tipo]=ta.value;
+}
+
 async function campWhatsApp(tipo){
+  _campSyncTa(tipo);
   var btn=event&&event.target;
   if(btn){btn.disabled=true;btn.textContent='⏳';}
   try{
@@ -186,6 +231,7 @@ async function campWhatsApp(tipo){
 }
 
 async function campEmail(tipo){
+  _campSyncTa(tipo);
   var btn=event&&event.target;
   if(btn){btn.disabled=true;btn.textContent='⏳';}
   try{
@@ -257,6 +303,64 @@ function _campAbrirModal(canal,tipo,clis){
   document.body.appendChild(modal);
   document.getElementById('campModalClose').onclick=function(){modal.remove();};
   modal.onclick=function(e){if(e.target===modal)modal.remove();};
+}
+
+/* ── Nova campanha ── */
+function abrirNovaCampanha(){
+  var modal=document.createElement('div');
+  modal.id='ovNovaCamp';
+  modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9999;display:flex;align-items:flex-end;justify-content:center';
+  var inner=document.createElement('div');
+  inner.style.cssText='background:var(--surface,#fff);border-radius:20px 20px 0 0;padding:20px 16px 32px;width:100%;max-width:480px;max-height:80vh;overflow-y:auto';
+  inner.innerHTML=
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">'+
+    '<div style="font-size:16px;font-weight:800;color:var(--text)">Nova campanha</div>'+
+    '<button onclick="document.getElementById(\'ovNovaCamp\').remove()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-3)">✕</button></div>'+
+    '<div style="margin-bottom:12px"><label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3)">Título</label>'+
+    '<input id="ncTitulo" type="text" placeholder="Ex: Promoção de fim de semana" maxlength="60" '+
+    'style="width:100%;margin-top:5px;padding:10px 12px;border-radius:8px;border:1px solid var(--sep);background:var(--bg-card-2);font-size:14px;color:var(--text);font-family:var(--font-body);outline:none"></div>'+
+    '<div style="margin-bottom:12px"><label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3)">Descrição curta</label>'+
+    '<input id="ncDesc" type="text" placeholder="Para quem é este envio?" maxlength="80" '+
+    'style="width:100%;margin-top:5px;padding:10px 12px;border-radius:8px;border:1px solid var(--sep);background:var(--bg-card-2);font-size:14px;color:var(--text);font-family:var(--font-body);outline:none"></div>'+
+    '<div style="margin-bottom:16px"><label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3)">Mensagem</label>'+
+    '<textarea id="ncMsg" rows="4" placeholder="Olá {nome}! Temos uma novidade no {salao}. Acesse: {link}" '+
+    'style="width:100%;margin-top:5px;padding:10px 12px;border-radius:8px;border:1px solid var(--sep);background:var(--bg-card-2);font-size:13px;color:var(--text);font-family:var(--font-body);resize:vertical;outline:none;line-height:1.55"></textarea>'+
+    '<div style="font-size:10px;color:var(--text-3);margin-top:4px">Use {nome}, {salao} e {link} como variáveis.</div></div>'+
+    '<button onclick="salvarNovaCampanha()" style="width:100%;padding:13px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer">Criar campanha</button>';
+  modal.appendChild(inner);
+  document.body.appendChild(modal);
+  modal.onclick=function(e){if(e.target===modal)modal.remove();};
+  setTimeout(function(){document.getElementById('ncTitulo').focus();},200);
+}
+
+function salvarNovaCampanha(){
+  var titulo=(document.getElementById('ncTitulo')||{}).value||'';
+  var desc=(document.getElementById('ncDesc')||{}).value||'';
+  var msg=(document.getElementById('ncMsg')||{}).value||'';
+  if(!titulo.trim()){toast('Informe o título da campanha','err');return;}
+  if(!msg.trim()){toast('Informe a mensagem da campanha','err');return;}
+  var tipo='custom_'+Date.now();
+  _campCustom.push({titulo:titulo.trim(),desc:desc.trim(),tipo:tipo});
+  _campTemplates[tipo]=msg.trim();
+  try{
+    localStorage.setItem('agenda_camp_custom',JSON.stringify(_campCustom));
+    localStorage.setItem('agenda_camp_tpl_'+tipo,msg.trim());
+  }catch(e){}
+  document.getElementById('ovNovaCamp').remove();
+  _tabOk.campanhas=false;
+  renderCampanhas();
+  toast('Campanha criada!','ok');
+}
+
+function _excluirCampCustom(tipo){
+  _campCustom=_campCustom.filter(function(c){return c.tipo!==tipo;});
+  delete _campTemplates[tipo];
+  try{
+    localStorage.setItem('agenda_camp_custom',JSON.stringify(_campCustom));
+    localStorage.removeItem('agenda_camp_tpl_'+tipo);
+  }catch(e){}
+  _tabOk.campanhas=false;
+  renderCampanhas();
 }
 
 async function exportarRelatorio(){

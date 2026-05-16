@@ -28,9 +28,7 @@ function gerarLinkWA(a) {
 /* ═══ AGENDA UNIFICADA ═══ */
 
 async function filtrarProf(profId){
-  _profFiltro = profId;
-  _tabOk.agenda = false; // força rerender
-  renderAgenda();
+  selecionarProfGlobal(profId);
 }
 
 var _renderingAgenda=false;
@@ -87,21 +85,8 @@ async function renderAgenda(){
 
   var html='';
 
-  /* FILTRO DE PROFISSIONAIS */
-  if(_profs.length > 1){
-    html+='<div class="prof-filter">';
-    var allSel=(_profFiltro===null);
-    html+='<button class="pfbtn'+(allSel?' on':'')+'" onclick="filtrarProf(null)">'+
-      '<div class="pfdot" style="background:'+(allSel?'#fff':'#ccc')+'"></div>Todos</button>';
-    _profs.forEach(function(p,i){
-      var cor=p.cor||profCor(i);
-      var sel=(_profFiltro===p.id);
-      html+='<button class="pfbtn'+(sel?' on':'')+'" data-profid="'+p.id+'" onclick="filtrarProf(this.dataset.profid)">'+
-        '<div class="pfdot" style="background:'+(sel?'#fff':cor)+';border-color:'+(sel?'#fff':cor)+'"></div>'+
-        esc(p.nome)+'</button>';
-    });
-    html+='</div>';
-  }
+  /* FILTRO DE PROFISSIONAIS — avatar strip global */
+  html+=renderProfStrip();
 
   /* SEÇÃO HOJE — métricas sempre visíveis */
   var _hoje2=new Date();
@@ -111,13 +96,25 @@ async function renderAgenda(){
   var _dFim=_y+'-'+String(_m).padStart(2,'0')+'-'+String(_dLast).padStart(2,'0');
   var _fatMes=0;
   try{
-    var _resMes=await api('agendamentos?salao_id=eq.'+S.id+'&data=gte.'+_d1+'&data=lte.'+_dFim+'&status=neq.cancelado&select=servico_preco');
+    var _profQ=_profFiltro?'&profissional_id=eq.'+_profFiltro:'';
+    var _resMes=await api('agendamentos?salao_id=eq.'+S.id+'&data=gte.'+_d1+'&data=lte.'+_dFim+'&status=neq.cancelado'+_profQ+'&select=servico_preco');
     _fatMes=(_resMes||[]).reduce(function(a,r){return a+(r.servico_preco||0);},0);
   }catch(e){}
+  // Comissão do profissional selecionado
+  var _profAtual=_profFiltro?_profs.find(function(p){return p.id===_profFiltro;}):null;
+  var _comPct=_profAtual&&_profAtual.comissao_pct!=null?_profAtual.comissao_pct:null;
+  var _fatCom=_comPct!==null?Math.round(fat*_comPct/100):null;
+  var _fatMesCom=_comPct!==null?Math.round(_fatMes*_comPct/100):null;
   html+='<div class="metrics">';
   html+='<div class="mc mc-L"><div class="mc-n">'+ativos.length+'</div><div class="mc-l">Hoje</div></div>';
   html+='<div class="mc mc-V"><div class="mc-n">'+formatPrice(fat)+'</div><div class="mc-l">Faturamento hoje</div></div>';
-  html+='<div class="mc mc-A mc-mes"><div class="mc-n">'+formatPrice(_fatMes)+'</div><div class="mc-l">Este mês</div></div>';
+  if(_fatCom!==null){
+    html+='<div class="mc" style="background:var(--VD-bg,rgba(45,106,79,.1))"><div class="mc-n" style="color:var(--VD)">'+formatPrice(_fatCom)+'</div><div class="mc-l" style="color:var(--VD)">Comissão hoje ('+_comPct+'%)</div></div>';
+  }
+  html+='<div class="mc mc-A mc-mes"><div class="mc-n">'+formatPrice(_fatMes)+'</div><div class="mc-l">Este mês'+((_profFiltro&&_profAtual)?' · '+_profAtual.nome.split(' ')[0]:'')+'</div></div>';
+  if(_fatMesCom!==null){
+    html+='<div class="mc" style="background:var(--VD-bg,rgba(45,106,79,.1))"><div class="mc-n" style="color:var(--VD)">'+formatPrice(_fatMesCom)+'</div><div class="mc-l" style="color:var(--VD)">Comissão mês ('+_comPct+'%)</div></div>';
+  }
   html+='</div>';
 
   /* HOJE — lista colapsável */

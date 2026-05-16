@@ -512,7 +512,7 @@ function iniciarApp(sessao){
   carregarServicos();
   renderAgenda();
   if(S.plano!=='basico'){
-    api('profissionais?salao_id=eq.'+S.id+'&ativo=eq.true&order=ordem').then(function(profs){
+    api('profissionais?salao_id=eq.'+S.id+'&ativo=eq.true&order=ordem&select=id,nome,especialidade,cor,foto_url,slug,comissao_pct').then(function(profs){
       _profs=profs||[];
       _profs.forEach(function(p,i){if(!p.cor)p.cor=PROF_CORES[i%PROF_CORES.length];});
     });
@@ -537,6 +537,43 @@ var _profFiltro=null;
 var PROF_CORES=['#FF5C1A','#1E6091','#2D6A4F','#C9736F','#6C63FF','#D4AF37','#E67E22','#8E44AD'];
 var _drillDia=null;
 function profCor(i){return PROF_CORES[i%PROF_CORES.length];}
+
+/* ── Seletor de profissional global (agenda / clientes / serviços) ── */
+function _profInitials(nome){
+  if(!nome) return '?';
+  var p=nome.trim().split(/\s+/);
+  return (p[0][0]+(p[1]?p[1][0]:'')).toUpperCase();
+}
+
+function renderProfStrip(){
+  if(!_profs||_profs.length<=1) return '';
+  var html='<div class="prof-strip">';
+  var allSel=(_profFiltro===null);
+  html+='<button class="ps-btn'+(allSel?' on':'')+'" onclick="selecionarProfGlobal(null)">'+
+    '<div class="ps-av ps-todos">'+_profs.length+'</div>'+
+    '<span>Todos</span></button>';
+  _profs.forEach(function(p,i){
+    var sel=(_profFiltro===p.id);
+    var av=p.foto_url
+      ? '<img src="'+esc(p.foto_url)+'" class="ps-av" style="object-fit:cover;border:none">'
+      : '<div class="ps-av" style="background:'+(p.cor||PROF_CORES[i%PROF_CORES.length])+'">'+_profInitials(p.nome)+'</div>';
+    html+='<button class="ps-btn'+(sel?' on':'')+'" data-profid="'+p.id+'" onclick="selecionarProfGlobal(this.dataset.profid)">'+
+      av+'<span>'+esc(p.nome.split(' ')[0])+'</span></button>';
+  });
+  html+='</div>';
+  return html;
+}
+
+function selecionarProfGlobal(id){
+  _profFiltro=id||null;
+  var activeBody=document.querySelector('.tab-body.on');
+  if(!activeBody) return;
+  var tid=activeBody.id.replace('tb-','');
+  _tabOk[tid]=false;
+  if(tid==='agenda') renderAgenda();
+  else if(tid==='clientes') renderClientes();
+  else if(tid==='servicos') renderServicos();
+}
 
 
 
