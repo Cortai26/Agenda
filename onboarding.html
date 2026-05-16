@@ -131,6 +131,11 @@ body{
     <h1 class="passo-h1" id="obSaudacao">O que você faz?</h1>
     <p class="passo-sub">Toque nos serviços mais comuns ou adicione os seus. Ajustamos preços depois.</p>
     <div id="chipsArea"></div>
+    <div style="background:rgba(229,90,12,0.06);border-left:2px solid var(--brand);padding:10px 14px;margin-bottom:16px;font-size:12px;color:var(--stone);line-height:1.6">
+      💡 <strong style="color:var(--bone)">Dica:</strong>
+      Preço médio na sua cidade? Pesquise no Google e coloque um valor justo —
+      nem o mais barato (parece suspeito), nem o mais caro (afasta antes de experimentar).
+    </div>
     <div class="svcs-lista" id="svcLista"></div>
     <div class="add-custom">
       <input type="text" id="inpSvcNome" placeholder="Outro serviço..." maxlength="40">
@@ -151,6 +156,11 @@ body{
     <button class="preset-btn" onclick="aplicarPreset()">
       ⚡ Preencher com Seg–Sex 9h–19h, Sáb 9h–14h
     </button>
+    <div style="background:rgba(229,90,12,0.06);border-left:2px solid var(--brand);padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--stone);line-height:1.6">
+      💡 <strong style="color:var(--bone)">Dica:</strong>
+      Profissionais que atendem sábado recebem 3x mais agendamentos online.
+      Vale a pena experimentar mesmo que por meio período.
+    </div>
     <div id="diasArea"></div>
     <div class="saving" id="savingHora"></div>
     <button class="btn-primary" onclick="salvarHorariosEAvancar()">
@@ -179,6 +189,15 @@ body{
     <div class="ob-field">
       <label class="ob-label" for="inpWhatsapp">WhatsApp para contato <span style="color:var(--stone-2);font-size:10px">(opcional)</span></label>
       <input type="tel" id="inpWhatsapp" class="ob-input" placeholder="(11) 99999-9999" oninput="mascaraTel(this)">
+    </div>
+    <div class="ob-field">
+      <label class="ob-label" for="inpDescricao">Sobre seu negócio <span style="color:var(--stone-2);font-size:10px">(opcional)</span></label>
+      <textarea id="inpDescricao" class="ob-input" rows="2"
+        placeholder="Ex: Especialistas em cortes clássicos e modernos desde 2018..."
+        style="border-bottom:1px solid var(--rule-2);padding-top:8px;resize:none;line-height:1.5"></textarea>
+      <div style="font-size:10px;color:var(--stone-2);margin-top:4px;font-style:italic;font-family:var(--serif)">
+        Aparece na sua página. Clientes gostam de saber com quem estão agendando.
+      </div>
     </div>
     <div class="saving" id="savingLoc"></div>
     <button class="btn-primary" onclick="salvarLocalizacaoEAvancar()">
@@ -223,6 +242,58 @@ body{
     <button class="btn-ghost" style="margin-top:10px" onclick="irParaPainel()">
       Ir para o painel →
     </button>
+
+    <div style="border-top:1px solid var(--rule);padding-top:24px;margin-top:20px;text-align:left">
+      <div style="font-size:9px;color:var(--stone-2);letter-spacing:3px;text-transform:uppercase;font-family:var(--sans);margin-bottom:18px">Para crescer mais rápido</div>
+
+      <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)">
+        <span style="font-size:20px;flex-shrink:0">📸</span>
+        <div>
+          <div style="font-family:var(--serif);font-style:italic;font-size:15px;color:var(--bone);margin-bottom:3px">Adicione uma foto de capa</div>
+          <div style="font-size:11px;color:var(--stone);line-height:1.5;font-weight:300">Páginas com foto de capa recebem 5x mais agendamentos. No painel → Config → Perfil público → Foto de capa.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)">
+        <span style="font-size:20px;flex-shrink:0">🔗</span>
+        <div>
+          <div style="font-family:var(--serif);font-style:italic;font-size:15px;color:var(--bone);margin-bottom:3px">Link na bio do Instagram</div>
+          <div style="font-size:11px;color:var(--stone);line-height:1.5;font-weight:300">Instagram → Editar perfil → Site → colar seu link. É o único link que você precisa.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)">
+        <span style="font-size:20px;flex-shrink:0">💬</span>
+        <div>
+          <div style="font-family:var(--serif);font-style:italic;font-size:15px;color:var(--bone);margin-bottom:3px">Mude o link no WhatsApp Business</div>
+          <div style="font-size:11px;color:var(--stone);line-height:1.5;font-weight:300">Na descrição do seu negócio no WhatsApp, substitua o número pelo seu link. Clientes que te acham no WhatsApp também conseguem agendar.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)">
+        <span style="font-size:20px;flex-shrink:0">⭐</span>
+        <div>
+          <div style="font-family:var(--serif);font-style:italic;font-size:15px;color:var(--bone);margin-bottom:3px">Peça avaliação após o atendimento</div>
+          <div style="font-size:11px;color:var(--stone);line-height:1.5;font-weight:300">No painel, marque o agendamento como concluído — o cliente recebe um link para avaliar automaticamente. Com 3+ avaliações, a nota aparece na sua página.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)">
+        <span style="font-size:20px;flex-shrink:0">💳</span>
+        <div>
+          <div style="font-family:var(--serif);font-style:italic;font-size:15px;color:var(--bone);margin-bottom:3px">Ative o sinal PIX antecipado</div>
+          <div style="font-size:11px;color:var(--stone);line-height:1.5;font-weight:300">Peça 30% do valor antes. Reduz drasticamente os "não apareceu sem avisar". Config → Sinal antecipado.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:4px">
+        <span style="font-size:20px;flex-shrink:0">🖼️</span>
+        <div>
+          <div style="font-family:var(--serif);font-style:italic;font-size:15px;color:var(--bone);margin-bottom:3px">Adicione fotos do seu trabalho</div>
+          <div style="font-size:11px;color:var(--stone);line-height:1.5;font-weight:300">4 fotos de trabalhos reais na galeria convencem mais que qualquer texto. Config → Galeria de trabalhos.</div>
+        </div>
+      </div>
+    </div>
   </div>
 
 </div>
@@ -400,9 +471,11 @@ async function salvarLocalizacaoEAvancar() {
     var cid=document.getElementById('inpCidade').value.trim();
     var ig=document.getElementById('inpInstagram').value.trim();
     var wa=document.getElementById('inpWhatsapp').value.replace(/\D/g,'');
+    var desc=(document.getElementById('inpDescricao')||{}).value||'';
     if(end)body.endereco=end;if(cid)body.cidade=cid;
     if(ig)body.instagram_url=ig.startsWith('http')?ig:'https://instagram.com/'+ig.replace('@','');
     if(wa.length>=10)body.whatsapp_url=wa;
+    if(desc.trim())body.descricao=desc.trim();
     if(Object.keys(body).length){
       try{var r=await fetch(SUPA_URL+'/rest/v1/saloes?id=eq.'+_salao.id,{method:'PATCH',headers:Object.assign({},H,{'Prefer':'return=minimal'}),body:JSON.stringify(body)});save.textContent=r.ok?'✓ Localização salva':'Erro ao salvar';}
       catch(e){save.textContent='Erro ao salvar';}
