@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reagendar — Agenda.</title>
+<meta name="theme-color" content="#E55A0C">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0A0908;--ink-2:#111009;--bone:#F0EDE8;--stone:#A09890;--stone-2:#6A6462;--brand:#E55A0C;--ok:#22C55E;--err:#EF4444;--rule:rgba(240,237,232,0.06);--rule-2:rgba(240,237,232,0.14);--serif:'Cormorant Garamond',Georgia,serif;--sans:'Manrope',system-ui,sans-serif;--mono:'JetBrains Mono',monospace}
+html.t-neutral{--ink:#F5F2EC;--ink-2:#FFF;--bone:#1A0E06;--stone:#5A4030;--rule:rgba(26,14,6,0.07);--rule-2:rgba(26,14,6,0.12)}
+html.t-feminine{--ink:#FBF5F7;--ink-2:#FFF;--bone:#1A0613;--stone:#5A1A35;--brand:#D81B60;--rule:rgba(216,27,96,0.08);--rule-2:rgba(216,27,96,0.14)}
+html.t-clinic{--ink:#F2F6F9;--ink-2:#FFF;--bone:#0E2A45;--stone:#2A5070;--brand:#2C6FAA;--rule:rgba(44,111,170,0.08);--rule-2:rgba(44,111,170,0.14)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ink);color:var(--bone);font-family:var(--sans);-webkit-font-smoothing:antialiased;min-height:100vh}
+.nav{height:52px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--rule);background:rgba(10,9,8,0.94);backdrop-filter:blur(10px);position:sticky;top:0;z-index:50}
+html.t-neutral .nav,html.t-feminine .nav,html.t-clinic .nav{background:rgba(255,255,255,0.94)}
+.nav-logo{font-family:var(--serif);font-style:italic;font-size:17px;color:var(--bone);text-decoration:none}
+.wrap{max-width:480px;margin:0 auto;padding:32px 20px 80px}
+.eyebrow{font-size:9px;color:rgba(229,90,12,0.6);letter-spacing:4px;text-transform:uppercase;font-family:var(--sans);margin-bottom:10px}
+.h1{font-family:var(--serif);font-style:italic;font-size:34px;color:var(--bone);letter-spacing:-1px;line-height:1;margin-bottom:8px}
+.sub{font-size:13px;color:var(--stone);line-height:1.6;font-weight:300;margin-bottom:24px}
+.ag-atual{border-left:2px solid var(--brand);padding:14px 16px;background:var(--ink-2);margin-bottom:28px}
+.ag-atual-label{font-size:9px;color:var(--stone-2);letter-spacing:3px;text-transform:uppercase;font-family:var(--sans);margin-bottom:8px}
+.ag-atual-info{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--bone)}
+.ag-atual-svc{font-size:13px;color:var(--stone);margin-top:3px}
+.cal-label{font-size:9px;color:var(--brand);letter-spacing:3px;text-transform:uppercase;font-family:var(--sans);margin:0 0 10px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:20px}
+.cal-day{display:flex;flex-direction:column;align-items:center;padding:8px 2px;min-height:54px;background:transparent;border:1px solid var(--rule);cursor:pointer;transition:all 0.15s;-webkit-tap-highlight-color:transparent}
+.cal-day:active:not([disabled]){border-color:var(--brand)}
+.cal-day.sel{background:var(--brand);border-color:var(--brand)}
+.cal-day[disabled]{opacity:0.25;cursor:not-allowed}
+.cal-day .da{font-size:8px;letter-spacing:1px;color:var(--stone-2);font-family:var(--sans)}
+.cal-day.sel .da{color:rgba(255,255,255,0.7)}
+.cal-day .dn{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--bone);margin:2px 0;line-height:1}
+.cal-day.sel .dn{color:var(--bone)}
+.cal-day .ds{font-size:8px;color:var(--brand);font-family:var(--sans);font-weight:600}
+.cal-day.sel .ds{color:rgba(255,255,255,0.8)}
+.periodo-label{font-size:9px;color:var(--brand);letter-spacing:3px;text-transform:uppercase;font-family:var(--sans);margin:16px 0 8px}
+.horas-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:20px}
+.hora-btn{padding:10px 4px;text-align:center;background:transparent;border:1px solid var(--rule);cursor:pointer;min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;transition:all 0.15s;-webkit-tap-highlight-color:transparent}
+.hora-btn:active:not([disabled]){border-color:var(--brand)}
+.hora-btn.sel{background:var(--brand);border-color:var(--brand)}
+.hora-btn.sug:not(.sel){border-color:rgba(229,90,12,0.4)}
+.hora-btn[disabled]{opacity:0.22;cursor:not-allowed}
+.hora-t{font-family:var(--serif);font-style:italic;font-size:13px;color:var(--bone)}
+.hora-btn.sel .hora-t{color:var(--bone)}
+.hora-btn.sug:not(.sel) .hora-t{color:var(--brand)}
+.hora-badge{font-size:7px;color:var(--brand);letter-spacing:1px;text-transform:uppercase;font-family:var(--sans);font-weight:600}
+.hora-btn.sel .hora-badge{color:rgba(255,255,255,0.75)}
+.btn-confirmar{width:100%;padding:16px 20px;background:var(--brand);color:var(--bone);border:none;font-family:var(--serif);font-style:italic;font-size:18px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background 0.15s;margin-top:8px}
+.btn-confirmar:disabled{opacity:0.4;cursor:not-allowed}
+.btn-confirmar:active:not([disabled]){background:#C04A08}
+.info-box{font-size:12px;color:var(--stone);border:1px solid var(--rule-2);padding:12px 14px;margin-bottom:16px;line-height:1.6}
+.sucesso-check{width:60px;height:60px;border-radius:50%;background:var(--ok);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;animation:pop 0.5s cubic-bezier(0.34,1.56,0.64,1)}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="#" class="nav-logo" id="navLogo">Agenda<span style="color:var(--brand)">.</span></a>
+</nav>
+
+<div class="wrap" id="app">
+  <div style="text-align:center;padding:48px;color:var(--stone);font-family:var(--serif);font-style:italic">Carregando...</div>
+</div>
+
+<script>
+const SUPA_URL = 'https://acldrisohnjfekjxgmoh.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFjbGRyaXNvaG5qZmVranhnbW9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1ODA1MzcsImV4cCI6MjA4OTE1NjUzN30.etojz12x1oVNvbW_fPeVpNx2OFuJ72C1YioFBlCLS2Y';
+const H = { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${SUPA_KEY}`, 'Content-Type': 'application/json' };
+const TOKEN = new URLSearchParams(location.search).get('token');
+
+let _ag = null, _salao = null, _slotsPorDia = {}, _slotsOtimizados = [];
+let _novaDia = null, _novaHora = null;
+
+async function init() {
+  if (!TOKEN) { mostrarErro('Link inválido.'); return; }
+
+  const r = await fetch(
+    `${SUPA_URL}/rest/v1/agendamentos?cancel_token=eq.${TOKEN}&select=*,saloes(id,nome,slug,tema,fonte,horario,intervalo_slots)`,
+    { headers: H }
+  );
+  const [ag] = await r.json();
+
+  if (!ag) { mostrarErro('Agendamento não encontrado.'); return; }
+  if (ag.status === 'cancelado') { mostrarErro('Este agendamento já foi cancelado.'); return; }
+
+  _ag = ag;
+  _salao = ag.saloes;
+
+  /* Aplicar tema */
+  const temaId = _salao?.tema?.id || _salao?.tema?.template || 'onyx';
+  const mapaClasse = { neutral:'t-neutral', feminine:'t-feminine', clinic:'t-clinic' };
+  if (mapaClasse[temaId]) document.documentElement.classList.add(mapaClasse[temaId]);
+
+  document.getElementById('navLogo').href = `/agendar.html?slug=${_salao?.slug}`;
+  document.title = `Reagendar — ${_salao?.nome}`;
+
+  renderPaginaReagendar();
+}
+
+function renderPaginaReagendar() {
+  const ag = _ag;
+  const fmtData = new Date(ag.data + 'T12:00:00').toLocaleDateString('pt-BR',{ weekday:'long', day:'2-digit', month:'long' });
+
+  document.getElementById('app').innerHTML = `
+  <div class="eyebrow">Reagendar</div>
+  <h1 class="h1">Escolha<br>um novo horário.</h1>
+  <p class="sub">O horário atual será cancelado automaticamente quando você confirmar o novo.</p>
+
+  <div class="ag-atual">
+    <div class="ag-atual-label">Agendamento atual</div>
+    <div class="ag-atual-info">${ag.hora?.slice(0,5)} · ${fmtData}</div>
+    <div class="ag-atual-svc">${ag.servico_nome}${ag.profissional_nome?' · com '+ag.profissional_nome:''}</div>
+  </div>
+
+  <div class="info-box">
+    💡 Seus dados (nome e WhatsApp) serão mantidos. Só muda o dia e o horário.
+  </div>
+
+  <div class="cal-label">Escolha o dia</div>
+  <div class="cal-grid" id="calGrid">Carregando...</div>
+
+  <div id="horasArea"></div>
+
+  <button class="btn-confirmar" id="btnConf" onclick="confirmarReagendar()" disabled>
+    <span id="btnConfLabel">Escolha um dia e horário</span>
+    <span>→</span>
+  </button>`;
+
+  carregarCalendario();
+}
+
+async function carregarCalendario() {
+  const hoje = new Date().toISOString().split('T')[0];
+  const fim  = new Date(Date.now() + 13*24*60*60*1000).toISOString().split('T')[0];
+
+  try {
+    const r = await fetch(`${SUPA_URL}/rest/v1/rpc/slots_livres_por_semana`, {
+      method:'POST', headers:H,
+      body: JSON.stringify({ p_salao_id: _salao.id, p_data_ini: hoje, p_data_fim: fim })
+    });
+    _slotsPorDia = await r.json();
+  } catch(e) { _slotsPorDia = {}; }
+
+  const ABBR = ['DOM','SEG','TER','QUA','QUI','SEX','SÁB'];
+  let html = '';
+  for (let i = 0; i < 14; i++) {
+    const d = new Date(Date.now() + i*24*60*60*1000);
+    const dStr = d.toISOString().split('T')[0];
+    const livres = _slotsPorDia[dStr] ?? null;
+    const full = livres === 0;
+    const isSel = _novaDia === dStr;
+    html += `
+    <button class="cal-day${isSel?' sel':''}"
+      ${full?'disabled':''} onclick="${full?'':(`selecionarDia('${dStr}')`)}">>
+      <span class="da">${ABBR[d.getDay()]}</span>
+      <span class="dn">${d.getDate()}</span>
+      <span class="ds">${livres===null?'':full?'—':`${livres}h`}</span>
+    </button>`;
+  }
+  document.getElementById('calGrid').innerHTML = html;
+}
+
+async function selecionarDia(dStr) {
+  _novaDia = dStr;
+  _novaHora = null;
+  atualizarBotao();
+  carregarCalendario();
+
+  document.getElementById('horasArea').innerHTML = '<div style="padding:12px 0;color:var(--stone);font-style:italic;font-family:var(--serif)">Buscando horários...</div>';
+
+  try {
+    const r = await fetch(`${SUPA_URL}/rest/v1/rpc/slots_otimizados`, {
+      method:'POST', headers:H,
+      body: JSON.stringify({ p_salao_id: _salao.id, p_data: dStr })
+    });
+    const res = await r.json();
+    _slotsOtimizados = res?.slots || [];
+  } catch(e) { _slotsOtimizados = []; }
+
+  const livre = _slotsOtimizados.filter(s => !s.ocupado);
+  if (!livre.length) {
+    document.getElementById('horasArea').innerHTML = '<div style="padding:12px 0;color:var(--stone);font-style:italic;font-family:var(--serif)">Nenhum horário disponível neste dia.</div>';
+    return;
+  }
+
+  const periodos = {
+    'Manhã':  livre.filter(s => parseInt(s.hora) >= 6  && parseInt(s.hora) < 12),
+    'Tarde':  livre.filter(s => parseInt(s.hora) >= 12 && parseInt(s.hora) < 18),
+    'Noite':  livre.filter(s => parseInt(s.hora) >= 18 && parseInt(s.hora) < 23),
+  };
+
+  let html = '';
+  Object.entries(periodos).forEach(([label, slots]) => {
+    if (!slots.length) return;
+    html += `<div class="periodo-label">${label}</div>
+    <div class="horas-grid">
+      ${slots.map(s => {
+        const isSel = _novaHora?.slice(0,5) === s.hora.slice(0,5);
+        return `<button class="hora-btn${isSel?' sel':''}${s.sugerido&&!isSel?' sug':''}"
+          onclick="selecionarHora('${s.hora}')">
+          <span class="hora-t">${s.hora.slice(0,5)}</span>
+          ${s.sugerido?'<span class="hora-badge">sugerido</span>':''}
+        </button>`;
+      }).join('')}
+    </div>`;
+  });
+  document.getElementById('horasArea').innerHTML = html;
+}
+window.selecionarDia = selecionarDia;
+
+function selecionarHora(hora) {
+  _novaHora = hora;
+  atualizarBotao();
+  selecionarDia(_novaDia);
+}
+window.selecionarHora = selecionarHora;
+
+function atualizarBotao() {
+  const btn = document.getElementById('btnConf');
+  const label = document.getElementById('btnConfLabel');
+  if (!btn) return;
+  if (_novaDia && _novaHora) {
+    btn.disabled = false;
+    const fmtNovo = new Date(_novaDia+'T12:00:00').toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'short'});
+    label.textContent = `Confirmar ${_novaHora.slice(0,5)} · ${fmtNovo}`;
+  } else if (_novaDia) {
+    label.textContent = 'Escolha um horário';
+    btn.disabled = true;
+  } else {
+    label.textContent = 'Escolha um dia e horário';
+    btn.disabled = true;
+  }
+}
+
+async function confirmarReagendar() {
+  const btn = document.getElementById('btnConf');
+  btn.disabled = true;
+  btn.innerHTML = '<span>Reagendando...</span>';
+
+  const r = await fetch(`${SUPA_URL}/rest/v1/rpc/reagendar`, {
+    method:'POST', headers:H,
+    body: JSON.stringify({ p_cancel_token: TOKEN, p_nova_data: _novaDia, p_nova_hora: _novaHora })
+  });
+  const res = await r.json();
+
+  if (res && res.ok === false) {
+    btn.disabled = false;
+    btn.innerHTML = `<span id="btnConfLabel">Confirmar ${_novaHora?.slice(0,5)}</span><span>→</span>`;
+    alert(res.erro || 'Erro ao reagendar. Tente novamente.');
+    return;
+  }
+
+  /* Sucesso */
+  const fmtNovo = new Date(_novaDia+'T12:00:00').toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'});
+  const cancelNovoUrl = `/cancelar.html?token=${res?.cancel_token || TOKEN}`;
+  const waMsg = encodeURIComponent(`Reagendei ${_ag.servico_nome} com ${_salao?.nome}\n${fmtNovo} às ${_novaHora?.slice(0,5)}\n\nCancelar: ${location.origin}${cancelNovoUrl}`);
+
+  document.getElementById('app').innerHTML = `
+  <div style="text-align:center;padding:20px 0">
+    <div class="sucesso-check">
+      <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+        <polyline points="4,13 10,19 22,7" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="eyebrow">Reagendado</div>
+    <h1 class="h1" style="font-size:36px;margin-bottom:8px">Tudo certo.</h1>
+    <p class="sub">${_ag.servico_nome} · ${fmtNovo} às ${_novaHora?.slice(0,5)}</p>
+
+    <a href="https://wa.me/?text=${waMsg}" target="_blank"
+      style="display:flex;align-items:center;justify-content:space-between;
+        padding:13px 16px;background:rgba(37,211,102,0.08);border:1px solid rgba(37,211,102,0.2);
+        color:#25D366;font-family:var(--serif);font-style:italic;font-size:15px;
+        text-decoration:none;margin-bottom:8px">
+      <span>💬 Salvar no WhatsApp</span><span>→</span>
+    </a>
+    <a href="${cancelNovoUrl}"
+      style="display:block;text-align:center;font-size:12px;color:var(--stone-2);
+        font-family:var(--serif);font-style:italic;margin-top:16px;text-decoration:none">
+      Precisa cancelar este horário? Clique aqui
+    </a>
+    <a href="/agendar.html?slug=${_salao?.slug}"
+      style="display:flex;align-items:center;justify-content:space-between;
+        padding:13px 16px;border:1px solid var(--rule-2);color:var(--stone);
+        font-family:var(--serif);font-style:italic;font-size:15px;text-decoration:none;margin-top:12px">
+      <span>← Voltar para ${_salao?.nome}</span>
+    </a>
+  </div>`;
+}
+window.confirmarReagendar = confirmarReagendar;
+
+function mostrarErro(msg) {
+  document.getElementById('app').innerHTML = `
+  <div style="text-align:center;padding:48px 0">
+    <div style="font-size:40px;margin-bottom:16px">😔</div>
+    <div style="font-family:var(--serif);font-style:italic;font-size:22px;color:var(--bone);margin-bottom:8px">${msg}</div>
+    <a href="/" style="font-size:13px;color:var(--brand);text-decoration:none">← Voltar ao início</a>
+  </div>`;
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
