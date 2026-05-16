@@ -65,11 +65,23 @@ async function abrirProf(id){
   var p=id?_profissionais.find(function(x){return x.id===id;}):null;
   var isBasico=(S.plano==='basico'||S.plano==='trial');
   var titulo=isBasico?'Meu Perfil':(id?'Editar Profissional':'Novo Profissional');
+
+  // Load linked services for this profissional
+  var profServicosAtivos={};
+  if(id){
+    try{
+      var ps=await api('profissional_servicos?profissional_id=eq.'+id+'&select=servico_id,ativo');
+      if(Array.isArray(ps)) ps.forEach(function(r){ profServicosAtivos[r.servico_id]=r.ativo!==false; });
+    }catch(e){}
+  }
+
+  var comissaoVal=p&&p.comissao_pct!=null?p.comissao_pct:50;
   var html=
     '<div class="mhdr"><h3>'+titulo+'</h3><button class="mclose" onclick="fecharProf()">✕</button></div>'+
     '<div class="merr" id="profErr"></div>'+
     '<div class="fg"><label class="fl">Nome *</label><input class="fi" type="text" id="profNome" placeholder="Nome do profissional" value="'+esc(p?p.nome:'')+'" maxlength="60"></div>'+
     '<div class="fg"><label class="fl">Especialidade</label><input class="fi" type="text" id="profEsp" placeholder="Ex: Barbeiro, Cabeleireiro" value="'+esc(p&&p.especialidade?p.especialidade:'')+'" maxlength="60"></div>'+
+    (!isBasico?'<div class="fg"><label class="fl">Comissão (%)</label><input class="fi" type="number" id="profComissao" min="0" max="100" step="1" value="'+comissaoVal+'" style="width:120px"></div>':'')+
     '<div class="fg">'+
       '<label class="fl">Foto do profissional</label>'+
       '<div class="foto-wrap">'+
@@ -80,14 +92,39 @@ async function abrirProf(id){
           (p&&p.foto_url?'<button class="btn-foto btn-foto-del" onclick="removerFoto()">🗑️ Remover</button>':'')+
         '</div>'+
       '</div>'+
-    '</div>'+
-    '<button class="btn-sv" onclick="salvarProf()">Salvar</button>';
+    '</div>';
+
+  // Service toggles (only when editing existing profissional in non-basico plan)
+  if(id && !isBasico && typeof _servicos!=='undefined' && _servicos.length){
+    html+='<div class="fg"><label class="fl">Serviços disponíveis</label>'+
+      '<div style="display:flex;flex-direction:column;gap:6px;margin-top:4px">';
+    _servicos.forEach(function(s){
+      var ativo=profServicosAtivos.hasOwnProperty(s.id)?profServicosAtivos[s.id]:true;
+      html+='<label style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:7px;background:var(--bg-card);border:1px solid var(--sep);cursor:pointer">'+
+        '<input type="checkbox" data-srv="'+s.id+'" '+(ativo?'checked':'')+' onchange="toggleProfServico(\''+id+'\',\''+s.id+'\',this.checked)" style="width:16px;height:16px;accent-color:var(--brand)">'+
+        '<span style="font-size:13px;font-weight:600;color:var(--text)">'+esc(s.nome)+'</span>'+
+        '</label>';
+    });
+    html+='</div></div>';
+  }
+
+  html+='<button class="btn-sv" onclick="salvarProf()">Salvar</button>';
   var ov=document.getElementById('ovSrv');
   ov.querySelector('.modal').innerHTML=html;
   ov.classList.add('show');
 }
 
 async function fecharProf(){document.getElementById('ovSrv').classList.remove('show');}
+
+async function toggleProfServico(profId, servicoId, ativo){
+  try{
+    await api('profissional_servicos',{
+      method:'POST',
+      headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},
+      body:JSON.stringify({profissional_id:profId,servico_id:servicoId,ativo:ativo})
+    });
+  }catch(e){ toast('Erro ao salvar serviço: '+e.message,'err'); }
+}
 
 /* ─── FOTO ─── */
 var _fotoFile=null;
@@ -143,11 +180,15 @@ async function salvarProf(){
   var btn=document.querySelector('.btn-sv');
   if(btn){btn.disabled=true;btn.textContent='Salvando...';}
 
+  var comissaoEl=document.getElementById('profComissao');
+  var comissaoPct=comissaoEl?parseFloat(comissaoEl.value)||null:null;
+
   try{
     if(_editProfId){
       // Upload foto se mudou
       var fotoUrl=await _uploadFotoProf(S.id,_editProfId);
       var upd={nome:nome.trim(),especialidade:esp.trim()||null};
+      if(comissaoPct!=null) upd.comissao_pct=comissaoPct;
       if(fotoUrl!==undefined) upd.foto_url=fotoUrl;
       await rpc('atualizar_profissional',{p_slug:S.slug,p_senha:pw,p_prof_id:_editProfId,p_dados:upd});
       var idx=_profissionais.findIndex(function(x){return x.id===_editProfId;});
