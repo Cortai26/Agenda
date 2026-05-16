@@ -461,8 +461,10 @@ nav{
       </div>
     </div>
 
-    <button class="btn-main" onclick="irGerenciar()">⚙️ Entrar no painel e configurar →</button>
-    <button class="btn-ghost" onclick="verPagina()">👁 Ver minha página de agendamento</button>
+    <button class="btn-main" id="btnIrOnboarding" onclick="irOnboarding()">
+      <span>Configurar minha página</span><span>→</span>
+    </button>
+    <button class="btn-ghost" onclick="irGerenciar()" style="margin-top:8px;font-size:13px">Ir direto para o painel</button>
   </div>
 
 </div>
@@ -706,6 +708,12 @@ async function cadastrar(){
   try{localStorage.setItem('cortai_novo_slug',fSlug);}catch(e){}
 
   irEtapa(3);
+}
+
+function irOnboarding(){
+  var slug='';
+  try{slug=localStorage.getItem('cortai_novo_slug')||'';}catch(e){}
+  window.location.href='/onboarding.html'+(slug?'?slug='+slug:'');
 }
 
 function irGerenciar(){
