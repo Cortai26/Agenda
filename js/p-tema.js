@@ -36,12 +36,44 @@ function renderTema(){
   el.innerHTML=html;
 }
 
+function renderFonte(){
+  var el=document.getElementById('temaWrap');
+  if(!el) return;
+  var atual=S._fonte||'sans';
+  var html='<div class="perfil-tit sec-collapse" onclick="if(typeof toggleSec===\'function\')toggleSec(this)" style="margin-top:8px">Fonte da página</div><div class="sec-body">';
+  html+='<div style="font-size:12px;color:var(--text-2,var(--CZ));font-weight:600;margin-bottom:14px;line-height:1.5">Escolha a tipografia exibida na sua página de agendamento.</div>';
+  html+='<div style="display:flex;gap:10px">';
+  html+='<button onclick="aplicarFonteEdt(\'sans\')" style="flex:1;padding:12px;border-radius:8px;border:2px solid '+(atual==='sans'?'var(--brand)':'var(--sep)')+';background:'+(atual==='sans'?'var(--brand-dim)':'transparent')+';cursor:pointer;text-align:center">';
+  html+='<div style="font-family:\'Manrope\',sans-serif;font-size:15px;font-weight:700;color:var(--text)">Manrope</div>';
+  html+='<div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-top:3px">Moderno</div>';
+  html+='</button>';
+  html+='<button onclick="aplicarFonteEdt(\'serif\')" style="flex:1;padding:12px;border-radius:8px;border:2px solid '+(atual==='serif'?'var(--brand)':'var(--sep)')+';background:'+(atual==='serif'?'var(--brand-dim)':'transparent')+';cursor:pointer;text-align:center">';
+  html+='<div style="font-family:\'Cormorant Garamond\',Georgia,serif;font-style:italic;font-size:17px;font-weight:600;color:var(--text)">Cormorant</div>';
+  html+='<div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-top:3px">Editorial</div>';
+  html+='</button>';
+  html+='</div></div>';
+  el.innerHTML=el.innerHTML+html;
+}
+
+function aplicarFonteEdt(f){
+  S._fonte=f;
+  api('saloes?slug=eq.'+S.slug,{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({fonte:f})}).catch(function(){});
+  renderTema();
+  renderFonte();
+}
+
+function aplicarFonteAgendar(f){
+  var html=document.documentElement;
+  html.classList.remove('fonte-serif','fonte-sans');
+  html.classList.add('fonte-'+(f||'sans'));
+}
+
 function aplicarTemaSimples(cls){
   if(typeof setPainelTema==='function') setPainelTema(cls);
   var tpl=cls.replace('t-','');
   var temaObj={template:tpl,id:tpl,cores:{}};
   S._tema=temaObj;
   rpc('salvar_tema_salao',{p_slug:S.slug,p_senha:_pw||'',p_tema:temaObj}).then(function(){
-    renderTema();
-  }).catch(function(){ renderTema(); });
+    renderTema(); renderFonte();
+  }).catch(function(){ renderTema(); renderFonte(); });
 }

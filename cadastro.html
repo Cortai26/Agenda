@@ -102,6 +102,15 @@ nav{
 /* ── PASSWORD ── */
 .pw-bars{display:flex;gap:4px;margin-top:6px}
 .pw-bar{height:2px;flex:1;border-radius:2px;background:var(--ink5);transition:.3s}
+.fi-wrap{position:relative}
+.fi-wrap .fi{padding-right:44px}
+.fi-eye{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;color:var(--bone3);padding:4px;
+  display:flex;align-items:center;justify-content:center;line-height:1;
+  font-size:16px;transition:.15s;
+}
+.fi-eye:hover{color:var(--bone)}
 .pw-info{font-family:var(--mono);font-size:10px;color:var(--bone3);margin-top:5px;min-height:14px}
 
 /* ── TERMOS ── */
@@ -393,7 +402,10 @@ nav{
     <div class="two">
       <div class="fg">
         <label class="fl">Criar senha *</label>
-        <input class="fi" type="password" id="fSenha" placeholder="Mínimo 6 caracteres" maxlength="50" oninput="avaliarSenha()">
+        <div class="fi-wrap">
+          <input class="fi" type="password" id="fSenha" placeholder="Mínimo 6 caracteres" maxlength="50" oninput="avaliarSenha()">
+          <button type="button" class="fi-eye" id="btnOlho" onclick="toggleSenha()" aria-label="Mostrar/ocultar senha">👁</button>
+        </div>
         <div class="pw-bars"><div class="pw-bar" id="pwb1"></div><div class="pw-bar" id="pwb2"></div><div class="pw-bar" id="pwb3"></div></div>
         <div class="pw-info" id="pwInfo">Crie uma senha para acessar seu painel</div>
       </div>
@@ -622,6 +634,13 @@ function verificarSlug(){
 }
 
 // ── SENHA ──
+function toggleSenha(){
+  var inp=document.getElementById('fSenha');
+  var btn=document.getElementById('btnOlho');
+  if(inp.type==='password'){inp.type='text';btn.textContent='🙈';}
+  else{inp.type='password';btn.textContent='👁';}
+}
+
 function avaliarSenha(){
   var v=document.getElementById('fSenha').value;
   var f=sforca(v);

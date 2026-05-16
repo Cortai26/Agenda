@@ -1591,6 +1591,14 @@ html.t-clinic .ws-chapter-title{color:var(--c-text);}
 .ws-hero-v2-cover{height:min(380px,58vh) !important;}
 
 /* ── NOME OVERLAY: nome sobre a foto quando não há avatar ── */
+/* fonte-serif: aplica Cormorant Garamond italic nos títulos/nomes */
+html.fonte-serif .ws-hero-v2-nome,
+html.fonte-serif .ws-hero-nome-capa,
+html.fonte-serif .svc-name,
+html.fonte-serif .step-title,
+html.fonte-serif .hdr-name{
+  font-family:'Cormorant Garamond',Georgia,serif!important;font-style:italic!important;
+}
 .ws-hero-nome-capa{
   position:absolute;bottom:0;left:0;right:0;
   padding:20px 16px 16px;
@@ -2037,6 +2045,19 @@ async function init(){
     const srvs = await supa(`servicos?salao_id=eq.${salao.id}&ativo=eq.true&order=ordem`);
     servicos = srvs||[];
 
+    // Filtrar serviços pelo profissional, se ?prof= estiver na URL
+    if(profParam && servicos.length){
+      try{
+        var psRows=await supa(`profissional_servicos?profissional_id=eq.${profParam}&select=servico_id,ativo`);
+        if(Array.isArray(psRows) && psRows.length){
+          var psMap={};
+          psRows.forEach(function(r){ psMap[r.servico_id]=r.ativo!==false; });
+          // Só inclui serviços onde ativo=true para esse profissional
+          servicos=servicos.filter(function(s){ return psMap[s.id]!==false; });
+        }
+      }catch(e){}
+    }
+
     buildSrv();
     buildDias();
 
@@ -2067,7 +2088,7 @@ async function applyTheme(){
   try{
     var slug2=new URLSearchParams(location.search).get('slug');
     if(!slug2) return;
-    var r=await fetch('https://acldrisohnjfekjxgmoh.supabase.co/rest/v1/saloes?slug=eq.'+slug2+'&select=tema',
+    var r=await fetch('https://acldrisohnjfekjxgmoh.supabase.co/rest/v1/saloes?slug=eq.'+slug2+'&select=tema,fonte',
       {headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY}});
     var d=await r.json();
     // tema is stored as {template:"onyx"} or as legacy string "t-obsidian"
@@ -2097,6 +2118,10 @@ async function applyTheme(){
     });
     document.documentElement.classList.add(tema);
     document.body.className=tema;
+    // Apply font
+    var fonte=(d&&d[0]&&d[0].fonte)||'sans';
+    document.documentElement.classList.remove('fonte-serif','fonte-sans');
+    document.documentElement.classList.add('fonte-'+fonte);
   }catch(e){console.warn('applyTheme:',e);}
 }
 

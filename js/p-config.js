@@ -479,10 +479,11 @@ async function renderPagina(){
 
   var d={};
   try{
-    var rows=await api('saloes?slug=eq.'+S.slug+'&select=nome,slug,responsavel,descricao,categoria,instagram_url,website_url,whatsapp_url,tiktok_url,facebook_url,video_url,tag_destaque,fundado_em,foto_url,foto_capa_url,galeria_fotos,diferenciais,faq,produtos,telefone,endereco,cep,cidade,bairro,numero,complemento,horario,intervalo_slots,max_ag_dia,cancelamento_min,aceita_dinheiro,aceita_pix,aceita_cartao,aceita_debito,pix_key,pix_tipo,mostrar_sinal,sinal_percentual,sinal_obrigatorio,notif_novo_ag,lembrete_retorno_ativo,lembrete_retorno_dias,lembrete_retorno_msg,publico_marketplace,aceita_indicacao,fat_nome,fat_cpf_cnpj,fat_email,fat_empresa,fat_celular,fat_cep,fat_rua,fat_numero,fat_complemento,fat_bairro,fat_cidade,fat_estado,tema');
+    var rows=await api('saloes?slug=eq.'+S.slug+'&select=nome,slug,responsavel,descricao,categoria,instagram_url,website_url,whatsapp_url,tiktok_url,facebook_url,video_url,tag_destaque,fundado_em,foto_url,foto_capa_url,galeria_fotos,diferenciais,faq,produtos,telefone,endereco,cep,cidade,bairro,numero,complemento,horario,intervalo_slots,max_ag_dia,cancelamento_min,aceita_dinheiro,aceita_pix,aceita_cartao,aceita_debito,pix_key,pix_tipo,mostrar_sinal,sinal_percentual,sinal_obrigatorio,notif_novo_ag,lembrete_retorno_ativo,lembrete_retorno_dias,lembrete_retorno_msg,publico_marketplace,aceita_indicacao,fat_nome,fat_cpf_cnpj,fat_email,fat_empresa,fat_celular,fat_cep,fat_rua,fat_numero,fat_complemento,fat_bairro,fat_cidade,fat_estado,tema,fonte');
     d=rows&&rows[0]?rows[0]:{};
     if(d.tema&&!S._tema) S._tema=d.tema;
     if(d.horario&&!S.horario) S.horario=d.horario;
+    if(d.fonte) S._fonte=d.fonte;
   }catch(e){ d={}; }
 
   try{
@@ -545,6 +546,7 @@ async function renderPagina(){
 
   setTimeout(function(){
     if(typeof renderTema==='function') renderTema();
+    if(typeof renderFonte==='function') renderFonte();
     atualizarStatusPush();
   },100);
 }
