@@ -2173,13 +2173,53 @@ async function applyTheme(){
   }catch(e){console.warn('applyTheme:',e);}
 }
 
+var _srvFiltroProf=null;
+var _srvFiltroMap={};
+
+async function filtrarProf(profId){
+  _srvFiltroProf=profId;
+  _srvFiltroMap={};
+  if(profId){
+    try{
+      var psRows=await supa(`profissional_servicos?profissional_id=eq.${profId}&select=servico_id,ativo`);
+      if(Array.isArray(psRows)) psRows.forEach(function(r){ _srvFiltroMap[r.servico_id]=r.ativo!==false; });
+    }catch(e){}
+  }
+  buildSrv();
+}
+
+function limparFiltroProf(){
+  _srvFiltroProf=null;
+  _srvFiltroMap={};
+  buildSrv();
+}
+
 function buildSrv(){
   const w=document.getElementById('srvWrap');
   w.innerHTML='';
   if(!servicos.length) return;
+
+  // Apply professional filter if active
+  let lista=servicos;
+  if(_srvFiltroProf){
+    lista=servicos.filter(function(sv){
+      return _srvFiltroMap[sv.id]!==false;
+    });
+  }
+
   const ul=document.createElement('div');
   ul.className='svc-ed-list';
-  servicos.forEach((sv,i)=>{
+
+  // "Ver todos" chip when filter is active
+  if(_srvFiltroProf && servicos.length !== lista.length){
+    const chip=document.createElement('div');
+    chip.style.cssText='font-size:11px;color:var(--c-stone,#888);text-align:center;margin-bottom:8px;cursor:pointer;text-decoration:underline';
+    chip.textContent='Mostrando serviços deste profissional · ver todos';
+    chip.onclick=function(){ limparFiltroProf(); };
+    ul.appendChild(chip);
+  }
+
+  lista.forEach((sv,i)=>{
     const c=document.createElement('div');
     const preco=sv.preco>0?'R$'+(sv.preco/100).toFixed(0):'—';
     const dur=sv.duracao>=60?Math.floor(sv.duracao/60)+'h'+(sv.duracao%60?sv.duracao%60+'m':''):sv.duracao+'min';
@@ -2244,10 +2284,12 @@ function selecionarProf(id){
   if(id==='sem_preferencia'){
     profSelecionado='sem_preferencia';
     document.getElementById('selProf').innerHTML='• Sem preferência';
+    limparFiltroProf();
   } else {
     const p=profissionais.find(x=>x.id===id);
     profSelecionado=p;
     document.getElementById('selProf').innerHTML=`<span style="display:inline-flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:${p.cor||'var(--c-primary)'};display:inline-block"></span>${p.nome}</span>`;
+    filtrarProf(p.id);
   }
   document.getElementById('bProf').classList.add('done');
   buildProf();

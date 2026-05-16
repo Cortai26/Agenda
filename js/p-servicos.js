@@ -187,50 +187,125 @@ async function renderServicos(){
   var el=document.getElementById('tb-servicos');
   var strip=renderProfStrip();
 
-  // Quando profissional selecionado, filtra os serviços dele
-  var lista=_servicos.slice();
-  var profNome='';
   if(_profFiltro){
+    // ── MODO PROFISSIONAL: todos os serviços com toggle ON/OFF para esse prof ──
     var prof=_profs.find(function(p){return p.id===_profFiltro;});
-    profNome=prof?prof.nome:'';
+    var profNome=prof?prof.nome:'Profissional';
+    var psMap={};
+    var prMap={};
     try{
-      var ps=await api('profissional_servicos?profissional_id=eq.'+_profFiltro+'&select=servico_id,ativo');
-      if(Array.isArray(ps) && ps.length){
-        var psMap={};
-        ps.forEach(function(r){ psMap[r.servico_id]=r.ativo!==false; });
-        lista=lista.filter(function(s){ return psMap[s.id]!==false; });
+      var psRows=await api('profissional_servicos?profissional_id=eq.'+_profFiltro+'&select=servico_id,ativo,preco_override');
+      if(Array.isArray(psRows)){
+        psRows.forEach(function(r){
+          psMap[r.servico_id]=r.ativo!==false;
+          if(r.preco_override!=null) prMap[r.servico_id]=r.preco_override;
+        });
       }
     }catch(e){}
+
+    var html=strip+
+      '<div class="srv-hdr"><h3>Serviços de '+esc(profNome.split(' ')[0])+'</h3></div>'+
+      '<div style="font-size:12px;color:var(--text-3);margin-bottom:12px;line-height:1.5">'+
+        'Ative os serviços que este profissional realiza. O preço individual pode ser ajustado.'+
+      '</div>'+
+      '<div class="lista">';
+
+    var ativoCount=0;
+    _servicos.forEach(function(s){
+      var habilitado=psMap[s.id]!==false;
+      if(habilitado) ativoCount++;
+      var precoEfetivo=prMap[s.id]!=null?prMap[s.id]:s.preco;
+      var precoLabel=formatPrice(precoEfetivo)+(prMap[s.id]!=null?' <span style="font-size:9px;color:var(--text-3);font-weight:600">personalizado</span>':'');
+      html+='<div class="srv-card'+(habilitado?'':' inativo')+'">'+
+        '<div class="srv-ico">'+s.icone+'</div>'+
+        '<div class="srv-dados">'+
+          '<div class="srv-nm">'+esc(s.nome)+'</div>'+
+          '<div class="srv-mt">⏱ '+s.duracao+' min</div>'+
+        '</div>'+
+        '<div class="srv-pr" style="cursor:pointer" onclick="editarPrecoProf(\''+_profFiltro+'\',\''+s.id+'\','+precoEfetivo+',\''+esc(s.nome)+'\')" title="Ajustar preço">'+precoLabel+'</div>'+
+        '<div class="srv-ctrl">'+
+          '<button class="toggle '+(habilitado?'on':'')+'" onclick="toggleProfServico(\''+_profFiltro+'\',\''+s.id+'\','+habilitado+')"></button>'+
+        '</div>'+
+      '</div>';
+    });
+
+    html+='</div>';
+    html+='<div style="font-size:11px;color:var(--text-3);font-weight:700;margin-top:8px;text-align:center">'+
+      ativoCount+' de '+_servicos.length+' habilitado'+(ativoCount!==1?'s':'')+'</div>';
+    el.innerHTML=html;
+    return;
   }
 
-  var ativos=lista.filter(function(s){return s.ativo;}).length;
-  var titulo=profNome?'Serviços de '+profNome.split(' ')[0]:'Meus Serviços';
+  // ── MODO ESTABELECIMENTO: lista padrão ──
+  var ativos=_servicos.filter(function(s){return s.ativo;}).length;
   var html=strip+
-    '<div class="srv-hdr"><h3>'+esc(titulo)+'</h3>'+(!_profFiltro?'<button class="btn-add" onclick="abrirSrv()">+ Adicionar</button>':'')+'</div>';
-  if(!_profFiltro) html+='<div class="srv-info-txt">Serviços <strong>ativos</strong> aparecem na sua página. Use o botão para mostrar ou ocultar.</div>';
-  html+='<div style="font-size:11px;color:var(--text-3);font-weight:700;margin-bottom:10px;text-align:center">'+ativos+' de '+lista.length+' visível'+(ativos!==1?'s':'')+'</div>';
-  html+='<div class="lista">';
-  if(lista.length===0){
-    html+=_profFiltro
-      ? '<div class="srv-empty">Nenhum serviço ativo para este profissional.<br><small style="color:var(--text-3)">Configure em Equipe → editar profissional.</small></div>'
-      : '<div class="srv-empty">Nenhum serviço ainda.<br><strong>Toque em "+ Adicionar" para começar!</strong></div>';
+    '<div class="srv-hdr"><h3>Meus Serviços</h3><button class="btn-add" onclick="abrirSrv()">+ Adicionar</button></div>'+
+    '<div class="srv-info-txt">Serviços <strong>ativos</strong> aparecem na sua página. Use o botão para mostrar ou ocultar.</div>'+
+    '<div style="font-size:11px;color:var(--text-3);font-weight:700;margin-bottom:10px;text-align:center">'+ativos+' de '+_servicos.length+' visível'+(ativos!==1?'s':'')+'</div>'+
+    '<div class="lista">';
+
+  if(_servicos.length===0){
+    html+='<div class="srv-empty">Nenhum serviço ainda.<br><strong>Toque em "+ Adicionar" para começar!</strong></div>';
   } else {
-    lista.forEach(function(s){
+    _servicos.forEach(function(s){
       html+='<div class="srv-card'+(s.ativo?'':' inativo')+'">'+
         '<div class="srv-ico">'+s.icone+'</div>'+
         '<div class="srv-dados"><div class="srv-nm">'+esc(s.nome)+(s.ativo?'':'<span class="toculto">oculto</span>')+'</div>'+
         '<div class="srv-mt">⏱ '+s.duracao+' min'+(s.descricao?' · '+esc(s.descricao):'')+'</div></div>'+
         '<div class="srv-pr">'+formatPrice(s.preco)+'</div>'+
-        (!_profFiltro?'<div class="srv-ctrl">'+
+        '<div class="srv-ctrl">'+
           '<button class="bsrv bedit" onclick="abrirSrv(\''+s.id+'\')">✏️</button>'+
           '<button class="bsrv bdel" onclick="excluirSrv(\''+s.id+'\')">🗑️</button>'+
           '<button class="toggle '+(s.ativo?'on':'')+'" onclick="toggleSrv(\''+s.id+'\')"></button>'+
-          '</div>':'')+
-        '</div>';
+        '</div>'+
+      '</div>';
     });
   }
   html+='</div>';
   el.innerHTML=html;
+}
+
+async function toggleProfServico(profId, svcId, atualAtivo){
+  var pw=await getPw('Serviços do profissional','Confirme sua senha para alterar o serviço.');
+  if(!pw) return;
+  try{
+    var novoAtivo=!atualAtivo;
+    await api('profissional_servicos',{
+      method:'POST',
+      headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},
+      body:JSON.stringify({profissional_id:profId,servico_id:svcId,ativo:novoAtivo})
+    });
+    toast(novoAtivo?'✓ Serviço habilitado':'✓ Serviço desabilitado','ok');
+    _tabOk.servicos=false; renderServicos();
+  }catch(e){
+    if(e.message&&e.message.includes('Acesso negado')){_pw=null;}
+    toast('Erro: '+e.message,'err');
+  }
+}
+
+async function editarPrecoProf(profId, svcId, precoAtual, svcNome){
+  var atual=(precoAtual/100).toFixed(2).replace('.',',');
+  var input=prompt('Preço de '+svcNome+' para este profissional (deixe vazio para usar o padrão):', atual);
+  if(input===null) return;
+  var pw=await getPw('Preço personalizado','Confirme sua senha.');
+  if(!pw) return;
+  try{
+    var novoPreco=null;
+    if(input.trim()!==''){
+      novoPreco=Math.round(parseFloat(input.replace(',','.'))*100);
+      if(isNaN(novoPreco)||novoPreco<=0){toast('Preço inválido.','err');return;}
+    }
+    await api('profissional_servicos',{
+      method:'POST',
+      headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},
+      body:JSON.stringify({profissional_id:profId,servico_id:svcId,preco_override:novoPreco})
+    });
+    toast('✓ Preço atualizado','ok');
+    _tabOk.servicos=false; renderServicos();
+  }catch(e){
+    if(e.message&&e.message.includes('Acesso negado')){_pw=null;}
+    toast('Erro: '+e.message,'err');
+  }
 }
 var _tipoServico='atendimento';
 

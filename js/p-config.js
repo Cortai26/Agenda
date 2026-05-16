@@ -484,6 +484,7 @@ async function renderPagina(){
     if(d.tema&&!S._tema) S._tema=d.tema;
     if(d.horario&&!S.horario) S.horario=d.horario;
     if(d.fonte) S._fonte=d.fonte;
+    if(d.fonte && typeof aplicarFonteAgendar==='function') aplicarFonteAgendar(d.fonte);
   }catch(e){ d={}; }
 
   try{
