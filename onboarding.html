@@ -462,7 +462,7 @@ window.aplicarPreset=aplicarPreset;
 async function salvarHorariosEAvancar() {
   var save=document.getElementById('savingHora');save.textContent='Salvando horários...';
   if(_salao){
-    try{var r=await fetch(SUPA_URL+'/rest/v1/saloes?id=eq.'+_salao.id,{method:'PATCH',headers:Object.assign({},H,{'Prefer':'return=minimal'}),body:JSON.stringify({horario:_horarios})});save.textContent=r.ok?'✓ Horários salvos':'Erro ao salvar — tente no painel';}
+    try{var r=await fetch(SUPA_URL+'/rest/v1/saloes?slug=eq.'+encodeURIComponent(SLUG),{method:'PATCH',headers:Object.assign({},H,{'Prefer':'return=minimal'}),body:JSON.stringify({horario:_horarios})});save.textContent=r.ok?'✓ Horários salvos':'Erro ao salvar — tente no painel';}
     catch(e){save.textContent='Erro ao salvar';}
   }else{save.textContent='';}
   setTimeout(function(){save.textContent='';avancarPasso(2);},700);
@@ -484,7 +484,7 @@ async function salvarLocalizacaoEAvancar() {
     if(wa.length>=10)body.whatsapp_url=wa;
     if(desc.trim())body.descricao=desc.trim();
     if(Object.keys(body).length){
-      try{var r=await fetch(SUPA_URL+'/rest/v1/saloes?id=eq.'+_salao.id,{method:'PATCH',headers:Object.assign({},H,{'Prefer':'return=minimal'}),body:JSON.stringify(body)});save.textContent=r.ok?'✓ Localização salva':'Erro ao salvar';}
+      try{var r=await fetch(SUPA_URL+'/rest/v1/saloes?slug=eq.'+encodeURIComponent(SLUG),{method:'PATCH',headers:Object.assign({},H,{'Prefer':'return=minimal'}),body:JSON.stringify(body)});save.textContent=r.ok?'✓ Localização salva':'Erro ao salvar';}
       catch(e){save.textContent='Erro ao salvar';}
     }else{save.textContent='';}
   }else{save.textContent='';}
