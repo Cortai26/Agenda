@@ -481,6 +481,78 @@ body {
   .produto-wrap, .features-eyebrow, .planos-inner { padding-left: 48px; padding-right: 48px; }
   .nav-link { padding: 8px 12px; }
 }
+
+/* ── NÚMEROS ── */
+.numero-item {
+  padding: 28px 24px;
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.numero-val {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(36px, 9vw, 52px);
+  color: var(--brand);
+  line-height: 1;
+  margin-bottom: 6px;
+  letter-spacing: -1px;
+}
+.numero-label {
+  font-size: 12px;
+  color: var(--stone);
+  line-height: 1.5;
+  font-weight: 300;
+}
+@media(min-width:640px){
+  .numero-item { padding: 36px 40px; }
+}
+
+/* ── MOCKUPS DE EXEMPLO ── */
+.exemplo-wrap { border: 1px solid var(--rule-2); padding: 24px; }
+.exemplo-label { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.exemplo-categoria { font-size: 11px; color: var(--stone); font-weight: 600; letter-spacing: 1px; }
+.exemplo-tema { font-size: 10px; padding: 3px 10px; border-radius: 20px; font-weight: 600; letter-spacing: 1px; }
+.phone-exemplo {
+  border-radius: 16px; overflow: hidden;
+  max-width: 260px; margin: 0 auto 16px;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+.ex-cover { height: 90px; padding: 10px 14px; display: flex; flex-direction: column; justify-content: flex-end; }
+.ex-cat { font-size: 7px; letter-spacing: 2px; text-transform: uppercase; font-family: var(--sans); margin-bottom: 3px; }
+.ex-nome { font-family: var(--serif); font-style: italic; font-size: 18px; color: var(--bone); }
+.ex-status-bar { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-top: 1px solid; border-bottom: 1px solid; }
+.ex-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.ex-status-t { font-size: 9px; font-weight: 700; font-family: var(--sans); color: var(--bone); }
+.ex-hours { font-size: 9px; color: var(--stone-2); font-family: var(--sans); margin-left: auto; }
+.ex-svcs { padding: 8px 14px; }
+.ex-svc { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.ex-svc:last-child { border: none; }
+.ex-num { font-family: var(--serif); font-style: italic; font-size: 9px; width: 14px; flex-shrink: 0; }
+.ex-name { font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--bone); flex: 1; }
+.ex-price { font-family: monospace; font-size: 11px; font-weight: 500; flex-shrink: 0; }
+.ex-cta { padding: 9px 14px; display: flex; justify-content: space-between; font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--bone); }
+.exemplo-desc { font-size: 12px; color: var(--stone); line-height: 1.65; font-weight: 300; margin-top: 4px; }
+@media(min-width:900px) {
+  #gridExemplos { flex-direction: row !important; align-items: flex-start; }
+  .exemplo-wrap { flex: 1; }
+}
+
+/* ── FAQ LANDING ── */
+.faq-lp { border-top: 1px solid var(--rule); }
+.faq-lp-btn {
+  width: 100%; padding: 16px 0;
+  background: none; border: none; text-align: left;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  cursor: pointer; font-size: 14px; font-weight: 500; color: var(--bone);
+  font-family: var(--sans);
+}
+.faq-lp-icon { font-size: 20px; color: var(--stone-2); flex-shrink: 0; transition: transform 0.2s; }
+.faq-lp-icon.open { transform: rotate(45deg); color: var(--brand); }
+.faq-lp-resp {
+  font-size: 13px; color: var(--stone); line-height: 1.7;
+  font-weight: 300; padding: 0 0 16px; display: none; max-width: 560px;
+}
 </style>
 </head>
 <body>
@@ -517,6 +589,28 @@ body {
   </div>
   <div class="hero-scroll">↓ &nbsp; veja como funciona</div>
 </section>
+
+<!-- ══ NÚMEROS ══ -->
+<div style="border-bottom:1px solid var(--rule)">
+<div style="display:grid;grid-template-columns:1fr 1fr;max-width:720px;margin:0 auto;border-left:1px solid var(--rule)">
+  <div class="numero-item reveal">
+    <div class="numero-val">3 min</div>
+    <div class="numero-label">para criar sua página e estar no ar</div>
+  </div>
+  <div class="numero-item reveal">
+    <div class="numero-val">24h</div>
+    <div class="numero-label">de agendamentos, mesmo enquanto você dorme</div>
+  </div>
+  <div class="numero-item reveal" style="border-bottom:none">
+    <div class="numero-val">-60%</div>
+    <div class="numero-label">de faltas com lembretes automáticos</div>
+  </div>
+  <div class="numero-item reveal" style="border-bottom:none">
+    <div class="numero-val">R$0</div>
+    <div class="numero-label">para começar. 14 dias grátis, sem cartão</div>
+  </div>
+</div>
+</div>
 
 <!-- ══ 2. PROBLEMA ══ -->
 <div style="border-bottom:1px solid var(--rule)">
@@ -613,6 +707,105 @@ body {
 </div>
 </div>
 
+<!-- ══ FUNCIONA PARA O SEU NEGÓCIO ══ -->
+<div style="border-bottom:1px solid var(--rule)">
+<div class="section" id="exemplos">
+  <div class="eyebrow reveal"><span>—</span> Para qualquer segmento</div>
+  <h2 class="h2 reveal">Funciona para<br>o seu negócio.</h2>
+  <p class="p reveal" style="margin-bottom:40px">
+    Da barbearia ao consultório. O Agenda se adapta ao visual e à identidade de cada estabelecimento.
+  </p>
+
+  <div style="display:flex;flex-direction:column;gap:32px" id="gridExemplos">
+
+    <!-- EXEMPLO 1: Salão Feminino -->
+    <div class="exemplo-wrap reveal">
+      <div class="exemplo-label">
+        <span class="exemplo-categoria">Salão de beleza</span>
+        <span class="exemplo-tema" style="background:rgba(216,27,96,0.12);color:#D81B60">Tema Rose</span>
+      </div>
+      <div class="phone-exemplo">
+        <div class="ex-cover" style="background:linear-gradient(160deg,#3D0A20,#1A0613)">
+          <div class="ex-cat" style="color:rgba(216,27,96,0.7)">Salão de Beleza · São Paulo</div>
+          <div class="ex-nome">Studio Belle.</div>
+        </div>
+        <div class="ex-status-bar" style="background:#1A0613;border-color:rgba(216,27,96,0.12)">
+          <span class="ex-dot" style="background:#22C55E"></span>
+          <span class="ex-status-t">Aberto agora</span>
+          <span class="ex-hours">Fecha às 20h</span>
+        </div>
+        <div class="ex-svcs" style="background:#1A0613">
+          <div class="ex-svc"><span class="ex-num" style="color:rgba(216,27,96,0.5)">01</span><span class="ex-name">Escova progressiva</span><span class="ex-price" style="color:#D81B60">R$180</span></div>
+          <div class="ex-svc"><span class="ex-num" style="color:rgba(216,27,96,0.5)">02</span><span class="ex-name">Coloração completa</span><span class="ex-price" style="color:#D81B60">R$250</span></div>
+          <div class="ex-svc"><span class="ex-num" style="color:rgba(216,27,96,0.5)">03</span><span class="ex-name">Corte + Escova</span><span class="ex-price" style="color:#D81B60">R$120</span></div>
+        </div>
+        <div class="ex-cta" style="background:#D81B60">
+          <span>Agendar agora</span><span>→</span>
+        </div>
+      </div>
+      <p class="exemplo-desc">Clientes agendam pelo Instagram sem precisar ligar. O salão recebe a notificação e o cliente recebe o lembrete.</p>
+    </div>
+
+    <!-- EXEMPLO 2: Dentista -->
+    <div class="exemplo-wrap reveal">
+      <div class="exemplo-label">
+        <span class="exemplo-categoria">Consultório odontológico</span>
+        <span class="exemplo-tema" style="background:rgba(44,111,170,0.12);color:#2C6FAA">Tema Clinic</span>
+      </div>
+      <div class="phone-exemplo">
+        <div class="ex-cover" style="background:linear-gradient(160deg,#0A1A2E,#0E2A45)">
+          <div class="ex-cat" style="color:rgba(44,111,170,0.7)">Odontologia · Curitiba</div>
+          <div class="ex-nome">Dra. Ana Lima.</div>
+        </div>
+        <div class="ex-status-bar" style="background:#0E2A45;border-color:rgba(44,111,170,0.18)">
+          <span class="ex-dot" style="background:#22C55E"></span>
+          <span class="ex-status-t" style="color:#7AB0D4">Consultório aberto</span>
+          <span class="ex-hours" style="color:#3A6080">Seg–Sex 8h–18h</span>
+        </div>
+        <div class="ex-svcs" style="background:#0E2A45">
+          <div class="ex-svc"><span class="ex-num" style="color:rgba(44,111,170,0.5)">01</span><span class="ex-name" style="color:#B8D4E8">Consulta e avaliação</span><span class="ex-price" style="color:#2C6FAA">R$150</span></div>
+          <div class="ex-svc"><span class="ex-num" style="color:rgba(44,111,170,0.5)">02</span><span class="ex-name" style="color:#B8D4E8">Clareamento dental</span><span class="ex-price" style="color:#2C6FAA">R$800</span></div>
+          <div class="ex-svc"><span class="ex-num" style="color:rgba(44,111,170,0.5)">03</span><span class="ex-name" style="color:#B8D4E8">Limpeza e profilaxia</span><span class="ex-price" style="color:#2C6FAA">R$200</span></div>
+        </div>
+        <div class="ex-cta" style="background:#2C6FAA">
+          <span>Agendar consulta</span><span>→</span>
+        </div>
+      </div>
+      <p class="exemplo-desc">Pacientes agendam sem ligar para o consultório. Dra. Ana vê a agenda do dia no painel e recebe confirmação automática.</p>
+    </div>
+
+    <!-- EXEMPLO 3: Clínica de estética -->
+    <div class="exemplo-wrap reveal">
+      <div class="exemplo-label">
+        <span class="exemplo-categoria">Clínica de estética</span>
+        <span class="exemplo-tema" style="background:rgba(26,14,6,0.08);color:#4A3728">Tema Claro</span>
+      </div>
+      <div class="phone-exemplo" style="border-color:rgba(26,14,6,0.12)">
+        <div class="ex-cover" style="background:linear-gradient(160deg,#E8E0D5,#F5F2EC)">
+          <div class="ex-cat" style="color:rgba(26,14,6,0.4)">CLÍNICA DE ESTÉTICA · PORTO ALEGRE</div>
+          <div class="ex-nome" style="color:#1A0E06">Espaço Nuvem.</div>
+        </div>
+        <div class="ex-status-bar" style="background:#FFF;border-color:rgba(26,14,6,0.08)">
+          <span class="ex-dot" style="background:#22C55E"></span>
+          <span class="ex-status-t" style="color:#3B6D11">Aberto agora</span>
+          <span class="ex-hours" style="color:#9A8070">Fecha às 19h</span>
+        </div>
+        <div class="ex-svcs" style="background:#FFF">
+          <div class="ex-svc"><span class="ex-num" style="color:rgba(229,90,12,0.35)">01</span><span class="ex-name" style="color:#1A0E06">Limpeza de pele profunda</span><span class="ex-price" style="color:#E55A0C">R$220</span></div>
+          <div class="ex-svc"><span class="ex-num" style="color:rgba(229,90,12,0.35)">02</span><span class="ex-name" style="color:#1A0E06">Drenagem linfática</span><span class="ex-price" style="color:#E55A0C">R$180</span></div>
+          <div class="ex-svc"><span class="ex-num" style="color:rgba(229,90,12,0.35)">03</span><span class="ex-name" style="color:#1A0E06">Radiofrequência facial</span><span class="ex-price" style="color:#E55A0C">R$320</span></div>
+        </div>
+        <div class="ex-cta" style="background:#E55A0C">
+          <span>Agendar procedimento</span><span>→</span>
+        </div>
+      </div>
+      <p class="exemplo-desc">Fundo claro e elegante para transmitir saúde e sofisticação. Cada estabelecimento tem sua identidade — não um template genérico.</p>
+    </div>
+
+  </div>
+</div>
+</div>
+
 <!-- ══ 5. FEATURES COM NÚMEROS ══ -->
 <div class="features-wrap">
   <div class="features-eyebrow reveal">
@@ -663,14 +856,44 @@ body {
   </div>
 </div>
 
-<!-- ══ 6. DEPOIMENTO ══ -->
+<!-- ══ 6. DEPOIMENTOS ══ -->
 <div style="border-bottom:1px solid var(--rule)">
-<div class="testimonial reveal">
-  <span class="quote-open">"</span>
-  <p class="quote-text">
-    Antes eu perdia cliente toda hora respondendo WhatsApp no meio do corte. Agora eles agendam sozinhos e eu recebo a notificação. Parece que contratei uma recepcionista — mas custa muito menos.
-  </p>
-  <div class="quote-author">Felipe · Proprietário, BarberShop</div>
+<div style="max-width:720px;margin:0 auto;padding:56px 24px">
+  <div class="eyebrow reveal"><span>—</span> O que dizem os primeiros usuários</div>
+
+  <div style="margin-top:28px">
+
+    <div class="reveal" style="padding:32px 0;border-bottom:1px solid var(--rule)">
+      <div style="font-family:var(--serif);font-style:italic;font-size:60px;color:rgba(229,90,12,0.12);line-height:0.6;margin-bottom:16px">"</div>
+      <p style="font-family:var(--serif);font-style:italic;font-size:clamp(16px,4vw,20px);color:var(--bone);line-height:1.5;margin-bottom:16px">
+        Antes eu perdia cliente toda hora respondendo WhatsApp no meio do corte. Agora eles agendam sozinhos e eu recebo a notificação. Parece que contratei uma recepcionista — mas custa muito menos.
+      </p>
+      <div style="font-size:10px;color:rgba(229,90,12,0.6);letter-spacing:3px;text-transform:uppercase">
+        Felipe · Proprietário, BarberShop · Santo André
+      </div>
+    </div>
+
+    <div class="reveal" style="padding:32px 0;border-bottom:1px solid var(--rule)">
+      <div style="font-family:var(--serif);font-style:italic;font-size:60px;color:rgba(229,90,12,0.12);line-height:0.6;margin-bottom:16px">"</div>
+      <p style="font-family:var(--serif);font-style:italic;font-size:clamp(16px,4vw,20px);color:var(--bone);line-height:1.5;margin-bottom:16px">
+        Minhas clientes amaram poder ver minha agenda e escolher o horário na hora. Minha taxa de no-show caiu pela metade com o lembrete automático.
+      </p>
+      <div style="font-size:10px;color:rgba(229,90,12,0.6);letter-spacing:3px;text-transform:uppercase">
+        Ana Paula · Studio de Unhas · São Paulo
+      </div>
+    </div>
+
+    <div class="reveal" style="padding:32px 0">
+      <div style="font-family:var(--serif);font-style:italic;font-size:60px;color:rgba(229,90,12,0.12);line-height:0.6;margin-bottom:16px">"</div>
+      <p style="font-family:var(--serif);font-style:italic;font-size:clamp(16px,4vw,20px);color:var(--bone);line-height:1.5;margin-bottom:16px">
+        Sou dentista e não tinha nenhum sistema de agendamento online. Coloquei o link na minha bio do Instagram e em uma semana já tinha 12 novos pacientes agendados sem eu precisar atender o telefone.
+      </p>
+      <div style="font-size:10px;color:rgba(229,90,12,0.6);letter-spacing:3px;text-transform:uppercase">
+        Dr. Marcus · Consultório Odontológico · Curitiba
+      </div>
+    </div>
+
+  </div>
 </div>
 </div>
 
@@ -749,21 +972,108 @@ body {
   </div>
 </div>
 
+<!-- ══ GARANTIA ══ -->
+<div style="border-bottom:1px solid var(--rule)">
+<div style="max-width:720px;margin:0 auto;padding:40px 24px;display:flex;flex-direction:column;align-items:center;text-align:center">
+  <div class="reveal" style="font-size:40px;margin-bottom:12px">🛡️</div>
+  <h3 class="reveal" style="font-family:var(--serif);font-style:italic;font-size:24px;color:var(--bone);letter-spacing:-0.5px;margin-bottom:8px">
+    14 dias grátis. Sem risco.
+  </h3>
+  <p class="reveal p" style="max-width:440px;margin-bottom:0">
+    Crie sua conta, configure sua página e compartilhe o link com seus clientes. Se em 14 dias você não ver valor, é só não continuar — sem explicação, sem burocracia. Mas a gente aposta que vai querer ficar.
+  </p>
+</div>
+</div>
+
+<!-- ══ FAQ ══ -->
+<div style="border-bottom:1px solid var(--rule)">
+<div class="section">
+  <div class="eyebrow reveal"><span>—</span> Dúvidas frequentes</div>
+  <h2 class="h2 reveal">Antes de decidir.</h2>
+
+  <div id="faqLanding" style="margin-top:28px">
+
+    <div class="faq-lp reveal">
+      <button class="faq-lp-btn" onclick="toggleFaqLp(0)">
+        <span>Preciso entender de tecnologia para usar?</span>
+        <span class="faq-lp-icon" id="flpIcon0">+</span>
+      </button>
+      <div class="faq-lp-resp" id="flpResp0">
+        Não. Se você consegue usar o Instagram, consegue usar o Agenda. O cadastro leva 3 minutos e o onboarding te guia em cada etapa. Nenhum conhecimento técnico é necessário.
+      </div>
+    </div>
+
+    <div class="faq-lp reveal">
+      <button class="faq-lp-btn" onclick="toggleFaqLp(1)">
+        <span>Meu cliente precisa criar uma conta para agendar?</span>
+        <span class="faq-lp-icon" id="flpIcon1">+</span>
+      </button>
+      <div class="faq-lp-resp" id="flpResp1">
+        Não. O cliente entra na sua página, escolhe o serviço, o dia e o horário, informa o nome e o WhatsApp — e pronto. Sem cadastro, sem senha, sem atrito.
+      </div>
+    </div>
+
+    <div class="faq-lp reveal">
+      <button class="faq-lp-btn" onclick="toggleFaqLp(2)">
+        <span>E se eu quiser cancelar? Tem multa ou contrato?</span>
+        <span class="faq-lp-icon" id="flpIcon2">+</span>
+      </button>
+      <div class="faq-lp-resp" id="flpResp2">
+        Nenhum contrato, nenhuma multa. Cancele quando quiser, sem burocracia. A cobrança é mensal e você pode interromper a qualquer momento pelo painel.
+      </div>
+    </div>
+
+    <div class="faq-lp reveal">
+      <button class="faq-lp-btn" onclick="toggleFaqLp(3)">
+        <span>Funciona para qualquer tipo de negócio?</span>
+        <span class="faq-lp-icon" id="flpIcon3">+</span>
+      </button>
+      <div class="faq-lp-resp" id="flpResp3">
+        Sim. Barbearia, salão de beleza, clínica de estética, consultório, pet shop, personal trainer, nutricionista — qualquer profissional que trabalha com hora marcada. A página se adapta visualmente ao seu segmento.
+      </div>
+    </div>
+
+    <div class="faq-lp reveal">
+      <button class="faq-lp-btn" onclick="toggleFaqLp(4)">
+        <span>Tenho vários profissionais. Funciona?</span>
+        <span class="faq-lp-icon" id="flpIcon4">+</span>
+      </button>
+      <div class="faq-lp-resp" id="flpResp4">
+        Sim. O cliente pode escolher o profissional na hora de agendar. Cada profissional tem sua agenda separada, e você vê tudo no mesmo painel. Nos planos Equipe e Negócio dá pra configurar comissão por profissional.
+      </div>
+    </div>
+
+    <div class="faq-lp reveal">
+      <button class="faq-lp-btn" onclick="toggleFaqLp(5)" style="border-bottom:none">
+        <span>Posso usar meu próprio domínio?</span>
+        <span class="faq-lp-icon" id="flpIcon5">+</span>
+      </button>
+      <div class="faq-lp-resp" id="flpResp5">
+        Por enquanto os endereços são no formato agendatop.vercel.app/seunome. Domínio próprio está no roadmap e será disponibilizado nos próximos meses, sem custo adicional.
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
 <!-- ══ 9. CTA FINAL ══ -->
 <div class="cta-final">
   <div class="cta-final-glow"></div>
   <div class="cta-final-eyebrow reveal">Comece hoje</div>
   <h2 class="cta-final-h2 reveal">
-    Seu negócio merece<br>
-    uma <em>presença</em> à altura.
+    Seu slug te espera.<br>
+    <em>Garante agora.</em>
   </h2>
   <p class="cta-final-p reveal">
-    Enquanto você lê isso, um cliente está tentando agendar com você — e não consegue. Resolve isso agora.
+    Enquanto você lê isso, alguém do seu segmento pode estar criando o endereço que você queria. Cada negócio tem um link único — e permanente.
   </p>
   <a href="/cadastro.html" class="btn-final reveal">
     Criar minha conta grátis <span>→</span>
   </a>
-  <div class="cta-final-disclaimer reveal">14 dias grátis · Sem cartão · Cancela quando quiser</div>
+  <div class="cta-final-disclaimer reveal">
+    14 dias grátis · Sem cartão · Cancela quando quiser
+  </div>
 </div>
 
 <!-- FOOTER -->
@@ -774,6 +1084,7 @@ body {
       <a href="/privacidade.html" class="footer-link">Privacidade</a>
       <a href="/termos.html" class="footer-link">Termos</a>
       <a href="mailto:cortai.contato@gmail.com" class="footer-link">Contato</a>
+      <a href="/meus-agendamentos.html" class="footer-link">Meus agendamentos</a>
     </div>
   </div>
 </footer>
@@ -810,6 +1121,17 @@ function animarSlug() {
   }, 300);
 }
 setInterval(animarSlug, 2500);
+
+// FAQ accordion
+function toggleFaqLp(i) {
+  const resp = document.getElementById('flpResp' + i);
+  const icon = document.getElementById('flpIcon' + i);
+  if (!resp) return;
+  const open = resp.style.display === 'block';
+  resp.style.display = open ? 'none' : 'block';
+  icon.classList.toggle('open', !open);
+}
+window.toggleFaqLp = toggleFaqLp;
 
 // Scroll suave para âncoras na nav
 document.querySelectorAll('a[href^="#"]').forEach(a => {
