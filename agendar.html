@@ -19,7 +19,7 @@
 <meta name="theme-color" content="#E55A0C">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,400;1,500;1,600&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/tokens.css?v=31">
 <style>
 /* ── AGENDA TOKENS v2 ── */
@@ -30,8 +30,9 @@
   --brand:#E55A0C; --brand-soft:rgba(229,90,12,0.12);
   --ok:#22C55E; --warn:#F59E0B; --crit:#EF4444;
   --rule:rgba(240,237,232,0.08); --rule-2:rgba(240,237,232,0.14);
-  --serif:'Cormorant Garamond',Georgia,serif;
-  --sans:'Manrope',system-ui,sans-serif;
+  --display:'Instrument Serif',Georgia,serif;
+  --serif:var(--display);
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
   --mono:'JetBrains Mono',monospace;
 }
 html.t-neutral { --ink:#F8F4EF; --ink-2:#FFFFFF; --ink-3:#F0EBE4; --bone:#1A0E06; --bone-2:#4A3728; --stone:#7A6050; --stone-2:#9A8070; --brand:#E55A0C; --rule:rgba(26,14,6,0.10); --rule-2:rgba(26,14,6,0.18); }
@@ -58,7 +59,7 @@ html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
   --c-brand-text: #C04A08; /* texto laranja sobre fundo claro — 5.28:1 AA ✅ */
   --c-brand-dark: #9C3A06;
   /* ── Tipografia ── */
-  --font-heading: 'Manrope', sans-serif;
+  --font-heading: 'Inter', sans-serif;
   --font-mono:    'JetBrains Mono', monospace;
   --text-h1:      clamp(28px, 6vw, 48px);
   --text-h2:      clamp(20px, 4vw, 32px);
@@ -92,8 +93,8 @@ html.t-neutral {
   --c-red: #DC2626;
   --c-red-bg: rgba(220,38,38,.08);
   /* Tipografia */
-  --font-head: 'Syne', sans-serif;
-  --font-body: 'Nunito', sans-serif;
+  --font-head: 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
   /* Forma */
   --r-sm: 8px;
   --r-md: 12px;
@@ -132,7 +133,7 @@ html.t-onyx {
   --c-green-bg: rgba(74,222,128,.1);
   --c-red: #F87171;
   --c-red-bg: rgba(248,113,113,.1);
-  --font-head: 'Manrope', sans-serif;
+  --font-head: 'Inter', sans-serif;
   --font-body: 'Inter', sans-serif;
   --r-sm: 2px;
   --r-md: 4px;
@@ -168,7 +169,7 @@ html.t-feminine {
   --c-green-bg: rgba(46,125,50,.08);
   --c-red: #C62828;
   --c-red-bg: rgba(198,40,40,.08);
-  --font-head: 'Manrope', sans-serif;
+  --font-head: 'Inter', sans-serif;
   --font-body: 'Inter', sans-serif;
   --r-sm: 12px;
   --r-md: 16px;
@@ -203,7 +204,7 @@ html.t-clinic {
   --c-green-bg: rgba(46,125,50,.10);
   --c-red:      #C62828;
   --c-red-bg:   rgba(198,40,40,.08);
-  --font-head:  'Manrope', sans-serif;
+  --font-head:  'Inter', sans-serif;
   --font-body:  'Inter', sans-serif;
   --r-sm:  8px;
   --r-md:  12px;
@@ -709,7 +710,7 @@ html.t-neutral .srv-card.ativo { box-shadow: 0 0 0 1px var(--c-primary), 0 4px 2
 /* Onyx: fundo carvão escuro, texto bege claro, selecionado laranja + branco */
 html.t-onyx .h-btn {
   border-radius: var(--r-sm);
-  font-family: 'Manrope', sans-serif;
+  font-family: 'Inter', sans-serif;
   letter-spacing: .3px;
   background: #2A2A2A;
   color: #E5E2E1;    /* 15:1 ✅ AAA */
@@ -962,9 +963,9 @@ html.t-onyx .ag-confirm-bar.ativo { display: block; }
   flex-shrink: 0;
 }
 .ag-cb-details { min-width: 0; }
-.ag-cb-name { font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 800; color: #E5E2E1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ag-cb-name { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 800; color: #E5E2E1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ag-cb-meta { font-size: 11px; color: #5C5045; margin-top: 2px; }
-.ag-cb-price { font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 800; color: var(--c-primary); flex-shrink: 0; }
+.ag-cb-price { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 800; color: var(--c-primary); flex-shrink: 0; }
 
 /* WhatsApp */
 .btn-wa-confirm {
@@ -1075,7 +1076,7 @@ html.t-feminine .ag-confirm-bar { display: none; }
 
 .brand-lockup{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
 .brand-mark{display:block;height:32px;width:32px;flex-shrink:0;border-radius:7px}
-.brand-wordmark{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:500;font-size:22px;letter-spacing:-.01em;color:#fff;line-height:1}
+.brand-wordmark{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:22px;letter-spacing:-.01em;color:#fff;line-height:1}
 @media(max-width:480px){.brand-mark{height:28px;width:28px}.brand-wordmark{font-size:19px}}
 
 /* ── New theme system (Agenda v2) ── */
@@ -1103,8 +1104,8 @@ html.t-azure body,html.t-emerald body,html.t-rose body,html.t-crimson body{
   --error:#FF3B30;  --error-bg:rgba(255,59,48,.12);   --red:#FF3B30;  --red-bg:rgba(255,59,48,.12);  --red-border:rgba(255,59,48,.2);
   --warning:#FF9500; --warning-bg:rgba(255,149,0,.12); --amber:#FF9500; --amber-bg:rgba(255,149,0,.12); --amber-border:rgba(255,149,0,.2);
   --VD:#34C759; --VM:#FF3B30; --AM:#FF9500; --info:#007AFF; --info-bg:rgba(0,122,255,.12);
-  --font-brand:'Sora',sans-serif; --font-body:'Nunito Sans',sans-serif;
-  --font-d:'Sora',sans-serif; --font-b:'Nunito Sans',sans-serif;
+  --font-brand:'Inter',sans-serif; --font-body:'Inter',sans-serif;
+  --font-d:'Inter',sans-serif; --font-b:'Inter',sans-serif;
   --r-xs:6px; --r-sm:10px; --r-md:14px; --r-lg:18px; --r-xl:24px;
   --sh-sm:0 1px 4px rgba(0,0,0,.4); --sh-md:0 4px 16px rgba(0,0,0,.5); --sh-lg:0 8px 32px rgba(0,0,0,.6);
   --sb-bg:#0C0A09; --sb-border:rgba(255,255,255,.07); --sb-text:rgba(255,255,255,.4);
@@ -1514,7 +1515,7 @@ html.t-clinic .sticky-header{background:rgba(244,248,251,0.92);}
   .col-esquerda{border-right:1px solid var(--rule,rgba(240,237,232,0.06));min-height:100vh;}
   .col-direita{position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--c-surface);display:flex;flex-direction:column;}
   .col-direita-header{padding:24px 24px 0;border-bottom:1px solid var(--c-border);}
-  .col-direita-titulo{font-family:var(--serif,'Cormorant Garamond',serif);font-style:italic;font-size:26px;color:var(--c-text);margin-bottom:4px;}
+  .col-direita-titulo{font-family:var(--serif);font-style:italic;font-size:26px;color:var(--c-text);margin-bottom:4px;}
   .col-direita-sub{font-size:12px;color:var(--c-text-2);padding-bottom:16px;line-height:1.5;}
   .col-direita-svcs{padding:16px 24px;flex:1;overflow-y:auto;}
   .cd-svc-item:hover{opacity:0.8;}
@@ -1614,13 +1615,13 @@ html.t-clinic .ws-chapter-title{color:var(--c-text);}
 .ws-hero-v2-cover{height:min(380px,58vh) !important;}
 
 /* ── NOME OVERLAY: nome sobre a foto quando não há avatar ── */
-/* fonte-serif: aplica Cormorant Garamond italic nos títulos/nomes */
+/* fonte-serif: aplica Instrument Serif italic nos títulos/nomes */
 html.fonte-serif .ws-hero-v2-nome,
 html.fonte-serif .ws-hero-nome-capa,
 html.fonte-serif .svc-name,
 html.fonte-serif .step-title,
 html.fonte-serif .hdr-name{
-  font-family:'Cormorant Garamond',Georgia,serif!important;font-style:italic!important;
+  font-family:'Instrument Serif',Georgia,serif!important;font-style:italic!important;
 }
 .ws-hero-nome-capa{
   position:absolute;bottom:0;left:0;right:0;
@@ -1686,7 +1687,7 @@ html.fonte-serif .hdr-name{
       <div class="col-direita-sub" id="cdSub">Escolha um serviço para começar</div>
     </div>
     <div class="col-direita-svcs" id="cdConteudo">
-      <div style="padding:32px 0;text-align:center;color:var(--c-text-2);font-family:var(--serif,'Cormorant Garamond',serif);font-style:italic">Carregando serviços...</div>
+      <div style="padding:32px 0;text-align:center;color:var(--c-text-2);font-family:var(--serif);font-style:italic">Carregando serviços...</div>
     </div>
   </div>
 </div>
@@ -3754,7 +3755,7 @@ function _renderDesktopCal(){
   }
   html+='</div>';
   if(_dDia){html+='<div id="cdHorasArea"><div style="padding:12px 0;color:var(--c-text-2);font-family:var(--serif);font-style:italic">Buscando horários...</div></div>';}
-  html+='<button id="btnCdConf" onclick="_desktopConfirmar()" disabled style="width:100%;padding:14px;background:var(--c-primary);color:#fff;border:none;font-family:var(--serif);font-style:italic;font-size:16px;cursor:pointer;opacity:0.4;margin-top:8px;display:flex;align-items:center;justify-content:space-between"><span id="cdConfLabel">Escolha um dia e horário</span><span>→</span></button>';
+  html+='<button id="btnCdConf" onclick="_desktopConfirmar()" disabled style="width:100%;padding:14px;background:var(--c-primary);color:#fff;border:none;font-family:var(--sans);font-style:normal;font-weight:600;font-size:15px;cursor:pointer;opacity:0.4;margin-top:8px;display:flex;align-items:center;justify-content:space-between"><span id="cdConfLabel">Escolha um dia e horário</span><span>→</span></button>';
   c.innerHTML=html;
   if(_dDia)_loadDesktopHoras(_dDia);
 }
@@ -3820,8 +3821,8 @@ function _desktopConfirmar(){
       '<div style="margin-bottom:16px"><label style="font-size:9px;color:var(--c-text-2);letter-spacing:2px;text-transform:uppercase;display:block;margin-bottom:6px">E-mail <span style="font-size:9px;opacity:0.5">(opcional)</span></label>'+
         '<input id="cdEmail" type="email" placeholder="seu@email.com" style="width:100%;padding:10px 0;background:transparent;border:none;border-bottom:1px solid var(--c-border);color:var(--c-text);font-size:15px;outline:none"></div>'+
     '</div>'+
-    '<button onclick="_desktopSalvar()" id="btnCdSalvar" style="width:100%;padding:14px;background:var(--c-primary);color:#fff;border:none;font-family:var(--serif);font-style:italic;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between"><span>✅ Confirmar agendamento</span><span>→</span></button>'+
-    '<button onclick="renderEtapaDesktop(\''+_dSvc.id+'\')" style="width:100%;padding:10px;background:transparent;border:none;color:var(--c-text-2);font-family:var(--serif);font-style:italic;font-size:13px;cursor:pointer;margin-top:6px">← Escolher outro horário</button>';
+    '<button onclick="_desktopSalvar()" id="btnCdSalvar" style="width:100%;padding:14px;background:var(--c-primary);color:#fff;border:none;font-family:var(--sans);font-style:normal;font-weight:600;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:space-between"><span>✅ Confirmar agendamento</span><span>→</span></button>'+
+    '<button onclick="renderEtapaDesktop(\''+_dSvc.id+'\')" style="width:100%;padding:10px;background:transparent;border:none;color:var(--c-text-2);font-family:var(--sans);font-style:normal;font-size:13px;cursor:pointer;margin-top:6px">← Escolher outro horário</button>';
 }
 window._desktopConfirmar=_desktopConfirmar;
 
@@ -3860,8 +3861,8 @@ async function _desktopSalvar(){
       '</div>'+
       '<p style="font-family:var(--serif);font-style:italic;font-size:22px;color:var(--c-text);margin-bottom:6px">'+_dSvc.nome+'</p>'+
       '<p style="font-size:13px;color:var(--c-text-2);margin-bottom:20px">'+fmtData+' às '+_dHora.slice(0,5)+'</p>'+
-      '<a href="https://wa.me/?text='+waMsg+'" target="_blank" style="display:flex;align-items:center;justify-content:space-between;padding:13px 16px;background:rgba(37,211,102,0.08);border:1px solid rgba(37,211,102,0.2);color:#25D366;font-family:var(--serif);font-style:italic;font-size:14px;text-decoration:none;margin-bottom:8px"><span>💬 Salvar no WhatsApp</span><span>→</span></a>'+
-      '<button onclick="renderListaServicosDesktop()" style="width:100%;padding:12px;background:transparent;border:1px solid var(--c-border);color:var(--c-text-2);font-family:var(--serif);font-style:italic;font-size:14px;cursor:pointer;margin-top:4px">← Agendar outro serviço</button>'+
+      '<a href="https://wa.me/?text='+waMsg+'" target="_blank" style="display:flex;align-items:center;justify-content:space-between;padding:13px 16px;background:rgba(37,211,102,0.08);border:1px solid rgba(37,211,102,0.2);color:#25D366;font-family:var(--sans);font-style:normal;font-weight:600;font-size:13px;text-decoration:none;margin-bottom:8px"><span>💬 Salvar no WhatsApp</span><span>→</span></a>'+
+      '<button onclick="renderListaServicosDesktop()" style="width:100%;padding:12px;background:transparent;border:1px solid var(--c-border);color:var(--c-text-2);font-family:var(--sans);font-style:normal;font-size:13px;cursor:pointer;margin-top:4px">← Agendar outro serviço</button>'+
     '</div>';
   }catch(e){alert('Erro ao conectar. Tente novamente.');if(btn){btn.disabled=false;btn.innerHTML='<span>✅ Confirmar agendamento</span><span>→</span>';}}
 }

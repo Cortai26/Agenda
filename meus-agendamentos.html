@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#E55A0C">
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" type="image/png" href="/favicon.png">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 /* ── TOKENS (padrão Onyx) ── */
 :root {
@@ -15,8 +15,9 @@
   --stone:#A09890; --stone-2:#6A6462;
   --brand:#E55A0C; --ok:#22C55E; --err:#EF4444;
   --rule:rgba(240,237,232,0.06); --rule-2:rgba(240,237,232,0.14);
-  --serif:'Cormorant Garamond',Georgia,serif;
-  --sans:'Manrope',system-ui,sans-serif;
+  --display:'Instrument Serif',Georgia,serif;
+  --serif:var(--display);
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
   --mono:'JetBrains Mono',monospace;
 }
 /* Temas do estabelecimento */
@@ -43,7 +44,7 @@ html.t-neutral .nav,html.t-feminine .nav,html.t-clinic .nav{background:rgba(255,
 .busca-input{width:100%;padding:14px 0;background:transparent;border:none;border-bottom:2px solid var(--rule-2);color:var(--bone);font-size:18px;font-family:var(--serif);font-style:italic;outline:none;transition:border-color 0.15s;text-align:center}
 .busca-input:focus{border-color:var(--brand)}
 .busca-input::placeholder{color:var(--stone-2);font-style:italic}
-.btn-buscar{width:100%;padding:15px;background:var(--brand);color:var(--bone);border:none;font-family:var(--serif);font-style:italic;font-size:17px;cursor:pointer;margin-top:16px;display:flex;align-items:center;justify-content:center;gap:10px;transition:background 0.15s}
+.btn-buscar{width:100%;padding:15px;background:var(--brand);color:var(--bone);border:none;font-family:var(--sans);font-style:normal;font-weight:600;font-size:15px;cursor:pointer;margin-top:16px;display:flex;align-items:center;justify-content:center;gap:10px;transition:background 0.15s}
 .btn-buscar:active{background:#C04A08}
 
 /* Cards de agendamento */
@@ -64,13 +65,13 @@ html.t-neutral .nav,html.t-feminine .nav,html.t-clinic .nav{background:rgba(255,
 .ag-prof{font-size:12px;color:var(--stone-2)}
 .ag-preco{font-family:var(--mono);font-size:13px;color:var(--brand);margin-top:6px}
 .ag-acoes{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
-.btn-ag-acao{padding:8px 14px;border:1px solid var(--rule-2);background:transparent;color:var(--stone);font-size:12px;font-family:var(--serif);font-style:italic;cursor:pointer;text-decoration:none;display:inline-block;transition:all 0.15s}
+.btn-ag-acao{padding:8px 14px;border:1px solid var(--rule-2);background:transparent;color:var(--stone);font-size:12px;font-family:var(--sans);font-style:normal;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block;transition:all 0.15s}
 .btn-ag-acao:hover{border-color:var(--bone);color:var(--bone)}
 .btn-ag-acao.reagendar{border-color:rgba(229,90,12,0.3);color:var(--brand)}
 .btn-ag-acao.cancelar{border-color:rgba(239,68,68,0.2);color:var(--err)}
 
 .empty-state{text-align:center;padding:40px 0;color:var(--stone);font-family:var(--serif);font-style:italic;font-size:18px}
-.btn-novo{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--brand);color:var(--bone);text-decoration:none;font-family:var(--serif);font-style:italic;font-size:17px;margin-top:20px;transition:background 0.15s}
+.btn-novo{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--brand);color:var(--bone);text-decoration:none;font-family:var(--sans);font-style:normal;font-weight:600;font-size:15px;margin-top:20px;transition:background 0.15s}
 .btn-novo:active{background:#C04A08}
 </style>
 </head>
@@ -109,7 +110,7 @@ html.t-neutral .nav,html.t-feminine .nav,html.t-clinic .nav{background:rgba(255,
     <a id="linkNovoAg" href="#" class="btn-novo">
       <span>Agendar novamente</span><span>→</span>
     </a>
-    <button onclick="voltarBusca()" style="width:100%;padding:12px;background:transparent;border:1px solid var(--rule-2);color:var(--stone);font-family:var(--serif);font-style:italic;font-size:14px;cursor:pointer;margin-top:8px">
+    <button onclick="voltarBusca()" style="width:100%;padding:12px;background:transparent;border:1px solid var(--rule-2);color:var(--stone);font-family:var(--sans);font-style:normal;font-weight:600;font-size:13px;cursor:pointer;margin-top:8px">
       ← Buscar outro número
     </button>
   </div>

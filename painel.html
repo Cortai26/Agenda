@@ -14,7 +14,7 @@
   <meta name="theme-color" content="#E55A0C">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Sora:wght@600;700;800;900&family=Nunito+Sans:wght@400;600;700;800&family=Manrope:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/tokens.css?v=30">
   <style>
     /* ── RESET ── */
@@ -35,7 +35,7 @@
       --c-brand:      #E55A0C;
       --c-brand-text: #C04A08;
       --c-brand-dark: #9C3A06;
-      --font-heading: 'Manrope', sans-serif;
+      --font-heading: 'Inter', sans-serif;
       --font-mono:    'JetBrains Mono', monospace;
       --text-h1:      clamp(28px, 6vw, 48px);
       --text-h2:      clamp(20px, 4vw, 32px);
@@ -79,7 +79,7 @@
       --r-xl: 16px;
       --sh: 0 4px 20px rgba(0, 0, 0, .4);
       --sh-lg: 0 8px 40px rgba(0, 0, 0, .5);
-      --font-h: 'Manrope', sans-serif;
+      --font-h: 'Inter', sans-serif;
       --font-b: 'Inter', sans-serif;
       --sidebar-w: 220px;
       --sidebar-bg: #0E0E0E;
@@ -156,7 +156,7 @@
       --r-xl: 24px;
       --sh: 0 2px 12px rgba(216, 27, 96, .08);
       --sh-lg: 0 8px 32px rgba(216, 27, 96, .12);
-      --font-h: 'Manrope', sans-serif;
+      --font-h: 'Inter', sans-serif;
       --font-b: 'Inter', sans-serif;
       --sidebar-w: 220px;
       --sidebar-bg: #FFFFFF;
@@ -233,8 +233,8 @@
       --r-xl: 20px;
       --sh: 0 1px 6px rgba(0, 0, 0, .06);
       --sh-lg: 0 4px 20px rgba(0, 0, 0, .08);
-      --font-h: 'Syne', sans-serif;
-      --font-b: 'Nunito', sans-serif;
+      --font-h: 'Inter', sans-serif;
+      --font-b: 'Inter', sans-serif;
       --sidebar-w: 220px;
       --sidebar-bg: #FFFFFF;
       --sidebar-border: #C8B8A8;
@@ -311,8 +311,8 @@
       --r-xl: 22px;
       --sh: 0 1px 6px rgba(28,58,94,.06);
       --sh-lg: 0 4px 20px rgba(28,58,94,.1);
-      --font-h: 'Syne', sans-serif;
-      --font-b: 'Nunito', sans-serif;
+      --font-h: 'Inter', sans-serif;
+      --font-b: 'Inter', sans-serif;
       --sidebar-w: 220px;
       --sidebar-bg: #FFFFFF;
       --sidebar-border: #D4E5F2;
@@ -358,8 +358,8 @@
     }
 
     html.fonte-serif {
-      --font-h: 'Cormorant Garamond', Georgia, serif;
-      --font-b: 'Cormorant Garamond', Georgia, serif;
+      --font-h: 'Inter', sans-serif;
+      --font-b: 'Inter', sans-serif;
     }
 
     body {
@@ -2739,7 +2739,7 @@
     }
 
     .mc-n {
-      font-family: var(--font-brand, var(--font-h, 'Sora', sans-serif));
+      font-family: var(--font-h);
       font-size: clamp(16px, 4vw, 22px);
       font-weight: 800;
       color: var(--primary);
@@ -2786,7 +2786,7 @@
       background: none;
       border: none;
       color: #fff;
-      font-family: var(--font-h, var(--font-brand, 'Sora', sans-serif));
+      font-family: var(--font-h);
       font-size: 15px;
       font-weight: 700;
       cursor: pointer;
@@ -2995,7 +2995,7 @@
     }
 
     .cal-modal-tit {
-      font-family: var(--font-h, var(--font-brand, 'Sora', sans-serif));
+      font-family: var(--font-h);
       font-size: 16px;
       font-weight: 800;
       color: var(--tx, var(--text, #fff))
@@ -3039,7 +3039,7 @@
       color: var(--tx, var(--text, #fff));
       transition: .12s;
       text-align: center;
-      font-family: var(--font-h, var(--font-brand, 'Sora', sans-serif));
+      font-family: var(--font-h);
     }
 
     .cpm-btn:hover {
@@ -3070,7 +3070,7 @@
       background: transparent;
       color: var(--tx, var(--text, #fff));
       transition: .12s;
-      font-family: var(--font-h, var(--font-brand, 'Sora', sans-serif));
+      font-family: var(--font-h);
     }
 
     .cpa-btn:hover {
@@ -3087,13 +3087,13 @@
     /* ── Cal-grid (modal novo agendamento) ── */
     .cal-grid{background:var(--s1,#181818);border:1px solid var(--bd,rgba(255,255,255,.07));border-radius:var(--r-lg,12px);padding:20px}
     .cal-grid__head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-    .cal-grid__title{font:700 14px var(--font-h,'Manrope',sans-serif);color:var(--tx,#E5E2E1)}
-    .cal-nav{width:32px;height:32px;border-radius:8px;border:none;background:var(--s2,#212121);color:var(--tx2,#A09080);font:700 16px var(--font-h,'Manrope',sans-serif);cursor:pointer;transition:background .15s;flex-shrink:0}
+    .cal-grid__title{font:700 14px var(--font-h,'Inter',sans-serif);color:var(--tx,#E5E2E1)}
+    .cal-nav{width:32px;height:32px;border-radius:8px;border:none;background:var(--s2,#212121);color:var(--tx2,#A09080);font:700 16px var(--font-h,'Inter',sans-serif);cursor:pointer;transition:background .15s;flex-shrink:0}
     .cal-nav:hover{background:var(--s3,#2C2C2C);color:var(--tx,#E5E2E1)}
     .cal-grid__weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px}
-    .cal-grid__weekdays span{text-align:center;font:700 10px var(--font-h,'Manrope',sans-serif);color:var(--tx3,#5C5045);padding:4px;letter-spacing:.3px}
+    .cal-grid__weekdays span{text-align:center;font:700 10px var(--font-h,'Inter',sans-serif);color:var(--tx3,#5C5045);padding:4px;letter-spacing:.3px}
     .cal-grid__days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-    .cal-day{aspect-ratio:1;border:none;border-radius:8px;background:transparent;color:var(--tx,#E5E2E1);font:500 13px var(--font-h,'Manrope',sans-serif);cursor:pointer;position:relative;transition:all .15s;min-height:36px}
+    .cal-day{aspect-ratio:1;border:none;border-radius:8px;background:transparent;color:var(--tx,#E5E2E1);font:500 13px var(--font-h,'Inter',sans-serif);cursor:pointer;position:relative;transition:all .15s;min-height:36px}
     .cal-day:hover:not(:disabled){background:var(--s2,#212121)}
     .cal-day.is-today{background:var(--primary-bg,rgba(229,90,12,.1));color:var(--primary,#E55A0C);font-weight:700}
     .cal-day.is-today::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--primary,#E55A0C)}
@@ -3128,7 +3128,7 @@
     <div class="lbox">
       <div class="llogo">
         <img src="/brand/agenda-mark-small.svg" alt="" width="36" height="36" style="display:block;flex-shrink:0;border-radius:8px">
-        <span style="font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:500;font-size:24px;letter-spacing:-.01em;color:#F0EDE8;line-height:1">agenda</span>
+        <span style="font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:24px;letter-spacing:-.01em;color:#F0EDE8;line-height:1">agenda</span>
       </div>
       <p class="lsub">Painel de gestão</p>
       <div class="login-erro" id="loginErro"></div>
@@ -3166,7 +3166,7 @@
     <aside class="app-sidebar">
       <a class="sb-logo" href="#" onclick="tabSidebar('agenda',document.querySelector('[data-tab=agenda]'));return false" style="text-decoration:none;cursor:pointer">
         <img src="/brand/agenda-mark-small.svg" alt="" width="28" height="28" style="border-radius:6px;display:block;flex-shrink:0">
-        <span class="sb-brand" style="font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:500;letter-spacing:-.01em">agenda</span>
+        <span class="sb-brand" style="font-family:'Instrument Serif',Georgia,serif;font-style:italic;letter-spacing:-.01em">agenda</span>
       </a>
       <nav class="sb-nav">
         <button class="sb-item tnav on" data-tab="agenda" onclick="tabSidebar('agenda',this)"> <span
