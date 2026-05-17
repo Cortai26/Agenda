@@ -1157,6 +1157,9 @@ function enviarWhatsAppById(id){
       <button class="adm-nav-item" id="nav-cobrancas" onclick="navSidebar('cobrancas',this)" style="color:rgba(255,255,255,.7)">
         <span class="adm-nav-icon">💳</span> Cobranças
       </button>
+      <button class="adm-nav-item" id="nav-lixeira" onclick="navSidebar('lixeira',this)" style="color:rgba(255,255,255,.7)">
+        <span class="adm-nav-icon">🗑️</span> Lixeira
+      </button>
     </nav>
 
     <div class="adm-sidebar-footer">
@@ -1188,6 +1191,7 @@ function enviarWhatsAppById(id){
     <div class="mobile-tabs" style="display:flex;align-items:center">
       <button class="mobile-tab on" onclick="navSidebar('visaogeral',this)">📊 Visão Geral</button>
       <button class="mobile-tab" onclick="navSidebar('cobrancas',this)">💳 Cobranças</button>
+      <button class="mobile-tab" onclick="navSidebar('lixeira',this)">🗑️ Lixeira</button>
       <div style="margin-left:auto;display:flex;align-items:center;gap:6px;padding-right:10px">
         <div class="theme-dot" id="mtdot-onyx" style="background:#F2CA50;flex-shrink:0" onclick="setTheme('t-onyx')" title="Onyx"></div>
         <div class="theme-dot" id="mtdot-feminine" style="background:#D81B60;flex-shrink:0" onclick="setTheme('t-feminine')" title="Feminine"></div>
@@ -1371,12 +1375,13 @@ function navSidebar(id, btn){
   activeTab=id;
   const el=document.getElementById('mainContent');
   // Topbar
-  const eyebrow={'visaogeral':'Platform Overview','cobrancas':'Financeiro'}[id]||'';
-  const title={'visaogeral':'Executive Dashboard','cobrancas':'Cobranças'}[id]||'';
+  const eyebrow={'visaogeral':'Platform Overview','cobrancas':'Financeiro','lixeira':'Gerenciamento'}[id]||'';
+  const title={'visaogeral':'Executive Dashboard','cobrancas':'Cobranças','lixeira':'Lixeira'}[id]||'';
   document.getElementById('topbar-eyebrow').textContent=eyebrow;
   document.getElementById('topbar-title').textContent=title;
   if(id==='visaogeral'){renderVisaoGeral(el);carregarUso();}
   else if(id==='cobrancas'){renderCobrancas(el);}
+  else if(id==='lixeira'){renderLixeira(el);}
 }
 // Compat legado (usado pelos botões gerados pelo JS)
 function navTab(id,btn){navSidebar(id,btn);}
@@ -1753,6 +1758,66 @@ async function renderCobrancas(el, forceRefresh){
   }
   html+='</div>';
   el.innerHTML=html;
+}
+
+// ── RENDER LIXEIRA ──
+var _lixeiraData=[];
+async function renderLixeira(el){
+  el.innerHTML='<div class="loading">Carregando lixeira...</div>';
+  try{
+    var tok=SESSION&&SESSION.access_token?SESSION.access_token:KEY;
+    var r=await fetch(SUPA+'/rest/v1/rpc/listar_lixeira',{
+      headers:{'apikey':KEY,'Authorization':'Bearer '+tok,'Content-Type':'application/json'}
+    });
+    if(!r.ok){var e=await r.text();throw new Error(e);}
+    var itens=await r.json();
+    _lixeiraData=itens||[];
+
+    var html='<div class="adm-card">';
+    html+='<div class="adm-card-hdr">';
+    html+='<span class="adm-card-title">🗑️ Lixeira ('+_lixeiraData.length+')</span>';
+    html+='<button class="btn-add" onclick="renderLixeira(document.getElementById(\'mainContent\'))" style="background:var(--s2);color:var(--tx);border:1px solid var(--bd)">↺ Recarregar</button>';
+    html+='</div>';
+
+    if(!_lixeiraData.length){
+      html+='<div class="empty">Nenhum estabelecimento excluído recentemente.</div>';
+    }else{
+      html+='<div class="table-scroll"><table class="adm-table"><thead class="adm-table-head"><tr>';
+      html+='<th>Estabelecimento</th><th>Endereço</th><th>Excluído em</th><th></th>';
+      html+='</tr></thead><tbody>';
+      _lixeiraData.forEach(function(item,idx){
+        var data=item.deleted_at?new Date(item.deleted_at):null;
+        var dataFmt=data?data.toLocaleDateString('pt-BR')+' '+data.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}):'—';
+        html+='<tr>';
+        html+='<td><div class="t-biz"><div class="t-biz-icon" style="font-size:18px">🗑️</div><div><div class="t-biz-name">'+esc(item.nome||'—')+'</div></div></div></td>';
+        html+='<td><span class="t-biz-loc" style="font-family:monospace;font-size:11px">'+esc(item.slug||'—')+'</span></td>';
+        html+='<td style="font-size:12px;color:var(--tx2);white-space:nowrap">'+dataFmt+'</td>';
+        html+='<td><button class="btn-add" onclick="restaurarSalao('+idx+')" style="white-space:nowrap">↩ Restaurar</button></td>';
+        html+='</tr>';
+      });
+      html+='</tbody></table></div>';
+    }
+    html+='</div>';
+    el.innerHTML=html;
+  }catch(e){
+    el.innerHTML='<div class="empty" style="color:var(--red)">Erro ao carregar lixeira: '+esc(e.message)+'</div>';
+  }
+}
+
+async function restaurarSalao(idx){
+  var item=_lixeiraData[idx];
+  if(!item){alert('Item não encontrado.');return;}
+  if(!confirm('Restaurar "'+item.nome+'" em modo trial?')) return;
+  var btn=event&&event.target;
+  if(btn){btn.disabled=true;btn.textContent='...';}
+  try{
+    await rpc('restaurar_salao',{p_lixeira_id:item.id});
+    alert('✅ Salão '+item.nome+' restaurado com sucesso em modo trial.');
+    renderLixeira(document.getElementById('mainContent'));
+  }catch(e){
+    if(btn){btn.disabled=false;btn.textContent='↩ Restaurar';}
+    alert('Erro ao restaurar: '+e.message);
+  }
 }
 
 async function cancelarCobAsaas(asaas_id){
