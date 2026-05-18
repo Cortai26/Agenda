@@ -377,6 +377,10 @@ function configurarAbasPorPlano(){
 
 function iniciarApp(sessao){
   S=sessao;
+  // Fetch fresh salon data in background — picks up changes from onboarding
+  api('saloes?slug=eq.'+sessao.slug+'&select=*').then(function(rows){
+    if(rows&&rows[0]) S=Object.assign({},sessao,rows[0]);
+  }).catch(function(){});
   (function(){
     var local=null;
     try{local=localStorage.getItem('cortai_painel_tema');}catch(e){}

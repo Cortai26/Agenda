@@ -2229,9 +2229,7 @@ function buildSrv(){
       S.srv=sv; S.hora=null;
       buildSrv();
       document.getElementById('selSrv').textContent=sv.icone+' '+sv.nome;
-      unlock('bDia'); buildDias();
-      if(S.dataStr){ buildHoras(); updResumo(); chkBtn(); }
-      scr('bDia');
+      decidirProximaEtapa();
       updateSteps(); updateBar();
     };
     ul.appendChild(c);
@@ -2278,6 +2276,23 @@ function buildProf(plano){
   });
   html+='</div>';
   wrap.innerHTML=html;
+}
+
+function decidirProximaEtapa(){
+  var isBasico=salao.plano==='basico';
+  if(!isBasico && profissionais.length>1 && !profSelecionado){
+    // Renumber subsequent blocks since prof step is now step 2
+    var bDiaNum=document.querySelector('#bDia .ag-bloco-num');
+    var bHoraNum=document.querySelector('#bHora .ag-bloco-num');
+    if(bDiaNum) bDiaNum.textContent='3';
+    if(bHoraNum) bHoraNum.textContent='4';
+    unlock('bProf');
+    scr('bProf');
+  } else {
+    unlock('bDia'); buildDias();
+    if(S.dataStr){ buildHoras(); updResumo(); chkBtn(); }
+    scr('bDia');
+  }
 }
 
 function selecionarProf(id){

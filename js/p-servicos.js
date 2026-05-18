@@ -387,10 +387,6 @@ async function salvarServico(){
   if(!nome){err.textContent='Informe o nome.';err.style.display='block';return;}
   if(!precoVal||isNaN(preco)||preco<=0){err.textContent='Preço inválido.';err.style.display='block';return;}
   if(isNaN(dur)||dur<10){err.textContent='Duração mínima: 10 min.';err.style.display='block';return;}
-  console.log('[salvarServico] validação OK, pedindo senha...');
-  var pw=await getPw();
-  if(!pw){console.warn('[salvarServico] senha cancelada');return;}
-  console.log('[salvarServico] senha obtida, salvando...');
   btn.disabled=true; btn.textContent='Salvando...';
   try{
     if(!_icoSel) _icoSel = '📋';
@@ -398,27 +394,24 @@ async function salvarServico(){
     var extraEvento = {};
     if(_tipoServico==='evento'){
       extraEvento={
-        tipo:'evento',
-        evento_data:document.getElementById('eventoData')?document.getElementById('eventoData').value||null:null,
-        evento_hora:document.getElementById('eventoHora')?document.getElementById('eventoHora').value||null:null,
-        vagas_max:document.getElementById('eventoVagas')?parseInt(document.getElementById('eventoVagas').value)||10:10,
-        evento_local:document.getElementById('eventoLocal')?document.getElementById('eventoLocal').value.trim()||null:null,
+        p_tipo:'evento',
+        p_evento_data:document.getElementById('eventoData')?document.getElementById('eventoData').value||null:null,
+        p_evento_hora:document.getElementById('eventoHora')?document.getElementById('eventoHora').value||null:null,
+        p_vagas_max:document.getElementById('eventoVagas')?parseInt(document.getElementById('eventoVagas').value)||10:10,
+        p_evento_local:document.getElementById('eventoLocal')?document.getElementById('eventoLocal').value.trim()||null:null,
       };
     } else {
-      extraEvento={tipo:'atendimento'};
+      extraEvento={p_tipo:'atendimento'};
     }
     if(_editSrvId){
       var atual=_servicos.find(function(s){return s.id===_editSrvId;});
-      await rpc('atualizar_servico',{p_slug:S.slug,p_senha:pw,p_servico_id:_editSrvId,p_icone:_icoSel,p_nome:nome,p_descricao:desc||null,p_preco:precoCentavos,p_duracao:dur,p_ativo:atual?atual.ativo:true,...extraEvento});
+      await rpc('painel_atualizar_servico',{p_salao_id:S.id,p_servico_id:_editSrvId,p_icone:_icoSel,p_nome:nome,p_descricao:desc||null,p_preco:precoCentavos,p_duracao:dur,p_ativo:atual?atual.ativo:true,...extraEvento});
     } else {
-      await rpc('adicionar_servico',{p_slug:S.slug,p_senha:pw,p_icone:_icoSel,p_nome:nome,p_descricao:desc||null,p_preco:precoCentavos,p_duracao:dur,p_ordem:_servicos.length+1,...extraEvento});
+      await rpc('painel_inserir_servico',{p_salao_id:S.id,p_icone:_icoSel,p_nome:nome,p_descricao:desc||null,p_preco:precoCentavos,p_duracao:dur,p_ordem:_servicos.length+1,...extraEvento});
     }
-    console.log('[salvarServico] sucesso!');
     fecharSrv(); await carregarServicos(); _tabOk.servicos=false; renderServicos(); toast('✓ Serviço salvo!','ok');
   }catch(e){
-    console.error('[salvarServico] erro:', e);
-    if(e.message && e.message.includes('Acesso negado')){_pw=null;err.textContent='Senha incorreta.';}
-    else err.textContent='Erro: '+(e.message || 'Desconhecido');
+    err.textContent='Erro: '+(e.message || 'Desconhecido');
     err.style.display='block';
   }
   btn.disabled=false; btn.textContent='Salvar';
