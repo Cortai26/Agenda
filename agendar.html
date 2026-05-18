@@ -1594,7 +1594,6 @@ html.t-clinic .cal-day-ed.ativo{background:#2C6FAA;}
 .hora-btn-ed:active:not(.hoc):not(.hsel){transform:scale(0.9);}
 .hora-btn-ed.hsel{background:var(--brand);color:#fff;border-color:var(--brand);box-shadow:0 2px 10px var(--brand-soft);}
 .hora-btn-ed.hoc{opacity:0.22;cursor:not-allowed;text-decoration:line-through;}
-.hora-btn-ed.sugerido::after{content:'';position:absolute;top:3px;right:3px;width:4px;height:4px;border-radius:50%;background:var(--brand);}
 html.t-neutral .hora-btn-ed{background:#fff;color:#1A0E06;border-color:#C8B8A8;}
 html.t-neutral .hora-btn-ed.hsel{background:#E55A0C;color:#fff;}
 html.t-feminine .hora-btn-ed{background:#FFF1F3;color:#201A1A;border-color:rgba(216,27,96,.2);}
@@ -3778,9 +3777,8 @@ async function _loadDesktopHoras(dStr){
     var html='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:12px">';
     html+=livres.map(function(s){
       var isSel=_dHora&&_dHora.slice(0,5)===s.hora.slice(0,5);
-      return '<button onclick="_desktopHora(\''+s.hora+'\')" style="padding:9px 4px;text-align:center;background:'+(isSel?'var(--c-primary)':'transparent')+';border:1px solid '+(isSel?'var(--c-primary)':s.sugerido?'rgba(229,90,12,0.35)':'var(--c-border)')+';cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px">'+
-        '<span style="font-family:var(--serif);font-style:italic;font-size:13px;color:'+(isSel?'#fff':s.sugerido?'var(--c-primary)':'var(--c-text)')+'">'+s.hora.slice(0,5)+'</span>'+
-        (s.sugerido&&!isSel?'<span style="font-size:7px;color:var(--c-primary);letter-spacing:1px;text-transform:uppercase">sug.</span>':'')+
+      return '<button onclick="_desktopHora(\''+s.hora+'\')" style="padding:9px 4px;text-align:center;background:'+(isSel?'var(--c-primary)':'transparent')+';border:1px solid '+(isSel?'var(--c-primary)':'var(--c-border)')+';cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px">'+
+        '<span style="font-family:var(--serif);font-style:italic;font-size:13px;color:'+(isSel?'#fff':'var(--c-text)')+'">'+s.hora.slice(0,5)+'</span>'+
       '</button>';
     }).join('');
     html+='</div>';
