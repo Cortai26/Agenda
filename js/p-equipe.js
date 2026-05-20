@@ -109,13 +109,19 @@ async function abrirProf(id){
     html+='</div></div>';
   }
 
-  html+='<button class="btn-sv" onclick="salvarProf()">Salvar</button>';
+  html+=(id&&!isBasico?'<div class="fg"><label class="fl">Tema visual</label>'+htmlSeletorTemaProf(id,p?p.tema:null)+'</div>':'')+
+    '<button class="btn-sv" onclick="salvarProf()">Salvar</button>';
   var ov=document.getElementById('ovSrv');
+  if(!ov._srvHtml) ov._srvHtml=ov.querySelector('.modal').innerHTML;
   ov.querySelector('.modal').innerHTML=html;
   ov.classList.add('show');
 }
 
-async function fecharProf(){document.getElementById('ovSrv').classList.remove('show');}
+async function fecharProf(){
+  var ov=document.getElementById('ovSrv');
+  ov.classList.remove('show');
+  if(ov._srvHtml){ov.querySelector('.modal').innerHTML=ov._srvHtml;}
+}
 
 async function toggleProfServico(profId, servicoId, ativo){
   try{
@@ -241,6 +247,45 @@ async function excluirProf(id){
     _profissionais=_profissionais.filter(function(x){return x.id!==id;});
     _tabOk.equipe=false; renderEquipe();
     toast('\u2713 Profissional excluído','ok');
+  }catch(e){toast('Erro: '+e.message,'err');}
+}
+
+/* ─── TEMA DO PROFISSIONAL ─── */
+function htmlSeletorTemaProf(profId, temaAtual){
+  var sel=temaAtual?(temaAtual.id||temaAtual.template||null):null;
+  var temas=[
+    {id:null,  label:'Herdar do salão', desc:'Usa o tema do estabelecimento'},
+    {id:'onyx',     label:'Onyx (escuro)',    desc:'Fundo preto, destaque laranja'},
+    {id:'neutral',  label:'Claro',            desc:'Bege/branco limpo'},
+    {id:'feminine', label:'Rose',             desc:'Rosa — beauty e manicure'},
+    {id:'clinic',   label:'Clinic',           desc:'Azul — saúde e estética'},
+  ];
+  var html='<div style="margin-top:4px">';
+  temas.forEach(function(t){
+    var checked=(sel===t.id);
+    html+='<label style="display:flex;align-items:center;gap:10px;padding:9px 12px;'+
+      'background:'+(checked?'rgba(229,90,12,0.08)':'var(--surface-2)')+';'+
+      'border:1px solid '+(checked?'var(--primary)':'var(--sep)')+';'+
+      'border-radius:8px;cursor:pointer;margin-bottom:6px">'+
+      '<input type="radio" name="temaProf_'+profId+'" value="'+(t.id||'')+'"'+
+        (checked?' checked':'')+
+        ' onchange="salvarTemaProf(\''+profId+'\','+(t.id?'\''+t.id+'\'':'null')+')"'+
+        ' style="accent-color:var(--primary)">'+
+      '<div>'+
+        '<div style="font-size:13px;font-weight:600;color:var(--text)">'+t.label+'</div>'+
+        '<div style="font-size:11px;color:var(--text-3)">'+t.desc+'</div>'+
+      '</div></label>';
+  });
+  return html+'</div>';
+}
+
+async function salvarTemaProf(profId, temaId){
+  var tema=temaId?{id:temaId,template:temaId}:null;
+  try{
+    await rpc('painel_salvar_tema_prof',{p_salao_id:S.id,p_prof_id:profId,p_tema:tema});
+    var prof=_profissionais.find(function(p){return p.id===profId;});
+    if(prof) prof.tema=tema;
+    toast(temaId?'✓ Tema '+temaId+' aplicado':'✓ Herdando tema do salão','ok');
   }catch(e){toast('Erro: '+e.message,'err');}
 }
 

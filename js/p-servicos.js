@@ -156,10 +156,8 @@ async function adicionarPreset(catKey, idx){
   var cat=SERVICO_PRESETS[catKey];
   var preset=cat.servicos[idx];
   if(!preset) return;
-  var pw=await getPw('Adicionar serviço','Confirme sua senha para adicionar: '+preset.icone+' '+preset.nome);
-  if(!pw) return;
   try{
-    await rpc('adicionar_servico',{p_slug:S.slug,p_senha:pw,
+    await rpc('painel_inserir_servico',{p_salao_id:S.id,
       p_nome:preset.nome,p_preco:preset.preco,
       p_duracao:preset.dur,p_icone:preset.icone,
       p_descricao:null,p_ordem:99});
@@ -167,7 +165,6 @@ async function adicionarPreset(catKey, idx){
     document.getElementById('presetModal').style.display='none';
     _tabOk.servicos=false; renderServicos();
   }catch(e){
-    if(e.message&&e.message.includes('Acesso negado')){_pw=null;}
     toast('Erro: '+e.message,'err');
   }
 }
@@ -204,7 +201,9 @@ async function renderServicos(){
     }catch(e){}
 
     var html=strip+
-      '<div class="srv-hdr"><h3>Serviços de '+esc(profNome.split(' ')[0])+'</h3></div>'+
+      '<div class="srv-hdr"><h3>Serviços de '+esc(profNome.split(' ')[0])+'</h3>'+
+      '<button class="btn-add" onclick="abrirModalServicoParaProf(\''+_profFiltro+'\',\''+esc(prof?prof.nome:'Profissional')+'\')">+ Exclusivo</button>'+
+      '</div>'+
       '<div style="font-size:12px;color:var(--text-3);margin-bottom:12px;line-height:1.5">'+
         'Ative os serviços que este profissional realiza. O preço individual pode ser ajustado.'+
       '</div>'+
@@ -308,6 +307,7 @@ async function editarPrecoProf(profId, svcId, precoAtual, svcNome){
   }
 }
 var _tipoServico='atendimento';
+var _profissionalEditando=null;
 
 async function abrirSrv(id){
   id=id||null; _editSrvId=id;
@@ -322,6 +322,11 @@ async function abrirSrv(id){
   if(errEl){errEl.style.display='none';errEl.classList.remove('show');}
   _icoSel=s?s.icone:'📋'; buildIcones();
   _renderTipoServico(s);
+  var ctxEl=document.getElementById('srvContexto');
+  if(ctxEl){
+    if(_profissionalEditando){ctxEl.textContent='Serviço exclusivo de '+_profissionalEditando.nome;ctxEl.style.display='block';}
+    else{ctxEl.style.display='none';}
+  }
   document.getElementById('ovSrv').classList.add('show');
   setTimeout(function(){document.getElementById('srvNome').focus();},300);
 }
@@ -363,7 +368,12 @@ function setTipoServico(tipo){
   }
 }
 window.setTipoServico=setTipoServico;
-async function fecharSrv(){document.getElementById('ovSrv').classList.remove('show');_editSrvId=null;}
+async function fecharSrv(){document.getElementById('ovSrv').classList.remove('show');_editSrvId=null;_profissionalEditando=null;}
+function abrirModalServicoParaProf(profId, profNome){
+  _profissionalEditando={id:profId,nome:profNome};
+  abrirSrv();
+}
+window.abrirModalServicoParaProf=abrirModalServicoParaProf;
 async function buildIcones(){
   var icEl = document.getElementById('iconGrid');
   if(!icEl) return;
@@ -407,7 +417,7 @@ async function salvarServico(){
       var atual=_servicos.find(function(s){return s.id===_editSrvId;});
       await rpc('painel_atualizar_servico',{p_salao_id:S.id,p_servico_id:_editSrvId,p_icone:_icoSel,p_nome:nome,p_descricao:desc||null,p_preco:precoCentavos,p_duracao:dur,p_ativo:atual?atual.ativo:true,...extraEvento});
     } else {
-      await rpc('painel_inserir_servico',{p_salao_id:S.id,p_icone:_icoSel,p_nome:nome,p_descricao:desc||null,p_preco:precoCentavos,p_duracao:dur,p_ordem:_servicos.length+1,...extraEvento});
+      await rpc('painel_inserir_servico',{p_salao_id:S.id,p_icone:_icoSel,p_nome:nome,p_descricao:desc||null,p_preco:precoCentavos,p_duracao:dur,p_ordem:_servicos.length+1,p_profissional_id:_profissionalEditando?_profissionalEditando.id:null,...extraEvento});
     }
     fecharSrv(); await carregarServicos(); _tabOk.servicos=false; renderServicos(); toast('✓ Serviço salvo!','ok');
   }catch(e){

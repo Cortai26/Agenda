@@ -2113,12 +2113,12 @@ async function init(){
 
     // Profissionais (todos os planos — fotos visíveis; seleção apenas pro/salão)
     {
-      const profs = await supa(`profissionais?salao_id=eq.${salao.id}&ativo=eq.true&order=ordem&select=id,nome,especialidade,cor,foto_url,slug`);
+      const profs = await supa(`profissionais?salao_id=eq.${salao.id}&ativo=eq.true&order=ordem&select=id,nome,especialidade,cor,foto_url,slug,tema`);
       profissionais = profs||[];
       if(profissionais.length > 0){
         if(salao.plano !== 'basico' && profParam){
           const pf = profissionais.find(p=>p.id===profParam||p.slug===profParam);
-          if(pf){ profSelecionado=pf; }
+          if(pf){ profSelecionado=pf; aplicarTemaProf(pf); }
         }
         buildProf(salao.plano);
       }
@@ -2128,6 +2128,23 @@ async function init(){
     if(isDesktop()) renderListaServicosDesktop();
   } catch(e){
     document.getElementById('srvWrap').innerHTML=`<div class="erro">Erro ao carregar: ${e.message}</div>`;
+  }
+}
+
+// ── APLICA TEMA DO PROFISSIONAL (sobrepõe tema do salão) ──
+function aplicarTemaProf(prof){
+  if(!prof||!prof.tema) return;
+  var temaId=prof.tema.id||prof.tema.template;
+  if(!temaId) return;
+  var validos=['t-onyx','t-neutral','t-feminine','t-clinic'];
+  validos.concat(['t-obsidian','t-azure','t-emerald','t-rose','t-crimson']).forEach(function(c){
+    document.documentElement.classList.remove(c);
+    document.body.classList.remove(c);
+  });
+  var cls='t-'+temaId;
+  if(validos.indexOf(cls)>=0){
+    document.documentElement.classList.add(cls);
+    document.body.className=cls;
   }
 }
 
