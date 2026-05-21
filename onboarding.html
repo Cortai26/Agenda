@@ -405,15 +405,22 @@ function adicionarCustom() {
 }
 window.adicionarCustom=adicionarCustom;
 
+async function rpcOb(fn, params) {
+  var r = await fetch(SUPA_URL+'/rest/v1/rpc/'+fn, {method:'POST', headers: H, body: JSON.stringify(params)});
+  if(!r.ok){ var t=await r.text(); throw new Error(t); }
+}
+
 async function salvarServicosEAvancar() {
   var save=document.getElementById('savingSvc');
   if(!_svcsAdicionados.length||!_salao){avancarPasso(1);return;}
   save.textContent='Salvando serviços...';
   try {
-    var payload=_svcsAdicionados.map(function(s,i){return{salao_id:_salao.id,nome:s.nome,preco:s.preco,duracao:s.duracao,icone:s.icone,ativo:true,ordem:i+1};});
-    var r=await fetch(SUPA_URL+'/rest/v1/servicos',{method:'POST',headers:Object.assign({},H,{'Prefer':'return=minimal'}),body:JSON.stringify(payload)});
-    save.textContent=r.ok?'✓ Serviços salvos':'Não foi possível salvar — adicione no painel';
-  } catch(e){save.textContent='Erro ao salvar — tente no painel';}
+    for(var i=0;i<_svcsAdicionados.length;i++){
+      var s=_svcsAdicionados[i];
+      await rpcOb('painel_inserir_servico',{p_salao_id:_salao.id,p_icone:s.icone||'📅',p_nome:s.nome,p_descricao:null,p_preco:s.preco,p_duracao:s.duracao,p_ordem:i+1,p_profissional_id:null,p_tipo:'atendimento',p_evento_data:null,p_evento_hora:null,p_vagas_max:null,p_evento_local:null});
+    }
+    save.textContent='✓ Serviços salvos';
+  } catch(e){save.textContent='Não foi possível salvar — adicione no painel';}
   setTimeout(function(){save.textContent='';avancarPasso(1);},700);
 }
 document.getElementById('btnContinuarSvcs').onclick=salvarServicosEAvancar;
@@ -463,8 +470,8 @@ window.aplicarPreset=aplicarPreset;
 async function salvarHorariosEAvancar() {
   var save=document.getElementById('savingHora');save.textContent='Salvando horários...';
   if(_salao){
-    try{var r=await fetch(SUPA_URL+'/rest/v1/saloes?slug=eq.'+encodeURIComponent(SLUG),{method:'PATCH',headers:Object.assign({},H,{'Prefer':'return=minimal'}),body:JSON.stringify({horario:_horarios})});save.textContent=r.ok?'✓ Horários salvos':'Erro ao salvar — tente no painel';}
-    catch(e){save.textContent='Erro ao salvar';}
+    try{await rpcOb('painel_salvar_horarios',{p_salao_id:_salao.id,p_horario:_horarios});save.textContent='✓ Horários salvos';}
+    catch(e){save.textContent='Erro ao salvar — tente no painel';}
   }else{save.textContent='';}
   setTimeout(function(){save.textContent='';avancarPasso(2);},700);
 }
@@ -474,18 +481,19 @@ window.salvarHorariosEAvancar=salvarHorariosEAvancar;
 async function salvarLocalizacaoEAvancar() {
   var save=document.getElementById('savingLoc');save.textContent='Salvando...';
   if(_salao){
-    var body={};
     var end=document.getElementById('inpEndereco').value.trim();
     var cid=document.getElementById('inpCidade').value.trim();
     var ig=document.getElementById('inpInstagram').value.trim();
     var wa=document.getElementById('inpWhatsapp').value.replace(/\D/g,'');
     var desc=(document.getElementById('inpDescricao')||{}).value||'';
-    if(end)body.endereco=end;if(cid)body.cidade=cid;
-    if(ig)body.instagram_url=ig.startsWith('http')?ig:'https://instagram.com/'+ig.replace('@','');
-    if(wa.length>=10)body.whatsapp_url=wa;
-    if(desc.trim())body.descricao=desc.trim();
-    if(Object.keys(body).length){
-      try{var r=await fetch(SUPA_URL+'/rest/v1/saloes?slug=eq.'+encodeURIComponent(SLUG),{method:'PATCH',headers:Object.assign({},H,{'Prefer':'return=minimal'}),body:JSON.stringify(body)});save.textContent=r.ok?'✓ Localização salva':'Erro ao salvar';}
+    var params={p_salao_id:_salao.id};
+    if(end)params.p_endereco=end;
+    if(cid)params.p_cidade=cid;
+    if(ig)params.p_instagram_url=ig.startsWith('http')?ig:'https://instagram.com/'+ig.replace('@','');
+    if(wa.length>=10)params.p_whatsapp_url=wa;
+    if(desc.trim())params.p_descricao=desc.trim();
+    if(Object.keys(params).length>1){
+      try{await rpcOb('painel_salvar_localizacao',params);save.textContent='✓ Localização salva';}
       catch(e){save.textContent='Erro ao salvar';}
     }else{save.textContent='';}
   }else{save.textContent='';}

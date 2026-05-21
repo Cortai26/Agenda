@@ -157,7 +157,7 @@ async function adicionarPreset(catKey, idx){
   var preset=cat.servicos[idx];
   if(!preset) return;
   try{
-    await rpc('painel_inserir_servico',{p_salao_id:S.id,
+    await rpcRetry('painel_inserir_servico',{p_salao_id:S.id,
       p_nome:preset.nome,p_preco:preset.preco,
       p_duracao:preset.dur,p_icone:preset.icone,
       p_descricao:null,p_ordem:99});
@@ -389,6 +389,7 @@ async function salvarServico(){
   var btn=document.getElementById('btnSvSrv'), err=document.getElementById('srvErr');
   if(!err||!btn){console.error('[salvarServico] elementos não encontrados');return;}
   err.style.display='none'; err.classList.remove('show');
+  if(!S||!S.id){err.textContent='Sessão expirada — faça login novamente.';err.style.display='block';return;}
   var nome=document.getElementById('srvNome').value.trim();
   var precoVal=document.getElementById('srvPreco').value.trim();
   var preco=parseFloat(precoVal);
@@ -415,9 +416,9 @@ async function salvarServico(){
     }
     if(_editSrvId){
       var atual=_servicos.find(function(s){return s.id===_editSrvId;});
-      await rpc('painel_atualizar_servico',{p_salao_id:S.id,p_servico_id:_editSrvId,p_icone:_icoSel,p_nome:nome,p_descricao:desc||null,p_preco:precoCentavos,p_duracao:dur,p_ativo:atual?atual.ativo:true,...extraEvento});
+      await rpcRetry('painel_atualizar_servico',{p_salao_id:S.id,p_servico_id:_editSrvId,p_icone:_icoSel,p_nome:nome,p_descricao:desc||null,p_preco:precoCentavos,p_duracao:dur,p_ativo:atual?atual.ativo:true,...extraEvento});
     } else {
-      await rpc('painel_inserir_servico',{p_salao_id:S.id,p_icone:_icoSel,p_nome:nome,p_descricao:desc||null,p_preco:precoCentavos,p_duracao:dur,p_ordem:_servicos.length+1,p_profissional_id:_profissionalEditando?_profissionalEditando.id:null,...extraEvento});
+      await rpcRetry('painel_inserir_servico',{p_salao_id:S.id,p_icone:_icoSel,p_nome:nome,p_descricao:desc||null,p_preco:precoCentavos,p_duracao:dur,p_ordem:_servicos.length+1,p_profissional_id:_profissionalEditando?_profissionalEditando.id:null,...extraEvento});
     }
     fecharSrv(); await carregarServicos(); _tabOk.servicos=false; renderServicos(); toast('✓ Serviço salvo!','ok');
   }catch(e){
