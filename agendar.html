@@ -1985,8 +1985,11 @@ function updateBar(){
 // ── INIT ──
 async function init(){
   try {
-    const dados = await supa(`saloes?slug=eq.${slug}&select=id,slug,nome,responsavel,plano,status,descricao,endereco,cancelamento_min,pix_key,pix_tipo,aceita_pix,aceita_dinheiro,aceita_cartao,aceita_debito,tema,trial_expira,horario,sinal_percentual,sinal_obrigatorio,mostrar_sinal,foto_url,foto_capa_url,instagram_url,website_url,whatsapp_url,tiktok_url,facebook_url,video_url,galeria_fotos,diferenciais,faq,produtos,nota_media,total_avaliacoes,tag_destaque,fundado_em`);
-    if(!dados||dados.length===0){ document.getElementById('srvWrap').innerHTML='<div class="erro">Salão não encontrado</div>'; return; }
+    const dados = await supa(`saloes?slug=eq.${slug}&deleted_at=is.null&select=id,slug,nome,responsavel,plano,status,descricao,endereco,cancelamento_min,pix_key,pix_tipo,aceita_pix,aceita_dinheiro,aceita_cartao,aceita_debito,tema,trial_expira,horario,sinal_percentual,sinal_obrigatorio,mostrar_sinal,foto_url,foto_capa_url,instagram_url,website_url,whatsapp_url,tiktok_url,facebook_url,video_url,galeria_fotos,diferenciais,faq,produtos,nota_media,total_avaliacoes,tag_destaque,fundado_em`);
+    if(!dados||dados.length===0){
+      document.body.innerHTML='<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0A0908;color:#A09890;font-family:system-ui;text-align:center;padding:40px"><div><div style="font-size:40px;margin-bottom:16px">🔍</div><div style="font-family:\'Instrument Serif\',serif;font-style:italic;font-size:28px;color:#F0EDE8;margin-bottom:8px">Página não encontrada</div><div style="font-size:14px;margin-bottom:24px;line-height:1.6">O endereço <strong style="color:#E55A0C">'+slug+'</strong> não existe ou foi removido.</div><a href="/" style="padding:12px 24px;background:#E55A0C;color:#F0EDE8;text-decoration:none;font-size:15px">Voltar ao início</a></div></div>';
+      return;
+    }
     salao = dados[0];
     document.title = salao.nome+' — Agendamento';
     window._horarioSalao = salao.horario || null;
@@ -2127,7 +2130,8 @@ async function init(){
     /* No desktop, popular o painel direito com os serviços */
     if(isDesktop()) renderListaServicosDesktop();
   } catch(e){
-    document.getElementById('srvWrap').innerHTML=`<div class="erro">Erro ao carregar: ${e.message}</div>`;
+    console.error('[AGENDA] Erro crítico no init():', e);
+    document.body.innerHTML='<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0A0908;color:#A09890;font-family:system-ui;text-align:center;padding:40px"><div><div style="font-size:40px;margin-bottom:16px">⚠️</div><div style="font-size:20px;color:#F0EDE8;margin-bottom:8px">Algo deu errado</div><div style="font-size:14px;margin-bottom:20px">Tente recarregar a página.</div><button onclick="location.reload()" style="padding:12px 24px;background:#E55A0C;color:#F0EDE8;border:none;font-size:15px;cursor:pointer">Recarregar</button></div></div>';
   }
 }
 
@@ -3273,11 +3277,13 @@ function _wsGaleria(){
   var fotos=window._galeriaFotos||[];
   if(!fotos.length) return '';
   var MAX=4;
-  var items=fotos.slice(0,MAX).map(function(url,i){
+  var items=fotos.slice(0,MAX).map(function(f,i){
+    var url=typeof f==='string'?f:(f&&(f.url||f.src))||null;
+    if(!url||typeof url!=='string') return '';
     var isLast=i===MAX-1&&fotos.length>MAX;
     if(isLast) return '<div class="galeria-item mais" onclick="abrirLightbox('+i+')">+'+fotos.length+'<br><span style="font-size:10px;font-weight:400">fotos</span></div>';
     return '<div class="galeria-item" onclick="abrirLightbox('+i+')"><img src="'+url+'" alt="Galeria" loading="lazy"></div>';
-  }).join('');
+  }).filter(Boolean).join('');
   return '<div class="ws-section-wrap"><section class="ws-section" id="secGaleria">'+
     _wsChapter(2,'Galeria',fotos.length+' fotos')+
     '<div class="galeria-grid">'+items+'</div>'+
