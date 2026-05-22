@@ -336,7 +336,7 @@ async function init() {
   var link = location.origin + '/agendar.html?slug=' + SLUG;
   document.getElementById('linkVal').textContent = link;
   document.getElementById('linkVerPagina').href = link;
-  for (var i = 0; i < 7; i++) _horarios[i] = null;
+  for (var i = 0; i < 7; i++) _horarios[String(i)] = null;
   renderChips();
   renderDias();
 }
@@ -430,7 +430,7 @@ var DIAS=['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
 
 function renderDias() {
   document.getElementById('diasArea').innerHTML=[1,2,3,4,5,6,0].map(function(d){
-    var h=_horarios[d], ativo=h!==null;
+    var h=_horarios[String(d)], ativo=h!==null;
     return '<div class="dia-row"><span class="dia-nome'+(ativo?'':' off')+'">'+DIAS[d]+'</span>'+
       '<span class="dia-horas'+(ativo?' has':'')+'" onclick="editarHora('+d+')">'+(ativo?h.ini+'–'+h.fim:'Fechado')+'</span>'+
       '<div class="toggle-sw'+(ativo?'':' off')+'" onclick="toggleDia('+d+')"></div></div>'+
@@ -442,26 +442,26 @@ function renderDias() {
 }
 
 function toggleDia(d) {
-  if(_horarios[d]!==null){_horarios[d]=null;renderDias();}
-  else{_horarios[d]={ini:'09:00',fim:'19:00'};renderDias();var ed=document.getElementById('horaEditor'+d);if(ed)ed.classList.add('show');}
+  if(_horarios[String(d)]!==null){_horarios[String(d)]=null;renderDias();}
+  else{_horarios[String(d)]={ini:'09:00',fim:'19:00'};renderDias();var ed=document.getElementById('horaEditor'+d);if(ed)ed.classList.add('show');}
 }
 window.toggleDia=toggleDia;
 
 function editarHora(d) {
-  if(_horarios[d]===null){toggleDia(d);return;}
+  if(_horarios[String(d)]===null){toggleDia(d);return;}
   var el=document.getElementById('horaEditor'+d);if(el)el.classList.toggle('show');
 }
 window.editarHora=editarHora;
 
 function atualizarHora(d) {
   var ini=(document.getElementById('horaIni'+d)||{}).value, fim=(document.getElementById('horaFim'+d)||{}).value;
-  if(ini&&fim)_horarios[d]={ini:ini,fim:fim};
+  if(ini&&fim)_horarios[String(d)]={ini:ini,fim:fim};
 }
 window.atualizarHora=atualizarHora;
 
 function aplicarPreset() {
-  for(var d=1;d<=5;d++)_horarios[d]={ini:'09:00',fim:'19:00'};
-  _horarios[6]={ini:'09:00',fim:'14:00'};_horarios[0]=null;renderDias();
+  for(var d=1;d<=5;d++)_horarios[String(d)]={ini:'09:00',fim:'19:00'};
+  _horarios['6']={ini:'09:00',fim:'14:00'};_horarios['0']=null;renderDias();
   var s=document.getElementById('savingHora');s.textContent='⚡ Preset aplicado!';
   setTimeout(function(){s.textContent='';},1500);
 }
