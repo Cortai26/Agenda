@@ -57,7 +57,9 @@ function renderFonte(){
 
 function aplicarFonteEdt(f){
   S._fonte=f;
-  api('saloes?slug=eq.'+S.slug,{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({fonte:f})}).catch(function(){});
+  getPw().then(function(pw){
+    if(pw) rpc('salvar_fonte_salao',{p_slug:S.slug,p_senha:pw,p_fonte:f}).catch(function(){});
+  });
   aplicarFonteAgendar(f);
   renderTema();
   renderFonte();

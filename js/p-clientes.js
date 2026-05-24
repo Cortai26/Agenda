@@ -20,23 +20,27 @@ async function renderClientes(page){
   var mon=new Date(now); mon.setDate(now.getDate()-wd+1); mon.setHours(0,0,0,0);
   var weekStart=fmt(mon);
   var monthStart=now.getFullYear()+'-'+pad(now.getMonth()+1)+'-01';
+  var todayStr=now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate());
   var profQ=_profFiltro?'&profissional_id=eq.'+_profFiltro:'';
   var results=await Promise.all([
     api('clientes?salao_id=eq.'+S.id+'&order=total_visitas.desc&select=*&limit='+_cliPerPage+'&offset='+offset,
       {headers:{'Prefer':'count=exact'}}),
     page===0?api('rpc/clientes_inativos',{method:'POST',body:JSON.stringify({p_salao_id:S.id,p_dias:30}),headers:{'Prefer':''}}):Promise.resolve([]),
     page===0?api('agendamentos?salao_id=eq.'+S.id+'&data=gte.'+weekStart+'&status=neq.cancelado'+profQ+'&select=servico_preco'):Promise.resolve([]),
-    page===0?api('agendamentos?salao_id=eq.'+S.id+'&data=gte.'+monthStart+'&status=neq.cancelado'+profQ+'&select=servico_preco'):Promise.resolve([])
+    page===0?api('agendamentos?salao_id=eq.'+S.id+'&data=gte.'+monthStart+'&status=neq.cancelado'+profQ+'&select=servico_preco'):Promise.resolve([]),
+    page===0?api('agendamentos?salao_id=eq.'+S.id+'&data=eq.'+todayStr+'&status=neq.cancelado'+profQ+'&select=servico_preco'):Promise.resolve([])
   ]);
   var clis=results[0]||[], inativos=results[1]||[];
   var receitaSem=(results[2]||[]).reduce(function(s,a){return s+(a.servico_preco||0);},0);
   var receitaMes=(results[3]||[]).reduce(function(s,a){return s+(a.servico_preco||0);},0);
+  var receitaDia=(results[4]||[]).reduce(function(s,a){return s+(a.servico_preco||0);},0);
   /* Métricas — sempre visíveis */
   var html=renderProfStrip()+
     '<div class="metrics">'+
     '<div class="mc"><div class="mc-n">'+clis.length+'</div><div class="mc-l">Clientes</div></div>'+
-    '<div class="mc mc-V"><div class="mc-n" style="font-size:clamp(11px,3.5vw,16px)">'+formatPrice(receitaSem)+'</div><div class="mc-l">Receita semanal</div></div>'+
-    '<div class="mc mc-A"><div class="mc-n" style="font-size:clamp(11px,3.5vw,16px)">'+formatPrice(receitaMes)+'</div><div class="mc-l">Receita mensal</div></div>'+
+    '<div class="mc mc-V"><div class="mc-n" style="font-size:clamp(11px,3.5vw,16px)">'+formatPrice(receitaDia)+'</div><div class="mc-l">Receita hoje</div></div>'+
+    '<div class="mc mc-A"><div class="mc-n" style="font-size:clamp(11px,3.5vw,16px)">'+formatPrice(receitaSem)+'</div><div class="mc-l">Receita semanal</div></div>'+
+    '<div class="mc"><div class="mc-n" style="font-size:clamp(11px,3.5vw,16px)">'+formatPrice(receitaMes)+'</div><div class="mc-l">Receita mensal</div></div>'+
     '</div>';
 
   /* Lista de clientes — colapsável */

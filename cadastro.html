@@ -109,7 +109,7 @@ nav{
   position:absolute;right:12px;top:50%;transform:translateY(-50%);
   background:none;border:none;cursor:pointer;color:var(--bone3);padding:4px;
   display:flex;align-items:center;justify-content:center;line-height:1;
-  font-size:16px;transition:.15s;
+  font-size:11px;font-weight:700;letter-spacing:.03em;transition:.15s;
 }
 .fi-eye:hover{color:var(--bone)}
 .pw-info{font-family:var(--mono);font-size:10px;color:var(--bone3);margin-top:5px;min-height:14px}
@@ -405,7 +405,7 @@ nav{
         <label class="fl">Criar senha *</label>
         <div class="fi-wrap">
           <input class="fi" type="password" id="fSenha" placeholder="Mínimo 6 caracteres" maxlength="50" oninput="avaliarSenha()">
-          <button type="button" class="fi-eye" id="btnOlho" onclick="toggleSenha()" aria-label="Mostrar/ocultar senha">👁</button>
+          <button type="button" class="fi-eye" id="btnOlho" onclick="toggleSenha()" aria-label="Mostrar/ocultar senha">Ver</button>
         </div>
         <div class="pw-bars"><div class="pw-bar" id="pwb1"></div><div class="pw-bar" id="pwb2"></div><div class="pw-bar" id="pwb3"></div></div>
         <div class="pw-info" id="pwInfo">Crie uma senha para acessar seu painel</div>
@@ -638,8 +638,8 @@ function verificarSlug(){
 function toggleSenha(){
   var inp=document.getElementById('fSenha');
   var btn=document.getElementById('btnOlho');
-  if(inp.type==='password'){inp.type='text';btn.textContent='🙈';}
-  else{inp.type='password';btn.textContent='👁';}
+  if(inp.type==='password'){inp.type='text';btn.textContent='Ocultar';}
+  else{inp.type='password';btn.textContent='Ver';}
 }
 
 function avaliarSenha(){
