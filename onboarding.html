@@ -7,7 +7,9 @@
 <meta name="theme-color" content="#E55A0C">
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" type="image/png" href="/favicon.png">
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
   --ink:#0A0908; --ink-2:#111009; --ink-3:#191714;
@@ -18,6 +20,7 @@
   --display:'Instrument Serif',Georgia,serif;
   --serif:var(--display);
   --sans:'Inter',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  --mono:'JetBrains Mono',monospace;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{
@@ -44,26 +47,43 @@ body{
 .passo.ativo{display:flex}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 .passo-eyebrow{font-size:9px;color:rgba(229,90,12,0.65);letter-spacing:4px;text-transform:uppercase;font-family:var(--sans);font-weight:600;margin-bottom:10px}
-.passo-h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(28px,6vw,36px);color:var(--bone);line-height:1.1;letter-spacing:-0.2px;margin-bottom:8px}
+.passo-h1{font-family:var(--sans);font-style:normal;font-weight:800;font-size:clamp(28px,7vw,38px);color:var(--bone);line-height:1.05;letter-spacing:-1.2px;margin-bottom:8px}
 .passo-sub{font-size:13px;color:var(--stone);line-height:1.65;font-weight:300;margin-bottom:24px}
+
+/* Grid de categorias */
+.categorias-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px}
+.cat-card{padding:16px 14px;border:1px solid var(--rule-2);background:var(--ink-2);cursor:pointer;transition:all 0.15s;display:flex;flex-direction:column;align-items:flex-start;gap:8px;-webkit-tap-highlight-color:transparent}
+.cat-card:active{transform:scale(0.97)}
+.cat-card.sel{border-color:var(--brand);background:var(--brand-soft)}
+.cat-icon{font-size:28px;line-height:1}
+.cat-label{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--bone)}
+.cat-desc{font-family:var(--sans);font-size:11px;color:var(--stone-2);font-weight:300;line-height:1.4}
+
+/* Chips de serviço */
 .chips-servico{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
 .chip-svc{padding:7px 13px;border:1px solid var(--rule-2);font-family:var(--sans);font-style:normal;font-weight:500;font-size:13px;color:var(--stone);cursor:pointer;transition:all 0.15s;background:var(--ink-2);-webkit-tap-highlight-color:transparent;user-select:none}
 .chip-svc.sel{border-color:var(--brand);color:var(--brand);background:var(--brand-soft)}
 .chip-svc:active{transform:scale(0.97)}
+
+/* Lista de serviços com preço editável */
 .svcs-lista{margin-bottom:12px}
-.svc-item-ob{background:var(--ink-2);border:1px solid rgba(229,90,12,0.18);padding:10px 14px;margin-bottom:4px;display:flex;align-items:center;justify-content:space-between}
-.svc-item-ob-nome{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--bone)}
-.svc-item-ob-info{font-family:monospace;font-size:12px;color:var(--brand)}
-.svc-item-ob-del{background:none;border:none;color:var(--stone-2);font-size:16px;cursor:pointer;padding:4px;line-height:1}
+.svc-item-ob{background:var(--ink-2);border:1px solid rgba(229,90,12,0.18);padding:10px 14px;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.svc-item-ob-nome{font-family:var(--sans);font-style:normal;font-size:14px;font-weight:600;color:var(--bone);flex:1;min-width:0}
+.svc-item-ob-preco{font-family:var(--mono);font-size:13px;color:var(--brand);font-weight:500;white-space:nowrap;cursor:pointer;border-bottom:1px dashed rgba(229,90,12,0.4);padding-bottom:1px}
+.svc-item-ob-preco:hover{border-color:var(--brand)}
+.svc-preco-input{width:80px;padding:4px 8px;background:var(--ink);border:1px solid var(--brand);color:var(--brand);font-family:var(--mono);font-size:13px;font-weight:500;outline:none;text-align:right;display:none}
+.svc-item-ob-del{background:none;border:none;color:var(--stone-2);font-size:16px;cursor:pointer;padding:4px;line-height:1;flex-shrink:0}
+.svc-item-ob-del:hover{color:#C04A08}
+
 .add-custom{display:flex;gap:8px;margin-bottom:4px}
-.add-custom input{flex:1;padding:9px 0;background:transparent;border:none;border-bottom:1px solid var(--rule-2);color:var(--bone);font-size:14px;font-family:var(--serif);font-style:italic;outline:none}
+.add-custom input{flex:1;padding:9px 0;background:transparent;border:none;border-bottom:1px solid var(--rule-2);color:var(--bone);font-size:14px;font-family:var(--sans);outline:none}
 .add-custom input:focus{border-color:var(--brand)}
 .btn-add-custom{padding:9px 14px;background:var(--brand);color:var(--bone);border:none;font-family:var(--sans);font-style:normal;font-weight:600;font-size:13px;cursor:pointer;white-space:nowrap}
 .preset-btn{width:100%;padding:10px 14px;margin-bottom:14px;background:var(--brand-soft);border:1px solid rgba(229,90,12,0.25);color:var(--brand);font-family:var(--sans);font-style:normal;font-weight:600;font-size:13px;cursor:pointer;text-align:left;transition:all 0.15s;display:flex;align-items:center;gap:8px}
 .preset-btn:active{background:rgba(229,90,12,0.15)}
 .dia-row{padding:11px 0;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:10px}
 .dia-row:last-child{border:none}
-.dia-nome{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--bone);flex:1;transition:color 0.2s}
+.dia-nome{font-family:var(--sans);font-size:14px;font-weight:500;color:var(--bone);flex:1;transition:color 0.2s}
 .dia-nome.off{color:var(--stone-2)}
 .dia-horas{font-size:11px;color:var(--stone-2);font-family:var(--sans);white-space:nowrap;cursor:pointer;transition:color 0.15s;border-bottom:1px dashed var(--rule-2);padding-bottom:1px}
 .dia-horas:hover,.dia-horas.has{color:var(--stone)}
@@ -74,13 +94,13 @@ body{
 .hora-editor{display:none;background:var(--ink-3);border:1px solid var(--rule-2);padding:12px 14px;margin:0 0 6px}
 .hora-editor.show{display:block}
 .hora-editor-row{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--stone)}
-.hora-editor input[type=time]{background:transparent;border:none;border-bottom:1px solid var(--rule-2);color:var(--bone);font-size:15px;font-family:var(--serif);font-style:italic;outline:none;padding:4px 0}
+.hora-editor input[type=time]{background:transparent;border:none;border-bottom:1px solid var(--rule-2);color:var(--bone);font-size:15px;font-family:var(--sans);outline:none;padding:4px 0}
 .hora-editor input[type=time]:focus{border-color:var(--brand)}
 .ob-field{margin-bottom:18px}
 .ob-label{display:block;font-size:9px;color:var(--stone-2);letter-spacing:3px;text-transform:uppercase;font-weight:600;margin-bottom:8px}
 .ob-input{width:100%;padding:11px 0;background:transparent;border:none;border-bottom:1px solid var(--rule-2);color:var(--bone);font-size:15px;font-family:var(--sans);font-style:normal;outline:none;transition:border-color 0.15s}
 .ob-input:focus{border-color:var(--brand)}
-.ob-input::placeholder{color:var(--stone-2);font-style:italic}
+.ob-input::placeholder{color:var(--stone-2)}
 .sucesso-check{width:60px;height:60px;border-radius:50%;background:var(--ok);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;animation:pop 0.5s cubic-bezier(0.34,1.56,0.64,1)}
 @keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
 .preview-mini{background:var(--ink-2);border:1px solid var(--rule-2);border-radius:10px;overflow:hidden;margin-bottom:14px}
@@ -90,13 +110,13 @@ body{
 .preview-svc-r{display:flex;align-items:center;gap:10px;padding:7px 14px;border-bottom:1px solid var(--rule)}
 .preview-svc-r:last-child{border:none}
 .preview-svc-num{font-family:var(--serif);font-style:italic;font-size:10px;color:rgba(229,90,12,0.4)}
-.preview-svc-nm{font-family:var(--serif);font-style:italic;font-size:13px;color:var(--bone);flex:1}
-.preview-svc-pr{font-family:monospace;font-size:11px;color:var(--brand)}
+.preview-svc-nm{font-family:var(--sans);font-size:13px;color:var(--bone);flex:1}
+.preview-svc-pr{font-family:var(--mono);font-size:11px;color:var(--brand)}
 .preview-cta-p{background:var(--brand);padding:9px 14px;display:flex;justify-content:space-between}
 .preview-cta-t{font-family:var(--serif);font-style:italic;font-size:13px;color:var(--bone)}
 .link-box{background:var(--ink-2);border:1px solid rgba(229,90,12,0.22);padding:14px 16px;margin-bottom:14px}
 .link-label{font-size:9px;color:var(--stone-2);letter-spacing:3px;text-transform:uppercase;font-family:var(--sans);margin-bottom:8px}
-.link-val{font-family:monospace;font-size:13px;color:var(--brand);word-break:break-all;margin-bottom:4px}
+.link-val{font-family:var(--mono);font-size:13px;color:var(--brand);word-break:break-all;margin-bottom:4px}
 .link-sub{font-size:11px;color:var(--stone-2);font-family:var(--serif);font-style:italic}
 .btn-primary{width:100%;padding:15px 20px;background:var(--brand);color:var(--bone);border:none;font-family:var(--sans);font-style:normal;font-weight:600;font-size:15px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background 0.15s;margin-top:auto;-webkit-tap-highlight-color:transparent}
 .btn-primary:active{background:#C04A08}
@@ -120,17 +140,26 @@ body{
 <div class="ob-wrap">
 
   <div class="progress">
-    <div class="prog-item active" id="prog0"></div>
+    <div class="prog-item active" id="prog-cat"></div>
+    <div class="prog-item" id="prog0"></div>
     <div class="prog-item" id="prog1"></div>
     <div class="prog-item" id="prog2"></div>
     <div class="prog-item" id="prog3"></div>
   </div>
 
-  <!-- PASSO 1: SERVIÇOS -->
-  <div class="passo ativo" id="passo0">
-    <div class="passo-eyebrow">01 — Serviços</div>
+  <!-- PASSO 0: CATEGORIA -->
+  <div class="passo ativo" id="passo-cat">
+    <div class="passo-eyebrow">00 — Tipo de negócio</div>
     <h1 class="passo-h1" id="obSaudacao">O que você faz?</h1>
-    <p class="passo-sub">Toque nos serviços mais comuns ou adicione os seus. Ajustamos preços depois.</p>
+    <p class="passo-sub">Selecione o segmento para vermos os serviços certos pra você.</p>
+    <div class="categorias-grid" id="catGrid"></div>
+  </div>
+
+  <!-- PASSO 1: SERVIÇOS -->
+  <div class="passo" id="passo0">
+    <div class="passo-eyebrow">01 — Serviços</div>
+    <h1 class="passo-h1">Quais serviços você oferece?</h1>
+    <p class="passo-sub">Toque nos serviços. Os preços são médias — ajuste conforme sua cidade.</p>
     <div id="chipsArea"></div>
     <div style="background:rgba(229,90,12,0.06);border-left:2px solid var(--brand);padding:10px 14px;margin-bottom:16px;font-size:12px;color:var(--stone);line-height:1.6">
       💡 <strong style="color:var(--bone)">Dica:</strong>
@@ -143,7 +172,7 @@ body{
       <button class="btn-add-custom" onclick="adicionarCustom()">+ Adicionar</button>
     </div>
     <div class="saving" id="savingSvc"></div>
-    <button class="btn-primary" id="btnContinuarSvcs">
+    <button class="btn-primary" onclick="salvarServicosEAvancar(1)">
       <span>Continuar</span><span>→</span>
     </button>
     <button class="btn-pular" onclick="avancarPasso(1)">Pular por agora</button>
@@ -312,230 +341,555 @@ var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 var H = { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json' };
 var SLUG = new URLSearchParams(location.search).get('slug');
 
-var _salao = null;
-var _svcsAdicionados = [];
-var _horarios = {};
-var _passoAtual = 0;
+/* ══ CATÁLOGO POR SEGMENTO (preços em centavos) ══ */
+var CATEGORIAS = [
+  {
+    id:'barbearia', icone:'💈', label:'Barbearia', desc:'Cortes masculinos, barba e estética',
+    servicos:[
+      {nome:'Corte',               icone:'✂️', preco:5000,  duracao:60},
+      {nome:'Barba',               icone:'🪒', preco:3500,  duracao:30},
+      {nome:'Corte + Barba',       icone:'💈', preco:8000,  duracao:90},
+      {nome:'Pezinho / Acabamento',icone:'✂️', preco:2000,  duracao:20},
+      {nome:'Sobrancelha',         icone:'🪄', preco:1500,  duracao:15},
+      {nome:'Relaxamento capilar', icone:'💆', preco:6000,  duracao:60},
+      {nome:'Coloração masculina', icone:'🎨', preco:8000,  duracao:60},
+      {nome:'Hidratação',          icone:'💧', preco:5000,  duracao:45},
+    ]
+  },
+  {
+    id:'cabelereiro', icone:'💇', label:'Salão de Beleza', desc:'Cabelo feminino, química e tratamentos',
+    servicos:[
+      {nome:'Corte feminino',      icone:'✂️', preco:8000,  duracao:60},
+      {nome:'Escova',              icone:'💇', preco:7000,  duracao:60},
+      {nome:'Escova progressiva',  icone:'💫', preco:25000, duracao:180},
+      {nome:'Coloração',           icone:'🎨', preco:18000, duracao:120},
+      {nome:'Mechas / Luzes',      icone:'✨', preco:25000, duracao:180},
+      {nome:'Hidratação',          icone:'💧', preco:7000,  duracao:60},
+      {nome:'Selagem',             icone:'🌟', preco:20000, duracao:120},
+      {nome:'Penteado',            icone:'👑', preco:8000,  duracao:60},
+      {nome:'Corte + Escova',      icone:'✂️', preco:13000, duracao:90},
+    ]
+  },
+  {
+    id:'unhas', icone:'💅', label:'Nail Designer', desc:'Manicure, pedicure e nail art',
+    servicos:[
+      {nome:'Manicure',              icone:'💅', preco:4500,  duracao:45},
+      {nome:'Pedicure',              icone:'🦶', preco:5500,  duracao:60},
+      {nome:'Manicure + Pedicure',   icone:'💅', preco:9000,  duracao:90},
+      {nome:'Esmaltação em gel',     icone:'✨', preco:7000,  duracao:60},
+      {nome:'Alongamento em gel',    icone:'💎', preco:15000, duracao:120},
+      {nome:'Unhas acrílicas',       icone:'💅', preco:12000, duracao:90},
+      {nome:'Nail art',              icone:'🎨', preco:5000,  duracao:60},
+      {nome:'Remoção de alongamento',icone:'🪄', preco:3500,  duracao:30},
+    ]
+  },
+  {
+    id:'estetica', icone:'✨', label:'Estética', desc:'Facial, corporal e bem-estar',
+    servicos:[
+      {nome:'Limpeza de pele',       icone:'✨', preco:12000, duracao:60},
+      {nome:'Massagem relaxante',    icone:'💆', preco:10000, duracao:60},
+      {nome:'Drenagem linfática',    icone:'💫', preco:9000,  duracao:60},
+      {nome:'Design de sobrancelha', icone:'🪄', preco:3500,  duracao:30},
+      {nome:'Depilação (faixa)',     icone:'✂️', preco:4500,  duracao:30},
+      {nome:'Radiofrequência',       icone:'⚡', preco:18000, duracao:60},
+      {nome:'Microblading',          icone:'🖊️', preco:45000, duracao:120},
+      {nome:'Extensão de cílios',    icone:'👁️', preco:18000, duracao:90},
+    ]
+  },
+  {
+    id:'saude', icone:'🦷', label:'Saúde / Clínica', desc:'Dentista, fisio, psicólogo e mais',
+    servicos:[
+      {nome:'Consulta e avaliação',   icone:'🦷', preco:18000, duracao:60},
+      {nome:'Limpeza (profilaxia)',   icone:'✨', preco:18000, duracao:60},
+      {nome:'Clareamento dental',     icone:'💎', preco:80000, duracao:90},
+      {nome:'Sessão de fisioterapia', icone:'💪', preco:12000, duracao:60},
+      {nome:'Consulta psicológica',   icone:'🧠', preco:18000, duracao:60},
+      {nome:'Sessão de nutrição',     icone:'🥗', preco:16000, duracao:60},
+      {nome:'Retorno',                icone:'📋', preco:10000, duracao:30},
+      {nome:'Exame / Avaliação',      icone:'🔬', preco:15000, duracao:45},
+    ]
+  },
+  {
+    id:'pet', icone:'🐾', label:'Pet Shop', desc:'Banho, tosa e cuidados animais',
+    servicos:[
+      {nome:'Banho (pequeno porte)', icone:'🛁', preco:6000,  duracao:60},
+      {nome:'Banho (médio porte)',   icone:'🛁', preco:8000,  duracao:75},
+      {nome:'Banho (grande porte)',  icone:'🛁', preco:11000, duracao:90},
+      {nome:'Tosa (pequeno)',        icone:'✂️', preco:8000,  duracao:60},
+      {nome:'Tosa (médio)',          icone:'✂️', preco:10000, duracao:75},
+      {nome:'Banho + Tosa',         icone:'🐾', preco:14000, duracao:120},
+      {nome:'Hidratação pelagem',   icone:'💧', preco:5000,  duracao:30},
+      {nome:'Consulta veterinária', icone:'🏥', preco:18000, duracao:60},
+    ]
+  },
+  {
+    id:'fitness', icone:'💪', label:'Fitness & Bem-estar', desc:'Personal, pilates, yoga e esportes',
+    servicos:[
+      {nome:'Sessão personal trainer',icone:'💪', preco:10000, duracao:60},
+      {nome:'Avaliação física',       icone:'📊', preco:10000, duracao:60},
+      {nome:'Aula de pilates',        icone:'🧘', preco:8000,  duracao:60},
+      {nome:'Aula de yoga',           icone:'🧘', preco:7000,  duracao:60},
+      {nome:'Treinamento funcional',  icone:'⚡', preco:9000,  duracao:60},
+      {nome:'Musculação (aula)',      icone:'🏋️', preco:8000,  duracao:60},
+    ]
+  },
+  {
+    id:'outro', icone:'📅', label:'Outro', desc:'Profissão não listada acima',
+    servicos:[
+      {nome:'Atendimento / Consulta', icone:'📅', preco:15000, duracao:60},
+      {nome:'Sessão',                 icone:'⭐',  preco:10000, duracao:60},
+      {nome:'Avaliação',              icone:'📋',  preco:8000,  duracao:45},
+      {nome:'Serviço personalizado',  icone:'🪄',  preco:10000, duracao:60},
+    ]
+  },
+];
 
+var CAT_LABEL = {
+  barbearia:'Barbearia', cabelereiro:'Salão de Beleza', unhas:'Nail Designer',
+  estetica:'Estética', saude:'Saúde', pet:'Pet Shop', fitness:'Fitness', outro:'Negócio'
+};
+
+/* ══ ESTADO ══ */
+var _salao          = null;
+var _catSel         = null;
+var _svcsAdicionados = [];
+var _horarios        = {};
+var _passoAtual      = 'cat';
+
+/* ══ INIT ══ */
 async function init() {
   if (!SLUG) { irParaPainel(); return; }
   try {
-    var r = await fetch(SUPA_URL + '/rest/v1/saloes?slug=eq.' + encodeURIComponent(SLUG) + '&select=id,nome,responsavel,cidade,endereco,categoria', { headers: H });
+    var r = await fetch(
+      SUPA_URL + '/rest/v1/saloes?slug=eq.' + encodeURIComponent(SLUG) +
+      '&deleted_at=is.null&select=id,nome,responsavel,cidade,endereco,categoria,horario',
+      { headers: H }
+    );
     var data = await r.json();
     _salao = (data && data[0]) || null;
-    if (_salao) {
-      var nome = (_salao.responsavel || _salao.nome || '').split(' ')[0];
-      document.getElementById('obSaudacao').textContent = 'Olá, ' + nome + '! O que você faz?';
-      if (_salao.cidade)   document.getElementById('inpCidade').value   = _salao.cidade;
-      if (_salao.endereco) document.getElementById('inpEndereco').value = _salao.endereco;
-      document.getElementById('previewNome').textContent = _salao.nome + '.';
-      var catMap = { beleza:'Barbearia', barbearia:'Barbearia', saude:'Saúde', fitness:'Fitness', estetica:'Estética', pet:'Pet' };
-      document.getElementById('previewCat').textContent = catMap[_salao.categoria] || _salao.categoria || '';
+
+    if (!_salao) { irParaPainel(); return; }
+
+    /* Saudação */
+    var nome = (_salao.responsavel || _salao.nome || '').split(' ')[0] || 'você';
+    var elS = document.getElementById('obSaudacao');
+    if (elS) elS.textContent = 'Olá, ' + nome + '! O que você faz?';
+
+    /* Preview */
+    var elNome = document.getElementById('previewNome');
+    var elCat  = document.getElementById('previewCat');
+    if (elNome) elNome.textContent = (_salao.nome || 'Meu Negócio') + '.';
+    if (elCat)  elCat.textContent  = CAT_LABEL[_salao.categoria] || _salao.categoria || '';
+
+    /* Link */
+    var link = location.origin + '/agendar.html?slug=' + SLUG;
+    document.getElementById('linkVal').textContent = link;
+    document.getElementById('linkVerPagina').href = link;
+
+    /* Pré-preencher localização */
+    if (_salao.cidade)   { var ec = document.getElementById('inpCidade');   if (ec) ec.value = _salao.cidade; }
+    if (_salao.endereco) { var ee = document.getElementById('inpEndereco'); if (ee) ee.value = _salao.endereco; }
+
+    /* Inicializar horários */
+    for (var i = 0; i < 7; i++) {
+      var h = _salao.horario && _salao.horario[String(i)];
+      _horarios[String(i)] = h || null;
     }
-  } catch(e) {}
-  var link = location.origin + '/agendar.html?slug=' + SLUG;
-  document.getElementById('linkVal').textContent = link;
-  document.getElementById('linkVerPagina').href = link;
-  for (var i = 0; i < 7; i++) _horarios[String(i)] = null;
-  renderChips();
-  renderDias();
-}
 
-function avancarPasso(n) {
-  document.getElementById('passo' + _passoAtual).classList.remove('ativo');
-  _passoAtual = n;
-  document.getElementById('passo' + n).classList.add('ativo');
-  for (var i = 0; i < 4; i++) {
-    document.getElementById('prog' + i).className = 'prog-item' + (i < n ? ' done' : i === n ? ' active' : '');
+    /* Se já tem categoria no banco → pular passo-cat */
+    if (_salao.categoria) {
+      var catExistente = CATEGORIAS.find(function(c){ return c.id === _salao.categoria; });
+      if (catExistente) {
+        _catSel = catExistente;
+        irParaServicos();
+        renderDias();
+        return;
+      }
+    }
+
+    renderCategorias();
+    renderDias();
+
+  } catch(e) {
+    console.error('[Onboarding] init:', e);
+    /* Garantir link mesmo sem _salao */
+    var link2 = location.origin + '/agendar.html?slug=' + (SLUG || '');
+    var lv = document.getElementById('linkVal');
+    var lvp = document.getElementById('linkVerPagina');
+    if (lv) lv.textContent = link2;
+    if (lvp) lvp.href = link2;
+    renderCategorias();
+    renderDias();
   }
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  if (n === 3) renderPreviewFinal();
 }
 
-/* ── SERVIÇOS ── */
-var CATS = {
-  beleza:    [{nome:'Corte',icone:'✂️',preco:3500,duracao:60},{nome:'Barba',icone:'🪒',preco:2500,duracao:30},{nome:'Corte + Barba',icone:'✂️',preco:6000,duracao:90},{nome:'Sobrancelha',icone:'💈',preco:1500,duracao:20},{nome:'Coloração',icone:'🎨',preco:8000,duracao:90},{nome:'Escova',icone:'💇',preco:5000,duracao:60},{nome:'Hidratação',icone:'💧',preco:6000,duracao:60}],
-  barbearia: [{nome:'Corte',icone:'✂️',preco:3500,duracao:60},{nome:'Barba',icone:'🪒',preco:2500,duracao:30},{nome:'Corte + Barba',icone:'✂️',preco:6000,duracao:90},{nome:'Sobrancelha',icone:'💈',preco:1500,duracao:20},{nome:'Pigmentação',icone:'🎨',preco:5000,duracao:45},{nome:'Relaxamento',icone:'💧',preco:4000,duracao:40}],
-  estetica:  [{nome:'Limpeza de pele',icone:'✨',preco:15000,duracao:60},{nome:'Massagem',icone:'💆',preco:12000,duracao:60},{nome:'Design sobrancelha',icone:'🪄',preco:5000,duracao:30},{nome:'Botox',icone:'💉',preco:20000,duracao:45},{nome:'Micropigmentação',icone:'🖊️',preco:25000,duracao:120}],
-  saude:     [{nome:'Consulta',icone:'🏥',preco:20000,duracao:60},{nome:'Retorno',icone:'📋',preco:10000,duracao:30},{nome:'Exame',icone:'🔬',preco:15000,duracao:45},{nome:'Avaliação',icone:'📝',preco:8000,duracao:30}],
-  fitness:   [{nome:'Personal',icone:'💪',preco:10000,duracao:60},{nome:'Avaliação física',icone:'📏',preco:8000,duracao:60},{nome:'Pilates',icone:'🧘',preco:8000,duracao:60}],
-  pet:       [{nome:'Banho',icone:'🛁',preco:6000,duracao:60},{nome:'Tosa',icone:'✂️',preco:8000,duracao:90},{nome:'Banho + Tosa',icone:'🐾',preco:13000,duracao:120},{nome:'Veterinário',icone:'🐶',preco:15000,duracao:60}],
-};
+/* ══ RENDERIZAR CATEGORIAS ══ */
+function renderCategorias() {
+  var grid = document.getElementById('catGrid');
+  if (!grid) return;
+  grid.innerHTML = CATEGORIAS.map(function(cat) {
+    var sel = _catSel && _catSel.id === cat.id;
+    return '<div class="cat-card' + (sel ? ' sel' : '') + '" onclick="selecionarCategoria(\'' + cat.id + '\')">' +
+      '<span class="cat-icon">' + cat.icone + '</span>' +
+      '<span class="cat-label">' + cat.label + '</span>' +
+      '<span class="cat-desc">' + cat.desc + '</span>' +
+      '</div>';
+  }).join('');
+}
+window.renderCategorias = renderCategorias;
 
+/* ══ SELECIONAR CATEGORIA ══ */
+async function selecionarCategoria(id) {
+  _catSel = CATEGORIAS.find(function(c){ return c.id === id; });
+  renderCategorias();
+
+  /* Salvar categoria no banco */
+  if (_salao) {
+    try {
+      await fetch(SUPA_URL + '/rest/v1/rpc/salvar_categoria_salao', {
+        method: 'POST', headers: H,
+        body: JSON.stringify({ p_salao_id: _salao.id, p_categoria: id })
+      });
+    } catch(e) { /* silencioso — categoria não é crítica */ }
+
+    /* Atualizar previewCat */
+    var elCat = document.getElementById('previewCat');
+    if (elCat) elCat.textContent = CAT_LABEL[id] || id;
+  }
+
+  /* Avançar para serviços após breve feedback visual */
+  setTimeout(irParaServicos, 180);
+}
+window.selecionarCategoria = selecionarCategoria;
+
+/* ══ IR PARA SERVIÇOS (passo0) ══ */
+function irParaServicos() {
+  var passocat = document.getElementById('passo-cat');
+  if (passocat) passocat.classList.remove('ativo');
+  _passoAtual = 0;
+  var p0 = document.getElementById('passo0');
+  if (p0) {
+    p0.classList.add('ativo');
+    p0.style.animation = 'none';
+    void p0.offsetHeight;
+    p0.style.animation = 'fadeUp 0.35s ease-out';
+  }
+  atualizarProgress(1);
+  renderChips();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+window.irParaServicos = irParaServicos;
+
+/* ══ AVANÇAR PASSO ══ */
+function avancarPasso(n) {
+  var currEl = _passoAtual === 'cat'
+    ? document.getElementById('passo-cat')
+    : document.getElementById('passo' + _passoAtual);
+  if (currEl) currEl.classList.remove('ativo');
+  _passoAtual = n;
+  var nextEl = document.getElementById('passo' + n);
+  if (nextEl) {
+    nextEl.classList.add('ativo');
+    nextEl.style.animation = 'none';
+    void nextEl.offsetHeight;
+    nextEl.style.animation = 'fadeUp 0.35s ease-out';
+  }
+  atualizarProgress(n + 1);
+  if (n === 3) renderPreviewFinal();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+window.avancarPasso = avancarPasso;
+
+/* ══ PROGRESSO ══ */
+function atualizarProgress(ativo) {
+  var ids = ['prog-cat', 'prog0', 'prog1', 'prog2', 'prog3'];
+  ids.forEach(function(id, i) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.className = 'prog-item' + (i < ativo ? ' done' : i === ativo ? ' active' : '');
+  });
+}
+
+/* ══ RENDERIZAR CHIPS (filtrados pela categoria selecionada) ══ */
 function renderChips() {
-  var cat = (_salao && _salao.categoria) || 'beleza';
-  var chips = CATS[cat] || CATS.beleza;
-  document.getElementById('chipsArea').innerHTML = '<div class="chips-servico">' +
-    chips.map(function(c) {
-      return '<div class="chip-svc" data-nome="' + c.nome + '" data-preco="' + c.preco + '" data-dur="' + c.duracao + '" data-ico="' + c.icone + '" onclick="toggleChip(this)">' + c.icone + ' ' + c.nome + '</div>';
+  var area = document.getElementById('chipsArea');
+  if (!area) return;
+  var servicos = _catSel ? _catSel.servicos : CATEGORIAS[0].servicos;
+  area.innerHTML = '<div class="chips-servico">' +
+    servicos.map(function(s) {
+      var sel = _svcsAdicionados.some(function(a){ return a.nome === s.nome; });
+      return '<div class="chip-svc' + (sel ? ' sel' : '') + '" onclick="toggleChip(\'' +
+        s.nome.replace(/'/g, "\\'") + '\')">' + s.icone + ' ' + s.nome + '</div>';
     }).join('') + '</div>';
 }
 
-function toggleChip(el) {
-  var nome=el.dataset.nome, preco=parseInt(el.dataset.preco,10), duracao=parseInt(el.dataset.dur,10), icone=el.dataset.ico;
-  var idx = _svcsAdicionados.findIndex(function(s){return s.nome===nome;});
-  if (idx>=0) { _svcsAdicionados.splice(idx,1); el.classList.remove('sel'); }
-  else { _svcsAdicionados.push({nome:nome,preco:preco,duracao:duracao,icone:icone}); el.classList.add('sel'); }
+/* ══ TOGGLE CHIP ══ */
+function toggleChip(nome) {
+  var cat = _catSel ? _catSel.servicos : CATEGORIAS[0].servicos;
+  var svcBase = cat.find(function(s){ return s.nome === nome; });
+  if (!svcBase) return;
+  var idx = _svcsAdicionados.findIndex(function(s){ return s.nome === nome; });
+  if (idx >= 0) {
+    _svcsAdicionados.splice(idx, 1);
+  } else {
+    _svcsAdicionados.push({ nome: svcBase.nome, preco: svcBase.preco, duracao: svcBase.duracao, icone: svcBase.icone });
+  }
+  renderChips();
   renderSvcLista();
 }
+window.toggleChip = toggleChip;
 
+/* ══ LISTA DE SERVIÇOS COM EDIÇÃO DE PREÇO ══ */
 function renderSvcLista() {
   var lista = document.getElementById('svcLista');
-  if (!_svcsAdicionados.length) { lista.innerHTML=''; return; }
-  lista.innerHTML = _svcsAdicionados.map(function(s,i) {
-    var pFmt = s.preco ? (s.preco/100).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) : 'A combinar';
-    return '<div class="svc-item-ob"><span class="svc-item-ob-nome">'+s.icone+' '+s.nome+'</span>' +
-      '<div style="display:flex;align-items:center;gap:12px"><span class="svc-item-ob-info">'+pFmt+' · '+s.duracao+'\'</span>' +
-      '<button class="svc-item-ob-del" onclick="removerSvc('+i+')">✕</button></div></div>';
+  if (!lista) return;
+  if (!_svcsAdicionados.length) { lista.innerHTML = ''; return; }
+  lista.innerHTML = _svcsAdicionados.map(function(s, i) {
+    var pFmt = (s.preco / 100).toLocaleString('pt-BR', { style:'currency', currency:'BRL' });
+    var durFmt = s.duracao >= 60
+      ? Math.floor(s.duracao/60) + 'h' + (s.duracao%60 ? s.duracao%60 + 'min' : '')
+      : s.duracao + 'min';
+    return '<div class="svc-item-ob" id="svcItem' + i + '">' +
+      '<div style="font-size:18px;flex-shrink:0">' + s.icone + '</div>' +
+      '<div style="flex:1;min-width:0">' +
+        '<div class="svc-item-ob-nome">' + s.nome + '</div>' +
+        '<div style="font-size:11px;color:var(--stone-2);margin-top:1px">' + durFmt + '</div>' +
+      '</div>' +
+      '<div style="display:flex;align-items:center;gap:6px">' +
+        '<span class="svc-item-ob-preco" id="precoLabel' + i + '" onclick="editarPreco(' + i + ')" title="Toque para editar">' + pFmt + '</span>' +
+        '<input type="number" class="svc-preco-input" id="precoInput' + i + '" value="' + (s.preco/100) + '" min="0" max="9999" step="1" ' +
+          'onblur="confirmarPreco(' + i + ')" onkeydown="if(event.key===\'Enter\')confirmarPreco(' + i + ')">' +
+      '</div>' +
+      '<button class="svc-item-ob-del" onclick="removerSvc(' + i + ')">✕</button>' +
+      '</div>';
   }).join('');
 }
 
+/* ══ EDITAR PREÇO ══ */
+function editarPreco(i) {
+  var label = document.getElementById('precoLabel' + i);
+  var input = document.getElementById('precoInput' + i);
+  if (!label || !input) return;
+  label.style.display = 'none';
+  input.style.display = 'inline-block';
+  input.focus(); input.select();
+}
+window.editarPreco = editarPreco;
+
+function confirmarPreco(i) {
+  var label = document.getElementById('precoLabel' + i);
+  var input = document.getElementById('precoInput' + i);
+  if (!label || !input) return;
+  var valor = parseFloat(input.value) || 0;
+  _svcsAdicionados[i].preco = Math.round(valor * 100);
+  var pFmt = (_svcsAdicionados[i].preco / 100).toLocaleString('pt-BR', { style:'currency', currency:'BRL' });
+  label.textContent = pFmt;
+  label.style.display = 'inline';
+  input.style.display = 'none';
+}
+window.confirmarPreco = confirmarPreco;
+
+/* ══ REMOVER SERVIÇO ══ */
 function removerSvc(i) {
-  var nome=_svcsAdicionados[i].nome; _svcsAdicionados.splice(i,1);
-  document.querySelectorAll('.chip-svc').forEach(function(el){if(el.dataset.nome===nome)el.classList.remove('sel');});
+  _svcsAdicionados.splice(i, 1);
+  renderChips();
   renderSvcLista();
 }
-window.removerSvc=removerSvc;
+window.removerSvc = removerSvc;
 
+/* ══ ADICIONAR PERSONALIZADO ══ */
 function adicionarCustom() {
-  var inp=document.getElementById('inpSvcNome'), nome=inp.value.trim();
-  if(!nome)return;
-  _svcsAdicionados.push({nome:nome,preco:0,duracao:60,icone:'📅'});
-  renderSvcLista(); inp.value=''; inp.focus();
+  var inp = document.getElementById('inpSvcNome');
+  var nome = (inp ? inp.value : '').trim();
+  if (!nome) return;
+  _svcsAdicionados.push({ nome: nome, preco: 0, duracao: 60, icone: (_catSel && _catSel.icone) || '📅' });
+  renderSvcLista();
+  if (inp) { inp.value = ''; inp.focus(); }
 }
-window.adicionarCustom=adicionarCustom;
+window.adicionarCustom = adicionarCustom;
 
-async function rpcOb(fn, params) {
-  var r = await fetch(SUPA_URL+'/rest/v1/rpc/'+fn, {method:'POST', headers: H, body: JSON.stringify(params)});
-  if(!r.ok){ var t=await r.text(); throw new Error(t); }
-}
+/* ══ SALVAR SERVIÇOS E AVANÇAR ══ */
+async function salvarServicosEAvancar(proximoPasso) {
+  if (!_salao || !_salao.slug) { avancarPasso(proximoPasso); return; }
+  if (!_svcsAdicionados || !_svcsAdicionados.length) { avancarPasso(proximoPasso); return; }
 
-async function salvarServicosEAvancar() {
-  var save=document.getElementById('savingSvc');
-  if(!_svcsAdicionados.length||!_salao){avancarPasso(1);return;}
-  save.textContent='Salvando serviços...';
-  try {
-    for(var i=0;i<_svcsAdicionados.length;i++){
-      var s=_svcsAdicionados[i];
-      await rpcOb('painel_inserir_servico',{p_salao_id:_salao.id,p_icone:s.icone||'📅',p_nome:s.nome,p_descricao:null,p_preco:s.preco,p_duracao:s.duracao,p_ordem:i+1,p_profissional_id:null,p_tipo:'atendimento',p_evento_data:null,p_evento_hora:null,p_vagas_max:null,p_evento_local:null});
+  var save = document.getElementById('savingSvc');
+  if (save) save.textContent = 'Salvando serviços...';
+
+  var salvos = 0, erros = 0;
+  for (var i = 0; i < _svcsAdicionados.length; i++) {
+    var s = _svcsAdicionados[i];
+    if (!s.nome || !s.nome.trim()) continue;
+    try {
+      var r = await fetch(SUPA_URL + '/rest/v1/rpc/adicionar_servico', {
+        method: 'POST', headers: H,
+        body: JSON.stringify({
+          p_slug:     _salao.slug,
+          p_nome:     s.nome,
+          p_preco:    s.preco  || 0,
+          p_duracao:  s.duracao || 60,
+          p_icone:    s.icone  || '📅',
+          p_descricao: null,
+          tipo:       'atendimento'
+        })
+      });
+      var res = await r.json();
+      if (res && res.ok === true) salvos++;
+      else { console.warn('Erro ao salvar serviço:', s.nome, res && res.erro); erros++; }
+    } catch(e) {
+      console.error('Exceção ao salvar serviço:', s.nome, e);
+      erros++;
     }
-    save.textContent='✓ Serviços salvos';
-  } catch(e){save.textContent='Não foi possível salvar — adicione no painel';}
-  setTimeout(function(){save.textContent='';avancarPasso(1);},700);
-}
-document.getElementById('btnContinuarSvcs').onclick=salvarServicosEAvancar;
+  }
 
-/* ── HORÁRIOS ── */
-var DIAS=['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+  if (save) {
+    save.textContent = erros === 0
+      ? '✓ ' + salvos + ' serviço' + (salvos !== 1 ? 's' : '') + ' salvo' + (salvos !== 1 ? 's' : '')
+      : salvos + ' salvos · ' + erros + ' com erro (adicione depois no painel)';
+  }
+
+  setTimeout(function() {
+    if (save) save.textContent = '';
+    avancarPasso(proximoPasso);
+  }, 900);
+}
+window.salvarServicosEAvancar = salvarServicosEAvancar;
+
+/* ══ HELPER RPC ══ */
+async function rpcOb(fn, params) {
+  var r = await fetch(SUPA_URL + '/rest/v1/rpc/' + fn, { method:'POST', headers: H, body: JSON.stringify(params) });
+  if (!r.ok) { var t = await r.text(); throw new Error(t); }
+}
+
+/* ══ HORÁRIOS ══ */
+var DIAS = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
 
 function renderDias() {
-  document.getElementById('diasArea').innerHTML=[1,2,3,4,5,6,0].map(function(d){
-    var h=_horarios[String(d)], ativo=h!==null;
-    return '<div class="dia-row"><span class="dia-nome'+(ativo?'':' off')+'">'+DIAS[d]+'</span>'+
-      '<span class="dia-horas'+(ativo?' has':'')+'" onclick="editarHora('+d+')">'+(ativo?h.ini+'–'+h.fim:'Fechado')+'</span>'+
-      '<div class="toggle-sw'+(ativo?'':' off')+'" onclick="toggleDia('+d+')"></div></div>'+
-      '<div class="hora-editor" id="horaEditor'+d+'"><div class="hora-editor-row">'+
-      '<span>Abre</span><input type="time" id="horaIni'+d+'" value="'+(ativo?h.ini:'09:00')+'" onchange="atualizarHora('+d+')">'+
-      '<span>· Fecha</span><input type="time" id="horaFim'+d+'" value="'+(ativo?h.fim:'19:00')+'" onchange="atualizarHora('+d+')">'+
+  document.getElementById('diasArea').innerHTML = [1,2,3,4,5,6,0].map(function(d) {
+    var h = _horarios[String(d)], ativo = h !== null;
+    return '<div class="dia-row">' +
+      '<span class="dia-nome' + (ativo ? '' : ' off') + '">' + DIAS[d] + '</span>' +
+      '<span class="dia-horas' + (ativo ? ' has' : '') + '" onclick="editarHora(' + d + ')">' + (ativo ? h.ini + '–' + h.fim : 'Fechado') + '</span>' +
+      '<div class="toggle-sw' + (ativo ? '' : ' off') + '" onclick="toggleDia(' + d + ')"></div>' +
+      '</div>' +
+      '<div class="hora-editor" id="horaEditor' + d + '"><div class="hora-editor-row">' +
+      '<span>Abre</span><input type="time" id="horaIni' + d + '" value="' + (ativo ? h.ini : '09:00') + '" onchange="atualizarHora(' + d + ')">' +
+      '<span>· Fecha</span><input type="time" id="horaFim' + d + '" value="' + (ativo ? h.fim : '19:00') + '" onchange="atualizarHora(' + d + ')">' +
       '</div></div>';
   }).join('');
 }
 
 function toggleDia(d) {
-  if(_horarios[String(d)]!==null){_horarios[String(d)]=null;renderDias();}
-  else{_horarios[String(d)]={ini:'09:00',fim:'19:00'};renderDias();var ed=document.getElementById('horaEditor'+d);if(ed)ed.classList.add('show');}
+  if (_horarios[String(d)] !== null) { _horarios[String(d)] = null; renderDias(); }
+  else {
+    _horarios[String(d)] = { ini:'09:00', fim:'19:00' }; renderDias();
+    var ed = document.getElementById('horaEditor' + d); if (ed) ed.classList.add('show');
+  }
 }
-window.toggleDia=toggleDia;
+window.toggleDia = toggleDia;
 
 function editarHora(d) {
-  if(_horarios[String(d)]===null){toggleDia(d);return;}
-  var el=document.getElementById('horaEditor'+d);if(el)el.classList.toggle('show');
+  if (_horarios[String(d)] === null) { toggleDia(d); return; }
+  var el = document.getElementById('horaEditor' + d); if (el) el.classList.toggle('show');
 }
-window.editarHora=editarHora;
+window.editarHora = editarHora;
 
 function atualizarHora(d) {
-  var ini=(document.getElementById('horaIni'+d)||{}).value, fim=(document.getElementById('horaFim'+d)||{}).value;
-  if(ini&&fim)_horarios[String(d)]={ini:ini,fim:fim};
+  var ini = (document.getElementById('horaIni' + d) || {}).value;
+  var fim = (document.getElementById('horaFim' + d) || {}).value;
+  if (ini && fim) _horarios[String(d)] = { ini: ini, fim: fim };
 }
-window.atualizarHora=atualizarHora;
+window.atualizarHora = atualizarHora;
 
 function aplicarPreset() {
-  for(var d=1;d<=5;d++)_horarios[String(d)]={ini:'09:00',fim:'19:00'};
-  _horarios['6']={ini:'09:00',fim:'14:00'};_horarios['0']=null;renderDias();
-  var s=document.getElementById('savingHora');s.textContent='⚡ Preset aplicado!';
-  setTimeout(function(){s.textContent='';},1500);
+  for (var d = 1; d <= 5; d++) _horarios[String(d)] = { ini:'09:00', fim:'19:00' };
+  _horarios['6'] = { ini:'09:00', fim:'14:00' };
+  _horarios['0'] = null;
+  renderDias();
+  var s = document.getElementById('savingHora');
+  if (s) { s.textContent = '⚡ Preset aplicado!'; setTimeout(function(){ s.textContent=''; }, 1500); }
 }
-window.aplicarPreset=aplicarPreset;
+window.aplicarPreset = aplicarPreset;
 
 async function salvarHorariosEAvancar() {
-  var save=document.getElementById('savingHora');save.textContent='Salvando horários...';
-  if(_salao){
-    try{await rpcOb('painel_salvar_horarios',{p_salao_id:_salao.id,p_horario:_horarios});save.textContent='✓ Horários salvos';}
-    catch(e){save.textContent='Erro ao salvar — tente no painel';}
-  }else{save.textContent='';}
-  setTimeout(function(){save.textContent='';avancarPasso(2);},700);
+  var save = document.getElementById('savingHora');
+  if (save) save.textContent = 'Salvando horários...';
+  if (_salao) {
+    try { await rpcOb('painel_salvar_horarios', { p_salao_id: _salao.id, p_horario: _horarios }); if (save) save.textContent = '✓ Horários salvos'; }
+    catch(e) { if (save) save.textContent = 'Erro ao salvar — tente no painel'; }
+  } else { if (save) save.textContent = ''; }
+  setTimeout(function(){ if (save) save.textContent = ''; avancarPasso(2); }, 700);
 }
-window.salvarHorariosEAvancar=salvarHorariosEAvancar;
+window.salvarHorariosEAvancar = salvarHorariosEAvancar;
 
-/* ── LOCALIZAÇÃO ── */
+/* ══ LOCALIZAÇÃO ══ */
 async function salvarLocalizacaoEAvancar() {
-  var save=document.getElementById('savingLoc');save.textContent='Salvando...';
-  if(_salao){
-    var end=document.getElementById('inpEndereco').value.trim();
-    var cid=document.getElementById('inpCidade').value.trim();
-    var ig=document.getElementById('inpInstagram').value.trim();
-    var wa=document.getElementById('inpWhatsapp').value.replace(/\D/g,'');
-    var desc=(document.getElementById('inpDescricao')||{}).value||'';
-    var params={p_salao_id:_salao.id};
-    if(end)params.p_endereco=end;
-    if(cid)params.p_cidade=cid;
-    if(ig)params.p_instagram_url=ig.startsWith('http')?ig:'https://instagram.com/'+ig.replace('@','');
-    if(wa.length>=10)params.p_whatsapp_url=wa;
-    if(desc.trim())params.p_descricao=desc.trim();
-    if(Object.keys(params).length>1){
-      try{await rpcOb('painel_salvar_localizacao',params);save.textContent='✓ Localização salva';}
-      catch(e){save.textContent='Erro ao salvar';}
-    }else{save.textContent='';}
-  }else{save.textContent='';}
-  setTimeout(function(){save.textContent='';avancarPasso(3);},600);
+  var save = document.getElementById('savingLoc');
+  if (save) save.textContent = 'Salvando...';
+  if (_salao) {
+    var end  = document.getElementById('inpEndereco').value.trim();
+    var cid  = document.getElementById('inpCidade').value.trim();
+    var ig   = document.getElementById('inpInstagram').value.trim();
+    var wa   = document.getElementById('inpWhatsapp').value.replace(/\D/g, '');
+    var desc = (document.getElementById('inpDescricao') || {}).value || '';
+    var params = { p_salao_id: _salao.id };
+    if (end) params.p_endereco = end;
+    if (cid) params.p_cidade = cid;
+    if (ig)  params.p_instagram_url = ig.startsWith('http') ? ig : 'https://instagram.com/' + ig.replace('@','');
+    if (wa.length >= 10) params.p_whatsapp_url = wa;
+    if (desc.trim()) params.p_descricao = desc.trim();
+    if (Object.keys(params).length > 1) {
+      try { await rpcOb('painel_salvar_localizacao', params); if (save) save.textContent = '✓ Localização salva'; }
+      catch(e) { if (save) save.textContent = 'Erro ao salvar'; }
+    } else { if (save) save.textContent = ''; }
+  } else { if (save) save.textContent = ''; }
+  setTimeout(function(){ if (save) save.textContent = ''; avancarPasso(3); }, 600);
 }
-window.salvarLocalizacaoEAvancar=salvarLocalizacaoEAvancar;
+window.salvarLocalizacaoEAvancar = salvarLocalizacaoEAvancar;
 
-/* ── PREVIEW FINAL ── */
+/* ══ PREVIEW FINAL ══ */
 function renderPreviewFinal() {
-  var svcs=_svcsAdicionados.slice(0,3);
-  document.getElementById('previewSvcs').innerHTML=svcs.length
-    ?svcs.map(function(s,i){var pr=s.preco?'<span class="preview-svc-pr">'+(s.preco/100).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})+'</span>':'';return'<div class="preview-svc-r"><span class="preview-svc-num">0'+(i+1)+'</span><span class="preview-svc-nm">'+s.nome+'</span>'+pr+'</div>';}).join('')
-    :'<div class="preview-svc-r"><span class="preview-svc-nm" style="color:var(--stone-2);font-size:12px">Adicione serviços no painel →</span></div>';
+  var svcs = _svcsAdicionados.slice(0, 3);
+  document.getElementById('previewSvcs').innerHTML = svcs.length
+    ? svcs.map(function(s, i) {
+        var pr = s.preco ? '<span class="preview-svc-pr">' + (s.preco/100).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) + '</span>' : '';
+        return '<div class="preview-svc-r"><span class="preview-svc-num">0' + (i+1) + '</span><span class="preview-svc-nm">' + s.nome + '</span>' + pr + '</div>';
+      }).join('')
+    : '<div class="preview-svc-r"><span class="preview-svc-nm" style="color:var(--stone-2);font-size:12px">Adicione serviços no painel →</span></div>';
 }
 
-/* ── COPIAR LINK ── */
+/* ══ COPIAR LINK ══ */
 async function copiarLink() {
-  var link=location.origin+'/agendar.html?slug='+SLUG;
-  var btn=document.getElementById('btnCopiar'),ic=document.getElementById('btnCopiarIcon');
-  try{await navigator.clipboard.writeText(link);}
-  catch(e){var el=document.getElementById('linkVal');var r=document.createRange();r.selectNode(el);window.getSelection().removeAllRanges();window.getSelection().addRange(r);return;}
-  btn.classList.add('copiado');ic.textContent='✓';
-  setTimeout(function(){btn.classList.remove('copiado');ic.textContent='📋';},2000);
+  var link = location.origin + '/agendar.html?slug=' + SLUG;
+  var btn = document.getElementById('btnCopiar'), ic = document.getElementById('btnCopiarIcon');
+  try { await navigator.clipboard.writeText(link); }
+  catch(e) {
+    var el = document.getElementById('linkVal');
+    var r = document.createRange(); r.selectNode(el);
+    window.getSelection().removeAllRanges(); window.getSelection().addRange(r);
+    return;
+  }
+  btn.classList.add('copiado'); ic.textContent = '✓';
+  setTimeout(function(){ btn.classList.remove('copiado'); ic.textContent = '📋'; }, 2000);
 }
-window.copiarLink=copiarLink;
+window.copiarLink = copiarLink;
 
 function mascaraTel(el) {
-  var v=el.value.replace(/\D/g,'').slice(0,11);
-  if(v.length>10)v=v.replace(/^(\d{2})(\d{5})(\d{4})$/,'($1) $2-$3');
-  else if(v.length>6)v=v.replace(/^(\d{2})(\d{4})(\d{0,4})$/,'($1) $2-$3');
-  else if(v.length>2)v=v.replace(/^(\d{2})(\d{0,5})$/,'($1) $2');
-  el.value=v;
+  var v = el.value.replace(/\D/g,'').slice(0,11);
+  if (v.length > 10) v = v.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+  else if (v.length > 6) v = v.replace(/^(\d{2})(\d{4})(\d{0,4})$/, '($1) $2-$3');
+  else if (v.length > 2) v = v.replace(/^(\d{2})(\d{0,5})$/, '($1) $2');
+  el.value = v;
 }
-window.mascaraTel=mascaraTel;
+window.mascaraTel = mascaraTel;
 
 function irParaPainel() {
-  if(SLUG){try{sessionStorage.setItem('agenda_slug',SLUG);}catch(e){}}
-  location.href='/painel.html'+(SLUG?'?slug='+SLUG:'');
+  if (SLUG) { try { sessionStorage.setItem('agenda_slug', SLUG); } catch(e) {} }
+  location.href = '/painel.html' + (SLUG ? '?slug=' + SLUG : '');
 }
-window.irParaPainel=irParaPainel;
+window.irParaPainel = irParaPainel;
 
-document.addEventListener('DOMContentLoaded',init);
+document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
