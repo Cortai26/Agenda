@@ -2348,6 +2348,16 @@ function buildDias(){
   var horSalao=window._horarioSalao;
   var _blks=window._bloqueiosSalao||[];
 
+  // Pré-selecionar hoje se ainda nenhum dia foi escolhido
+  if(!S.dataStr){
+    var diaFechadoHoje=horSalao&&horSalao[String(hoje.getDay())]===null;
+    var blkHoje=_blks.find(function(b){return hojeFmt>=b.data_ini&&hojeFmt<=b.data_fim;});
+    if(!diaFechadoHoje&&!blkHoje&&hoje.getDay()!==0){
+      _selDia(hojeFmt,hoje.getDate(),hoje.getMonth());
+      return;
+    }
+  }
+
   // Group forward 60 days into months
   var mesesMap={};
   var mesesOrder=[];
