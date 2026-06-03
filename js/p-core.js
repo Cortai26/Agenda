@@ -1,4 +1,7 @@
 /* Agenda Painel — Core: config, auth, helpers */
+/* ═══ FEATURE FLAGS ═══ */
+const FEAT_EMAIL=false;
+const FEAT_CAMPANHAS=false;
 /* ═══ CONFIG ═══ */
 const SUPA='https://acldrisohnjfekjxgmoh.supabase.co';
 const ASAAS_FN='https://acldrisohnjfekjxgmoh.supabase.co/functions/v1/asaas-billing';
@@ -364,7 +367,7 @@ function configurarAbasPorPlano(){
   var isBasico=plano==='basico'||plano==='solo';
   var isNegocio=plano==='salao'||plano==='negocio';
   var isPro=plano==='pro'||plano==='equipe';
-  var temCampanhas=isPro||isNegocio;
+  var temCampanhas=FEAT_CAMPANHAS&&(isPro||isNegocio);
   var temAnalytics=isNegocio;
   ['campanhas','analytics'].forEach(function(aba){
     var vis=aba==='campanhas'?temCampanhas:temAnalytics;

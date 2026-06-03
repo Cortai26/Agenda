@@ -1912,6 +1912,7 @@ html.fonte-serif .hdr-name{
 // ═══════════════════════════════════════════════════════════════
 // AGENDA — AGENDAR JS (lógica completa, tema via CSS)
 // ═══════════════════════════════════════════════════════════════
+const FEAT_EMAIL=false;
 const SUPA_URL = 'https://acldrisohnjfekjxgmoh.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFjbGRyaXNvaG5qZmVranhnbW9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1ODA1MzcsImV4cCI6MjA4OTE1NjUzN30.etojz12x1oVNvbW_fPeVpNx2OFuJ72C1YioFBlCLS2Y';
 
@@ -2655,7 +2656,7 @@ document.getElementById('btnAg').onclick=async()=>{
       }).catch(function(){});
     }
     // Send confirmation email (fire and forget)
-    if(emailVal && rpcRes.cancel_token){
+    if(FEAT_EMAIL && emailVal && rpcRes.cancel_token){
       var _sinalPct=salao.sinal_percentual||30;
       var _sinalVal2=salao.mostrar_sinal&&salao.pix_key&&S.srv.preco>0?Math.round(S.srv.preco*(_sinalPct/100)):0;
       var _horasCan=(salao.cancelamento_min||120)>=60?Math.floor((salao.cancelamento_min||120)/60):null;
