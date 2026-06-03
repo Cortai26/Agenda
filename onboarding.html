@@ -462,7 +462,7 @@ async function init() {
   try {
     var r = await fetch(
       SUPA_URL + '/rest/v1/saloes?slug=eq.' + encodeURIComponent(SLUG) +
-      '&deleted_at=is.null&select=id,nome,responsavel,cidade,endereco,categoria,horario',
+      '&deleted_at=is.null&select=id,slug,nome,responsavel,cidade,endereco,categoria,horario',
       { headers: H }
     );
     var data = await r.json();

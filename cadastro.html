@@ -236,6 +236,11 @@ nav{
 .cred-val{font-family:var(--mono);color:var(--bone);font-size:12px;font-weight:600;word-break:break-all;text-align:right;max-width:60%}
 .creds-hint{font-size:12px;color:var(--bone3);margin-top:12px;line-height:1.55}
 
+.painel-block{background:linear-gradient(135deg,rgba(229,90,12,0.09),rgba(229,90,12,0.04));border:1.5px solid rgba(229,90,12,0.38);border-radius:12px;padding:20px 18px;margin-bottom:16px}
+.painel-block-eyebrow{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--brand);margin-bottom:8px}
+.painel-block-desc{font-size:13px;color:var(--bone2);line-height:1.55;margin-bottom:12px}
+.painel-url-row{background:rgba(0,0,0,.3);border-radius:7px;padding:11px 14px;margin-bottom:0}
+.painel-url-row .link-url{color:var(--brand)}
 .next-steps{margin-bottom:24px;border-top:1px solid var(--rule2)}
 .next-step{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--rule)}
 .ns-num{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--brand);flex-shrink:0;margin-top:2px;min-width:22px}
@@ -434,6 +439,28 @@ nav{
       <div class="success-sub" id="sucSub">Sua conta está ativa com 14 dias grátis.</div>
     </div>
 
+    <!-- PAINEL — destaque principal -->
+    <div class="painel-block">
+      <div class="painel-block-eyebrow">🖥️ Seu painel de controle</div>
+      <div class="painel-block-desc">Gerencie agendamentos, visualize a agenda, configure serviços e personalize sua página.</div>
+      <div class="painel-url-row">
+        <div class="link-url" id="sucPainelLink"></div>
+      </div>
+      <button class="btn-main" onclick="irGerenciar()" style="margin-top:14px">
+        <span>Entrar no meu painel</span><span>→</span>
+      </button>
+    </div>
+
+    <!-- Credenciais -->
+    <div class="creds-block">
+      <div class="creds-eyebrow">🔐 Dados de acesso</div>
+      <div class="cred-row">
+        <span class="cred-lbl">E-mail</span>
+        <span class="cred-val" id="credEmail"></span>
+      </div>
+      <div class="creds-hint">Use seu e-mail e a senha que criou para entrar no painel a qualquer momento.</div>
+    </div>
+
     <!-- Link dos clientes -->
     <div class="link-block">
       <div class="link-block-eyebrow">📲 Link para seus clientes agendarem</div>
@@ -444,40 +471,7 @@ nav{
       <div class="link-desc">Compartilhe no Instagram, WhatsApp e onde quiser. Seus clientes clicam e agendam diretamente.</div>
     </div>
 
-    <!-- Credenciais -->
-    <div class="creds-block">
-      <div class="creds-eyebrow">🔐 Dados de acesso ao painel</div>
-      <div class="cred-row">
-        <span class="cred-lbl">E-mail</span>
-        <span class="cred-val" id="credEmail"></span>
-      </div>
-      <div class="cred-row">
-        <span class="cred-lbl">Link</span>
-        <span class="cred-val" id="credSlug"></span>
-      </div>
-      <div class="creds-hint">Use seu e-mail e a senha que criou para entrar no painel.</div>
-    </div>
-
-    <!-- Próximos passos -->
-    <div class="next-steps">
-      <div class="next-step">
-        <span class="ns-num">01</span>
-        <div class="ns-txt"><strong>Configure seus serviços</strong> — entre no painel e adicione os serviços que você oferece com preços e duração.</div>
-      </div>
-      <div class="next-step">
-        <span class="ns-num">02</span>
-        <div class="ns-txt"><strong>Personalize o tema</strong> — escolha as cores e adicione sua foto ou logo.</div>
-      </div>
-      <div class="next-step">
-        <span class="ns-num">03</span>
-        <div class="ns-txt"><strong>Compartilhe o link</strong> — cole na bio do Instagram ou envie pelo WhatsApp e comece a receber agendamentos.</div>
-      </div>
-    </div>
-
-    <button class="btn-main" id="btnIrOnboarding" onclick="irOnboarding()">
-      <span>Configurar minha página</span><span>→</span>
-    </button>
-    <button class="btn-ghost" onclick="irGerenciar()" style="margin-top:8px;font-size:13px">Ir direto para o painel</button>
+    <button class="btn-ghost" onclick="irOnboarding()" style="margin-top:8px;font-size:13px">Configurar minha página primeiro →</button>
   </div>
 
 </div>
@@ -515,7 +509,7 @@ nav{
 <h3>10. Alterações</h3>
 <p>Podemos atualizar estes Termos com aviso prévio de 15 dias por e-mail.</p>
 <h3>11. Contato</h3>
-<p>E-mail: <strong>contato [at] agenda.app</strong></p>
+<p>E-mail: <a href="mailto:cortai.contato@gmail.com" style="color:var(--brand)">cortai.contato@gmail.com</a></p>
     </div>
   </div>
 </div>
@@ -532,7 +526,7 @@ nav{
 <p style="font-size:12px;opacity:.6;margin-bottom:16px">Versão 1.0 · 15 de março de 2026 — em conformidade com a LGPD (Lei 13.709/2018)</p>
 <h3>1. Controladora</h3>
 <p>A <strong>Agenda</strong> é a controladora dos dados dos Profissionais. Os Profissionais atuam como controladores dos dados dos Clientes finais coletados por meio da plataforma.<br>
-Encarregado de dados (DPO): <strong>contato [at] agenda.app</strong></p>
+Encarregado de dados (DPO): <a href="mailto:cortai.contato@gmail.com" style="color:var(--brand)">cortai.contato@gmail.com</a></p>
 <h3>2. Dados Coletados dos Profissionais</h3>
 <p>Nome, e-mail, WhatsApp, cidade, nome do estabelecimento e link personalizado. Dados de uso da plataforma (agendamentos, serviços, analytics).</p>
 <h3>3. Dados Coletados dos Clientes</h3>
@@ -549,11 +543,11 @@ Encarregado de dados (DPO): <strong>contato [at] agenda.app</strong></p>
 <p>Dados de conta: enquanto a conta estiver ativa + 90 dias. Após cancelamento, dados de agendamento são anonimizados em 30 dias.</p>
 <h3>9. Seus Direitos</h3>
 <p>Você tem direito a: confirmar e acessar seus dados; corrigi-los; solicitar exclusão; portabilidade; revogar consentimento; e se opor a tratamentos.<br>
-Contato: <strong>contato [at] agenda.app</strong> — prazo de resposta: 15 dias úteis.</p>
+Contato: <a href="mailto:cortai.contato@gmail.com" style="color:var(--brand)">cortai.contato@gmail.com</a> — prazo de resposta: 15 dias úteis.</p>
 <h3>10. Cookies</h3>
 <p>Usamos apenas cookies essenciais para manter a sessão do usuário. Não utilizamos cookies de rastreamento ou publicidade.</p>
 <h3>11. Contato</h3>
-<p>E-mail: <strong>contato [at] agenda.app</strong> — assunto: [LGPD] + descrição<br>Reclamações junto à ANPD: <strong>www.gov.br/anpd</strong></p>
+<p>E-mail: <a href="mailto:cortai.contato@gmail.com" style="color:var(--brand)">cortai.contato@gmail.com</a> — assunto: [LGPD] + descrição<br>Reclamações junto à ANPD: <strong>www.gov.br/anpd</strong></p>
     </div>
   </div>
 </div>
@@ -720,10 +714,11 @@ async function cadastrar(){
 
   // Sucesso
   var link='https://agendatop.vercel.app/agendar.html?slug='+fSlug;
+  var painelLink='https://agendatop.vercel.app/painel.html?slug='+fSlug;
   document.getElementById('sucLink').textContent=link;
+  document.getElementById('sucPainelLink').textContent=painelLink;
   document.getElementById('sucSub').textContent='Bem-vindo(a), '+fNome+'! Sua conta está ativa com 14 dias grátis.';
   document.getElementById('credEmail').textContent=fEmail;
-  document.getElementById('credSlug').textContent=fSlug;
 
   try{localStorage.setItem('cortai_novo_slug',fSlug);}catch(e){}
 
