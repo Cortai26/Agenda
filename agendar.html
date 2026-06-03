@@ -1584,6 +1584,13 @@ html.t-clinic .cal-day-ed.ativo{background:#2C6FAA;}
 /* override horizontal scroll for grid mode */
 .dias-scroll.cal-mode{overflow-x:visible;padding:0;}
 .dias-scroll.cal-mode .dia-list{display:block;min-width:auto;}
+/* Mobile calendar: paginação por mês */
+.cal-nav{display:flex;align-items:center;justify-content:space-between;padding:2px 0 10px;}
+.cal-nav-btn{background:none;border:none;cursor:pointer;padding:8px 12px;color:var(--stone-2);font-size:22px;line-height:1;-webkit-tap-highlight-color:transparent;transition:color .15s;border-radius:6px;}
+.cal-nav-btn:hover{color:var(--bone);}
+.cal-nav-btn:disabled{opacity:0.18;cursor:default;pointer-events:none;}
+.cal-nav-lbl{font-family:var(--mono);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--bone);}
+@media(min-width:780px){.cal-nav{display:none !important;}}
 
 /* ── HORA EDITORIAL BUTTONS ── */
 .hora-ed-outer{padding:0 16px 8px;}
@@ -2110,7 +2117,7 @@ async function init(){
     }
 
     buildSrv();
-    buildDias();
+    _calMesIdx=0; buildDias();
 
     const lc=document.getElementById('linkCancelar');
     const bl=document.getElementById('btnIrCancelar');
@@ -2366,19 +2373,22 @@ function buildDias(){
     var mk=d.getFullYear()+'-'+d.getMonth();
     if(!mesesMap[mk]){ mesesMap[mk]={ano:d.getFullYear(),mes:d.getMonth()}; mesesOrder.push(mk); }
   }
+  _calMesTotal=mesesOrder.length;
+  if(_calMesIdx>=_calMesTotal) _calMesIdx=_calMesTotal-1;
+  if(_calMesIdx<0) _calMesIdx=0;
 
+  var isMobile=window.innerWidth<780;
   var DOW_ABBR=['D','S','T','Q','Q','S','S'];
-  var html='<div class="cal-ed-outer">';
-  mesesOrder.forEach(function(mk){
-    var m=mesesMap[mk];
+
+  function renderMesHtml(m){
     var lastDay=new Date(m.ano,m.mes+1,0).getDate();
     var firstDow=new Date(m.ano,m.mes,1).getDay();
-    html+='<div class="cal-ed-month">';
-    html+='<div class="cal-ed-month-lbl">'+MESES[m.mes]+' '+m.ano+'</div>';
-    html+='<div class="cal-ed-dow">';
-    DOW_ABBR.forEach(function(d){html+='<div class="cal-ed-dow-lbl">'+d+'</div>';});
-    html+='</div><div class="cal-ed-grid">';
-    for(var e=0;e<firstDow;e++) html+='<div class="cal-day-ed empty"></div>';
+    var mh='<div class="cal-ed-month">';
+    if(!isMobile) mh+='<div class="cal-ed-month-lbl">'+MESES[m.mes]+' '+m.ano+'</div>';
+    mh+='<div class="cal-ed-dow">';
+    DOW_ABBR.forEach(function(dw){mh+='<div class="cal-ed-dow-lbl">'+dw+'</div>';});
+    mh+='</div><div class="cal-ed-grid">';
+    for(var e=0;e<firstDow;e++) mh+='<div class="cal-day-ed empty"></div>';
     for(var day=1;day<=lastDay;day++){
       var d2=new Date(m.ano,m.mes,day);
       var ds=fmt(d2);
@@ -2392,14 +2402,27 @@ function buildDias(){
       var cls='cal-day-ed'+(isAtivo?' ativo':'')+(inacessivel?' cfd':'');
       var title=bloqueado?' title="'+(blk.motivo||'Indisponível')+'"':(diaFechado?' title="Fechado"':'');
       var onclick='';
-      if(!inacessivel){
-        onclick=' onclick="_selDia(\''+ds+'\','+day+','+m.mes+')"';
-      }
-      html+='<div class="'+cls+'"'+onclick+title+'><span class="cdd">'+day+'</span></div>';
+      if(!inacessivel) onclick=' onclick="_selDia(\''+ds+'\','+day+','+m.mes+')"';
+      mh+='<div class="'+cls+'"'+onclick+title+'><span class="cdd">'+day+'</span></div>';
     }
-    html+='</div></div>';
-  });
-  html+='</div>';
+    mh+='</div></div>';
+    return mh;
+  }
+
+  var html='';
+  if(isMobile){
+    var cm=mesesMap[mesesOrder[_calMesIdx]];
+    html+='<div class="cal-nav">';
+    html+='<button class="cal-nav-btn" onclick="_navCalMes(-1)"'+(_calMesIdx===0?' disabled':'')+'>‹</button>';
+    html+='<span class="cal-nav-lbl">'+MESES[cm.mes]+' '+cm.ano+'</span>';
+    html+='<button class="cal-nav-btn" onclick="_navCalMes(1)"'+(_calMesIdx>=_calMesTotal-1?' disabled':'')+'>›</button>';
+    html+='</div>';
+    html+='<div class="cal-ed-outer">'+renderMesHtml(cm)+'</div>';
+  } else {
+    html='<div class="cal-ed-outer">';
+    mesesOrder.forEach(function(mk){ html+=renderMesHtml(mesesMap[mk]); });
+    html+='</div>';
+  }
   w.innerHTML=html;
   if(S.dataStr){
     setTimeout(function(){
@@ -2415,6 +2438,11 @@ function _selDia(ds,dayNum,monthIdx){
   unlock('bHora'); buildHoras(); scr('bHora');
   updateSteps(); updateBar();
 }
+function _navCalMes(delta){
+  _calMesIdx=Math.max(0,Math.min(_calMesIdx+delta,_calMesTotal-1));
+  buildDias();
+}
+window._navCalMes=_navCalMes;
 
 async function buildHoras(){
   const w=document.getElementById('horaWrap');
@@ -3742,6 +3770,7 @@ window.wsNavTo=wsNavTo;
 
 /* ── DESKTOP: PAINEL DIREITO DE AGENDAMENTO ── */
 var _dSvc=null,_dDia=null,_dHora=null,_dSlots={};
+var _calMesIdx=0,_calMesTotal=0;
 
 function renderListaServicosDesktop(){
   var c=document.getElementById('cdConteudo'); if(!c)return;
@@ -3768,7 +3797,7 @@ function renderListaServicosDesktop(){
 async function renderEtapaDesktop(svcId){
   _dSvc=svcId?servicos.find(function(s){return s.id===svcId;}):(servicos[0]||null);
   if(!_dSvc){renderListaServicosDesktop();return;}
-  _dDia=null;_dHora=null;
+  _dDia=null;_dHora=null;_calMesIdx=0;
   document.getElementById('cdTitulo').textContent=_dSvc.nome;
   document.getElementById('cdSub').textContent=(_dSvc.duracao||60)+'min · Escolha um dia';
   var c=document.getElementById('cdConteudo'); if(!c)return;
