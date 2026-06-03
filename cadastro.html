@@ -439,26 +439,17 @@ nav{
       <div class="success-sub" id="sucSub">Sua conta está ativa com 14 dias grátis.</div>
     </div>
 
-    <!-- PAINEL — destaque principal -->
+    <!-- Credenciais + painel visível -->
     <div class="painel-block">
       <div class="painel-block-eyebrow">🖥️ Seu painel de controle</div>
-      <div class="painel-block-desc">Gerencie agendamentos, visualize a agenda, configure serviços e personalize sua página.</div>
       <div class="painel-url-row">
         <div class="link-url" id="sucPainelLink"></div>
       </div>
-      <button class="btn-main" onclick="irGerenciar()" style="margin-top:14px">
-        <span>Entrar no meu painel</span><span>→</span>
-      </button>
-    </div>
-
-    <!-- Credenciais -->
-    <div class="creds-block">
-      <div class="creds-eyebrow">🔐 Dados de acesso</div>
-      <div class="cred-row">
-        <span class="cred-lbl">E-mail</span>
+      <div class="cred-row" style="border-bottom:none;padding:10px 0 0">
+        <span class="cred-lbl" style="color:var(--bone3)">E-mail</span>
         <span class="cred-val" id="credEmail"></span>
       </div>
-      <div class="creds-hint">Use seu e-mail e a senha que criou para entrar no painel a qualquer momento.</div>
+      <div style="font-size:11px;color:rgba(229,90,12,0.6);margin-top:6px">Use seu e-mail e a senha criada para acessar o painel.</div>
     </div>
 
     <!-- Link dos clientes -->
@@ -471,7 +462,10 @@ nav{
       <div class="link-desc">Compartilhe no Instagram, WhatsApp e onde quiser. Seus clientes clicam e agendam diretamente.</div>
     </div>
 
-    <button class="btn-ghost" onclick="irOnboarding()" style="margin-top:8px;font-size:13px">Configurar minha página primeiro →</button>
+    <button class="btn-main" onclick="irOnboarding()">
+      <span>Configurar minha página agora</span><span>→</span>
+    </button>
+    <button class="btn-ghost" onclick="irGerenciar()" style="margin-top:8px;font-size:13px">Ir direto para o painel</button>
   </div>
 
 </div>
