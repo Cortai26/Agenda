@@ -556,21 +556,22 @@ async function renderPagina(){
 async function salvarPerfil(){
   var btn=document.querySelector('[onclick="salvarPerfil()"]');
   if(btn){btn.disabled=true;btn.textContent='Salvando...';}
-  var g=function(id){var el=document.getElementById(id);return el?el.value.trim():'';};
+  var g=function(id){var el=document.getElementById(id);return el?el.value.trim():null;};
   try{
-    await _patch({
-      nome:g('pfNome')||null,
-      responsavel:g('pfResp')||null,
-      descricao:g('pfDesc')||null,
-      categoria:document.getElementById('pfCat')?document.getElementById('pfCat').value||null:null,
-      instagram_url:g('pfInsta')||null,
-      whatsapp_url:g('pfWhats')||null,
-      tiktok_url:g('pfTiktok')||null,
-      facebook_url:g('pfFb')||null,
-      website_url:g('pfSite')||null,
-      video_url:g('pfVideo')||null,
-      tag_destaque:g('pfTag')||null,
-      fundado_em:g('pfFundado')||null
+    await rpc('painel_salvar_perfil',{
+      p_salao_id:S.id,
+      p_nome:g('pfNome')||null,
+      p_responsavel:g('pfResp')||null,
+      p_descricao:g('pfDesc')||null,
+      p_categoria:document.getElementById('pfCat')?document.getElementById('pfCat').value||null:null,
+      p_instagram_url:g('pfInsta')||null,
+      p_whatsapp_url:g('pfWhats')||null,
+      p_tiktok_url:g('pfTiktok')||null,
+      p_facebook_url:g('pfFb')||null,
+      p_website_url:g('pfSite')||null,
+      p_video_url:g('pfVideo')||null,
+      p_tag_destaque:g('pfTag')||null,
+      p_fundado_em:g('pfFundado')||null
     });
     if(g('pfNome')) S.nome=g('pfNome');
     toast('✓ Perfil salvo!','ok');
@@ -617,14 +618,15 @@ async function salvarLocalizacao(){
   if(btn){btn.disabled=true;btn.textContent='Salvando...';}
   var g=function(id){var el=document.getElementById(id);return el?el.value.trim():'';};
   try{
-    await _patch({
-      telefone:g('locTel')||null,
-      endereco:g('locEnd')||null,
-      cep:g('locCep').replace(/\D/g,'')||null,
-      cidade:g('locCidade')||null,
-      bairro:g('locBairro')||null,
-      numero:g('locNum')||null,
-      complemento:g('locComp')||null
+    await rpc('painel_salvar_localizacao',{
+      p_salao_id:S.id,
+      p_telefone:g('locTel')||null,
+      p_endereco:g('locEnd')||null,
+      p_cep:g('locCep').replace(/\D/g,'')||null,
+      p_cidade:g('locCidade')||null,
+      p_bairro:g('locBairro')||null,
+      p_numero:g('locNum')||null,
+      p_complemento:g('locComp')||null
     });
     S.telefone=g('locTel');
     toast('✓ Localização salva!','ok');
@@ -652,7 +654,7 @@ async function salvarAgenda(){
   var cancel=document.getElementById('cfgCancel')?parseInt(document.getElementById('cfgCancel').value):120;
   try{
     await rpc('salvar_horario',{p_slug:S.slug,p_senha:pw,p_horario:horario});
-    await _patch({intervalo_slots:slots,max_ag_dia:maxAg,cancelamento_min:cancel});
+    await rpc('painel_salvar_agenda_cfg',{p_salao_id:S.id,p_intervalo_slots:slots,p_max_ag_dia:maxAg,p_cancelamento_min:cancel});
     S._horario=horario;S.cancelamento_min=cancel;
     toast('✓ Agenda salva!','ok');
   }catch(e){
@@ -711,7 +713,7 @@ async function salvarSinalPix(){
   var obrig=document.getElementById('tgSinalObrig')?document.getElementById('tgSinalObrig').classList.contains('on'):false;
   var pct=document.getElementById('sliderSinal')?parseInt(document.getElementById('sliderSinal').value):30;
   try{
-    await _patch({mostrar_sinal:mostrar,sinal_obrigatorio:obrig,sinal_percentual:pct});
+    await rpc('painel_salvar_sinal_pix',{p_salao_id:S.id,p_mostrar_sinal:mostrar,p_sinal_obrigatorio:obrig,p_sinal_percentual:pct});
     S.mostrar_sinal=mostrar;S.sinal_obrigatorio=obrig;S.sinal_percentual=pct;
     toast('✓ Sinal salvo!','ok');
   }catch(e){toast('Erro: '+e.message,'err');}

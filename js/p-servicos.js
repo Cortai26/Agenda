@@ -316,7 +316,7 @@ async function abrirSrv(id){
   document.getElementById('srvTit').textContent=id?'Editar Serviço':'Novo Serviço';
   document.getElementById('srvNome').value=s?s.nome:'';
   document.getElementById('srvDesc').value=s&&s.descricao?s.descricao:'';
-  document.getElementById('srvPreco').value=s?s.preco/100:'';
+  document.getElementById('srvPreco').value=s&&s.preco>0?s.preco/100:'';
   document.getElementById('srvDur').value=s?s.duracao:30;
   var errEl=document.getElementById('srvErr');
   if(errEl){errEl.style.display='none';errEl.classList.remove('show');}
@@ -392,11 +392,11 @@ async function salvarServico(){
   if(!S||!S.id){err.textContent='Sessão expirada — faça login novamente.';err.style.display='block';return;}
   var nome=document.getElementById('srvNome').value.trim();
   var precoVal=document.getElementById('srvPreco').value.trim();
-  var preco=parseFloat(precoVal);
+  var preco=precoVal?parseFloat(precoVal):0;
   var dur=parseInt(document.getElementById('srvDur').value);
   var desc=document.getElementById('srvDesc').value.trim();
   if(!nome){err.textContent='Informe o nome.';err.style.display='block';return;}
-  if(!precoVal||isNaN(preco)||preco<=0){err.textContent='Preço inválido.';err.style.display='block';return;}
+  if(precoVal&&(isNaN(preco)||preco<0)){err.textContent='Preço inválido.';err.style.display='block';return;}
   if(isNaN(dur)||dur<10){err.textContent='Duração mínima: 10 min.';err.style.display='block';return;}
   btn.disabled=true; btn.textContent='Salvando...';
   try{

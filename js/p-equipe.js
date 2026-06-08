@@ -109,7 +109,7 @@ async function abrirProf(id){
     html+='</div></div>';
   }
 
-  html+=(id&&!isBasico?'<div class="fg"><label class="fl">Tema visual</label>'+htmlSeletorTemaProf(id,p?p.tema:null)+'</div>':'')+
+  html+=(id&&!isBasico&&typeof FEAT_TEMA_PROF!=='undefined'&&FEAT_TEMA_PROF?'<div class="fg"><label class="fl">Tema visual</label>'+htmlSeletorTemaProf(id,p?p.tema:null)+'</div>':'')+
     '<button class="btn-sv" onclick="salvarProf()">Salvar</button>';
   var ov=document.getElementById('ovSrv');
   if(!ov._srvHtml) ov._srvHtml=ov.querySelector('.modal').innerHTML;

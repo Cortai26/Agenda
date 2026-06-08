@@ -213,12 +213,12 @@ body{
       <input type="text" id="inpCidade" class="ob-input" placeholder="Sua cidade" autocomplete="address-level2">
     </div>
     <div class="ob-field">
-      <label class="ob-label" for="inpInstagram">Instagram <span style="color:var(--stone-2);font-size:10px">(opcional)</span></label>
-      <input type="text" id="inpInstagram" class="ob-input" placeholder="@seuperfil ou URL">
+      <label class="ob-label" for="inpTelefone">Telefone / WhatsApp <span style="color:var(--stone-2);font-size:10px">(opcional)</span></label>
+      <input type="tel" id="inpTelefone" class="ob-input" placeholder="(11) 99999-9999" oninput="mascaraTel(this)" autocomplete="tel">
     </div>
     <div class="ob-field">
-      <label class="ob-label" for="inpWhatsapp">WhatsApp para contato <span style="color:var(--stone-2);font-size:10px">(opcional)</span></label>
-      <input type="tel" id="inpWhatsapp" class="ob-input" placeholder="(11) 99999-9999" oninput="mascaraTel(this)">
+      <label class="ob-label" for="inpInstagram">Instagram <span style="color:var(--stone-2);font-size:10px">(opcional)</span></label>
+      <input type="text" id="inpInstagram" class="ob-input" placeholder="@seuperfil ou URL">
     </div>
     <div class="ob-field">
       <label class="ob-label" for="inpDescricao">Sobre seu negócio <span style="color:var(--stone-2);font-size:10px">(opcional)</span></label>
@@ -257,31 +257,38 @@ body{
         <span style="color:#F0EDE8;font-size:16px">→</span>
       </div>
     </div>
-    <button class="btn-primary" onclick="irParaPainel()">
-      <span>Ir para o meu painel</span><span>→</span>
-    </button>
-    <div class="link-box" style="margin-top:16px">
-      <div class="link-label">Seu link público (para clientes)</div>
-      <div class="link-val" id="linkVal"></div>
-      <div class="link-sub">Toque no botão abaixo para copiar</div>
+    <div class="link-box" style="margin-top:0;margin-bottom:16px;background:rgba(229,90,12,0.08);border:1.5px solid rgba(229,90,12,0.3)">
+      <div class="link-label" style="color:var(--brand);font-size:9px;letter-spacing:3px">SEU LINK DE AGENDAMENTO</div>
+      <div class="link-val" id="linkVal" style="font-size:13px;word-break:break-all"></div>
+      <div class="link-sub">Compartilhe este link — clientes abrem e já agendam com você</div>
     </div>
-    <button class="btn-copiar" id="btnCopiar" onclick="copiarLink()">
-      <span>Copiar link</span><span id="btnCopiarIcon">📋</span>
+    <button class="btn-copiar" id="btnCopiar" onclick="copiarLink()" style="font-size:15px;font-weight:800;padding:14px 20px">
+      <span>📋 Copiar meu link</span><span id="btnCopiarIcon"></span>
     </button>
     <a id="linkVerPagina" href="#" target="_blank"
-      style="display:block;padding:12px;border:1px solid var(--rule-2);color:var(--stone);font-family:var(--sans);font-size:13px;margin-top:8px;transition:all 0.15s;text-decoration:none;text-align:center">
-      Ver minha página pública ↗
+      style="display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;border:1px solid var(--rule-2);color:var(--stone);font-family:var(--sans);font-size:13px;margin-top:8px;transition:all 0.15s;text-decoration:none">
+      <span>Ver minha página agora</span><span>↗</span>
     </a>
+    <button class="btn-primary" onclick="irParaPainel()" style="margin-top:12px;background:transparent;border:1.5px solid rgba(240,237,232,0.2);color:var(--stone)">
+      <span>Ir para o painel de gestão</span><span>→</span>
+    </button>
 
     <div style="border-top:1px solid var(--rule);padding-top:24px;margin-top:20px;text-align:left">
       <div style="font-size:9px;color:var(--stone-2);letter-spacing:3px;text-transform:uppercase;font-family:var(--sans);margin-bottom:18px">Para crescer mais rápido</div>
 
-      <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)">
-        <span style="font-size:20px;flex-shrink:0">📸</span>
-        <div>
-          <div style="font-family:var(--serif);font-style:italic;font-size:15px;color:var(--bone);margin-bottom:3px">Adicione uma foto de capa</div>
-          <div style="font-size:11px;color:var(--stone);line-height:1.5;font-weight:300">Páginas com foto de capa recebem 5x mais agendamentos. No painel → Config → Perfil público → Foto de capa.</div>
+      <div style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)">
+        <div style="font-family:var(--serif);font-style:italic;font-size:15px;color:var(--bone);margin-bottom:8px">📸 Foto de perfil</div>
+        <div style="font-size:11px;color:var(--stone);line-height:1.5;font-weight:300;margin-bottom:12px">Páginas com foto recebem 5× mais agendamentos. Toque para adicionar.</div>
+        <div style="display:flex;align-items:center;gap:14px">
+          <div id="obFotoPreview" onclick="document.getElementById('obFotoInput').click()" style="width:64px;height:64px;border-radius:50%;background:var(--ink-3);border:2px dashed rgba(240,237,232,0.2);cursor:pointer;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">
+            <span style="font-size:24px">📷</span>
+          </div>
+          <div>
+            <button onclick="document.getElementById('obFotoInput').click()" style="padding:9px 18px;background:var(--brand);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer">Escolher foto</button>
+            <div id="obFotoStatus" style="font-size:11px;color:var(--stone-2);margin-top:5px"></div>
+          </div>
         </div>
+        <input type="file" id="obFotoInput" accept="image/*" style="display:none" onchange="obUploadFoto(this)">
       </div>
 
       <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)">
@@ -446,7 +453,7 @@ var CAT_LABEL = {
 var _salao          = null;
 var _catSel         = null;
 var _svcsAdicionados = [];
-var _horarios        = {};
+var _horarios        = {'0':null,'1':{ini:'09:00',fim:'19:00'},'2':{ini:'09:00',fim:'19:00'},'3':{ini:'09:00',fim:'19:00'},'4':{ini:'09:00',fim:'19:00'},'5':{ini:'09:00',fim:'19:00'},'6':{ini:'09:00',fim:'14:00'}};
 var _passoAtual      = 'cat';
 
 /* ══ INIT ══ */
@@ -588,6 +595,7 @@ function avancarPasso(n) {
     nextEl.style.animation = 'fadeUp 0.35s ease-out';
   }
   atualizarProgress(n + 1);
+  if (n === 1) renderDias();
   if (n === 3) renderPreviewFinal();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -754,6 +762,38 @@ async function rpcOb(fn, params) {
   if (!r.ok) { var t = await r.text(); throw new Error(t); }
 }
 
+/* ══ UPLOAD FOTO ONBOARDING ══ */
+async function obUploadFoto(input) {
+  var file = input && input.files && input.files[0];
+  if (!file || !_salao) return;
+  var status = document.getElementById('obFotoStatus');
+  var preview = document.getElementById('obFotoPreview');
+  if (status) status.textContent = 'Enviando...';
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    if (preview) { preview.innerHTML = '<img src="'+e.target.result+'" style="width:100%;height:100%;object-fit:cover">'; }
+  };
+  reader.readAsDataURL(file);
+  var ext = (file.name||'img').split('.').pop().toLowerCase();
+  if (!['jpg','jpeg','png','webp'].includes(ext)) ext = 'jpg';
+  var path = _salao.id + '/perfil.' + ext;
+  try {
+    var r = await fetch(SUPA_URL + '/storage/v1/object/fotos-estabelecimentos/' + path, {
+      method: 'POST',
+      headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'Content-Type': file.type||'image/jpeg', 'x-upsert': 'true' },
+      body: file
+    });
+    if (!r.ok) throw new Error(await r.text());
+    var url = SUPA_URL + '/storage/v1/object/public/fotos-estabelecimentos/' + path;
+    await rpcOb('onboarding_salvar_foto', { p_salao_id: _salao.id, p_url: url, p_tipo: 'perfil' });
+    if (status) status.textContent = '✓ Foto salva!';
+  } catch(e) {
+    if (status) status.textContent = 'Erro ao enviar';
+    console.error('obUploadFoto:', e);
+  }
+}
+window.obUploadFoto = obUploadFoto;
+
 /* ══ HORÁRIOS ══ */
 var DIAS = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
 
@@ -822,14 +862,14 @@ async function salvarLocalizacaoEAvancar() {
   if (_salao) {
     var end  = document.getElementById('inpEndereco').value.trim();
     var cid  = document.getElementById('inpCidade').value.trim();
+    var tel  = (document.getElementById('inpTelefone').value || '').replace(/\D/g, '');
     var ig   = document.getElementById('inpInstagram').value.trim();
-    var wa   = document.getElementById('inpWhatsapp').value.replace(/\D/g, '');
     var desc = (document.getElementById('inpDescricao') || {}).value || '';
     var params = { p_salao_id: _salao.id };
     if (end) params.p_endereco = end;
     if (cid) params.p_cidade = cid;
+    if (tel.length >= 10) { params.p_telefone = tel; params.p_whatsapp_url = tel; }
     if (ig)  params.p_instagram_url = ig.startsWith('http') ? ig : 'https://instagram.com/' + ig.replace('@','');
-    if (wa.length >= 10) params.p_whatsapp_url = wa;
     if (desc.trim()) params.p_descricao = desc.trim();
     if (Object.keys(params).length > 1) {
       try { await rpcOb('painel_salvar_localizacao', params); if (save) save.textContent = '✓ Localização salva'; }

@@ -2,6 +2,7 @@
 /* ═══ FEATURE FLAGS ═══ */
 const FEAT_EMAIL=false;
 const FEAT_CAMPANHAS=false;
+const FEAT_TEMA_PROF=false;
 /* ═══ CONFIG ═══ */
 const SUPA='https://acldrisohnjfekjxgmoh.supabase.co';
 const ASAAS_FN='https://acldrisohnjfekjxgmoh.supabase.co/functions/v1/asaas-billing';
@@ -72,6 +73,7 @@ function rBRL(c){return'R$'+Math.round(c/100);}
 
 /* ── formatPrice: pt-BR currency ── */
 function formatPrice(centavos){
+  if(!centavos||centavos<=0) return 'A combinar';
   return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(centavos/100);
 }
 
