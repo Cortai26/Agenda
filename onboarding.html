@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 :root {
   --ink:#0A0908; --ink-2:#111009; --ink-3:#191714;
@@ -120,14 +121,50 @@ body{
 .link-sub{font-size:11px;color:var(--stone-2);font-family:var(--serif);font-style:italic}
 .btn-primary{width:100%;padding:15px 20px;background:var(--brand);color:var(--bone);border:none;font-family:var(--sans);font-style:normal;font-weight:600;font-size:15px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background 0.15s;margin-top:auto;-webkit-tap-highlight-color:transparent}
 .btn-primary:active{background:#C04A08}
-.btn-pular{width:100%;padding:12px;background:transparent;border:none;color:var(--stone-2);font-family:var(--sans);font-style:normal;font-weight:500;font-size:13px;cursor:pointer;margin-top:8px;letter-spacing:0.5px;transition:color 0.15s}
-.btn-pular:hover{color:var(--stone)}
+.btn-pular{width:100%;padding:12px;background:transparent;border:1px solid var(--rule-2);color:var(--stone);font-family:var(--sans);font-style:normal;font-weight:500;font-size:14px;cursor:pointer;margin-top:8px;letter-spacing:0.5px;transition:all 0.15s}
+.btn-pular:hover{border-color:rgba(240,237,232,0.2);color:var(--bone)}
 .btn-ghost{width:100%;padding:12px;background:transparent;border:1px solid var(--rule-2);color:var(--stone);font-family:var(--sans);font-style:normal;font-weight:600;font-size:14px;cursor:pointer;margin-top:8px;transition:all 0.15s}
 .btn-ghost:hover{border-color:var(--bone);color:var(--bone)}
 .btn-copiar{width:100%;padding:15px 20px;background:var(--brand);color:var(--bone);border:none;font-family:var(--sans);font-style:normal;font-weight:600;font-size:15px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:all 0.15s}
 .btn-copiar.copiado{background:var(--ok)}
 .saving{font-size:11px;color:var(--stone-2);text-align:center;padding:8px;letter-spacing:1px;min-height:28px;font-family:var(--sans)}
 @media(min-width:640px){.ob-wrap{padding-top:20px}.passo{padding:36px 32px 40px}}
+
+/* ── LAYOUT COM PREVIEW LATERAL ── */
+.ob-layout{display:flex;width:100%;align-items:flex-start;justify-content:center}
+.ob-preview-panel{display:none;width:260px;flex-shrink:0;position:sticky;top:64px;margin:20px 0 0 32px}
+.ob-pv-label{font-size:9px;color:var(--stone-2);letter-spacing:3px;text-transform:uppercase;font-family:var(--sans);margin-bottom:10px;text-align:center}
+.ob-pv-phone{background:var(--ink-2);border:1px solid var(--rule-2);border-radius:20px;overflow:hidden;box-shadow:0 16px 40px rgba(0,0,0,0.5)}
+.ob-pv-header{padding:12px 14px;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:10px}
+.ob-pv-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,rgba(229,90,12,0.6),rgba(229,90,12,0.2));flex-shrink:0}
+.ob-pv-name{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--bone);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ob-pv-cat{font-size:9px;color:var(--stone-2);letter-spacing:1px;text-transform:uppercase;margin-top:1px}
+.ob-pv-svc{display:flex;align-items:center;justify-content:space-between;padding:7px 14px;border-bottom:1px solid var(--rule)}
+.ob-pv-svc-name{font-family:var(--serif);font-style:italic;font-size:12px;color:var(--bone);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ob-pv-svc-price{font-family:var(--mono);font-size:10px;color:var(--brand);flex-shrink:0;margin-left:6px}
+.ob-pv-empty{padding:16px 14px;font-size:11px;color:var(--stone-2);text-align:center}
+.ob-pv-cta{background:var(--brand);padding:9px 14px;font-family:var(--serif);font-style:italic;font-size:12px;color:var(--bone);display:flex;justify-content:space-between;align-items:center}
+
+/* Mobile preview toggle */
+.ob-pv-mobile-toggle{display:flex;align-items:center;justify-content:space-between;position:fixed;bottom:0;left:0;right:0;z-index:30;background:var(--ink-2);border-top:1px solid var(--rule-2);padding:11px 20px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ob-pv-mobile-toggle-txt{font-size:12px;color:var(--stone);letter-spacing:1px}
+.ob-pv-mobile-drawer{position:fixed;bottom:0;left:0;right:0;z-index:29;background:var(--ink);border-top:1px solid var(--rule-2);padding:16px 20px 32px;transform:translateY(100%);transition:transform 0.3s ease}
+.ob-pv-mobile-drawer.open{transform:translateY(0)}
+.passo{padding-bottom:80px}
+
+/* preset grid */
+.preset-grid{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+
+/* QR code */
+.qr-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px;background:var(--ink-2);border:1px solid var(--rule-2);border-radius:8px;margin-bottom:12px}
+.qr-canvas{display:flex;align-items:center;justify-content:center}
+
+@media(min-width:900px){
+  .ob-layout{max-width:860px;margin:0 auto}
+  .ob-preview-panel{display:block}
+  .ob-pv-mobile-toggle,.ob-pv-mobile-drawer{display:none!important}
+  .passo{padding-bottom:32px}
+}
 </style>
 </head>
 <body>
@@ -137,6 +174,7 @@ body{
   <span class="nav-skip" onclick="irParaPainel()">Pular configuração →</span>
 </nav>
 
+<div class="ob-layout">
 <div class="ob-wrap">
 
   <div class="progress">
@@ -183,9 +221,11 @@ body{
     <div class="passo-eyebrow">02 — Horários</div>
     <h1 class="passo-h1">Quando você atende?</h1>
     <p class="passo-sub">Ative os dias que trabalha. Você pode editar a qualquer momento.</p>
-    <button class="preset-btn" onclick="aplicarPreset()">
-      ⚡ Preencher com Seg–Sex 9h–19h, Sáb 9h–14h
-    </button>
+    <div class="preset-grid">
+      <button class="preset-btn" onclick="aplicarPreset('padrao')">⚡ Seg–Sex 9h–19h + Sáb 9h–14h</button>
+      <button class="preset-btn" onclick="aplicarPreset('semana')">📅 Seg–Sex 9h–18h (sem sábado)</button>
+      <button class="preset-btn" onclick="aplicarPreset('full')">🗓️ Todos os dias 9h–18h</button>
+    </div>
     <div style="background:rgba(229,90,12,0.06);border-left:2px solid var(--brand);padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--stone);line-height:1.6">
       💡 <strong style="color:var(--bone)">Dica:</strong>
       Profissionais que atendem sábado recebem 3x mais agendamentos online.
@@ -265,11 +305,23 @@ body{
     <button class="btn-copiar" id="btnCopiar" onclick="copiarLink()" style="font-size:15px;font-weight:800;padding:14px 20px">
       <span>📋 Copiar meu link</span><span id="btnCopiarIcon"></span>
     </button>
+    <a id="btnWhatsapp" href="#" target="_blank" rel="noopener"
+      style="display:flex;align-items:center;justify-content:center;gap:8px;padding:14px 20px;background:#25D366;color:#fff;text-decoration:none;font-family:var(--sans);font-size:15px;font-weight:700;margin-top:8px;transition:filter 0.15s">
+      <span>Compartilhar via WhatsApp</span>
+    </a>
     <a id="linkVerPagina" href="#" target="_blank"
       style="display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;border:1px solid var(--rule-2);color:var(--stone);font-family:var(--sans);font-size:13px;margin-top:8px;transition:all 0.15s;text-decoration:none">
       <span>Ver minha página agora</span><span>↗</span>
     </a>
-    <button class="btn-primary" onclick="irParaPainel()" style="margin-top:12px;background:transparent;border:1.5px solid rgba(240,237,232,0.2);color:var(--stone)">
+
+    <!-- QR Code -->
+    <div class="qr-wrap" id="qrWrap" style="margin-top:20px">
+      <div style="font-size:9px;color:var(--stone-2);letter-spacing:3px;text-transform:uppercase;margin-bottom:4px">QR Code da sua página</div>
+      <div class="qr-canvas" id="qrCanvas"></div>
+      <div style="font-size:11px;color:var(--stone-2);text-align:center">Imprima e coloque no balcão</div>
+    </div>
+
+    <button class="btn-primary" onclick="irParaPainel()" style="margin-top:16px;background:transparent;border:1.5px solid rgba(240,237,232,0.2);color:var(--stone)">
       <span>Ir para o painel de gestão</span><span>→</span>
     </button>
 
@@ -333,6 +385,44 @@ body{
     </div>
   </div>
 
+</div><!-- /ob-wrap -->
+
+<!-- PREVIEW LATERAL (desktop) -->
+<div class="ob-preview-panel" id="obPreviewPanel">
+  <div class="ob-pv-label">Prévia da sua página</div>
+  <div class="ob-pv-phone">
+    <div class="ob-pv-header">
+      <div class="ob-pv-avatar"></div>
+      <div>
+        <div class="ob-pv-name" id="pvName">Meu negócio</div>
+        <div class="ob-pv-cat" id="pvCat"></div>
+      </div>
+    </div>
+    <div id="pvSvcs"><div class="ob-pv-empty">Selecione serviços →</div></div>
+    <div class="ob-pv-cta"><span>Agendar agora</span><span>→</span></div>
+  </div>
+</div>
+
+</div><!-- /ob-layout -->
+
+<!-- PREVIEW MOBILE TOGGLE -->
+<div class="ob-pv-mobile-toggle" id="pvMobileToggle" onclick="togglePreviewMobile()">
+  <span class="ob-pv-mobile-toggle-txt">👁 Ver prévia da página</span>
+  <span style="font-size:18px;color:var(--stone-2)" id="pvToggleIcon">↑</span>
+</div>
+<div class="ob-pv-mobile-drawer" id="pvMobileDrawer">
+  <div style="font-size:9px;color:var(--stone-2);letter-spacing:3px;text-transform:uppercase;margin-bottom:12px;text-align:center">Prévia da sua página</div>
+  <div class="ob-pv-phone" style="max-width:260px;margin:0 auto">
+    <div class="ob-pv-header">
+      <div class="ob-pv-avatar"></div>
+      <div>
+        <div class="ob-pv-name" id="pvNameM">Meu negócio</div>
+        <div class="ob-pv-cat" id="pvCatM"></div>
+      </div>
+    </div>
+    <div id="pvSvcsM"><div class="ob-pv-empty">Selecione serviços →</div></div>
+    <div class="ob-pv-cta"><span>Agendar agora</span><span>→</span></div>
+  </div>
 </div>
 
 <script>
@@ -434,6 +524,18 @@ var CATEGORIAS = [
     ]
   },
   {
+    id:'tatuagem', icone:'🪡', label:'Tatuagem & Piercing', desc:'Tattoo, piercing e body art',
+    servicos:[
+      {nome:'Tatuagem P (até 5cm)',    icone:'🪡', preco:20000, duracao:60},
+      {nome:'Tatuagem M (5–15cm)',     icone:'🪡', preco:40000, duracao:120},
+      {nome:'Tatuagem G (15cm+)',      icone:'🪡', preco:80000, duracao:240},
+      {nome:'Cover up',               icone:'🎨', preco:60000, duracao:180},
+      {nome:'Piercing simples',        icone:'💎', preco:8000,  duracao:30},
+      {nome:'Remoção de piercing',     icone:'✂️', preco:5000,  duracao:20},
+      {nome:'Retoque de tatuagem',     icone:'🖊️', preco:0,     duracao:60},
+    ]
+  },
+  {
     id:'outro', icone:'📅', label:'Outro', desc:'Profissão não listada acima',
     servicos:[
       {nome:'Atendimento / Consulta', icone:'📅', preco:15000, duracao:60},
@@ -446,7 +548,8 @@ var CATEGORIAS = [
 
 var CAT_LABEL = {
   barbearia:'Barbearia', cabelereiro:'Salão de Beleza', unhas:'Nail Designer',
-  estetica:'Estética', saude:'Saúde', pet:'Pet Shop', fitness:'Fitness', outro:'Negócio'
+  estetica:'Estética', saude:'Saúde', pet:'Pet Shop', fitness:'Fitness',
+  tatuagem:'Tatuagem & Piercing', outro:'Negócio'
 };
 
 /* ══ ESTADO ══ */
@@ -480,6 +583,7 @@ async function init() {
     var elCat  = document.getElementById('previewCat');
     if (elNome) elNome.textContent = (_salao.nome || 'Meu Negócio') + '.';
     if (elCat)  elCat.textContent  = CAT_LABEL[_salao.categoria] || _salao.categoria || '';
+    atualizarPreview();
 
     /* Link */
     var link = location.origin + '/agendar.html?slug=' + SLUG;
@@ -557,6 +661,7 @@ async function selecionarCategoria(id) {
     if (elCat) elCat.textContent = CAT_LABEL[id] || id;
   }
 
+  atualizarPreview();
   /* Avançar para serviços após breve feedback visual */
   setTimeout(irParaServicos, 180);
 }
@@ -637,6 +742,7 @@ function toggleChip(nome) {
   }
   renderChips();
   renderSvcLista();
+  atualizarPreview();
 }
 window.toggleChip = toggleChip;
 
@@ -695,6 +801,7 @@ function removerSvc(i) {
   _svcsAdicionados.splice(i, 1);
   renderChips();
   renderSvcLista();
+  atualizarPreview();
 }
 window.removerSvc = removerSvc;
 
@@ -705,6 +812,7 @@ function adicionarCustom() {
   if (!nome) return;
   _svcsAdicionados.push({ nome: nome, preco: 0, duracao: 60, icone: (_catSel && _catSel.icone) || '📅' });
   renderSvcLista();
+  atualizarPreview();
   if (inp) { inp.value = ''; inp.focus(); }
 }
 window.adicionarCustom = adicionarCustom;
@@ -834,10 +942,17 @@ function atualizarHora(d) {
 }
 window.atualizarHora = atualizarHora;
 
-function aplicarPreset() {
-  for (var d = 1; d <= 5; d++) _horarios[String(d)] = { ini:'09:00', fim:'19:00' };
-  _horarios['6'] = { ini:'09:00', fim:'14:00' };
-  _horarios['0'] = null;
+function aplicarPreset(tipo) {
+  if (tipo === 'semana') {
+    for (var d = 1; d <= 5; d++) _horarios[String(d)] = { ini:'09:00', fim:'18:00' };
+    _horarios['6'] = null; _horarios['0'] = null;
+  } else if (tipo === 'full') {
+    for (var d = 0; d <= 6; d++) _horarios[String(d)] = { ini:'09:00', fim:'18:00' };
+  } else {
+    for (var d = 1; d <= 5; d++) _horarios[String(d)] = { ini:'09:00', fim:'19:00' };
+    _horarios['6'] = { ini:'09:00', fim:'14:00' };
+    _horarios['0'] = null;
+  }
   renderDias();
   var s = document.getElementById('savingHora');
   if (s) { s.textContent = '⚡ Preset aplicado!'; setTimeout(function(){ s.textContent=''; }, 1500); }
@@ -889,6 +1004,13 @@ function renderPreviewFinal() {
         return '<div class="preview-svc-r"><span class="preview-svc-num">0' + (i+1) + '</span><span class="preview-svc-nm">' + s.nome + '</span>' + pr + '</div>';
       }).join('')
     : '<div class="preview-svc-r"><span class="preview-svc-nm" style="color:var(--stone-2);font-size:12px">Adicione serviços no painel →</span></div>';
+  /* WhatsApp share */
+  var link = location.origin + '/agendar.html?slug=' + (SLUG || '');
+  var texto = encodeURIComponent('Olá! Agora você pode agendar comigo pelo link: ' + link);
+  var btnWa = document.getElementById('btnWhatsapp');
+  if (btnWa) btnWa.href = 'https://wa.me/?text=' + texto;
+  /* QR */
+  setTimeout(gerarQR, 200);
 }
 
 /* ══ COPIAR LINK ══ */
@@ -915,6 +1037,50 @@ function mascaraTel(el) {
   el.value = v;
 }
 window.mascaraTel = mascaraTel;
+
+/* ══ PREVIEW AO VIVO ══ */
+function atualizarPreview() {
+  var nome = _salao ? (_salao.nome || 'Meu negócio') : 'Meu negócio';
+  var cat = _catSel ? (_catSel.label || '') : '';
+  var svcsHtml = _svcsAdicionados.length
+    ? _svcsAdicionados.slice(0, 4).map(function(s) {
+        var pr = s.preco > 0
+          ? '<span class="ob-pv-svc-price">' + (s.preco/100).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) + '</span>'
+          : '<span class="ob-pv-svc-price" style="color:var(--stone-2)">A combinar</span>';
+        return '<div class="ob-pv-svc"><span class="ob-pv-svc-name">' + s.nome + '</span>' + pr + '</div>';
+      }).join('')
+    : '<div class="ob-pv-empty">Selecione serviços →</div>';
+
+  ['pvName','pvNameM'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=nome;});
+  ['pvCat','pvCatM'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=cat;});
+  ['pvSvcs','pvSvcsM'].forEach(function(id){var el=document.getElementById(id);if(el)el.innerHTML=svcsHtml;});
+}
+
+/* ══ TOGGLE PREVIEW MOBILE ══ */
+var _pvMobileOpen = false;
+function togglePreviewMobile() {
+  _pvMobileOpen = !_pvMobileOpen;
+  var drawer = document.getElementById('pvMobileDrawer');
+  var icon = document.getElementById('pvToggleIcon');
+  if (drawer) drawer.classList.toggle('open', _pvMobileOpen);
+  if (icon) icon.textContent = _pvMobileOpen ? '↓' : '↑';
+  if (_pvMobileOpen) atualizarPreview();
+}
+window.togglePreviewMobile = togglePreviewMobile;
+
+/* ══ QR CODE FINAL ══ */
+var _qrGerado = false;
+function gerarQR() {
+  if (_qrGerado) return;
+  var canvas = document.getElementById('qrCanvas');
+  if (!canvas || !SLUG || typeof QRCode === 'undefined') return;
+  try {
+    canvas.innerHTML = '';
+    var link = location.origin + '/agendar.html?slug=' + SLUG;
+    new QRCode(canvas, { text: link, width: 160, height: 160, colorDark: '#0A0908', colorLight: '#F0EDE8', correctLevel: QRCode.CorrectLevel.M });
+    _qrGerado = true;
+  } catch(e) { console.warn('QR:', e); }
+}
 
 function irParaPainel() {
   if (SLUG) { try { sessionStorage.setItem('agenda_slug', SLUG); } catch(e) {} }
