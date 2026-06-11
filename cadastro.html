@@ -28,14 +28,8 @@
 html{-webkit-text-size-adjust:100%}
 body{background:var(--ink);color:var(--bone);font-family:var(--sans);min-height:100vh}
 
-/* ── NAV ── */
-nav{
-  background:rgba(10,9,8,.92);backdrop-filter:blur(14px);
-  border-bottom:1px solid var(--rule2);
-  padding:14px 20px;
-  display:flex;align-items:center;justify-content:space-between;
-  position:sticky;top:0;z-index:50;
-}
+/* NAV */
+nav{background:rgba(10,9,8,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--rule2);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
 .nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
 .nav-logo{width:28px;height:28px;border-radius:7px;display:block;flex-shrink:0}
 .nav-wordmark{font-family:var(--serif);font-style:italic;font-size:21px;font-weight:400;color:var(--bone);letter-spacing:-.01em}
@@ -43,55 +37,33 @@ nav{
 .nav-back{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--bone3);text-decoration:none;letter-spacing:.04em;transition:.2s}
 .nav-back:hover{color:var(--bone)}
 
-/* ── WRAP ── */
-.wrap{max-width:540px;margin:0 auto;padding:36px 20px 80px}
+/* WRAP */
+.wrap{max-width:480px;margin:0 auto;padding:36px 20px 80px}
 
-/* ── PROGRESS ── */
-.prog{display:flex;align-items:center;margin-bottom:44px}
-.prog-step{display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0}
-.prog-num{
-  width:30px;height:30px;border-radius:50%;
-  border:1px solid var(--rule2);background:transparent;
-  color:var(--bone3);font-family:var(--mono);font-size:12px;font-weight:600;
-  display:flex;align-items:center;justify-content:center;transition:.3s;
-}
-.prog-num.active{border-color:var(--brand);color:var(--brand);background:var(--brand-dim)}
-.prog-num.done{border-color:var(--green2);background:var(--green-bg);color:var(--green2)}
-.prog-lbl{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--bone3);transition:.3s}
-.prog-lbl.active{color:var(--brand)}
-.prog-lbl.done{color:var(--green2)}
-.prog-line{flex:1;height:1px;background:var(--rule2);margin:0 10px 18px;transition:.3s}
-.prog-line.done{background:var(--green2);opacity:.6}
+/* HEADER */
+.form-eyebrow{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--brand);margin-bottom:10px}
+.form-title{font-family:var(--serif);font-style:italic;font-size:40px;font-weight:400;color:var(--bone);line-height:1.1;margin-bottom:8px}
+.form-sub{font-size:13px;color:var(--bone3);line-height:1.65;margin-bottom:28px}
+.form-rule{width:100%;height:1px;background:var(--rule2);margin-bottom:24px}
 
-/* ── ETAPAS ── */
-.etapa{display:none}
-.etapa.show{display:block}
+/* PLANO INDICATOR */
+.plano-indicator{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--ink3);border:1px solid var(--rule2);border-radius:8px;margin-bottom:24px}
+.plano-indicator-label{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--bone3)}
+.plano-indicator-val{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--brand)}
+.plano-indicator-change{font-size:11px;color:var(--bone3);text-decoration:none;margin-left:auto}
+.plano-indicator-change:hover{color:var(--bone)}
 
-/* ── HEADINGS ── */
-.et-eyebrow{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--brand);margin-bottom:8px}
-.et-title{font-family:var(--serif);font-style:italic;font-size:36px;font-weight:400;color:var(--bone);line-height:1.15;margin-bottom:6px}
-.et-sub{font-size:13px;color:var(--bone3);line-height:1.65;margin-bottom:32px}
-.et-rule{width:100%;height:1px;background:var(--rule2);margin-bottom:28px}
-
-/* ── FORM ── */
+/* FORM */
 .fg{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
 .fl{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--bone3)}
-.fi{
-  background:var(--ink3);border:1px solid var(--rule2);border-radius:8px;
-  padding:13px 16px;font-family:var(--sans);font-size:15px;color:var(--bone);
-  width:100%;outline:none;transition:.2s;
-}
+.fi{background:var(--ink3);border:1px solid var(--rule2);border-radius:8px;padding:13px 16px;font-family:var(--sans);font-size:15px;color:var(--bone);width:100%;outline:none;transition:.2s}
 .fi:focus{border-color:var(--brand);background:var(--ink4);box-shadow:0 0 0 3px var(--brand-dim)}
 .fi::placeholder{color:var(--bone3);opacity:.5}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:420px){.two{grid-template-columns:1fr}}
 
-/* ── SLUG ── */
-.slug-wrap{
-  display:flex;align-items:center;
-  background:var(--ink3);border:1px solid var(--rule2);border-radius:8px;
-  overflow:hidden;transition:.2s;
-}
+/* SLUG */
+.slug-wrap{display:flex;align-items:center;background:var(--ink3);border:1px solid var(--rule2);border-radius:8px;overflow:hidden;transition:.2s}
 .slug-wrap:focus-within{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-dim)}
 .slug-pre{padding:13px 0 13px 14px;font-family:var(--mono);font-size:11px;color:var(--bone3);white-space:nowrap;flex-shrink:0}
 .fi.slug{border:none;border-radius:0;padding:13px 14px 13px 3px;background:transparent;box-shadow:none!important;font-family:var(--mono);font-size:13px;flex:1}
@@ -100,165 +72,37 @@ nav{
 .slug-err{color:#E05252}
 .slug-hint{font-family:var(--mono);font-size:10px;color:var(--bone3);margin-top:5px;line-height:1.5;opacity:.7}
 
-/* ── PASSWORD ── */
+/* PASSWORD */
 .pw-bars{display:flex;gap:4px;margin-top:6px}
 .pw-bar{height:2px;flex:1;border-radius:2px;background:var(--ink5);transition:.3s}
 .fi-wrap{position:relative}
 .fi-wrap .fi{padding-right:44px}
-.fi-eye{
-  position:absolute;right:12px;top:50%;transform:translateY(-50%);
-  background:none;border:none;cursor:pointer;color:var(--bone3);padding:4px;
-  display:flex;align-items:center;justify-content:center;line-height:1;
-  font-size:11px;font-weight:700;letter-spacing:.03em;transition:.15s;
-}
+.fi-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--bone3);padding:4px;display:flex;align-items:center;justify-content:center;line-height:1;font-size:11px;font-weight:700;letter-spacing:.03em;transition:.15s}
 .fi-eye:hover{color:var(--bone)}
 .pw-info{font-family:var(--mono);font-size:10px;color:var(--bone3);margin-top:5px;min-height:14px}
 
-/* ── TERMOS ── */
-.check-wrap{
-  display:flex;align-items:flex-start;gap:12px;
-  padding:14px 16px;background:var(--ink3);border:1px solid var(--rule2);
-  border-radius:8px;cursor:pointer;margin-bottom:24px;transition:.2s;
-}
+/* TERMOS */
+.check-wrap{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:var(--ink3);border:1px solid var(--rule2);border-radius:8px;cursor:pointer;margin-bottom:24px;transition:.2s}
 .check-wrap:hover{background:var(--ink4)}
-.check-box{
-  width:22px;height:22px;border-radius:5px;border:1px solid var(--rule3);
-  background:transparent;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-size:12px;transition:.2s;margin-top:1px;
-}
+.check-box{width:22px;height:22px;border-radius:5px;border:1px solid var(--rule3);background:transparent;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;transition:.2s;margin-top:1px}
 .check-box.ok{background:var(--brand);border-color:var(--brand);color:#fff}
 .check-txt{font-size:13px;color:var(--bone2);line-height:1.6;flex:1}
 .check-txt a{color:var(--brand);text-decoration:none;font-weight:600}
 
-/* ── ERRORS ── */
-.err-box{
-  background:var(--red-bg);border:1px solid rgba(192,57,43,.25);border-radius:8px;
-  padding:12px 16px;font-size:13px;font-weight:600;color:#E05252;
-  margin-bottom:16px;display:none;
-}
+/* ERRORS */
+.err-box{background:var(--red-bg);border:1px solid rgba(192,57,43,.25);border-radius:8px;padding:12px 16px;font-size:13px;font-weight:600;color:#E05252;margin-bottom:16px;display:none}
 .err-box.show{display:block}
 
-/* ── BUTTONS ── */
-.btn-main{
-  width:100%;padding:16px;
-  background:var(--brand);color:#fff;border:none;border-radius:8px;
-  font-family:var(--sans);font-size:15px;font-weight:700;cursor:pointer;
-  transition:.2s;box-shadow:0 4px 20px var(--brand-glow);margin-bottom:10px;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-}
+/* BUTTONS */
+.btn-main{width:100%;padding:16px;background:var(--brand);color:#fff;border:none;border-radius:8px;font-family:var(--sans);font-size:15px;font-weight:700;cursor:pointer;transition:.2s;box-shadow:0 4px 20px var(--brand-glow);margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:8px;font-style:normal}
 .btn-main:hover{filter:brightness(1.08);transform:translateY(-1px)}
 .btn-main:disabled{opacity:.4;cursor:not-allowed;transform:none;filter:none}
-.btn-ghost{
-  width:100%;padding:14px;background:transparent;color:var(--bone3);
-  border:1px solid var(--rule2);border-radius:8px;
-  font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer;transition:.2s;
-}
-.btn-ghost:hover{border-color:var(--rule3);color:var(--bone);background:var(--ink3)}
+.login-link{text-align:center;font-size:12px;color:var(--bone3);margin-top:12px}
+.login-link a{color:var(--brand);text-decoration:none;font-weight:600}
 
-/* ── PLANO CARDS ── */
-.planos-list{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
-.plano-card{
-  background:var(--ink3);border:1px solid var(--rule2);border-radius:10px;
-  padding:18px 16px;cursor:pointer;transition:.2s;
-  display:flex;align-items:flex-start;gap:14px;position:relative;
-}
-.plano-card:hover{background:var(--ink4)}
-.plano-card.sel{border-color:var(--brand);background:linear-gradient(135deg,var(--ink3),rgba(229,90,12,.06))}
-.plano-card.popular:not(.sel){border-color:rgba(229,90,12,.3)}
-.plano-radio{
-  width:20px;height:20px;border-radius:50%;border:1.5px solid var(--rule2);
-  flex-shrink:0;margin-top:3px;transition:.2s;position:relative;
-}
-.plano-card.sel .plano-radio{border-color:var(--brand);background:var(--brand)}
-.plano-card.sel .plano-radio::after{
-  content:'';position:absolute;
-  width:7px;height:7px;border-radius:50%;background:#fff;
-  top:50%;left:50%;transform:translate(-50%,-50%);
-}
-.plano-body{flex:1;min-width:0}
-.plano-head{display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap}
-.plano-nome{font-family:var(--serif);font-style:italic;font-size:22px;font-weight:400;color:var(--bone);line-height:1}
-.plano-badge{
-  font-family:var(--mono);font-size:9px;font-weight:600;
-  letter-spacing:.08em;text-transform:uppercase;
-  color:var(--brand);background:var(--brand-dim);
-  padding:2px 8px;border-radius:20px;
-}
-.plano-preco{font-family:var(--mono);font-size:20px;font-weight:600;color:var(--bone);margin-bottom:8px}
-.plano-preco span{font-size:12px;color:var(--bone3);font-weight:400}
-.plano-feats{font-size:12px;color:var(--bone3);line-height:1.75}
-.plano-trial{
-  display:inline-block;
-  font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.06em;
-  color:var(--green2);background:var(--green-bg);border:1px solid var(--green-rule);
-  padding:3px 10px;border-radius:20px;margin-top:8px;
-}
-
-/* ── SUCCESS ── */
-.success-hero{text-align:center;padding:8px 0 28px}
-.success-check{
-  width:64px;height:64px;border-radius:50%;
-  background:var(--green-bg);border:1px solid var(--green-rule);
-  display:flex;align-items:center;justify-content:center;
-  font-size:28px;margin:0 auto 20px;
-}
-.success-title{font-family:var(--serif);font-style:italic;font-size:38px;font-weight:400;color:var(--bone);margin-bottom:8px}
-.success-sub{font-size:14px;color:var(--bone3);line-height:1.7;margin-bottom:0}
-
-.link-block{
-  background:var(--ink3);border:1px solid var(--green-rule);border-radius:10px;
-  padding:18px;margin-bottom:16px;
-}
-.link-block-eyebrow{
-  font-family:var(--mono);font-size:9px;font-weight:600;
-  letter-spacing:.1em;text-transform:uppercase;color:var(--green2);margin-bottom:10px;
-}
-.link-display{
-  display:flex;align-items:center;gap:10px;
-  background:rgba(0,0,0,.3);border-radius:7px;padding:11px 14px;
-}
-.link-url{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--green2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
-.btn-copy{
-  background:var(--green);color:#fff;border:none;
-  padding:7px 14px;border-radius:6px;
-  font-family:var(--mono);font-size:11px;font-weight:600;cursor:pointer;
-  flex-shrink:0;transition:.2s;
-}
-.btn-copy:hover{filter:brightness(1.15)}
-.link-desc{font-size:12px;color:var(--bone3);line-height:1.65;margin-top:10px}
-
-.creds-block{background:var(--ink3);border:1px solid var(--rule2);border-radius:10px;padding:16px;margin-bottom:20px}
-.creds-eyebrow{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--bone3);margin-bottom:12px}
-.cred-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--rule);font-size:13px}
-.cred-row:last-child{border-bottom:none}
-.cred-lbl{font-family:var(--sans);color:var(--bone3);font-size:12px}
-.cred-val{font-family:var(--mono);color:var(--bone);font-size:12px;font-weight:600;word-break:break-all;text-align:right;max-width:60%}
-.creds-hint{font-size:12px;color:var(--bone3);margin-top:12px;line-height:1.55}
-
-.painel-block{background:linear-gradient(135deg,rgba(229,90,12,0.09),rgba(229,90,12,0.04));border:1.5px solid rgba(229,90,12,0.38);border-radius:12px;padding:20px 18px;margin-bottom:16px}
-.painel-block-eyebrow{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--brand);margin-bottom:8px}
-.painel-block-desc{font-size:13px;color:var(--bone2);line-height:1.55;margin-bottom:12px}
-.painel-url-row{background:rgba(0,0,0,.3);border-radius:7px;padding:11px 14px;margin-bottom:0}
-.painel-url-row .link-url{color:var(--brand)}
-.next-steps{margin-bottom:24px;border-top:1px solid var(--rule2)}
-.next-step{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--rule)}
-.ns-num{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--brand);flex-shrink:0;margin-top:2px;min-width:22px}
-.ns-txt{font-size:13px;color:var(--bone2);line-height:1.6}
-.ns-txt strong{color:var(--bone);font-weight:700}
-
-/* ── LEGAL OVERLAY ── */
-.legal-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.7);
-  backdrop-filter:blur(4px);z-index:200;
-  display:flex;align-items:flex-end;justify-content:center;padding:0;
-}
-.legal-modal{
-  background:var(--ink2);width:100%;max-width:560px;
-  border-radius:16px 16px 0 0;max-height:80vh;
-  display:flex;flex-direction:column;
-  box-shadow:0 -8px 40px rgba(0,0,0,.4);animation:slideUp .3s ease;
-}
+/* LEGAL OVERLAY */
+.legal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:200;display:flex;align-items:flex-end;justify-content:center;padding:0}
+.legal-modal{background:var(--ink2);width:100%;max-width:560px;border-radius:16px 16px 0 0;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 -8px 40px rgba(0,0,0,.4);animation:slideUp .3s ease}
 @keyframes slideUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
 .legal-hdr{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 14px;border-bottom:1px solid var(--rule2)}
 .legal-title{font-family:var(--serif);font-style:italic;font-size:18px;font-weight:400;color:var(--bone)}
@@ -269,16 +113,8 @@ nav{
 .legal-body h3{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--bone3);margin:16px 0 6px;font-weight:600}
 .legal-body p{font-size:13px;color:var(--bone3);line-height:1.65;margin-bottom:8px}
 .legal-body strong{color:var(--bone2);font-weight:600}
-@media(min-width:480px){
-  .legal-overlay{align-items:center;padding:20px}
-  .legal-modal{border-radius:16px;max-height:85vh}
-}
-
-@media(min-width:600px){
-  .wrap{padding:44px 24px 80px}
-  .et-title{font-size:42px}
-  .success-title{font-size:44px}
-}
+@media(min-width:480px){.legal-overlay{align-items:center;padding:20px}.legal-modal{border-radius:16px;max-height:85vh}}
+@media(min-width:600px){.wrap{padding:44px 24px 80px}.form-title{font-size:48px}}
 </style>
 </head>
 <body>
@@ -292,182 +128,67 @@ nav{
 </nav>
 
 <div class="wrap">
+  <div class="form-eyebrow">14 dias grátis · Sem cartão</div>
+  <h1 class="form-title">Crie sua<br>página agora.</h1>
+  <p class="form-sub">Preencha abaixo. Em 3 minutos você já tem um link para compartilhar.</p>
+  <div class="form-rule"></div>
 
-  <!-- PROGRESS -->
-  <div class="prog">
-    <div class="prog-step"><div class="prog-num active" id="dot1">01</div><div class="prog-lbl active" id="lbl1">Plano</div></div>
-    <div class="prog-line" id="line1"></div>
-    <div class="prog-step"><div class="prog-num" id="dot2">02</div><div class="prog-lbl" id="lbl2">Dados</div></div>
-    <div class="prog-line" id="line2"></div>
-    <div class="prog-step"><div class="prog-num" id="dot3">03</div><div class="prog-lbl" id="lbl3">Pronto</div></div>
+  <!-- Plano selecionado (vindo da landing) -->
+  <div class="plano-indicator" id="planoIndicator">
+    <span class="plano-indicator-label">Plano</span>
+    <span class="plano-indicator-val" id="planoIndicatorVal">Equipe</span>
+    <a href="/index.html#planos" class="plano-indicator-change">trocar →</a>
   </div>
 
-  <!-- ════════════════════════════ ETAPA 1: PLANO ════════════════════════════ -->
-  <div class="etapa show" id="etapa1">
-    <div class="et-eyebrow">Etapa 01</div>
-    <div class="et-title">Escolha seu plano.</div>
-    <div class="et-sub">Todos com 14 dias grátis. Cancele quando quiser, sem burocracia.</div>
-    <div class="et-rule"></div>
+  <div class="fg">
+    <label class="fl">Nome do negócio ou profissional *</label>
+    <input class="fi" type="text" id="fNome" placeholder="Ex: Barbearia Silva, Dra. Ana Costa" maxlength="80" autocomplete="organization">
+  </div>
 
-    <div class="planos-list">
+  <div class="fg">
+    <label class="fl">Seu nome <span style="opacity:.5;font-size:9px">— opcional</span></label>
+    <input class="fi" type="text" id="fResponsavel" placeholder="Ex: Carlos Silva" maxlength="80" autocomplete="name">
+  </div>
 
-      <!-- SOLO -->
-      <div class="plano-card" id="card-basico" onclick="selPlano('basico')">
-        <div class="plano-radio" id="rad-basico"></div>
-        <div class="plano-body">
-          <div class="plano-head">
-            <div class="plano-nome">Solo</div>
-          </div>
-          <div class="plano-preco">R$35<span>/mês</span></div>
-          <div class="plano-feats">
-            Agendamentos ilimitados · 1 profissional · até 5 serviços<br>
-            Agenda 24h · link personalizado · confirmação por email
-          </div>
-          <div class="plano-trial">✓ 14 dias grátis</div>
-        </div>
-      </div>
-
-      <!-- EQUIPE (popular) -->
-      <div class="plano-card popular" id="card-pro" onclick="selPlano('pro')">
-        <div class="plano-radio" id="rad-pro"></div>
-        <div class="plano-body">
-          <div class="plano-head">
-            <div class="plano-nome">Equipe</div>
-            <div class="plano-badge">Mais popular</div>
-          </div>
-          <div class="plano-preco">R$70<span>/mês</span></div>
-          <div class="plano-feats">
-            Agendamentos ilimitados · até 3 profissionais · serviços ilimitados<br>
-            5 temas visuais · relatórios financeiros · gestão de equipe<br>
-            campanhas de reengajamento
-          </div>
-          <div class="plano-trial">✓ 14 dias grátis</div>
-        </div>
-      </div>
-
-      <!-- NEGÓCIO -->
-      <div class="plano-card" id="card-salao" onclick="selPlano('salao')">
-        <div class="plano-radio" id="rad-salao"></div>
-        <div class="plano-body">
-          <div class="plano-head">
-            <div class="plano-nome">Negócio</div>
-          </div>
-          <div class="plano-preco">R$140<span>/mês</span></div>
-          <div class="plano-feats">
-            Agendamentos ilimitados · profissionais ilimitados · serviços ilimitados<br>
-            5 temas · relatórios · campanhas · analytics avançado · suporte prioritário
-          </div>
-          <div class="plano-trial">✓ 14 dias grátis</div>
-        </div>
-      </div>
-
+  <div class="fg">
+    <label class="fl">Seu link personalizado *</label>
+    <div class="slug-wrap">
+      <span class="slug-pre">agendatop.vercel.app/</span>
+      <input class="fi slug" type="text" id="fSlug" placeholder="nome-do-negocio" maxlength="40" autocomplete="off" autocorrect="off" spellcheck="false">
     </div>
-
-    <div id="errPlano" class="err-box">Selecione um plano para continuar.</div>
-    <button class="btn-main" onclick="nextEtapa1()">Avançar →</button>
+    <div class="slug-st" id="slugSt"></div>
+    <div class="slug-hint">Este é o link que você compartilha com seus clientes.</div>
   </div>
 
-  <!-- ════════════════════════════ ETAPA 2: DADOS ════════════════════════════ -->
-  <div class="etapa" id="etapa2">
-    <div class="et-eyebrow">Etapa 02</div>
-    <div class="et-title">Seus dados.</div>
-    <div class="et-sub">Quase lá. Preencha para criar seu perfil e começar a receber agendamentos.</div>
-    <div class="et-rule"></div>
-
+  <div class="two">
     <div class="fg">
-      <label class="fl">Nome do estabelecimento ou profissional *</label>
-      <input class="fi" type="text" id="fNome" placeholder="Ex: Barbearia Silva, Dra. Ana Costa" maxlength="80">
+      <label class="fl">WhatsApp *</label>
+      <input class="fi" type="tel" id="fTel" placeholder="(11) 99999-9999" maxlength="20" autocomplete="tel">
     </div>
-
-    <div class="two">
-      <div class="fg">
-        <label class="fl">WhatsApp *</label>
-        <input class="fi" type="tel" id="fTel" placeholder="(11) 99999-9999" maxlength="20">
-      </div>
-      <div class="fg">
-        <label class="fl">E-mail *</label>
-        <input class="fi" type="email" id="fEmail" placeholder="seu@email.com" maxlength="80">
-      </div>
-    </div>
-
     <div class="fg">
-      <label class="fl">Cidade / Bairro <span style="opacity:.5;font-size:9px"> — opcional</span></label>
-      <input class="fi" type="text" id="fCidade" placeholder="Vila Nova — SP" maxlength="80">
+      <label class="fl">E-mail *</label>
+      <input class="fi" type="email" id="fEmail" placeholder="seu@email.com" maxlength="80" autocomplete="email">
     </div>
-
-    <div class="fg">
-      <label class="fl">Seu link personalizado *</label>
-      <div class="slug-wrap">
-        <span class="slug-pre">agendatop.vercel.app/</span>
-        <input class="fi slug" type="text" id="fSlug" placeholder="nome-do-salao" maxlength="40" oninput="verificarSlug()" autocomplete="off" autocorrect="off" spellcheck="false">
-      </div>
-      <div class="slug-st" id="slugSt"></div>
-      <div class="slug-hint">Este é o link que você compartilha com seus clientes.</div>
-    </div>
-
-    <div class="two">
-      <div class="fg">
-        <label class="fl">Criar senha *</label>
-        <div class="fi-wrap">
-          <input class="fi" type="password" id="fSenha" placeholder="Mínimo 6 caracteres" maxlength="50" oninput="avaliarSenha()">
-          <button type="button" class="fi-eye" id="btnOlho" onclick="toggleSenha()" aria-label="Mostrar/ocultar senha">Ver</button>
-        </div>
-        <div class="pw-bars"><div class="pw-bar" id="pwb1"></div><div class="pw-bar" id="pwb2"></div><div class="pw-bar" id="pwb3"></div></div>
-        <div class="pw-info" id="pwInfo">Crie uma senha para acessar seu painel</div>
-      </div>
-      <div class="fg">
-        <label class="fl">Confirmar senha *</label>
-        <input class="fi" type="password" id="fSenha2" placeholder="Repita a senha" maxlength="50">
-      </div>
-    </div>
-
-    <div class="check-wrap" onclick="toggleTermos()">
-      <div class="check-box" id="checkBox"></div>
-      <div class="check-txt">Li e aceito os <a href="#" onclick="event.stopPropagation();abrirLegal('termos')">Termos de Uso</a> e a <a href="#" onclick="event.stopPropagation();abrirLegal('privacidade')">Política de Privacidade</a>.</div>
-    </div>
-
-    <div id="errCad" class="err-box"></div>
-    <button class="btn-main" id="btnCad" onclick="cadastrar()">📅 Criar minha página grátis</button>
-    <button class="btn-ghost" onclick="irEtapa(1)">← Voltar</button>
   </div>
 
-  <!-- ════════════════════════════ ETAPA 3: SUCESSO ════════════════════════════ -->
-  <div class="etapa" id="etapa3">
-    <div class="success-hero">
-      <div class="success-check">✓</div>
-      <div class="success-title">Tudo pronto!</div>
-      <div class="success-sub" id="sucSub">Sua conta está ativa com 14 dias grátis.</div>
+  <div class="fg">
+    <label class="fl">Criar senha *</label>
+    <div class="fi-wrap">
+      <input class="fi" type="password" id="fSenha" placeholder="Mínimo 6 caracteres" maxlength="50" autocomplete="new-password">
+      <button type="button" class="fi-eye" id="btnOlho" onclick="toggleSenha()">Ver</button>
     </div>
-
-    <!-- Credenciais + painel visível -->
-    <div class="painel-block">
-      <div class="painel-block-eyebrow">🖥️ Seu painel de controle</div>
-      <div class="painel-url-row">
-        <div class="link-url" id="sucPainelLink"></div>
-      </div>
-      <div class="cred-row" style="border-bottom:none;padding:10px 0 0">
-        <span class="cred-lbl" style="color:var(--bone3)">E-mail</span>
-        <span class="cred-val" id="credEmail"></span>
-      </div>
-      <div style="font-size:11px;color:rgba(229,90,12,0.6);margin-top:6px">Use seu e-mail e a senha criada para acessar o painel.</div>
-    </div>
-
-    <!-- Link dos clientes -->
-    <div class="link-block">
-      <div class="link-block-eyebrow">📲 Link para seus clientes agendarem</div>
-      <div class="link-display">
-        <div class="link-url" id="sucLink"></div>
-        <button class="btn-copy" id="btnCopiarLink" onclick="copiarLink()">Copiar</button>
-      </div>
-      <div class="link-desc">Compartilhe no Instagram, WhatsApp e onde quiser. Seus clientes clicam e agendam diretamente.</div>
-    </div>
-
-    <button class="btn-main" onclick="irOnboarding()">
-      <span>Configurar minha página agora</span><span>→</span>
-    </button>
-    <button class="btn-ghost" onclick="irGerenciar()" style="margin-top:8px;font-size:13px">Ir direto para o painel</button>
+    <div class="pw-bars"><div class="pw-bar" id="pwb1"></div><div class="pw-bar" id="pwb2"></div><div class="pw-bar" id="pwb3"></div></div>
+    <div class="pw-info" id="pwInfo">Crie uma senha para acessar seu painel</div>
   </div>
 
+  <div class="check-wrap" onclick="toggleTermos()">
+    <div class="check-box" id="checkBox"></div>
+    <div class="check-txt">Li e aceito os <a href="#" onclick="event.stopPropagation();abrirLegal('termos')">Termos de Uso</a> e a <a href="#" onclick="event.stopPropagation();abrirLegal('privacidade')">Política de Privacidade</a>.</div>
+  </div>
+
+  <div id="errCad" class="err-box"></div>
+  <button class="btn-main" id="btnCad" onclick="cadastrar()">Criar minha página grátis →</button>
+  <div class="login-link">Já tem conta? <a href="/painel.html">Entrar →</a></div>
 </div>
 
 <!-- MODAL TERMOS -->
@@ -557,54 +278,63 @@ async function sbFetch(path,opts){
   return{ok:r.ok,status:r.status,data:d};
 }
 
-var planoSel=null;
 var aceitouTermos=false;
 var slugValido=false;
+var slugManual=false;
 
-// Pré-seleciona plano pela URL
-(function(){
-  var p=new URLSearchParams(location.search).get('plano');
-  if(p&&['basico','pro','salao'].includes(p)) selPlano(p);
-})();
+// Lê params da URL
+var _params=new URLSearchParams(location.search);
+var _plano=_params.get('plano')||'pro';
+var _ciclo=_params.get('ciclo')||'mensal';
+var _slug=_params.get('slug')||'';
+if(!['basico','pro','salao'].includes(_plano)) _plano='pro';
 
-// ── STEPPER ──
-function irEtapa(n){
-  document.querySelectorAll('.etapa').forEach(function(e){e.classList.remove('show');});
-  document.getElementById('etapa'+n).classList.add('show');
-  [1,2,3].forEach(function(i){
-    var dot=document.getElementById('dot'+i);
-    var lbl=document.getElementById('lbl'+i);
-    dot.classList.remove('active','done');
-    lbl.classList.remove('active','done');
-    if(i<n){dot.classList.add('done');lbl.classList.add('done');}
-    if(i===n){dot.classList.add('active');lbl.classList.add('active');}
-    if(i<3){
-      document.getElementById('line'+i).classList.toggle('done',i<n);
+// Mostra plano selecionado
+var _nomesPlano={basico:'Solo',pro:'Equipe',salao:'Negócio'};
+document.getElementById('planoIndicatorVal').textContent=_nomesPlano[_plano];
+
+// Pré-preenche slug da landing
+if(_slug){
+  document.getElementById('fSlug').value=_slug;
+  slugManual=true;
+  setTimeout(verificarSlug,300);
+}
+
+// Nome → slug auto
+document.getElementById('fNome').addEventListener('input',function(){
+  if(!slugManual){
+    var slug=nomeToSlug(this.value);
+    document.getElementById('fSlug').value=slug;
+    clearTimeout(_slugTimer);
+    if(slug.length>=3){
+      document.getElementById('slugSt').textContent='...';
+      document.getElementById('slugSt').className='slug-st';
+      _slugTimer=setTimeout(function(){checkSlugDisp(slug);},400);
+    } else {
+      document.getElementById('slugSt').textContent='';
+      slugValido=false;
     }
-  });
-  window.scrollTo({top:0,behavior:'smooth'});
+  }
+});
+
+// Slug manual
+document.getElementById('fSlug').addEventListener('input',function(){
+  slugManual=true;
+  verificarSlug();
+});
+document.getElementById('fSlug').addEventListener('focus',function(){
+  slugManual=true;
+});
+
+function nomeToSlug(v){
+  return v.toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g,'')
+    .replace(/[^a-z0-9]+/g,'-')
+    .replace(/^-|-$/g,'')
+    .slice(0,40);
 }
 
-// ── PLANO ──
-function selPlano(p){
-  planoSel=p;
-  ['basico','pro','salao'].forEach(function(id){
-    var card=document.getElementById('card-'+id);
-    var isSel=id===p;
-    card.classList.toggle('sel',isSel);
-  });
-  document.getElementById('errPlano').classList.remove('show');
-}
-
-function nextEtapa1(){
-  var errEl=document.getElementById('errPlano');
-  if(!planoSel){errEl.classList.add('show');return;}
-  errEl.classList.remove('show');
-  irEtapa(2);
-}
-
-// ── SLUG ──
-var slugTimer=null;
+var _slugTimer=null;
 function verificarSlug(){
   var val=document.getElementById('fSlug').value.trim().toLowerCase().replace(/[^a-z0-9-]/g,'');
   document.getElementById('fSlug').value=val;
@@ -612,26 +342,32 @@ function verificarSlug(){
   slugValido=false;
   if(val.length<3){el.textContent='';el.className='slug-st';return;}
   el.textContent='Verificando...';el.className='slug-st';
-  clearTimeout(slugTimer);
-  slugTimer=setTimeout(async function(){
-    var res=await sbFetch('/rest/v1/saloes?slug=eq.'+val+'&select=id');
-    if(!res.ok){el.textContent='Erro ao verificar.';el.className='slug-st slug-err';return;}
-    var taken=Array.isArray(res.data)&&res.data.length>0;
-    if(taken){el.textContent='❌ Esse link já está em uso.';el.className='slug-st slug-err';}
-    else{el.textContent='✓ Disponível!';el.className='slug-st slug-ok';slugValido=true;}
-  },600);
+  clearTimeout(_slugTimer);
+  _slugTimer=setTimeout(function(){checkSlugDisp(val);},500);
 }
 
-// ── SENHA ──
+async function checkSlugDisp(slug){
+  var el=document.getElementById('slugSt');
+  try{
+    var r=await fetch(SUPA_URL+'/rest/v1/rpc/slug_disponivel',{
+      method:'POST',headers:SBH,
+      body:JSON.stringify({p_slug:slug})
+    });
+    var ok=await r.json();
+    if(ok===true){el.textContent='✓ Disponível!';el.className='slug-st slug-ok';slugValido=true;}
+    else{el.textContent='❌ Esse link já está em uso.';el.className='slug-st slug-err';slugValido=false;}
+  }catch(e){el.textContent='';el.className='slug-st';}
+}
+
+// Senha
 function toggleSenha(){
   var inp=document.getElementById('fSenha');
   var btn=document.getElementById('btnOlho');
   if(inp.type==='password'){inp.type='text';btn.textContent='Ocultar';}
   else{inp.type='password';btn.textContent='Ver';}
 }
-
-function avaliarSenha(){
-  var v=document.getElementById('fSenha').value;
+document.getElementById('fSenha').addEventListener('input',function(){
+  var v=this.value;
   var f=sforca(v);
   var cores=['','#C0392B','#D4AC0D','#2D6A4F'];
   ['pwb1','pwb2','pwb3'].forEach(function(id,i){
@@ -639,16 +375,10 @@ function avaliarSenha(){
   });
   var msgs=['','Fraca','Média — adicione números','Forte ✓'];
   document.getElementById('pwInfo').textContent=v.length>0?msgs[f]:'Crie uma senha para acessar seu painel';
-}
-function sforca(v){
-  var s=0;
-  if(v.length>=6)s++;
-  if(/[0-9]/.test(v))s++;
-  if(/[^a-zA-Z0-9]/.test(v)||v.length>=10)s++;
-  return s;
-}
+});
+function sforca(v){var s=0;if(v.length>=6)s++;if(/[0-9]/.test(v))s++;if(/[^a-zA-Z0-9]/.test(v)||v.length>=10)s++;return s;}
 
-// ── TERMOS ──
+// Termos
 function toggleTermos(){
   aceitouTermos=!aceitouTermos;
   var box=document.getElementById('checkBox');
@@ -656,38 +386,36 @@ function toggleTermos(){
   box.textContent=aceitouTermos?'✓':'';
 }
 
-// ── CADASTRAR ──
+// Cadastrar
 async function cadastrar(){
   var fNome=(document.getElementById('fNome').value||'').trim();
+  var fResp=(document.getElementById('fResponsavel').value||'').trim();
   var fTel=(document.getElementById('fTel').value||'').trim();
   var fEmail=(document.getElementById('fEmail').value||'').trim().toLowerCase();
-  var fCidade=(document.getElementById('fCidade').value||'').trim();
   var fSlug=(document.getElementById('fSlug').value||'').trim().toLowerCase();
   var fSenha=document.getElementById('fSenha').value;
-  var fSenha2=document.getElementById('fSenha2').value;
   var errEl=document.getElementById('errCad');
   var btn=document.getElementById('btnCad');
 
-  function erro(msg){errEl.textContent=msg;errEl.classList.add('show');btn.disabled=false;btn.textContent='📅 Criar minha página grátis';}
+  function erro(msg){errEl.textContent=msg;errEl.classList.add('show');btn.disabled=false;btn.textContent='Criar minha página grátis →';}
 
   errEl.classList.remove('show');
-  if(!fNome||fNome.length<2) return erro('Informe o nome do seu estabelecimento ou profissional.');
+  if(!fNome||fNome.length<2) return erro('Informe o nome do seu negócio ou profissional.');
+  if(fSlug.length<3) return erro('O link precisa ter pelo menos 3 caracteres.');
+  if(!slugValido) return erro('Verifique o link personalizado — ele precisa estar disponível.');
   if(!fTel||fTel.replace(/\D/g,'').length<10) return erro('WhatsApp inválido. Verifique o número.');
   if(!fEmail||!fEmail.includes('@')) return erro('E-mail inválido.');
-  if(fSlug.length<3) return erro('Link muito curto — mínimo 3 caracteres.');
-  if(!slugValido) return erro('Verifique o link personalizado — ele precisa estar disponível.');
   if(fSenha.length<6) return erro('Senha deve ter pelo menos 6 caracteres.');
-  if(fSenha!==fSenha2) return erro('Senhas não conferem.');
   if(!aceitouTermos) return erro('Você precisa aceitar os Termos de Uso para continuar.');
 
   btn.disabled=true;
   btn.textContent='⏳ Criando sua página...';
 
   try{
-    var ck=await sbFetch('/rest/v1/saloes?or=(email.eq.'+encodeURIComponent(fEmail)+',slug.eq.'+fSlug+')&select=email,slug&limit=1');
+    var ck=await sbFetch('/rest/v1/saloes?select=email,slug&or=(email.eq.'+encodeURIComponent(fEmail)+',slug.eq.'+fSlug+')&limit=1');
     if(ck.ok&&ck.data&&ck.data.length>0){
       var dp=ck.data[0];
-      if(dp.email===fEmail) return erro('Esse e-mail já possui uma conta. Acesse o painel normalmente.');
+      if(dp.email===fEmail) return erro('Esse e-mail já tem uma conta. Acesse o painel normalmente.');
       if(dp.slug===fSlug) return erro('Esse link já está em uso. Escolha outro nome.');
     }
   }catch(e){}
@@ -696,8 +424,8 @@ async function cadastrar(){
     method:'POST',
     body:JSON.stringify({
       p_slug:fSlug,p_nome:fNome,p_email:fEmail,
-      p_telefone:fTel,p_cidade:fCidade||null,
-      p_plano:planoSel||'basico',p_senha:fSenha,p_aceite:true
+      p_telefone:fTel.replace(/\D/g,''),p_cidade:null,
+      p_plano:_plano,p_senha:fSenha,p_aceite:true
     })
   });
 
@@ -706,61 +434,15 @@ async function cadastrar(){
     return erro(msg);
   }
 
-  // Sucesso
-  var link='https://agendatop.vercel.app/agendar.html?slug='+fSlug;
-  var painelLink='https://agendatop.vercel.app/painel.html?slug='+fSlug;
-  document.getElementById('sucLink').textContent=link;
-  document.getElementById('sucPainelLink').textContent=painelLink;
-  document.getElementById('sucSub').textContent='Bem-vindo(a), '+fNome+'! Sua conta está ativa com 14 dias grátis.';
-  document.getElementById('credEmail').textContent=fEmail;
+  try{
+    localStorage.setItem('cortai_novo_slug',fSlug);
+    if(fResp) localStorage.setItem('cortai_novo_responsavel',fResp);
+  }catch(e){}
 
-  try{localStorage.setItem('cortai_novo_slug',fSlug);}catch(e){}
-
-  irEtapa(3);
+  window.location.href='/onboarding.html?slug='+encodeURIComponent(fSlug);
 }
 
-function irOnboarding(){
-  var slug='';
-  try{slug=localStorage.getItem('cortai_novo_slug')||'';}catch(e){}
-  window.location.href='/onboarding.html'+(slug?'?slug='+slug:'');
-}
-
-function irGerenciar(){
-  var slug='';
-  try{slug=localStorage.getItem('cortai_novo_slug')||'';}catch(e){}
-  try{localStorage.removeItem('cortai_novo_slug');}catch(e){}
-  try{localStorage.removeItem('cortai_painel_v4');}catch(e){}
-  try{localStorage.removeItem('cortai_painel_tema');}catch(e){}
-  window.location.href='/painel.html'+(slug?'?slug='+slug:'');
-}
-
-function verPagina(){
-  var slug=(document.getElementById('fSlug')||{}).value||'';
-  try{slug=slug||localStorage.getItem('cortai_novo_slug')||'';}catch(e){}
-  if(slug) window.open('/agendar.html?slug='+slug,'_blank');
-}
-
-function copiarLink(){
-  var link=document.getElementById('sucLink').textContent.trim();
-  if(!link) return;
-  if(navigator.clipboard&&navigator.clipboard.writeText){
-    navigator.clipboard.writeText(link).then(function(){
-      var btn=document.getElementById('btnCopiarLink');
-      btn.textContent='✓ Copiado!';
-      setTimeout(function(){btn.textContent='Copiar';},2000);
-    });
-  } else {
-    var ta=document.createElement('textarea');
-    ta.value=link;ta.style.position='fixed';ta.style.opacity='0';
-    document.body.appendChild(ta);ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    var btn=document.getElementById('btnCopiarLink');
-    btn.textContent='✓ Copiado!';
-    setTimeout(function(){btn.textContent='Copiar';},2000);
-  }
-}
-
+// Legal modals
 function abrirLegal(tipo){
   var id='ov'+tipo.charAt(0).toUpperCase()+tipo.slice(1);
   var el=document.getElementById(id);
