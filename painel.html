@@ -3197,6 +3197,12 @@
         </a>
         <div class="topbar-name" id="hdrNome">Carregando…</div>
         <div class="topbar-actions">
+          <button class="topbar-link-btn" id="btnShare" onclick="abrirShare()" title="Compartilhar meu link" style="margin-right:4px">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+            </svg>
+          </button>
           <a class="topbar-link-btn" id="btnVerPag" href="#" target="_blank" title="Ver página pública" rel="noopener">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
               stroke-linecap="round">
@@ -3481,9 +3487,33 @@
     </div>
   </div>
 
+  <!-- SHARE MODAL -->
+  <div class="overlay" id="ovShare" style="display:none" onclick="if(event.target===this)fecharShare()">
+    <div class="modal" style="max-width:380px">
+      <div class="mhdr">
+        <h3>Compartilhar minha página</h3>
+        <button class="mclose" onclick="fecharShare()">✕</button>
+      </div>
+      <div style="padding:16px">
+        <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text-3,#888);margin-bottom:8px">Seu link</div>
+        <div style="display:flex;align-items:center;gap:8px;background:var(--bg-2,rgba(255,255,255,.05));border:1px solid var(--rule,rgba(255,255,255,.08));border-radius:8px;padding:10px 14px;margin-bottom:16px">
+          <div id="shareLinkTxt" style="font-family:monospace;font-size:12px;color:var(--L,#E55A0C);word-break:break-all;flex:1"></div>
+          <button onclick="copiarShareLink()" style="padding:6px 12px;background:var(--L,#E55A0C);color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;flex-shrink:0" id="btnCopyShare">Copiar</button>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:20px">
+          <a id="shareWaLink" href="#" target="_blank" rel="noopener" style="flex:1;padding:10px;background:#25D366;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px">WhatsApp</a>
+          <a id="shareVerLink" href="#" target="_blank" rel="noopener" style="flex:1;padding:10px;background:rgba(255,255,255,.06);color:var(--text-1,#f0f0f0);border:1px solid var(--rule,rgba(255,255,255,.1));border-radius:8px;font-size:13px;font-weight:700;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center">Ver página</a>
+        </div>
+        <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text-3,#888);margin-bottom:10px;text-align:center">QR Code</div>
+        <div id="shareQR" style="display:flex;justify-content:center;padding:8px;background:#fff;border-radius:8px"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- ──────────────────────────────────────
      SCRIPTS
 ────────────────────────────────────── -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="/js/p-core.js?v=30"></script>
   <script src="/js/p-agenda.js?v=30"></script>
   <script src="/js/p-clientes.js?v=30"></script>

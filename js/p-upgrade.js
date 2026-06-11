@@ -207,7 +207,7 @@ function abrirModalPix(d, plano, meses){
   modal.style.cssText='background:var(--surface);border-radius:20px;padding:24px;width:100%;max-width:400px;text-align:center';
   modal.innerHTML=
     '<div style="font-family:var(--font-d);font-size:18px;font-weight:800;color:var(--text);margin-bottom:4px">🎉 Cobrança gerada!</div>'+
-    '<div style="font-size:13px;color:var(--text-3);font-weight:700;margin-bottom:20px">Plano '+info.nome+' · '+meses+(meses===1?' mês':' meses')+' · '+valor+'</div>';
+    '<div style="font-size:13px;color:var(--text-3);font-weight:700;margin-bottom:20px">Plano '+info.nome+' · '+(meses===12?'Anual':meses+(meses===1?' mês':' meses'))+' · '+valor+'</div>';
 
   if(d.pix_copia_cola){
     var pixDiv=document.createElement('div');
@@ -249,7 +249,7 @@ function abrirModalPix(d, plano, meses){
 
 /* ─── CICLO MENSAL / ANUAL ─── */
 var _cicloUpg = 'mensal';
-var PRECOS_ANUAL = { basico:29, pro:58, salao:117 };
+var PRECOS_ANUAL = { basico:350, pro:700, salao:1400 };
 
 function _setCicloUpg(ciclo, planoId) {
   _cicloUpg = ciclo;
@@ -260,10 +260,10 @@ function _setCicloUpg(ciclo, planoId) {
   var resumo = document.getElementById('upgResumoPreco');
   if (resumo && planoId) {
     var mensal = (PLANOS_INFO[planoId]||{preco:35}).preco;
-    var anual  = PRECOS_ANUAL[planoId] || Math.round(mensal*0.83);
+    var anualTotal = PRECOS_ANUAL[planoId] || Math.round(mensal*10);
     if (ciclo === 'anual') {
-      var economia = (mensal - anual) * 12;
-      resumo.innerHTML = 'Cobrado anualmente: <strong style="color:var(--text)">R$'+(anual*12)+'</strong> · <span style="color:#16a34a">Economize R$'+economia+'/ano</span>';
+      var economia = mensal * 12 - anualTotal;
+      resumo.innerHTML = 'Cobrado anualmente · <strong style="color:var(--text)">R$'+anualTotal+'</strong> (R$'+Math.round(anualTotal/12)+'/mês) · <span style="color:#16a34a">Economize R$'+economia+'</span>';
     } else {
       resumo.textContent = 'Cobrado mensalmente · R$'+mensal+'/mês';
     }
