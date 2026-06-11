@@ -85,6 +85,9 @@ async function renderAgenda(){
 
   var html='';
 
+  /* ONBOARDING CHECKLIST — renderOnboarding preenche este div */
+  html+='<div id="onboardingWrap" style="display:none"></div>';
+
   /* FILTRO DE PROFISSIONAIS — avatar strip global */
   html+=renderProfStrip();
 
@@ -579,6 +582,44 @@ function dismissOnboarding(){
   var el=document.getElementById('onboardingWrap');
   if(el) el.style.display='none';
 }
+
+/* ═══ SHARE PANEL ═══ */
+var _shareQrGerado=false;
+function abrirShare(){
+  var slug=S&&S.slug?S.slug:'';
+  var link=location.origin+'/agendar.html?slug='+slug;
+  var el=document.getElementById('ovShare');
+  if(!el) return;
+  document.getElementById('shareLinkTxt').textContent=link;
+  document.getElementById('shareVerLink').href=link;
+  var waTxt=encodeURIComponent('Olá! Agora você pode agendar comigo: '+link);
+  document.getElementById('shareWaLink').href='https://wa.me/?text='+waTxt;
+  el.style.display='flex';
+  document.body.style.overflow='hidden';
+  if(!_shareQrGerado&&typeof QRCode!=='undefined'){
+    var qrEl=document.getElementById('shareQR');
+    if(qrEl){
+      qrEl.innerHTML='';
+      try{new QRCode(qrEl,{text:link,width:160,height:160,colorDark:'#0A0908',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});}catch(e){}
+      _shareQrGerado=true;
+    }
+  }
+}
+function fecharShare(){
+  var el=document.getElementById('ovShare');
+  if(el){el.style.display='none';document.body.style.overflow='';}
+}
+function copiarShareLink(){
+  var slug=S&&S.slug?S.slug:'';
+  var link=location.origin+'/agendar.html?slug='+slug;
+  navigator.clipboard.writeText(link).then(function(){
+    var btn=document.getElementById('btnCopyShare');
+    if(btn){btn.textContent='✓ Copiado!';setTimeout(function(){btn.textContent='Copiar';},2000);}
+  }).catch(function(){});
+}
+window.abrirShare=abrirShare;
+window.fecharShare=fecharShare;
+window.copiarShareLink=copiarShareLink;
 
 
 /* ═══ ITEM 1: WALK-IN / ATENDIMENTO RÁPIDO ═══ */

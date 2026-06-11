@@ -700,7 +700,18 @@ function badgeStatus(status){
 }
 function renderListaAgs(ags, podeAcao, origem) {
   if(!ags||ags.length===0){
-    return '<div class="empty">Nenhum agendamento hoje<br><span style="font-size:11px;color:var(--CZ)">Quando alguém agendar, aparece aqui</span></div>';
+    var linkPub = S&&S.slug ? (location.origin+'/agendar.html?slug='+S.slug) : '';
+    var shareHtml = linkPub
+      ? '<div style="margin-top:16px;background:rgba(229,90,12,0.06);border:1px solid rgba(229,90,12,0.2);border-radius:8px;padding:14px 16px">'+
+          '<div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(229,90,12,0.7);margin-bottom:8px">Seu link de agendamento</div>'+
+          '<div style="font-family:var(--mono,monospace);font-size:12px;color:var(--L,#E55A0C);word-break:break-all;margin-bottom:10px">'+esc(linkPub)+'</div>'+
+          '<div style="display:flex;gap:8px;flex-wrap:wrap">'+
+            '<button onclick="navigator.clipboard.writeText(\''+esc(linkPub)+'\').then(function(){toast(\'Link copiado!\',\'ok\')})" style="padding:8px 16px;background:var(--L,#E55A0C);color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer">📋 Copiar link</button>'+
+            '<a href="https://wa.me/?text='+encodeURIComponent('Olá! Agora você pode agendar comigo: '+linkPub)+'" target="_blank" rel="noopener" style="padding:8px 16px;background:#25D366;color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center">Compartilhar no WhatsApp</a>'+
+          '</div>'+
+        '</div>'
+      : '';
+    return '<div class="empty">Nenhum agendamento hoje<br><span style="font-size:11px;color:var(--CZ)">Compartilhe seu link para receber o primeiro</span>'+shareHtml+'</div>';
   }
   var ativos=ags.filter(function(a){return a.status!=='cancelado';});
   var html='<div class="lista-hdr"><h3>Agendamentos</h3><span class="tag-c">'+ativos.length+' ativo'+(ativos.length!==1?'s':'')+'</span></div>';
