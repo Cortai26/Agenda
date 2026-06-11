@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Agenda — Seu cliente agenda. Você só atende.</title>
-<meta name="description" content="Transforme seu WhatsApp em uma página profissional de agendamentos. Grátis por 14 dias. Sem cartão.">
-<meta property="og:title" content="Agenda — Agendamentos online para profissionais">
-<meta property="og:description" content="Receba agendamentos 24h. Reduza faltas. Pareça maior do que você é.">
+<title>Agenda — Seu cliente agenda sozinho.</title>
+<meta name="description" content="Crie sua página de agendamentos em 3 minutos. Compartilhe o link. Receba clientes 24h sem precisar responder mensagem.">
+<meta property="og:title" content="Agenda — Seu cliente agenda sozinho.">
+<meta property="og:description" content="Página de agendamentos para profissionais que atendem com hora marcada. 14 dias grátis.">
 <meta property="og:image" content="https://agendatop.vercel.app/og/og-image.png">
 <meta property="og:url" content="https://agendatop.vercel.app/">
 <meta property="og:type" content="website">
@@ -20,544 +20,180 @@
 <link rel="manifest" href="/manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900;1,14..32,300;1,14..32,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,300;1,14..32,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-/* ── RESET E BASE ── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  background: #0A0908;
-  color: #F0EDE8;
-  font-family: var(--sans);
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#0A0908;color:#F0EDE8;font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+:root{
+  --ink:#0A0908;--ink-2:#111009;--ink-3:#191714;
+  --bone:#F0EDE8;--stone:#A09890;--stone-2:#6A6462;
+  --brand:#E55A0C;
+  --rule:rgba(240,237,232,0.06);--rule-2:rgba(240,237,232,0.12);
+  --display:'Instrument Serif',Georgia,serif;
+  --serif:var(--display);
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --mono:'JetBrains Mono','Fira Code',monospace;
 }
 
-/* ── TOKENS ── */
-:root {
-  --ink:    #0A0908;
-  --ink-2:  #111009;
-  --ink-3:  #191714;
-  --bone:   #F0EDE8;
-  --stone:  #A09890;
-  --stone-2:#6A6462;
-  --brand:  #E55A0C;
-  --rule:   rgba(240,237,232,0.06);
-  --rule-2: rgba(240,237,232,0.12);
-  --display:'Instrument Serif', Georgia, serif;
-  --serif:  var(--display);
-  --sans:   'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  --mono:   'JetBrains Mono', 'Fira Code', monospace;
-}
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,9,8,0.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--rule);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.nav-logo{font-family:var(--display);font-style:italic;font-size:20px;color:var(--bone);text-decoration:none;flex-shrink:0}
+.nav-logo span{color:var(--brand)}
+.nav-links{display:flex;align-items:center;gap:4px}
+.nav-link{font-size:12px;color:var(--stone);text-decoration:none;padding:8px 10px;transition:color 0.15s;white-space:nowrap}
+.nav-link:hover{color:var(--bone)}
+.nav-cta{padding:9px 18px;background:var(--brand);color:var(--bone);border:none;font-family:var(--sans);font-weight:600;font-style:normal;font-size:14px;cursor:pointer;text-decoration:none;display:inline-block;white-space:nowrap;transition:background 0.15s;flex-shrink:0}
+.nav-cta:active{background:#C04A08}
+@media(max-width:520px){.nav-link:not(.nav-link-entrar){display:none}}
 
-/* ── NAV ── */
-.nav {
-  position: fixed; top: 0; left: 0; right: 0;
-  z-index: 100;
-  background: rgba(10,9,8,0.94);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--rule);
-  padding: 0 24px;
-  height: 56px;
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 12px;
-}
-.nav-logo {
-  font-family: var(--display);
-  font-style: italic;
-  font-size: 20px;
-  color: var(--bone);
-  text-decoration: none;
-  flex-shrink: 0;
-}
-.nav-logo span { color: var(--brand); }
-.nav-links { display: flex; align-items: center; gap: 4px; }
-.nav-link {
-  font-size: 12px;
-  color: var(--stone);
-  text-decoration: none;
-  padding: 8px 10px;
-  transition: color 0.15s;
-  white-space: nowrap;
-}
-.nav-link:hover { color: var(--bone); }
-.nav-cta {
-  padding: 9px 18px;
-  background: var(--brand);
-  color: var(--bone);
-  border: none;
-  font-family: var(--sans);
-  font-weight: 600;
-  font-style: normal;
-  font-size: 14px;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
-  white-space: nowrap;
-  transition: background 0.15s;
-  flex-shrink: 0;
-}
-.nav-cta:active { background: #C04A08; }
-@media(max-width:520px){
-  .nav-link:not(.nav-link-entrar){ display:none; }
-}
+/* HERO */
+.hero{min-height:100vh;padding-top:56px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden}
+.hero-glow{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(229,90,12,0.07) 0%,transparent 70%);top:-100px;left:-100px;pointer-events:none}
+.hero-glow-2{position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(229,90,12,0.05) 0%,transparent 70%);bottom:100px;right:-80px;pointer-events:none}
+.hero-content{position:relative;z-index:1;padding:0 24px 64px;max-width:680px}
+.hero-eyebrow{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(229,90,12,0.7);margin-bottom:20px}
+.hero-h1{font-family:var(--display);font-style:normal;font-size:clamp(48px,11vw,80px);line-height:0.93;letter-spacing:-3px;color:var(--bone);margin-bottom:20px}
+.hero-h1 em{font-style:italic;color:var(--brand)}
+.hero-sub{font-size:14px;color:var(--stone);line-height:1.7;font-weight:300;max-width:440px;margin-bottom:32px}
 
-/* ── HERO ── */
-.hero {
-  min-height: 100vh;
-  padding-top: 56px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  position: relative;
-  overflow: hidden;
-}
-.hero-glow-1 {
-  position: absolute;
-  width: 400px; height: 400px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(229,90,12,0.08) 0%, transparent 70%);
-  top: 20%; left: -10%;
-  pointer-events: none;
-}
-.hero-glow-2 {
-  position: absolute;
-  width: 300px; height: 300px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(240,237,232,0.03) 0%, transparent 70%);
-  top: 10%; right: -5%;
-  pointer-events: none;
-}
-.hero-content {
-  position: relative;
-  z-index: 1;
-  padding: 0 24px 40px;
-  max-width: 640px;
-}
-.hero-eyebrow {
-  font-size: 9px;
-  font-weight: 500;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: rgba(229,90,12,0.7);
-  margin-bottom: 20px;
-}
-.hero-h1 {
-  font-family: var(--sans);
-  font-weight: 800;
-  font-size: clamp(48px, 11vw, 88px);
-  line-height: 0.96;
-  letter-spacing: -3px;
-  font-style: normal;
-  color: var(--bone);
-  margin-bottom: 20px;
-}
-.hero-h1 em { font-family: var(--display); font-style: italic; color: var(--brand); }
-.hero-sub {
-  font-size: 15px;
-  color: var(--stone);
-  line-height: 1.7;
-  margin-bottom: 32px;
-  max-width: 400px;
-  font-weight: 300;
-}
-.hero-actions { display: flex; flex-direction: column; gap: 12px; }
-.btn-hero {
-  padding: 16px 28px;
-  background: var(--brand);
-  color: var(--bone);
-  border: none;
-  font-family: var(--sans);
-  font-weight: 600;
-  font-size: 15px;
-  letter-spacing: -0.2px;
-  font-style: normal;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  align-self: flex-start;
-  transition: background 0.15s;
-  -webkit-tap-highlight-color: transparent;
-}
-.btn-hero:active { background: #C04A08; }
-.hero-disclaimer {
-  font-size: 11px;
-  color: var(--stone-2);
-  letter-spacing: 1px;
-}
-.hero-scroll {
-  border-top: 1px solid var(--rule);
-  padding: 16px 24px;
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 12px;
-  color: rgba(240,237,232,0.25);
-  letter-spacing: 2px;
-  text-align: center;
-  animation: floatY 3s ease-in-out infinite;
-}
-@keyframes floatY {
-  0%,100% { transform: translateY(0); }
-  50%      { transform: translateY(5px); }
-}
+/* CLAIM-LINK */
+.claim-wrap{margin-bottom:16px}
+.claim-row{display:flex;align-items:stretch;border:1px solid var(--rule-2);background:var(--ink-2);overflow:hidden;max-width:480px}
+.claim-row:focus-within{border-color:rgba(229,90,12,0.5)}
+.claim-prefix{font-family:var(--mono);font-size:12px;color:var(--stone-2);padding:12px 10px 12px 14px;display:flex;align-items:center;white-space:nowrap;flex-shrink:0;border-right:1px solid var(--rule)}
+.claim-input{flex:1;background:transparent;border:none;outline:none;font-family:var(--mono);font-size:13px;color:var(--brand);padding:12px 10px;min-width:0}
+.claim-input::placeholder{color:var(--stone-2)}
+.slug-status{font-family:var(--mono);font-size:11px;margin-top:8px;height:16px;letter-spacing:1px}
+.slug-status.ok{color:#4CAF50}
+.slug-status.taken{color:#EF5350}
+.slug-status.checking{color:var(--stone-2)}
+.btn-hero{display:inline-flex;align-items:center;gap:10px;padding:14px 28px;background:var(--brand);color:var(--bone);text-decoration:none;font-family:var(--serif);font-style:italic;font-size:18px;transition:background 0.15s;-webkit-tap-highlight-color:transparent;white-space:nowrap}
+.btn-hero:active{background:#C04A08}
+.hero-disclaimer{font-size:11px;color:var(--stone-2);margin-top:12px;letter-spacing:0.5px}
+.hero-scroll{padding:20px 24px;font-size:10px;color:var(--stone-2);letter-spacing:3px;text-transform:uppercase}
 
-/* ── SEÇÕES ── */
-.section {
-  padding: 56px 24px;
-  border-bottom: 1px solid var(--rule);
-  max-width: 720px;
-  margin: 0 auto;
-  width: 100%;
-}
-.section-full {
-  padding: 56px 0;
-  border-bottom: 1px solid var(--rule);
-}
-.eyebrow {
-  font-family: var(--sans);
-  font-weight: 600;
-  font-size: 9px;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: rgba(229,90,12,0.6);
-  margin-bottom: 20px;
-}
-.eyebrow span { color: var(--brand); }
-.h2 {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: clamp(30px, 6vw, 44px);
-  line-height: 1.06;
-  letter-spacing: -1.2px;
-  color: var(--bone);
-  margin-bottom: 14px;
-}
-.p {
-  font-family: var(--sans);
-  font-size: 16px;
-  font-weight: 300;
-  line-height: 1.7;
-  color: var(--stone);
-  max-width: 500px;
-}
+/* SEÇÕES */
+.section{padding:56px 24px;border-bottom:1px solid var(--rule);max-width:720px;margin:0 auto}
+.section-full{border-bottom:1px solid var(--rule)}
+.eyebrow{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(229,90,12,0.6);margin-bottom:16px}
+.eyebrow span{color:var(--stone-2)}
+.h2{font-family:var(--display);font-style:italic;font-size:clamp(32px,8vw,48px);line-height:0.95;letter-spacing:-1.5px;color:var(--bone);margin-bottom:16px}
+.p{font-size:14px;color:var(--stone);line-height:1.7;font-weight:300;margin-bottom:24px}
 
-/* ── MOCKUP DO PRODUTO ── */
-.produto-wrap {
-  padding: 56px 24px 0;
-  border-bottom: 1px solid var(--rule);
-}
-.produto-inner { max-width: 720px; margin: 0 auto; }
-.phone-mockup {
-  background: #111009;
-  border: 1px solid rgba(240,237,232,0.1);
-  border-radius: 24px;
-  overflow: hidden;
-  max-width: 260px;
-  margin: 28px auto 0;
-  box-shadow: 0 32px 64px rgba(0,0,0,0.5);
-}
-.phone-notch { height: 28px; background: #0A0908; display: flex; align-items: center; justify-content: center; }
-.phone-pill { width: 50px; height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; }
-.phone-hero-p { height: 120px; background: linear-gradient(160deg,#1a0f09,#0a0908); padding: 14px 18px; display: flex; flex-direction: column; justify-content: flex-end; }
-.phone-cat { font-size: 8px; letter-spacing: 3px; color: rgba(229,90,12,0.6); text-transform: uppercase; font-family: var(--sans); }
-.phone-title { font-family: var(--serif); font-style: italic; font-size: 22px; color: var(--bone); }
-.phone-status { display: flex; align-items: center; gap: 5px; padding: 7px 18px; border-top: 1px solid rgba(240,237,232,0.06); border-bottom: 1px solid rgba(240,237,232,0.06); }
-.phone-dot-g { width: 5px; height: 5px; border-radius: 50%; background: #22C55E; flex-shrink: 0; }
-.phone-status-t { font-size: 8px; color: rgba(240,237,232,0.4); letter-spacing: 1.5px; font-family: var(--sans); }
-.phone-svcs { padding: 10px 18px; }
-.phone-svc-r { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid rgba(240,237,232,0.04); }
-.phone-svc-r:last-child { border: none; }
-.phone-svc-n { font-size: 8px; color: rgba(229,90,12,0.45); font-family: var(--serif); font-style: italic; width: 16px; flex-shrink: 0; }
-.phone-svc-nm { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--bone); flex: 1; }
-.phone-svc-p { font-family: monospace; font-size: 11px; color: var(--brand); white-space: nowrap; }
-.phone-cta-p {
-  margin: 8px 10px 10px;
-  background: var(--brand);
-  padding: 10px 14px;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.phone-cta-t { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--bone); }
-.phone-caption { text-align: center; padding: 16px; font-size: 9px; color: var(--stone-2); letter-spacing: 2px; text-transform: uppercase; }
+/* STEPS */
+.steps{display:flex;flex-direction:column;margin-top:28px}
+.step{display:flex;gap:20px;align-items:flex-start;padding:20px 0;border-bottom:1px solid var(--rule)}
+.step:last-child{border:none}
+.step-n{font-family:var(--mono);font-size:28px;color:rgba(229,90,12,0.35);min-width:32px;line-height:1;flex-shrink:0}
+.step-title{font-family:var(--sans);font-weight:600;font-size:17px;color:var(--bone);margin-bottom:4px}
+.step-desc{font-size:12px;color:var(--stone);line-height:1.6;font-weight:300}
 
-/* ── COMO FUNCIONA / STEPS ── */
-.steps { display: flex; flex-direction: column; margin-top: 28px; }
-.step {
-  display: flex; gap: 20px; align-items: flex-start;
-  padding: 20px 0; border-bottom: 1px solid var(--rule);
-}
-.step:last-child { border: none; }
-.step-n {
-  font-family: var(--sans); font-style: normal;
-  font-size: 28px; color: rgba(229,90,12,0.35);
-  min-width: 32px; line-height: 1; flex-shrink: 0;
-}
-.step-title { font-family: var(--sans); font-weight: 600; font-size: 17px; color: var(--bone); margin-bottom: 4px; }
-.step-desc { font-size: 12px; color: var(--stone); line-height: 1.6; font-weight: 300; }
+/* DEMO */
+.demo-wrap{display:flex;flex-direction:column;align-items:center;gap:24px;margin-top:32px}
+.demo-phone{width:240px;background:var(--ink-2);border:1px solid var(--rule-2);border-radius:24px;overflow:hidden;box-shadow:0 24px 48px rgba(0,0,0,0.5);min-height:360px;display:flex;flex-direction:column}
+.demo-phone-header{padding:16px;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.demo-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,rgba(229,90,12,0.6),rgba(229,90,12,0.2));flex-shrink:0}
+.demo-salon-name{font-family:var(--display);font-style:italic;font-size:14px;color:var(--bone)}
+.demo-salon-cat{font-size:9px;color:var(--stone-2);letter-spacing:1px;text-transform:uppercase}
+.demo-body{flex:1;overflow:hidden;position:relative}
+.demo-state{position:absolute;inset:0;padding:12px;display:flex;flex-direction:column;transition:opacity 0.2s,transform 0.2s}
+.demo-state.hidden{opacity:0;pointer-events:none;transform:translateX(12px)}
+.demo-hint{font-size:10px;color:var(--stone-2);text-align:center;margin-top:8px;letter-spacing:1px}
+.demo-svc-row{display:flex;align-items:center;justify-content:space-between;padding:10px 8px;border-bottom:1px solid var(--rule);cursor:pointer;border-radius:4px;transition:background 0.15s;-webkit-tap-highlight-color:transparent}
+.demo-svc-row:last-child{border-bottom:none}
+.demo-svc-row:hover,.demo-svc-row:active{background:rgba(229,90,12,0.06)}
+.demo-svc-name{font-family:var(--display);font-style:italic;font-size:13px;color:var(--bone)}
+.demo-svc-info{font-size:10px;color:var(--stone-2);text-align:right}
+.demo-back-btn{font-size:11px;color:var(--stone);cursor:pointer;padding:4px 0 12px;display:flex;align-items:center;gap:4px}
+.demo-svc-title-big{font-family:var(--display);font-style:italic;font-size:15px;color:var(--bone);margin-bottom:10px}
+.demo-slots{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.demo-slot{padding:8px;border:1px solid var(--rule-2);font-family:var(--mono);font-size:11px;color:var(--bone);text-align:center;cursor:pointer;border-radius:3px;transition:all 0.15s;-webkit-tap-highlight-color:transparent}
+.demo-slot:hover,.demo-slot:active{border-color:var(--brand);background:rgba(229,90,12,0.08);color:var(--brand)}
+.demo-success{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:16px}
+.demo-check{width:48px;height:48px;border-radius:50%;background:rgba(76,175,80,0.15);border:2px solid rgba(76,175,80,0.5);display:flex;align-items:center;justify-content:center;font-size:22px;color:#4CAF50;margin-bottom:4px}
+.demo-success-title{font-family:var(--display);font-style:italic;font-size:18px;color:var(--bone)}
+.demo-success-sub{font-size:11px;color:var(--stone-2);line-height:1.5}
+.demo-restart{margin-top:12px;background:none;border:1px solid var(--rule-2);padding:8px 16px;font-size:11px;color:var(--stone-2);cursor:pointer;border-radius:3px;font-family:var(--sans)}
+.demo-restart:hover{color:var(--bone);border-color:var(--rule)}
+.demo-caption{font-size:12px;color:var(--stone-2);text-align:center;max-width:240px;line-height:1.6}
+@media(min-width:780px){.demo-wrap{flex-direction:row;align-items:flex-start;justify-content:center}.demo-caption{text-align:left;max-width:300px;padding-top:48px}}
 
-/* ── FEATURES COM NÚMEROS ── */
-.features-wrap { border-bottom: 1px solid var(--rule); }
-.features-eyebrow { padding: 56px 24px 0; max-width: 720px; margin: 0 auto; }
-.features-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1px;
-  background: var(--rule);
-  border-top: 1px solid var(--rule);
-  margin-top: 28px;
-}
-.feat {
-  background: var(--ink);
-  padding: 28px 24px;
-}
-.feat-num {
-  font-family: var(--serif); font-style: italic;
-  font-size: 44px; line-height: 1;
-  color: var(--brand); margin-bottom: 6px;
-}
-.feat-title { font-family: var(--serif); font-style: italic; font-size: 16px; color: var(--bone); margin-bottom: 4px; }
-.feat-desc { font-size: 11px; color: var(--stone); line-height: 1.5; font-weight: 300; }
+/* BENEFÍCIOS */
+.benefits-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:28px}
+.benefit{background:var(--ink);padding:24px}
+.benefit-icon{font-family:var(--display);font-style:italic;font-size:40px;color:var(--brand);line-height:1;margin-bottom:8px}
+.benefit-title{font-family:var(--display);font-style:italic;font-size:17px;color:var(--bone);margin-bottom:6px}
+.benefit-desc{font-size:12px;color:var(--stone);line-height:1.6;font-weight:300}
+@media(min-width:640px){.benefits-grid{grid-template-columns:repeat(4,1fr)}}
 
-/* ── DEPOIMENTO ── */
-.testimonial {
-  padding: 64px 24px;
-  border-bottom: 1px solid var(--rule);
-  max-width: 640px; margin: 0 auto;
-  width: 100%;
-}
-.quote-open {
-  font-family: var(--serif); font-style: italic;
-  font-size: 80px; line-height: 0.6;
-  color: rgba(229,90,12,0.12);
-  margin-bottom: 20px;
-  display: block;
-}
-.quote-text {
-  font-family: var(--serif); font-style: italic;
-  font-size: clamp(18px, 5vw, 24px);
-  line-height: 1.5; color: var(--bone);
-  letter-spacing: -0.3px; margin-bottom: 20px;
-}
-.quote-author { font-size: 10px; color: rgba(229,90,12,0.6); letter-spacing: 3px; text-transform: uppercase; }
+/* PLANOS */
+.planos-section{padding:56px 0;border-bottom:1px solid var(--rule)}
+.planos-inner{padding:0 24px;max-width:720px;margin:0 auto}
+.toggle-ciclo{display:inline-flex;border:1px solid var(--rule-2);margin:24px 0;overflow:hidden}
+.toggle-btn{padding:8px 20px;background:transparent;border:none;font-family:var(--sans);font-size:13px;color:var(--stone-2);cursor:pointer;transition:all 0.15s;white-space:nowrap;font-style:normal}
+.toggle-btn.active{background:var(--brand);color:var(--bone)}
+.toggle-badge{font-size:9px;background:rgba(76,175,80,0.2);color:#4CAF50;padding:2px 7px;border-radius:20px;margin-left:6px;letter-spacing:0.5px;font-weight:600}
+.planos-grid{display:flex;flex-direction:column;gap:12px;margin-top:8px}
+.plano{border:1px solid rgba(240,237,232,0.1);padding:24px;position:relative;transition:border-color 0.2s}
+.plano:hover{border-color:rgba(240,237,232,0.2)}
+.plano.destaque{border-color:var(--brand);background:rgba(229,90,12,0.04)}
+.plano-badge{position:absolute;top:-1px;left:20px;background:var(--brand);font-size:9px;color:var(--bone);padding:3px 10px;letter-spacing:2px;text-transform:uppercase}
+.plano-nome{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--stone);margin-bottom:10px}
+.plano-preco{font-family:var(--display);font-style:italic;font-size:40px;color:var(--bone);line-height:1;margin-bottom:4px}
+.plano-preco sup{font-size:16px;vertical-align:top;margin-top:8px;font-style:normal}
+.plano-preco sub{font-size:14px;color:var(--stone);font-style:normal}
+.plano-anual-info{font-size:10px;color:rgba(76,175,80,0.8);margin-bottom:10px;display:none;letter-spacing:0.5px}
+.plano-itens{list-style:none;margin:14px 0}
+.plano-itens li{font-size:12px;color:var(--stone);padding:4px 0;display:flex;gap:8px}
+.plano-itens li::before{content:'→';color:var(--brand);flex-shrink:0}
+.plano-cta{width:100%;padding:12px;background:transparent;border:1px solid rgba(240,237,232,0.15);color:var(--stone);font-family:var(--serif);font-style:italic;font-size:15px;cursor:pointer;text-decoration:none;display:block;text-align:center;margin-top:16px;transition:all 0.15s;-webkit-tap-highlight-color:transparent}
+.plano-cta:hover{border-color:var(--bone);color:var(--bone)}
+.plano.destaque .plano-cta{background:var(--brand);border-color:var(--brand);color:var(--bone)}
+.plano-trial{font-size:10px;color:rgba(229,90,12,0.6);margin-top:8px;text-align:center;letter-spacing:1px}
+@media(min-width:780px){.planos-grid{flex-direction:row}.plano{flex:1}.planos-inner{padding-left:48px;padding-right:48px}}
 
-/* ── SLUG PERSONALIZADO (FOMO) ── */
-.slug-section {
-  padding: 56px 24px;
-  border-bottom: 1px solid var(--rule);
-  background: var(--ink-2);
-}
-.slug-inner { max-width: 640px; margin: 0 auto; }
-.slug-display {
-  font-family: monospace;
-  font-size: clamp(13px, 4vw, 17px);
-  color: var(--bone);
-  background: var(--ink);
-  padding: 16px 20px;
-  margin: 20px 0 10px;
-  display: flex; align-items: center; gap: 4px;
-  overflow: hidden;
-  border: 1px solid var(--rule-2);
-}
-.slug-base { color: var(--stone-2); }
-.slug-name { color: var(--brand); }
-.slug-cursor {
-  width: 2px; height: 18px;
-  background: var(--brand);
-  animation: blink 1s step-end infinite;
-  flex-shrink: 0;
-}
-@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
-.slug-sub { font-size: 11px; color: var(--stone-2); letter-spacing: 1px; }
+/* DEPOIMENTOS */
+.depo-wrap{border-bottom:1px solid var(--rule)}
+.depo-inner{max-width:720px;margin:0 auto;padding:56px 24px}
+.depo-item{padding:32px 0;border-bottom:1px solid var(--rule)}
+.depo-item:last-child{border-bottom:none}
+.depo-open{font-family:var(--display);font-style:italic;font-size:60px;color:rgba(229,90,12,0.12);line-height:0.6;margin-bottom:16px}
+.depo-text{font-family:var(--display);font-style:italic;font-size:clamp(16px,4vw,20px);color:var(--bone);line-height:1.5;margin-bottom:16px}
+.depo-author{font-size:10px;color:rgba(229,90,12,0.6);letter-spacing:3px;text-transform:uppercase}
 
-/* ── PLANOS ── */
-.planos-section {
-  padding: 56px 0;
-  border-bottom: 1px solid var(--rule);
-}
-.planos-inner { padding: 0 24px; max-width: 720px; margin: 0 auto; }
-.planos-grid { display: flex; flex-direction: column; gap: 12px; margin-top: 28px; }
-.plano {
-  border: 1px solid rgba(240,237,232,0.1);
-  padding: 24px;
-  position: relative;
-  transition: border-color 0.2s;
-}
-.plano:hover { border-color: rgba(240,237,232,0.2); }
-.plano.destaque { border-color: var(--brand); background: rgba(229,90,12,0.04); }
-.plano-badge {
-  position: absolute; top: -1px; left: 20px;
-  background: var(--brand);
-  font-size: 9px; color: var(--bone);
-  padding: 3px 10px;
-  letter-spacing: 2px; text-transform: uppercase;
-}
-.plano-nome { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--stone); margin-bottom: 10px; }
-.plano-preco {
-  font-family: var(--serif); font-style: italic;
-  font-size: 40px; color: var(--bone); line-height: 1;
-  margin-bottom: 4px;
-}
-.plano-preco sup { font-size: 16px; vertical-align: top; margin-top: 8px; font-style: normal; }
-.plano-preco sub { font-size: 14px; color: var(--stone); font-style: normal; }
-.plano-desc { font-size: 12px; color: var(--stone); line-height: 1.7; margin-top: 10px; font-weight: 300; }
-.plano-itens { list-style: none; margin: 14px 0; }
-.plano-itens li { font-size: 12px; color: var(--stone); padding: 4px 0; display: flex; gap: 8px; }
-.plano-itens li::before { content: '→'; color: var(--brand); flex-shrink: 0; }
-.plano-cta {
-  width: 100%; padding: 12px;
-  background: transparent;
-  border: 1px solid rgba(240,237,232,0.15);
-  color: var(--stone);
-  font-family: var(--serif); font-style: italic; font-size: 15px;
-  cursor: pointer; text-decoration: none;
-  display: block; text-align: center;
-  margin-top: 16px; transition: all 0.15s;
-  -webkit-tap-highlight-color: transparent;
-}
-.plano-cta:hover { border-color: var(--bone); color: var(--bone); }
-.plano.destaque .plano-cta { background: var(--brand); border-color: var(--brand); color: var(--bone); }
-.plano-trial { font-size: 10px; color: rgba(229,90,12,0.6); margin-top: 8px; text-align: center; letter-spacing: 1px; }
+/* FAQ */
+.faq-lp{border-top:1px solid var(--rule)}
+.faq-lp-btn{width:100%;padding:16px 0;background:none;border:none;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;font-size:14px;font-weight:500;color:var(--bone);font-family:var(--sans)}
+.faq-lp-icon{font-size:20px;color:var(--stone-2);flex-shrink:0;transition:transform 0.2s}
+.faq-lp-icon.open{transform:rotate(45deg);color:var(--brand)}
+.faq-lp-resp{font-size:13px;color:var(--stone);line-height:1.7;font-weight:300;padding:0 0 16px;display:none;max-width:560px}
 
-/* ── CTA FINAL ── */
-.cta-final {
-  padding: 80px 24px;
-  text-align: center;
-  background: linear-gradient(180deg, #0A0908 0%, #150d08 100%);
-  position: relative; overflow: hidden;
-}
-.cta-final-glow {
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse at center bottom, rgba(229,90,12,0.1) 0%, transparent 70%);
-  pointer-events: none;
-}
-.cta-final-eyebrow { font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: rgba(229,90,12,0.6); margin-bottom: 16px; }
-.cta-final-h2 {
-  font-family: var(--serif); font-style: italic;
-  font-size: clamp(36px, 10vw, 56px);
-  line-height: 0.95; letter-spacing: -2px;
-  color: var(--bone); margin-bottom: 12px;
-}
-.cta-final-h2 em { color: var(--brand); }
-.cta-final-p { font-size: 14px; color: var(--stone); margin-bottom: 32px; max-width: 360px; margin-left: auto; margin-right: auto; font-weight: 300; }
-.btn-final {
-  padding: 18px 36px;
-  background: var(--brand);
-  color: var(--bone);
-  border: none;
-  font-family: var(--serif); font-style: italic; font-size: 20px;
-  cursor: pointer; text-decoration: none;
-  display: inline-flex; align-items: center; gap: 12px;
-  transition: background 0.15s;
-  -webkit-tap-highlight-color: transparent;
-}
-.btn-final:active { background: #C04A08; }
-.cta-final-disclaimer { font-size: 11px; color: var(--stone-2); margin-top: 14px; letter-spacing: 1px; }
+/* CTA FINAL */
+.cta-final{padding:80px 24px;text-align:center;background:linear-gradient(180deg,#0A0908 0%,#150d08 100%);position:relative;overflow:hidden}
+.cta-final-glow{position:absolute;inset:0;background:radial-gradient(ellipse at center bottom,rgba(229,90,12,0.1) 0%,transparent 70%);pointer-events:none}
+.cta-final-eyebrow{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(229,90,12,0.6);margin-bottom:16px}
+.cta-final-h2{font-family:var(--display);font-style:italic;font-size:clamp(36px,10vw,56px);line-height:0.95;letter-spacing:-2px;color:var(--bone);margin-bottom:12px}
+.cta-final-h2 em{color:var(--brand)}
+.cta-final-p{font-size:14px;color:var(--stone);margin-bottom:32px;max-width:360px;margin-left:auto;margin-right:auto;font-weight:300}
+.cta-final-claim{max-width:480px;margin:0 auto 16px;text-align:left}
+.cta-final-disclaimer{font-size:11px;color:var(--stone-2);margin-top:14px;letter-spacing:1px}
 
-/* ── FOOTER ── */
-.footer {
-  padding: 24px;
-  border-top: 1px solid var(--rule);
-  display: flex; align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap; gap: 12px;
-  max-width: 720px; margin: 0 auto;
-}
-.footer-brand { font-family: var(--serif); font-style: italic; font-size: 22px; color: rgba(240,237,232,0.2); text-decoration: none; }
-.footer-links { display: flex; gap: 16px; flex-wrap: wrap; }
-.footer-link { font-size: 11px; color: rgba(240,237,232,0.2); text-decoration: none; letter-spacing: 1px; }
-.footer-link:hover { color: var(--stone); }
+/* FOOTER */
+.footer{padding:24px;border-top:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;max-width:720px;margin:0 auto}
+.footer-brand{font-family:var(--display);font-style:italic;font-size:22px;color:rgba(240,237,232,0.2);text-decoration:none}
+.footer-links{display:flex;gap:16px;flex-wrap:wrap}
+.footer-link{font-size:11px;color:rgba(240,237,232,0.2);text-decoration:none;letter-spacing:1px}
+.footer-link:hover{color:var(--stone)}
 
-/* ── REVEAL ON SCROLL ── */
-@keyframes revealUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.reveal { opacity: 0; }
-.reveal.visible { animation: revealUp 0.6s cubic-bezier(0.4,0,0.2,1) forwards; }
+/* REVEAL */
+@keyframes revealUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0}
+.reveal.visible{animation:revealUp 0.6s cubic-bezier(0.4,0,0.2,1) forwards}
 
-/* ── DESKTOP ── */
-@media (min-width: 780px) {
-  .hero-content { padding: 0 48px 60px; }
-  .section { padding: 80px 48px; }
-  .features-grid { grid-template-columns: repeat(4,1fr); }
-  .planos-grid { flex-direction: row; }
-  .plano { flex: 1; }
-  .produto-wrap, .features-eyebrow, .planos-inner { padding-left: 48px; padding-right: 48px; }
-  .nav-link { padding: 8px 12px; }
-}
-
-/* ── NÚMEROS ── */
-.numero-item {
-  padding: 28px 24px;
-  border-right: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
-}
-.numero-val {
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: clamp(36px, 9vw, 52px);
-  color: var(--brand);
-  line-height: 1;
-  margin-bottom: 6px;
-  letter-spacing: -1px;
-}
-.numero-label {
-  font-size: 12px;
-  color: var(--stone);
-  line-height: 1.5;
-  font-weight: 300;
-}
-@media(min-width:640px){
-  .numero-item { padding: 36px 40px; }
-}
-
-/* ── MOCKUPS DE EXEMPLO ── */
-.exemplo-wrap { border: 1px solid var(--rule-2); padding: 24px; }
-.exemplo-label { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
-.exemplo-categoria { font-size: 11px; color: var(--stone); font-weight: 600; letter-spacing: 1px; }
-.exemplo-tema { font-size: 10px; padding: 3px 10px; border-radius: 20px; font-weight: 600; letter-spacing: 1px; }
-.phone-exemplo {
-  border-radius: 16px; overflow: hidden;
-  max-width: 260px; margin: 0 auto 16px;
-  border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-}
-.ex-cover { height: 90px; padding: 10px 14px; display: flex; flex-direction: column; justify-content: flex-end; }
-.ex-cat { font-size: 7px; letter-spacing: 2px; text-transform: uppercase; font-family: var(--sans); margin-bottom: 3px; }
-.ex-nome { font-family: var(--serif); font-style: italic; font-size: 18px; color: var(--bone); }
-.ex-status-bar { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-top: 1px solid; border-bottom: 1px solid; }
-.ex-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
-.ex-status-t { font-size: 9px; font-weight: 700; font-family: var(--sans); color: var(--bone); }
-.ex-hours { font-size: 9px; color: var(--stone-2); font-family: var(--sans); margin-left: auto; }
-.ex-svcs { padding: 8px 14px; }
-.ex-svc { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
-.ex-svc:last-child { border: none; }
-.ex-num { font-family: var(--serif); font-style: italic; font-size: 9px; width: 14px; flex-shrink: 0; }
-.ex-name { font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--bone); flex: 1; }
-.ex-price { font-family: monospace; font-size: 11px; font-weight: 500; flex-shrink: 0; }
-.ex-cta { padding: 9px 14px; display: flex; justify-content: space-between; font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--bone); }
-.exemplo-desc { font-size: 12px; color: var(--stone); line-height: 1.65; font-weight: 300; margin-top: 4px; }
-@media(min-width:900px) {
-  #gridExemplos { flex-direction: row !important; align-items: flex-start; }
-  .exemplo-wrap { flex: 1; }
-}
-
-/* ── FAQ LANDING ── */
-.faq-lp { border-top: 1px solid var(--rule); }
-.faq-lp-btn {
-  width: 100%; padding: 16px 0;
-  background: none; border: none; text-align: left;
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  cursor: pointer; font-size: 14px; font-weight: 500; color: var(--bone);
-  font-family: var(--sans);
-}
-.faq-lp-icon { font-size: 20px; color: var(--stone-2); flex-shrink: 0; transition: transform 0.2s; }
-.faq-lp-icon.open { transform: rotate(45deg); color: var(--brand); }
-.faq-lp-resp {
-  font-size: 13px; color: var(--stone); line-height: 1.7;
-  font-weight: 300; padding: 0 0 16px; display: none; max-width: 560px;
+@media(min-width:780px){
+  .hero-content{padding:0 48px 64px}
+  .section{padding:80px 48px}
 }
 </style>
 </head>
@@ -574,371 +210,194 @@ body {
   </div>
 </nav>
 
-<!-- ══ 1. HERO ══ -->
+<!-- HERO -->
 <section class="hero">
-  <div class="hero-glow-1"></div>
+  <div class="hero-glow"></div>
   <div class="hero-glow-2"></div>
   <div class="hero-content">
-    <div class="hero-eyebrow reveal">Para profissionais independentes</div>
+    <div class="hero-eyebrow reveal">Para quem atende com hora marcada</div>
     <h1 class="hero-h1 reveal">
-      Seu cliente agenda.<br>Você só <em>atende.</em>
+      Seu cliente<br>agenda <em>sozinho.</em>
     </h1>
-    <p class="hero-sub reveal">
-      Transforme seu WhatsApp em uma página profissional de agendamentos. Receba clientes 24h, reduza faltas com lembretes automáticos e pareça maior do que você é — com uma ferramenta feita pra quem trabalha de verdade.
-    </p>
-    <div class="hero-actions reveal">
-      <a href="/cadastro.html" class="btn-hero">
-        Criar minha página grátis <span>→</span>
-      </a>
-      <div class="hero-disclaimer">14 dias grátis · Sem cartão · Cancela quando quiser</div>
+    <p class="hero-sub reveal">Crie sua página em 3 minutos. Compartilhe o link. Pronto.</p>
+
+    <div class="claim-wrap reveal">
+      <div class="claim-row">
+        <span class="claim-prefix">agendatop.vercel.app/</span>
+        <input id="slugHero" class="claim-input" type="text" placeholder="seu-negocio" autocomplete="off" spellcheck="false" maxlength="50">
+      </div>
+      <div id="slugHeroStatus" class="slug-status"></div>
     </div>
+
+    <a id="heroCta" href="/cadastro.html" class="btn-hero reveal">
+      Criar minha página grátis →
+    </a>
+    <div class="hero-disclaimer reveal">14 dias grátis · Sem cartão · Cancela quando quiser</div>
   </div>
   <div class="hero-scroll">↓ &nbsp; veja como funciona</div>
 </section>
 
-<!-- ══ NÚMEROS ══ -->
-<div style="border-bottom:1px solid var(--rule)">
-<div style="display:grid;grid-template-columns:1fr 1fr;max-width:720px;margin:0 auto;border-left:1px solid var(--rule)">
-  <div class="numero-item reveal">
-    <div class="numero-val">3 min</div>
-    <div class="numero-label">para criar sua página e estar no ar</div>
-  </div>
-  <div class="numero-item reveal">
-    <div class="numero-val">24h</div>
-    <div class="numero-label">de agendamentos, mesmo enquanto você dorme</div>
-  </div>
-  <div class="numero-item reveal" style="border-bottom:none">
-    <div class="numero-val">-60%</div>
-    <div class="numero-label">de faltas com lembretes automáticos</div>
-  </div>
-  <div class="numero-item reveal" style="border-bottom:none">
-    <div class="numero-val">R$0</div>
-    <div class="numero-label">para começar. 14 dias grátis, sem cartão</div>
-  </div>
-</div>
-</div>
-
-<!-- ══ 2. PROBLEMA ══ -->
-<div style="border-bottom:1px solid var(--rule)">
+<!-- COMO FUNCIONA -->
+<div class="section-full" id="como-funciona">
 <div class="section">
-  <div class="eyebrow reveal"><span>—</span> O dia a dia que você conhece</div>
-  <h2 class="h2 reveal">"Espera, deixa eu responder esse WhatsApp..."</h2>
-  <p class="p reveal">
-    Você para um atendimento. O cliente na cadeira espera. No WhatsApp, alguém quer saber o preço do corte — e você não sabe se vai aparecer ou não. Essa cena se repete todo dia. E custa tempo, presença e dinheiro.
-  </p>
-  <p class="p reveal" style="margin-top:14px;font-style:italic;color:var(--stone-2)">
-    Com o Agenda, essa pergunta nunca mais chega no seu WhatsApp.
-  </p>
-</div>
-</div>
-
-<!-- ══ 3. PRODUTO ══ -->
-<div class="produto-wrap reveal" id="como-funciona">
-  <div class="produto-inner">
-    <div class="eyebrow"><span>—</span> A solução</div>
-    <h2 class="h2">Uma página do seu negócio.<br>Um link. O cliente resolve sozinho.</h2>
-    <p class="p">
-      Serviços, preços, horários, equipe e avaliações — tudo em uma página linda que é só sua.
-      <strong style="color:var(--bone)">agendatop.vercel.app/<em style="color:var(--brand)">suanome</em></strong>
-    </p>
-    <div class="phone-mockup">
-      <div class="phone-notch"><div class="phone-pill"></div></div>
-      <div class="phone-hero-p">
-        <div class="phone-cat">Barbearia · Santo André</div>
-        <div class="phone-title">BarberShop.</div>
-      </div>
-      <div class="phone-status">
-        <div class="phone-dot-g"></div>
-        <span class="phone-status-t">ABERTO AGORA · FECHA ÀS 19H</span>
-      </div>
-      <div class="phone-svcs">
-        <div class="phone-svc-r">
-          <span class="phone-svc-n">01</span>
-          <span class="phone-svc-nm">Corte</span>
-          <span class="phone-svc-p">R$35</span>
-        </div>
-        <div class="phone-svc-r">
-          <span class="phone-svc-n">02</span>
-          <span class="phone-svc-nm">Barba</span>
-          <span class="phone-svc-p">R$25</span>
-        </div>
-        <div class="phone-svc-r">
-          <span class="phone-svc-n">03</span>
-          <span class="phone-svc-nm">Corte + Barba</span>
-          <span class="phone-svc-p">R$60</span>
-        </div>
-        <div class="phone-svc-r">
-          <span class="phone-svc-n">04</span>
-          <span class="phone-svc-nm">Pezinho</span>
-          <span class="phone-svc-p">R$15</span>
-        </div>
-      </div>
-      <div class="phone-cta-p">
-        <span class="phone-cta-t">Agendar agora</span>
-        <span style="color:#F0EDE8;font-size:16px">→</span>
-      </div>
-    </div>
-    <div class="phone-caption">Coloca na bio do Instagram. O cliente agenda sozinho.</div>
-  </div>
-</div>
-
-<!-- ══ 4. COMO FUNCIONA ══ -->
-<div style="border-bottom:1px solid var(--rule)">
-<div class="section">
-  <div class="eyebrow reveal"><span>—</span> Em 3 minutos você está no ar</div>
+  <div class="eyebrow reveal"><span>—</span> No ar em 3 minutos</div>
   <h2 class="h2 reveal">Simples assim.</h2>
   <div class="steps">
     <div class="step reveal">
-      <span class="step-n">01</span>
+      <div class="step-n">01</div>
       <div>
-        <div class="step-title">Cria sua conta e configura</div>
-        <div class="step-desc">Cadastra seus serviços, preços, horários e uma foto. Seu link já está no ar imediatamente.</div>
+        <div class="step-title">Crie sua conta</div>
+        <div class="step-desc">Só nome, email e senha. 30 segundos, sem cartão de crédito.</div>
       </div>
     </div>
     <div class="step reveal">
-      <span class="step-n">02</span>
+      <div class="step-n">02</div>
       <div>
-        <div class="step-title">Coloca o link na bio do Instagram</div>
-        <div class="step-desc">Um único link substitui aquele "me chama no WhatsApp". O cliente entra, escolhe e agenda — tudo sozinho.</div>
+        <div class="step-title">Configure serviços e horários</div>
+        <div class="step-desc">Adicione o que você oferece, os preços e os dias disponíveis. 2 minutos.</div>
       </div>
     </div>
     <div class="step reveal">
-      <span class="step-n">03</span>
+      <div class="step-n">03</div>
       <div>
-        <div class="step-title">Você recebe a notificação e atende</div>
-        <div class="step-desc">O agendamento aparece no seu painel. O cliente recebe um lembrete 1h antes. Menos faltas. Mais previsibilidade.</div>
+        <div class="step-title">Compartilhe seu link</div>
+        <div class="step-desc">Coloque na bio do Instagram, no cartão de visita ou mande no grupo. Seu cliente já pode agendar.</div>
       </div>
     </div>
   </div>
 </div>
 </div>
 
-<!-- ══ FUNCIONA PARA O SEU NEGÓCIO ══ -->
-<div style="border-bottom:1px solid var(--rule)">
-<div class="section" id="exemplos">
-  <div class="eyebrow reveal"><span>—</span> Para qualquer segmento</div>
-  <h2 class="h2 reveal">Funciona para<br>o seu negócio.</h2>
-  <p class="p reveal" style="margin-bottom:40px">
-    Da barbearia ao consultório. O Agenda se adapta ao visual e à identidade de cada estabelecimento.
-  </p>
-
-  <div style="display:flex;flex-direction:column;gap:32px" id="gridExemplos">
-
-    <!-- EXEMPLO 1: Salão Feminino -->
-    <div class="exemplo-wrap reveal">
-      <div class="exemplo-label">
-        <span class="exemplo-categoria">Salão de beleza</span>
-        <span class="exemplo-tema" style="background:rgba(216,27,96,0.12);color:#D81B60">Tema Rose</span>
-      </div>
-      <div class="phone-exemplo">
-        <div class="ex-cover" style="background:linear-gradient(160deg,#3D0A20,#1A0613)">
-          <div class="ex-cat" style="color:rgba(216,27,96,0.7)">Salão de Beleza · São Paulo</div>
-          <div class="ex-nome">Studio Belle.</div>
-        </div>
-        <div class="ex-status-bar" style="background:#1A0613;border-color:rgba(216,27,96,0.12)">
-          <span class="ex-dot" style="background:#22C55E"></span>
-          <span class="ex-status-t">Aberto agora</span>
-          <span class="ex-hours">Fecha às 20h</span>
-        </div>
-        <div class="ex-svcs" style="background:#1A0613">
-          <div class="ex-svc"><span class="ex-num" style="color:rgba(216,27,96,0.5)">01</span><span class="ex-name">Escova progressiva</span><span class="ex-price" style="color:#D81B60">R$180</span></div>
-          <div class="ex-svc"><span class="ex-num" style="color:rgba(216,27,96,0.5)">02</span><span class="ex-name">Coloração completa</span><span class="ex-price" style="color:#D81B60">R$250</span></div>
-          <div class="ex-svc"><span class="ex-num" style="color:rgba(216,27,96,0.5)">03</span><span class="ex-name">Corte + Escova</span><span class="ex-price" style="color:#D81B60">R$120</span></div>
-        </div>
-        <div class="ex-cta" style="background:#D81B60">
-          <span>Agendar agora</span><span>→</span>
+<!-- DEMO INTERATIVA -->
+<div class="section-full">
+<div class="section" style="border-bottom:none">
+  <div class="eyebrow reveal"><span>—</span> Veja como seu cliente te vê</div>
+  <h2 class="h2 reveal">É assim que eles agendam.</h2>
+  <div class="demo-wrap reveal">
+    <div class="demo-phone">
+      <div class="demo-phone-header">
+        <div class="demo-avatar"></div>
+        <div>
+          <div class="demo-salon-name">Studio Carol</div>
+          <div class="demo-salon-cat">Estética · São Paulo</div>
         </div>
       </div>
-      <p class="exemplo-desc">Clientes agendam pelo Instagram sem precisar ligar. O salão recebe a notificação e o cliente recebe o lembrete.</p>
+      <div class="demo-body">
+
+        <!-- Estado 0: serviços -->
+        <div class="demo-state" id="dS0">
+          <div class="demo-svc-row" onclick="demoStep1(this,'Sobrancelha Designer','45 min · R$50')">
+            <div>
+              <div class="demo-svc-name">Sobrancelha Designer</div>
+              <div class="demo-svc-info">45 min</div>
+            </div>
+            <div class="demo-svc-info">R$50</div>
+          </div>
+          <div class="demo-svc-row" onclick="demoStep1(this,'Limpeza de Pele','60 min · R$80')">
+            <div>
+              <div class="demo-svc-name">Limpeza de Pele</div>
+              <div class="demo-svc-info">60 min</div>
+            </div>
+            <div class="demo-svc-info">R$80</div>
+          </div>
+          <div class="demo-svc-row" onclick="demoStep1(this,'Extensão de Cílios','90 min · R$120')">
+            <div>
+              <div class="demo-svc-name">Extensão de Cílios</div>
+              <div class="demo-svc-info">90 min</div>
+            </div>
+            <div class="demo-svc-info">R$120</div>
+          </div>
+          <div class="demo-hint">← toque em um serviço</div>
+        </div>
+
+        <!-- Estado 1: horários -->
+        <div class="demo-state hidden" id="dS1">
+          <div class="demo-back-btn" onclick="demoBack()">← voltar</div>
+          <div class="demo-svc-title-big" id="dSvcTitle">Sobrancelha Designer</div>
+          <div class="demo-slots">
+            <div class="demo-slot" onclick="demoStep2()">Hoje 14:00</div>
+            <div class="demo-slot" onclick="demoStep2()">Hoje 16:30</div>
+            <div class="demo-slot" onclick="demoStep2()">Amanhã 10:00</div>
+            <div class="demo-slot" onclick="demoStep2()">Amanhã 11:30</div>
+          </div>
+          <div class="demo-hint" style="margin-top:10px">← escolha um horário</div>
+        </div>
+
+        <!-- Estado 2: confirmado -->
+        <div class="demo-state hidden" id="dS2">
+          <div class="demo-success">
+            <div class="demo-check">✓</div>
+            <div class="demo-success-title">Agendado!</div>
+            <div class="demo-success-sub">Seu cliente recebeu a confirmação.</div>
+            <button class="demo-restart" onclick="demoRestart()">recomeçar</button>
+          </div>
+        </div>
+
+      </div>
     </div>
-
-    <!-- EXEMPLO 2: Dentista -->
-    <div class="exemplo-wrap reveal">
-      <div class="exemplo-label">
-        <span class="exemplo-categoria">Consultório odontológico</span>
-        <span class="exemplo-tema" style="background:rgba(44,111,170,0.12);color:#2C6FAA">Tema Clinic</span>
-      </div>
-      <div class="phone-exemplo">
-        <div class="ex-cover" style="background:linear-gradient(160deg,#0A1A2E,#0E2A45)">
-          <div class="ex-cat" style="color:rgba(44,111,170,0.7)">Odontologia · Curitiba</div>
-          <div class="ex-nome">Dra. Ana Lima.</div>
-        </div>
-        <div class="ex-status-bar" style="background:#0E2A45;border-color:rgba(44,111,170,0.18)">
-          <span class="ex-dot" style="background:#22C55E"></span>
-          <span class="ex-status-t" style="color:#7AB0D4">Consultório aberto</span>
-          <span class="ex-hours" style="color:#3A6080">Seg–Sex 8h–18h</span>
-        </div>
-        <div class="ex-svcs" style="background:#0E2A45">
-          <div class="ex-svc"><span class="ex-num" style="color:rgba(44,111,170,0.5)">01</span><span class="ex-name" style="color:#B8D4E8">Consulta e avaliação</span><span class="ex-price" style="color:#2C6FAA">R$150</span></div>
-          <div class="ex-svc"><span class="ex-num" style="color:rgba(44,111,170,0.5)">02</span><span class="ex-name" style="color:#B8D4E8">Clareamento dental</span><span class="ex-price" style="color:#2C6FAA">R$800</span></div>
-          <div class="ex-svc"><span class="ex-num" style="color:rgba(44,111,170,0.5)">03</span><span class="ex-name" style="color:#B8D4E8">Limpeza e profilaxia</span><span class="ex-price" style="color:#2C6FAA">R$200</span></div>
-        </div>
-        <div class="ex-cta" style="background:#2C6FAA">
-          <span>Agendar consulta</span><span>→</span>
-        </div>
-      </div>
-      <p class="exemplo-desc">Pacientes agendam sem ligar para o consultório. Dra. Ana vê a agenda do dia no painel e recebe confirmação automática.</p>
+    <div class="demo-caption">
+      <p style="color:var(--bone);font-family:var(--display);font-style:italic;font-size:18px;line-height:1.3;margin-bottom:10px">Esta é a página que seu cliente vai abrir.</p>
+      <p style="font-size:12px;color:var(--stone);line-height:1.6;font-weight:300">Ele escolhe o serviço, o horário e confirma. Você recebe a notificação. Sem nenhuma troca de mensagem.</p>
     </div>
-
-    <!-- EXEMPLO 3: Clínica de estética -->
-    <div class="exemplo-wrap reveal">
-      <div class="exemplo-label">
-        <span class="exemplo-categoria">Clínica de estética</span>
-        <span class="exemplo-tema" style="background:rgba(26,14,6,0.08);color:#4A3728">Tema Claro</span>
-      </div>
-      <div class="phone-exemplo" style="border-color:rgba(26,14,6,0.12)">
-        <div class="ex-cover" style="background:linear-gradient(160deg,#E8E0D5,#F5F2EC)">
-          <div class="ex-cat" style="color:rgba(26,14,6,0.4)">CLÍNICA DE ESTÉTICA · PORTO ALEGRE</div>
-          <div class="ex-nome" style="color:#1A0E06">Espaço Nuvem.</div>
-        </div>
-        <div class="ex-status-bar" style="background:#FFF;border-color:rgba(26,14,6,0.08)">
-          <span class="ex-dot" style="background:#22C55E"></span>
-          <span class="ex-status-t" style="color:#3B6D11">Aberto agora</span>
-          <span class="ex-hours" style="color:#9A8070">Fecha às 19h</span>
-        </div>
-        <div class="ex-svcs" style="background:#FFF">
-          <div class="ex-svc"><span class="ex-num" style="color:rgba(229,90,12,0.35)">01</span><span class="ex-name" style="color:#1A0E06">Limpeza de pele profunda</span><span class="ex-price" style="color:#E55A0C">R$220</span></div>
-          <div class="ex-svc"><span class="ex-num" style="color:rgba(229,90,12,0.35)">02</span><span class="ex-name" style="color:#1A0E06">Drenagem linfática</span><span class="ex-price" style="color:#E55A0C">R$180</span></div>
-          <div class="ex-svc"><span class="ex-num" style="color:rgba(229,90,12,0.35)">03</span><span class="ex-name" style="color:#1A0E06">Radiofrequência facial</span><span class="ex-price" style="color:#E55A0C">R$320</span></div>
-        </div>
-        <div class="ex-cta" style="background:#E55A0C">
-          <span>Agendar procedimento</span><span>→</span>
-        </div>
-      </div>
-      <p class="exemplo-desc">Fundo claro e elegante para transmitir saúde e sofisticação. Cada estabelecimento tem sua identidade — não um template genérico.</p>
-    </div>
-
   </div>
 </div>
 </div>
 
-<!-- ══ 5. FEATURES COM NÚMEROS ══ -->
-<div class="features-wrap">
-  <div class="features-eyebrow reveal">
-    <div class="eyebrow"><span>—</span> O que você ganha</div>
-    <h2 class="h2">Mais do que um agendamento.<br>Uma operação.</h2>
+<!-- BENEFÍCIOS -->
+<div class="section-full">
+<div class="section" style="max-width:100%;padding-left:0;padding-right:0;border-bottom:none">
+  <div style="padding:0 24px" class="section">
+    <div class="eyebrow reveal"><span>—</span> O que você ganha</div>
+    <h2 class="h2 reveal">Menos trabalho.<br>Mais clientes.</h2>
   </div>
-  <div class="features-grid">
-    <div class="feat reveal">
-      <div class="feat-num">24h</div>
-      <div class="feat-title">Agendamentos</div>
-      <div class="feat-desc">Enquanto você dorme, clientes agendam. Seu negócio não fecha mais.</div>
+  <div class="benefits-grid">
+    <div class="benefit reveal">
+      <div class="benefit-icon">24h</div>
+      <div class="benefit-title">Agenda aberta</div>
+      <div class="benefit-desc">Clientes agendam enquanto você dorme, descansa ou está atendendo.</div>
     </div>
-    <div class="feat reveal">
-      <div class="feat-num">-60%</div>
-      <div class="feat-title">Menos faltas</div>
-      <div class="feat-desc">Lembretes automáticos via WhatsApp 1h antes do horário.</div>
+    <div class="benefit reveal">
+      <div class="benefit-icon">0%</div>
+      <div class="benefit-title">Faltas</div>
+      <div class="benefit-desc">Confirmação automática na hora do agendamento. O cliente confirma e já era.</div>
     </div>
-    <div class="feat reveal">
-      <div class="feat-num">R$0</div>
-      <div class="feat-title">Pra começar</div>
-      <div class="feat-desc">14 dias grátis, sem cartão de crédito. Sem risco nenhum.</div>
+    <div class="benefit reveal">
+      <div class="benefit-icon">PIX</div>
+      <div class="benefit-title">Sinal antecipado</div>
+      <div class="benefit-desc">Receba parte do valor antes do atendimento. Compromisso garantido.</div>
     </div>
-    <div class="feat reveal">
-      <div class="feat-num">PIX</div>
-      <div class="feat-title">Sinal antecipado</div>
-      <div class="feat-desc">Receba parte do valor antes. Confirme o compromisso do cliente.</div>
+    <div class="benefit reveal">
+      <div class="benefit-icon">→</div>
+      <div class="benefit-title">Página própria</div>
+      <div class="benefit-desc">Link profissional com seu nome para colocar na bio, cartão e indicações.</div>
     </div>
-    <div class="feat reveal">
-      <div class="feat-num">⭐</div>
-      <div class="feat-title">Avaliações reais</div>
-      <div class="feat-desc">Seu cliente avalia depois do atendimento. Você constrói reputação automaticamente.</div>
-    </div>
-    <div class="feat reveal">
-      <div class="feat-num">📊</div>
-      <div class="feat-title">Painel completo</div>
-      <div class="feat-desc">Veja sua agenda, receita do mês e histórico de clientes de um lugar só.</div>
-    </div>
-    <div class="feat reveal">
-      <div class="feat-num">🔁</div>
-      <div class="feat-title">Retorno automático</div>
-      <div class="feat-desc">Sistema avisa quando um cliente some. Você manda um WhatsApp com um clique.</div>
-    </div>
-    <div class="feat reveal">
-      <div class="feat-num">∞</div>
-      <div class="feat-title">Agendamentos</div>
-      <div class="feat-desc">Sem limite de agendamentos por mês. Cresce com você.</div>
-    </div>
-  </div>
-</div>
-
-<!-- ══ 6. DEPOIMENTOS ══ -->
-<div style="border-bottom:1px solid var(--rule)">
-<div style="max-width:720px;margin:0 auto;padding:56px 24px">
-  <div class="eyebrow reveal"><span>—</span> O que dizem os primeiros usuários</div>
-
-  <div style="margin-top:28px">
-
-    <div class="reveal" style="padding:32px 0;border-bottom:1px solid var(--rule)">
-      <div style="font-family:var(--serif);font-style:italic;font-size:60px;color:rgba(229,90,12,0.12);line-height:0.6;margin-bottom:16px">"</div>
-      <p style="font-family:var(--serif);font-style:italic;font-size:clamp(16px,4vw,20px);color:var(--bone);line-height:1.5;margin-bottom:16px">
-        Antes eu perdia cliente toda hora respondendo WhatsApp no meio do corte. Agora eles agendam sozinhos e eu recebo a notificação. Parece que contratei uma recepcionista — mas custa muito menos.
-      </p>
-      <div style="font-size:10px;color:rgba(229,90,12,0.6);letter-spacing:3px;text-transform:uppercase">
-        Felipe · Proprietário, BarberShop · Santo André
-      </div>
-    </div>
-
-    <div class="reveal" style="padding:32px 0;border-bottom:1px solid var(--rule)">
-      <div style="font-family:var(--serif);font-style:italic;font-size:60px;color:rgba(229,90,12,0.12);line-height:0.6;margin-bottom:16px">"</div>
-      <p style="font-family:var(--serif);font-style:italic;font-size:clamp(16px,4vw,20px);color:var(--bone);line-height:1.5;margin-bottom:16px">
-        Minhas clientes amaram poder ver minha agenda e escolher o horário na hora. Minha taxa de no-show caiu pela metade com o lembrete automático.
-      </p>
-      <div style="font-size:10px;color:rgba(229,90,12,0.6);letter-spacing:3px;text-transform:uppercase">
-        Ana Paula · Studio de Unhas · São Paulo
-      </div>
-    </div>
-
-    <div class="reveal" style="padding:32px 0">
-      <div style="font-family:var(--serif);font-style:italic;font-size:60px;color:rgba(229,90,12,0.12);line-height:0.6;margin-bottom:16px">"</div>
-      <p style="font-family:var(--serif);font-style:italic;font-size:clamp(16px,4vw,20px);color:var(--bone);line-height:1.5;margin-bottom:16px">
-        Sou dentista e não tinha nenhum sistema de agendamento online. Coloquei o link na minha bio do Instagram e em uma semana já tinha 12 novos pacientes agendados sem eu precisar atender o telefone.
-      </p>
-      <div style="font-size:10px;color:rgba(229,90,12,0.6);letter-spacing:3px;text-transform:uppercase">
-        Dr. Marcus · Consultório Odontológico · Curitiba
-      </div>
-    </div>
-
   </div>
 </div>
 </div>
 
-<!-- ══ 7. SLUG (FOMO) ══ -->
-<div class="slug-section">
-  <div class="slug-inner">
-    <div class="eyebrow reveal"><span>—</span> Seu endereço te espera</div>
-    <h2 class="h2 reveal">Qual vai ser o seu?</h2>
-    <p class="p reveal" style="margin-bottom:0">
-      Cada estabelecimento tem um endereço único e permanente. Uma vez que alguém do seu segmento registrar o nome que você queria — acabou.
-    </p>
-    <div class="slug-display reveal">
-      <span class="slug-base">agendatop.vercel.app/</span>
-      <span class="slug-name" id="slugAnim">barbershop</span>
-      <span class="slug-cursor"></span>
-    </div>
-    <div class="slug-sub reveal">Links personalizados · Página própria · Para sempre seu</div>
-    <a href="/cadastro.html" class="btn-hero reveal" style="margin-top:24px;display:inline-flex">
-      Garantir meu endereço agora →
-    </a>
-  </div>
-</div>
-
-<!-- ══ 8. PLANOS ══ -->
+<!-- PLANOS -->
 <div class="planos-section" id="planos">
   <div class="planos-inner">
     <div class="eyebrow reveal"><span>—</span> Planos</div>
     <h2 class="h2 reveal">Sem surpresas.<br>Sem letra miúda.</h2>
     <p class="p reveal" style="margin-bottom:0">Todos os planos começam com 14 dias grátis. Cancela quando quiser.</p>
+    <div class="reveal">
+      <div class="toggle-ciclo">
+        <button class="toggle-btn active" data-ciclo="mensal" onclick="setCiclo('mensal')">Mensal</button>
+        <button class="toggle-btn" data-ciclo="anual" onclick="setCiclo('anual')">Anual <span class="toggle-badge">2 meses grátis</span></button>
+      </div>
+    </div>
     <div class="planos-grid">
 
       <div class="plano reveal">
         <div class="plano-nome">Solo</div>
-        <div class="plano-preco"><sup>R$</sup>35<sub>/mês</sub></div>
+        <div class="plano-preco"><sup>R$</sup><span class="preco-val" data-mensal="35" data-anual="29">35</span><sub>/mês</sub></div>
+        <div class="plano-anual-info">Cobrado anualmente · R$350/ano</div>
         <ul class="plano-itens">
           <li>1 profissional</li>
           <li>Agendamentos ilimitados</li>
           <li>Página pública completa</li>
-          <li>Lembretes automáticos</li>
+          <li>Confirmação automática</li>
           <li>Painel de controle</li>
         </ul>
         <a href="/cadastro.html?plano=basico" class="plano-cta">Começar grátis →</a>
@@ -948,12 +407,13 @@ body {
       <div class="plano destaque reveal">
         <div class="plano-badge">★ Mais popular</div>
         <div class="plano-nome" style="color:var(--brand)">Equipe</div>
-        <div class="plano-preco"><sup>R$</sup>70<sub>/mês</sub></div>
+        <div class="plano-preco"><sup>R$</sup><span class="preco-val" data-mensal="70" data-anual="58">70</span><sub>/mês</sub></div>
+        <div class="plano-anual-info">Cobrado anualmente · R$700/ano</div>
         <ul class="plano-itens">
           <li>Até 3 profissionais</li>
           <li>Tudo do Solo</li>
-          <li>Campanhas de retorno</li>
-          <li>Analytics avançado</li>
+          <li>PIX antecipado</li>
+          <li>Analytics da agenda</li>
           <li>Avaliações de clientes</li>
         </ul>
         <a href="/cadastro.html?plano=pro" class="plano-cta">Começar grátis →</a>
@@ -962,13 +422,13 @@ body {
 
       <div class="plano reveal">
         <div class="plano-nome">Negócio</div>
-        <div class="plano-preco"><sup>R$</sup>140<sub>/mês</sub></div>
+        <div class="plano-preco"><sup>R$</sup><span class="preco-val" data-mensal="140" data-anual="117">140</span><sub>/mês</sub></div>
+        <div class="plano-anual-info">Cobrado anualmente · R$1.400/ano</div>
         <ul class="plano-itens">
           <li>Profissionais ilimitados</li>
           <li>Tudo do Equipe</li>
-          <li>Suporte WhatsApp prioritário</li>
+          <li>Suporte prioritário</li>
           <li>Onboarding personalizado</li>
-          <li style="opacity:0.6">API de integração <span style="font-size:9px;color:var(--brand);background:rgba(229,90,12,0.12);padding:1px 6px;border-radius:3px;font-weight:700;letter-spacing:1px;vertical-align:middle">EM BREVE</span></li>
         </ul>
         <a href="/cadastro.html?plano=salao" class="plano-cta">Começar grátis →</a>
         <div class="plano-trial">14 dias grátis incluídos</div>
@@ -978,112 +438,92 @@ body {
   </div>
 </div>
 
-<!-- ══ GARANTIA ══ -->
-<div style="border-bottom:1px solid var(--rule)">
-<div style="max-width:720px;margin:0 auto;padding:40px 24px;display:flex;flex-direction:column;align-items:center;text-align:center">
-  <div class="reveal" style="font-size:40px;margin-bottom:12px">🛡️</div>
-  <h3 class="reveal" style="font-family:var(--serif);font-style:italic;font-size:24px;color:var(--bone);letter-spacing:-0.5px;margin-bottom:8px">
-    14 dias grátis. Sem risco.
-  </h3>
-  <p class="reveal p" style="max-width:440px;margin-bottom:0">
-    Crie sua conta, configure sua página e compartilhe o link com seus clientes. Se em 14 dias você não ver valor, é só não continuar — sem explicação, sem burocracia. Mas a gente aposta que vai querer ficar.
-  </p>
-</div>
+<!-- DEPOIMENTOS (oculto enquanto vazio) -->
+<script>const DEPOIMENTOS_REAIS = [];</script>
+<div class="depo-wrap" id="depoSection" style="display:none">
+  <div class="depo-inner">
+    <div class="eyebrow"><span>—</span> O que dizem os primeiros usuários</div>
+    <div id="depoList"></div>
+  </div>
 </div>
 
-<!-- ══ FAQ ══ -->
-<div style="border-bottom:1px solid var(--rule)">
+<!-- FAQ -->
+<div class="section-full">
 <div class="section">
   <div class="eyebrow reveal"><span>—</span> Dúvidas frequentes</div>
   <h2 class="h2 reveal">Antes de decidir.</h2>
-
   <div id="faqLanding" style="margin-top:28px">
 
     <div class="faq-lp reveal">
-      <button class="faq-lp-btn" onclick="toggleFaqLp(0)">
+      <button class="faq-lp-btn" onclick="toggleFaq(0)">
         <span>Preciso entender de tecnologia para usar?</span>
-        <span class="faq-lp-icon" id="flpIcon0">+</span>
+        <span class="faq-lp-icon" id="fi0">+</span>
       </button>
-      <div class="faq-lp-resp" id="flpResp0">
-        Não. Se você consegue usar o Instagram, consegue usar o Agenda. O cadastro leva 3 minutos e o onboarding te guia em cada etapa. Nenhum conhecimento técnico é necessário.
+      <div class="faq-lp-resp" id="fr0">
+        Não. Se você usa Instagram, você usa o Agenda. O cadastro leva 3 minutos e o onboarding te guia em cada passo. Zero conhecimento técnico necessário.
       </div>
     </div>
 
     <div class="faq-lp reveal">
-      <button class="faq-lp-btn" onclick="toggleFaqLp(1)">
+      <button class="faq-lp-btn" onclick="toggleFaq(1)">
         <span>Meu cliente precisa criar uma conta para agendar?</span>
-        <span class="faq-lp-icon" id="flpIcon1">+</span>
+        <span class="faq-lp-icon" id="fi1">+</span>
       </button>
-      <div class="faq-lp-resp" id="flpResp1">
-        Não. O cliente entra na sua página, escolhe o serviço, o dia e o horário, informa o nome e o WhatsApp — e pronto. Sem cadastro, sem senha, sem atrito.
+      <div class="faq-lp-resp" id="fr1">
+        Não. O cliente abre sua página, escolhe o serviço, o dia e o horário, informa o nome e o telefone — pronto. Sem cadastro, sem senha, sem atrito.
       </div>
     </div>
 
     <div class="faq-lp reveal">
-      <button class="faq-lp-btn" onclick="toggleFaqLp(2)">
-        <span>E se eu quiser cancelar? Tem multa ou contrato?</span>
-        <span class="faq-lp-icon" id="flpIcon2">+</span>
+      <button class="faq-lp-btn" onclick="toggleFaq(2)">
+        <span>Posso cancelar quando quiser?</span>
+        <span class="faq-lp-icon" id="fi2">+</span>
       </button>
-      <div class="faq-lp-resp" id="flpResp2">
-        Nenhum contrato, nenhuma multa. Cancele quando quiser, sem burocracia. A cobrança é mensal e você pode interromper a qualquer momento pelo painel.
+      <div class="faq-lp-resp" id="fr2">
+        Sim. Sem fidelidade, sem multa. Você cancela pelo painel e pronto. Seus dados ficam disponíveis para exportar antes de sair.
       </div>
     </div>
 
     <div class="faq-lp reveal">
-      <button class="faq-lp-btn" onclick="toggleFaqLp(3)">
-        <span>Funciona para qualquer tipo de negócio?</span>
-        <span class="faq-lp-icon" id="flpIcon3">+</span>
+      <button class="faq-lp-btn" onclick="toggleFaq(3)">
+        <span>Para qual tipo de profissional o Agenda foi feito?</span>
+        <span class="faq-lp-icon" id="fi3">+</span>
       </button>
-      <div class="faq-lp-resp" id="flpResp3">
-        Sim. Barbearia, salão de beleza, clínica de estética, consultório, pet shop, personal trainer, nutricionista — qualquer profissional que trabalha com hora marcada. A página se adapta visualmente ao seu segmento.
+      <div class="faq-lp-resp" id="fr3">
+        Para qualquer profissional que atende com hora marcada: cabelereiros, esteticistas, tatuadores, personal trainers, psicólogos, nutricionistas, dentistas e muito mais. Se você agenda horários, o Agenda é para você.
       </div>
     </div>
 
-    <div class="faq-lp reveal">
-      <button class="faq-lp-btn" onclick="toggleFaqLp(4)">
-        <span>Tenho vários profissionais. Funciona?</span>
-        <span class="faq-lp-icon" id="flpIcon4">+</span>
-      </button>
-      <div class="faq-lp-resp" id="flpResp4">
-        Sim. O cliente pode escolher o profissional na hora de agendar. Cada profissional tem sua agenda separada, e você vê tudo no mesmo painel. Nos planos Equipe e Negócio dá pra configurar comissão por profissional.
-      </div>
-    </div>
-
-    <div class="faq-lp reveal">
-      <button class="faq-lp-btn" onclick="toggleFaqLp(5)" style="border-bottom:none">
-        <span>Posso usar meu próprio domínio?</span>
-        <span class="faq-lp-icon" id="flpIcon5">+</span>
-      </button>
-      <div class="faq-lp-resp" id="flpResp5">
-        Por enquanto os endereços são no formato agendatop.vercel.app/seunome. Domínio próprio está no roadmap e será disponibilizado nos próximos meses, sem custo adicional.
-      </div>
-    </div>
-
+    <div class="faq-lp" style="border-bottom:1px solid var(--rule)"></div>
   </div>
 </div>
 </div>
 
-<!-- ══ 9. CTA FINAL ══ -->
+<!-- CTA FINAL -->
 <div class="cta-final">
   <div class="cta-final-glow"></div>
-  <div class="cta-final-eyebrow reveal">Comece hoje</div>
-  <h2 class="cta-final-h2 reveal">
-    Seu endereço te espera.<br>
-    <em>Garante agora.</em>
-  </h2>
-  <p class="cta-final-p reveal">
-    Enquanto você lê isso, alguém do seu segmento pode estar criando o endereço que você queria. Cada negócio tem um link único — e permanente.
-  </p>
-  <a href="/cadastro.html" class="btn-final reveal">
-    Criar minha conta grátis <span>→</span>
-  </a>
-  <div class="cta-final-disclaimer reveal">
-    14 dias grátis · Sem cartão · Cancela quando quiser
+  <div style="position:relative;z-index:1">
+    <div class="cta-final-eyebrow reveal">— Pronto para começar</div>
+    <h2 class="cta-final-h2 reveal">Seu link te<br><em>espera.</em></h2>
+    <p class="cta-final-p reveal">Escolha agora antes que alguém do seu segmento pegue o endereço que você queria.</p>
+    <div class="cta-final-claim reveal">
+      <div class="claim-row" style="max-width:480px;margin:0 auto 8px">
+        <span class="claim-prefix">agendatop.vercel.app/</span>
+        <input id="slugFinal" class="claim-input" type="text" placeholder="seu-negocio" autocomplete="off" spellcheck="false" maxlength="50">
+      </div>
+      <div id="slugFinalStatus" class="slug-status" style="text-align:center"></div>
+      <div style="text-align:center;margin-top:16px">
+        <a id="finalCta" href="/cadastro.html" class="btn-hero">
+          Criar minha página grátis →
+        </a>
+      </div>
+    </div>
+    <div class="cta-final-disclaimer reveal">14 dias grátis · Sem cartão · Cancela quando quiser</div>
   </div>
 </div>
 
 <!-- FOOTER -->
-<footer style="background:var(--ink);border-top:1px solid var(--rule)">
+<footer style="background:var(--ink)">
   <div class="footer">
     <a href="/" class="footer-brand">Agenda.</a>
     <div class="footer-links">
@@ -1096,57 +536,141 @@ body {
 </footer>
 
 <script>
+const SUPA_URL = 'https://acldrisohnjfekjxgmoh.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFjbGRyaXNvaG5qZmVranhnbW9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1ODA1MzcsImV4cCI6MjA4OTE1NjUzN30.etojz12x1oVNvbW_fPeVpNx2OFuJ72C1YioFBlCLS2Y';
+
 // Reveal on scroll
-const obs = new IntersectionObserver((entries) => {
+const _obs = new IntersectionObserver((entries) => {
   entries.forEach((e, i) => {
     if (e.isIntersecting) {
       setTimeout(() => e.target.classList.add('visible'), i * 60);
-      obs.unobserve(e.target);
+      _obs.unobserve(e.target);
     }
   });
 }, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-
-// Slug animação — troca entre diferentes slugs para criar FOMO
-const slugs = [
-  'barbershop', 'studio.carol', 'nailtop.sp',
-  'clinica.estetica', 'barbearia.ze', 'salao.maria'
-];
-let si = 0;
-function animarSlug() {
-  const el = document.getElementById('slugAnim');
-  if (!el) return;
-  el.style.opacity = '0';
-  el.style.transform = 'translateY(-4px)';
-  setTimeout(() => {
-    si = (si + 1) % slugs.length;
-    el.textContent = slugs[si];
-    el.style.transition = 'all 0.3s ease';
-    el.style.opacity = '1';
-    el.style.transform = 'translateY(0)';
-  }, 300);
-}
-setInterval(animarSlug, 2500);
-
-// FAQ accordion
-function toggleFaqLp(i) {
-  const resp = document.getElementById('flpResp' + i);
-  const icon = document.getElementById('flpIcon' + i);
-  if (!resp) return;
-  const open = resp.style.display === 'block';
-  resp.style.display = open ? 'none' : 'block';
-  icon.classList.toggle('open', !open);
-}
-window.toggleFaqLp = toggleFaqLp;
+document.querySelectorAll('.reveal').forEach(el => _obs.observe(el));
 
 // Scroll suave para âncoras na nav
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
     e.preventDefault();
-    const target = document.querySelector(a.getAttribute('href'));
-    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 });
+
+// Claim-link: sanitize + debounce + RPC
+function sanitizeSlug(v) {
+  return v.toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g,'')
+    .replace(/[^a-z0-9-]/g,'-')
+    .replace(/-+/g,'-')
+    .replace(/^-|-$/g,'');
+}
+
+async function checkSlug(slug, statusEl) {
+  if (!slug) { statusEl.textContent = ''; statusEl.className = 'slug-status'; return; }
+  statusEl.textContent = '...';
+  statusEl.className = 'slug-status checking';
+  try {
+    const r = await fetch(SUPA_URL + '/rest/v1/rpc/slug_disponivel', {
+      method: 'POST',
+      headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p_slug: slug })
+    });
+    const ok = await r.json();
+    if (ok === true) {
+      statusEl.textContent = '✓ disponível';
+      statusEl.className = 'slug-status ok';
+    } else {
+      statusEl.textContent = '✗ já reservado';
+      statusEl.className = 'slug-status taken';
+    }
+  } catch(_) { statusEl.textContent = ''; statusEl.className = 'slug-status'; }
+}
+
+function wireSlugInput(inputId, statusId, ctaId) {
+  const inp = document.getElementById(inputId);
+  const st = document.getElementById(statusId);
+  const cta = document.getElementById(ctaId);
+  if (!inp) return;
+  let timer = null;
+  inp.addEventListener('input', function() {
+    const clean = sanitizeSlug(this.value);
+    if (clean !== this.value) this.value = clean;
+    cta.href = clean ? '/cadastro.html?slug=' + encodeURIComponent(clean) : '/cadastro.html';
+    clearTimeout(timer);
+    st.textContent = '';
+    if (!clean) return;
+    timer = setTimeout(() => checkSlug(clean, st), 400);
+  });
+}
+wireSlugInput('slugHero', 'slugHeroStatus', 'heroCta');
+wireSlugInput('slugFinal', 'slugFinalStatus', 'finalCta');
+
+// Plano toggle
+function setCiclo(ciclo) {
+  document.querySelectorAll('[data-ciclo]').forEach(b => b.classList.toggle('active', b.dataset.ciclo === ciclo));
+  document.querySelectorAll('.preco-val').forEach(el => {
+    el.textContent = ciclo === 'anual' ? el.dataset.anual : el.dataset.mensal;
+  });
+  document.querySelectorAll('.plano-anual-info').forEach(el => {
+    el.style.display = ciclo === 'anual' ? 'block' : 'none';
+  });
+  document.querySelectorAll('.plano-cta').forEach(a => {
+    try {
+      const u = new URL(a.href, location.origin);
+      if (ciclo === 'anual') u.searchParams.set('ciclo','anual');
+      else u.searchParams.delete('ciclo');
+      a.href = u.pathname + u.search;
+    } catch(_) {}
+  });
+}
+window.setCiclo = setCiclo;
+
+// FAQ accordion
+function toggleFaq(i) {
+  const r = document.getElementById('fr' + i);
+  const ic = document.getElementById('fi' + i);
+  if (!r) return;
+  const open = r.style.display === 'block';
+  r.style.display = open ? 'none' : 'block';
+  ic.classList.toggle('open', !open);
+}
+window.toggleFaq = toggleFaq;
+
+// Depoimentos
+if (DEPOIMENTOS_REAIS.length > 0) {
+  document.getElementById('depoSection').style.display = '';
+  const list = document.getElementById('depoList');
+  DEPOIMENTOS_REAIS.forEach(d => {
+    list.innerHTML += '<div class="depo-item reveal"><div class="depo-open">"</div><p class="depo-text">' + d.texto + '</p><div class="depo-author">' + d.autor + '</div></div>';
+  });
+  list.querySelectorAll('.reveal').forEach(el => _obs.observe(el));
+}
+
+// Demo interativa
+function demoStep1(el, nome) {
+  document.getElementById('dSvcTitle').textContent = nome;
+  document.getElementById('dS0').classList.add('hidden');
+  document.getElementById('dS1').classList.remove('hidden');
+}
+function demoBack() {
+  document.getElementById('dS1').classList.add('hidden');
+  document.getElementById('dS0').classList.remove('hidden');
+}
+function demoStep2() {
+  document.getElementById('dS1').classList.add('hidden');
+  document.getElementById('dS2').classList.remove('hidden');
+}
+function demoRestart() {
+  document.getElementById('dS2').classList.add('hidden');
+  document.getElementById('dS0').classList.remove('hidden');
+}
+window.demoStep1 = demoStep1;
+window.demoBack = demoBack;
+window.demoStep2 = demoStep2;
+window.demoRestart = demoRestart;
 </script>
 </body>
 </html>
