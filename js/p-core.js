@@ -73,8 +73,8 @@ function rBRL(c){return'R$'+Math.round(c/100);}
 
 /* ── formatPrice: pt-BR currency ── */
 function formatPrice(centavos){
-  if(!centavos||centavos<=0) return 'A combinar';
-  return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(centavos/100);
+  var v = (!centavos||centavos<0) ? 0 : centavos;
+  return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v/100);
 }
 
 function sforca(v,ids,infoId){
