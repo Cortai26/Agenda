@@ -182,6 +182,7 @@ body{
     <div class="prog-item" id="prog0"></div>
     <div class="prog-item" id="prog1"></div>
     <div class="prog-item" id="prog2"></div>
+    <div class="prog-item" id="prog4"></div>
     <div class="prog-item" id="prog3"></div>
   </div>
 
@@ -273,10 +274,33 @@ body{
     <button class="btn-primary" onclick="salvarLocalizacaoEAvancar()">
       <span>Continuar</span><span>→</span>
     </button>
+    <button class="btn-pular" onclick="avancarPasso(4)">Pular por agora</button>
+  </div>
+
+  <!-- PASSO 4: FOTO DE PERFIL -->
+  <div class="passo" id="passo4">
+    <div class="passo-eyebrow">04 — Foto de perfil</div>
+    <h1 class="passo-h1">Como você quer<br>aparecer?</h1>
+    <p class="passo-sub">Páginas com foto recebem 5× mais agendamentos. Você pode trocar a qualquer momento.</p>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:16px;margin:28px 0 32px">
+      <div id="obFotoPreview" onclick="document.getElementById('obFotoInput').click()"
+           style="width:110px;height:110px;border-radius:50%;background:var(--ink-3);border:2px dashed rgba(240,237,232,0.25);cursor:pointer;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">
+        <span style="font-size:40px">📷</span>
+      </div>
+      <button onclick="document.getElementById('obFotoInput').click()"
+              style="padding:11px 28px;background:var(--brand);color:#fff;border:none;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;letter-spacing:0.01em">
+        Escolher foto
+      </button>
+      <div id="obFotoStatus" style="font-size:12px;color:var(--stone-2);min-height:16px"></div>
+    </div>
+    <input type="file" id="obFotoInput" accept="image/*" style="display:none" onchange="obUploadFoto(this)">
+    <button class="btn-primary" onclick="avancarPasso(3)">
+      <span>Continuar</span><span>→</span>
+    </button>
     <button class="btn-pular" onclick="avancarPasso(3)">Pular por agora</button>
   </div>
 
-  <!-- PASSO 4: PRONTO! -->
+  <!-- PASSO 5: PRONTO! -->
   <div class="passo" id="passo3" style="text-align:center">
     <div class="sucesso-check">
       <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
@@ -285,102 +309,46 @@ body{
     </div>
     <div class="passo-eyebrow">Tudo pronto</div>
     <h1 class="passo-h1">Sua página<br>está no ar.</h1>
-    <p class="passo-sub">Compartilhe o link na bio do seu Instagram. Clientes já podem agendar.</p>
-    <div class="preview-mini">
-      <div class="preview-capa">
-        <div class="preview-cat" id="previewCat"></div>
-        <div class="preview-nome-p" id="previewNome">Seu negócio.</div>
-      </div>
-      <div id="previewSvcs"></div>
-      <div class="preview-cta-p">
-        <span class="preview-cta-t">Agendar agora</span>
-        <span style="color:#F0EDE8;font-size:16px">→</span>
-      </div>
-    </div>
-    <div class="link-box" style="margin-top:0;margin-bottom:16px;background:rgba(229,90,12,0.08);border:1.5px solid rgba(229,90,12,0.3)">
-      <div class="link-label" style="color:var(--brand);font-size:9px;letter-spacing:3px">SEU LINK DE AGENDAMENTO</div>
-      <div class="link-val" id="linkVal" style="font-size:13px;word-break:break-all"></div>
-      <div class="link-sub">Compartilhe este link — clientes abrem e já agendam com você</div>
-    </div>
-    <button class="btn-copiar" id="btnCopiar" onclick="copiarLink()" style="font-size:15px;font-weight:800;padding:14px 20px">
-      <span>📋 Copiar meu link</span><span id="btnCopiarIcon"></span>
-    </button>
-    <a id="btnWhatsapp" href="#" target="_blank" rel="noopener"
-      style="display:flex;align-items:center;justify-content:center;gap:8px;padding:14px 20px;background:#25D366;color:#fff;text-decoration:none;font-family:var(--sans);font-size:15px;font-weight:700;margin-top:8px;transition:filter 0.15s">
-      <span>Compartilhar via WhatsApp</span>
-    </a>
-    <a id="linkVerPagina" href="#" target="_blank"
-      style="display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;border:1px solid var(--rule-2);color:var(--stone);font-family:var(--sans);font-size:13px;margin-top:8px;transition:all 0.15s;text-decoration:none">
-      <span>Ver minha página agora</span><span>↗</span>
-    </a>
 
-    <!-- QR Code -->
-    <div class="qr-wrap" id="qrWrap" style="margin-top:20px">
-      <div style="font-size:9px;color:var(--stone-2);letter-spacing:3px;text-transform:uppercase;margin-bottom:4px">QR Code da sua página</div>
-      <div class="qr-canvas" id="qrCanvas"></div>
-      <div style="font-size:11px;color:var(--stone-2);text-align:center">Imprima e coloque no balcão</div>
+    <!-- BLOCO 1: PAINEL — ação primária -->
+    <div style="background:var(--ink-2);border:1.5px solid rgba(240,237,232,0.12);padding:20px;margin:20px 0 0;text-align:left">
+      <div style="font-size:9px;color:var(--stone-2);letter-spacing:3px;text-transform:uppercase;font-family:var(--sans);margin-bottom:10px">Sua área de gestão</div>
+      <div style="font-family:var(--display);font-style:italic;font-size:17px;color:var(--bone);margin-bottom:6px">Acesse seu painel</div>
+      <div style="font-size:12px;color:var(--stone);line-height:1.65;font-weight:300;margin-bottom:16px">
+        É de lá que você gerencia agendamentos, clientes e configurações.<br>
+        <span style="color:var(--stone-2)">Dica: no celular, adicione à tela inicial para usar como app — sem precisar abrir o navegador.</span>
+      </div>
+      <button class="btn-primary" onclick="irParaPainel()" style="margin:0;width:100%">
+        <span>Ir para meu painel</span><span>→</span>
+      </button>
     </div>
 
-    <button class="btn-primary" onclick="irParaPainel()" style="margin-top:16px;background:transparent;border:1.5px solid rgba(240,237,232,0.2);color:var(--stone)">
-      <span>Ir para o painel de gestão</span><span>→</span>
-    </button>
+    <!-- BLOCO 2: LINK DE CLIENTES — separador visual -->
+    <div style="border-top:1px solid var(--rule);padding-top:24px;margin-top:28px;text-align:left">
+      <div style="font-size:9px;color:var(--stone-2);letter-spacing:3px;text-transform:uppercase;font-family:var(--sans);margin-bottom:6px">Link para seus clientes agendarem</div>
+      <div style="font-size:12px;color:var(--stone);line-height:1.6;font-weight:300;margin-bottom:16px">Envie este link para seus clientes. Eles abrem e já podem agendar com você, sem app.</div>
 
-    <div style="border-top:1px solid var(--rule);padding-top:24px;margin-top:20px;text-align:left">
-      <div style="font-size:9px;color:var(--stone-2);letter-spacing:3px;text-transform:uppercase;font-family:var(--sans);margin-bottom:18px">Para crescer mais rápido</div>
-
-      <div style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)">
-        <div style="font-family:var(--serif);font-style:italic;font-size:15px;color:var(--bone);margin-bottom:8px">📸 Foto de perfil</div>
-        <div style="font-size:11px;color:var(--stone);line-height:1.5;font-weight:300;margin-bottom:12px">Páginas com foto recebem 5× mais agendamentos. Toque para adicionar.</div>
-        <div style="display:flex;align-items:center;gap:14px">
-          <div id="obFotoPreview" onclick="document.getElementById('obFotoInput').click()" style="width:64px;height:64px;border-radius:50%;background:var(--ink-3);border:2px dashed rgba(240,237,232,0.2);cursor:pointer;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">
-            <span style="font-size:24px">📷</span>
-          </div>
-          <div>
-            <button onclick="document.getElementById('obFotoInput').click()" style="padding:9px 18px;background:var(--brand);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer">Escolher foto</button>
-            <div id="obFotoStatus" style="font-size:11px;color:var(--stone-2);margin-top:5px"></div>
-          </div>
-        </div>
-        <input type="file" id="obFotoInput" accept="image/*" style="display:none" onchange="obUploadFoto(this)">
+      <div class="link-box" style="margin-top:0;margin-bottom:14px;background:rgba(229,90,12,0.06);border:1.5px solid rgba(229,90,12,0.25)">
+        <div class="link-label" style="color:var(--brand);font-size:9px;letter-spacing:3px">SEU LINK DE AGENDAMENTO</div>
+        <div class="link-val" id="linkVal" style="font-size:13px;word-break:break-all"></div>
       </div>
 
-      <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)">
-        <span style="font-size:20px;flex-shrink:0">🔗</span>
-        <div>
-          <div style="font-family:var(--serif);font-style:italic;font-size:15px;color:var(--bone);margin-bottom:3px">Link na bio do Instagram</div>
-          <div style="font-size:11px;color:var(--stone);line-height:1.5;font-weight:300">Instagram → Editar perfil → Site → colar seu link. É o único link que você precisa.</div>
-        </div>
+      <button class="btn-copiar" id="btnCopiar" onclick="copiarLink()" style="font-size:14px;font-weight:800;padding:13px 20px;width:100%">
+        <span>📋 Copiar link</span><span id="btnCopiarIcon"></span>
+      </button>
+      <a id="btnWhatsapp" href="#" target="_blank" rel="noopener"
+        style="display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 20px;background:#25D366;color:#fff;text-decoration:none;font-family:var(--sans);font-size:14px;font-weight:700;margin-top:8px;transition:filter 0.15s">
+        <span>Compartilhar via WhatsApp</span>
+      </a>
+
+      <!-- QR Code -->
+      <div class="qr-wrap" id="qrWrap" style="margin-top:20px">
+        <div style="font-size:9px;color:var(--stone-2);letter-spacing:3px;text-transform:uppercase;margin-bottom:4px">QR Code — imprima e coloque no balcão</div>
+        <div class="qr-canvas" id="qrCanvas"></div>
       </div>
 
-      <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)">
-        <span style="font-size:20px;flex-shrink:0">💬</span>
-        <div>
-          <div style="font-family:var(--serif);font-style:italic;font-size:15px;color:var(--bone);margin-bottom:3px">Mude o link no WhatsApp Business</div>
-          <div style="font-size:11px;color:var(--stone);line-height:1.5;font-weight:300">Na descrição do seu negócio no WhatsApp, substitua o número pelo seu link. Clientes que te acham no WhatsApp também conseguem agendar.</div>
-        </div>
-      </div>
-
-      <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)">
-        <span style="font-size:20px;flex-shrink:0">⭐</span>
-        <div>
-          <div style="font-family:var(--serif);font-style:italic;font-size:15px;color:var(--bone);margin-bottom:3px">Peça avaliação após o atendimento</div>
-          <div style="font-size:11px;color:var(--stone);line-height:1.5;font-weight:300">No painel, marque o agendamento como concluído — o cliente recebe um link para avaliar automaticamente. Com 3+ avaliações, a nota aparece na sua página.</div>
-        </div>
-      </div>
-
-      <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)">
-        <span style="font-size:20px;flex-shrink:0">💳</span>
-        <div>
-          <div style="font-family:var(--serif);font-style:italic;font-size:15px;color:var(--bone);margin-bottom:3px">Ative o sinal PIX antecipado</div>
-          <div style="font-size:11px;color:var(--stone);line-height:1.5;font-weight:300">Peça 30% do valor antes. Reduz drasticamente os "não apareceu sem avisar". Config → Sinal antecipado.</div>
-        </div>
-      </div>
-
-      <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:4px">
-        <span style="font-size:20px;flex-shrink:0">🖼️</span>
-        <div>
-          <div style="font-family:var(--serif);font-style:italic;font-size:15px;color:var(--bone);margin-bottom:3px">Adicione fotos do seu trabalho</div>
-          <div style="font-size:11px;color:var(--stone);line-height:1.5;font-weight:300">4 fotos de trabalhos reais na galeria convencem mais que qualquer texto. Config → Galeria de trabalhos.</div>
-        </div>
+      <div style="font-size:11px;color:var(--stone-2);text-align:center;margin-top:16px;line-height:1.6;padding:10px;background:rgba(255,255,255,0.03);border:1px solid var(--rule-2)">
+        💡 Você também encontra este link e o QR code dentro do painel, a qualquer momento.
       </div>
     </div>
   </div>
@@ -699,16 +667,16 @@ function avancarPasso(n) {
     void nextEl.offsetHeight;
     nextEl.style.animation = 'fadeUp 0.35s ease-out';
   }
-  atualizarProgress(n + 1);
+  if (n === 3) { atualizarProgress(6); renderPreviewFinal(); }
+  else { atualizarProgress(n + 1); }
   if (n === 1) renderDias();
-  if (n === 3) renderPreviewFinal();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 window.avancarPasso = avancarPasso;
 
 /* ══ PROGRESSO ══ */
 function atualizarProgress(ativo) {
-  var ids = ['prog-cat', 'prog0', 'prog1', 'prog2', 'prog3'];
+  var ids = ['prog-cat', 'prog0', 'prog1', 'prog2', 'prog4', 'prog3'];
   ids.forEach(function(id, i) {
     var el = document.getElementById(id);
     if (!el) return;
@@ -991,7 +959,7 @@ async function salvarLocalizacaoEAvancar() {
       catch(e) { if (save) save.textContent = 'Erro ao salvar'; }
     } else { if (save) save.textContent = ''; }
   } else { if (save) save.textContent = ''; }
-  setTimeout(function(){ if (save) save.textContent = ''; avancarPasso(3); }, 600);
+  setTimeout(function(){ if (save) save.textContent = ''; avancarPasso(4); }, 600);
 }
 window.salvarLocalizacaoEAvancar = salvarLocalizacaoEAvancar;
 
