@@ -2638,6 +2638,7 @@ document.getElementById('btnAg').onclick=async()=>{
       p_cliente_email:emailVal
     });
     if(!rpcRes||!rpcRes.ok){
+      console.error('Erro ao confirmar agendamento (mobile):',rpcRes);
       if(window.toast)window.toast('error','Horário indisponível',rpcRes?.erro||'Escolha outro horário e tente novamente.');
       else alert(rpcRes?.erro||'Horário não disponível. Escolha outro.');
       btn.disabled=false; btn.textContent='✅ Confirmar agendamento';
@@ -2678,6 +2679,7 @@ document.getElementById('btnAg').onclick=async()=>{
       }).catch(function(){});
     }
   }catch(e){
+    console.error('Erro real ao confirmar agendamento (mobile):',e);
     if(e.message.includes('unique')){
       if(window.toast)window.toast('error','Horário ocupado','Esse horário acabou de ser reservado. Escolha outro.');
       else alert('Esse horário acabou de ser ocupado! Escolha outro.');
@@ -3922,10 +3924,15 @@ async function _desktopSalvar(){
   if(btn){btn.disabled=true;btn.innerHTML='<span>Confirmando...</span>';}
   var profId=profSelecionado&&profSelecionado!=='sem_preferencia'?profSelecionado.id:null;
   try{
-    var payload={p_salao_id:salao.id,p_svc_id:_dSvc.id,p_data:_dDia,p_hora:_dHora,
-      p_cliente_nome:nome,p_cliente_tel:tel,p_cliente_email:email,p_prof_id:profId,p_notas:''};
-    var res=await supaRpc('agendar',payload);
-    if(!res||res.erro){alert(res&&res.erro?res.erro:'Erro ao confirmar. Tente novamente.');if(btn){btn.disabled=false;btn.innerHTML='<span>✅ Confirmar agendamento</span><span>→</span>';}return;}
+    var payload={p_slug:slug,p_servico_id:_dSvc.id,p_data:_dDia,p_hora:_dHora+':00',
+      p_cliente_nome:nome,p_cliente_tel:tel,p_profissional_id:profId,p_cliente_email:email||null};
+    var res=await supaRpc('criar_agendamento',payload);
+    if(!res||!res.ok){
+      console.error('Erro ao confirmar agendamento (desktop):',res);
+      alert(res&&res.erro?res.erro:'Erro ao confirmar. Tente novamente.');
+      if(btn){btn.disabled=false;btn.innerHTML='<span>✅ Confirmar agendamento</span><span>→</span>';}
+      return;
+    }
     /* Sucesso */
     var c=document.getElementById('cdConteudo');
     document.getElementById('cdTitulo').textContent='Confirmado!';
@@ -3942,7 +3949,11 @@ async function _desktopSalvar(){
       '<a href="https://wa.me/?text='+waMsg+'" target="_blank" style="display:flex;align-items:center;justify-content:space-between;padding:13px 16px;background:rgba(37,211,102,0.08);border:1px solid rgba(37,211,102,0.2);color:#25D366;font-family:var(--sans);font-style:normal;font-weight:600;font-size:13px;text-decoration:none;margin-bottom:8px"><span>💬 Salvar no WhatsApp</span><span>→</span></a>'+
       '<button onclick="renderListaServicosDesktop()" style="width:100%;padding:12px;background:transparent;border:1px solid var(--c-border);color:var(--c-text-2);font-family:var(--sans);font-style:normal;font-size:13px;cursor:pointer;margin-top:4px">← Agendar outro serviço</button>'+
     '</div>';
-  }catch(e){alert('Erro ao conectar. Tente novamente.');if(btn){btn.disabled=false;btn.innerHTML='<span>✅ Confirmar agendamento</span><span>→</span>';}}
+  }catch(e){
+    console.error('Erro real ao confirmar agendamento (desktop):',e);
+    alert('Erro ao conectar. Tente novamente.');
+    if(btn){btn.disabled=false;btn.innerHTML='<span>✅ Confirmar agendamento</span><span>→</span>';}
+  }
 }
 window._desktopSalvar=_desktopSalvar;
 
