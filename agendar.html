@@ -3087,6 +3087,7 @@ function abrirSheet(srvId, profId){
     var sv=servicos.find(function(s){return s.id===srvId;});
     if(sv && (!S.srv||S.srv.id!==srvId)){
       S.srv=sv; S.hora=null;
+      if(typeof trackEvento==='function') trackEvento('servico_selecionado',{servico_id:sv.id,servico_nome:sv.nome,preco:sv.preco});
       buildSrv();
       document.getElementById('selSrv').textContent=sv.icone+' '+sv.nome;
       unlock('bDia'); buildDias();
@@ -3880,6 +3881,7 @@ function renderListaServicosDesktop(){
 async function renderEtapaDesktop(svcId){
   _dSvc=svcId?servicos.find(function(s){return s.id===svcId;}):(servicos[0]||null);
   if(!_dSvc){renderListaServicosDesktop();return;}
+  if(svcId&&typeof trackEvento==='function') trackEvento('servico_selecionado',{servico_id:_dSvc.id,servico_nome:_dSvc.nome,preco:_dSvc.preco});
   _dDia=null;_dHora=null;_calMesIdx=0;
   document.getElementById('cdTitulo').textContent=_dSvc.nome;
   document.getElementById('cdSub').textContent=(_dSvc.duracao||60)+'min · Escolha um dia';
@@ -3984,8 +3986,8 @@ function _desktopConfirmar(){
         '<input id="cdNome" type="text" placeholder="Seu nome" style="width:100%;padding:10px 0;background:transparent;border:none;border-bottom:1px solid var(--c-border);color:var(--c-text);font-size:15px;outline:none"></div>'+
       '<div style="margin-bottom:12px"><label style="font-size:9px;color:var(--c-text-2);letter-spacing:2px;text-transform:uppercase;display:block;margin-bottom:6px">WhatsApp *</label>'+
         '<input id="cdTel" type="tel" placeholder="(11) 99999-9999" oninput="mascaraTelInput(this)" style="width:100%;padding:10px 0;background:transparent;border:none;border-bottom:1px solid var(--c-border);color:var(--c-text);font-size:15px;outline:none"></div>'+
-      '<div style="margin-bottom:16px"><label style="font-size:9px;color:var(--c-text-2);letter-spacing:2px;text-transform:uppercase;display:block;margin-bottom:6px">E-mail <span style="font-size:9px;opacity:0.5">(opcional)</span></label>'+
-        '<input id="cdEmail" type="email" placeholder="seu@email.com" style="width:100%;padding:10px 0;background:transparent;border:none;border-bottom:1px solid var(--c-border);color:var(--c-text);font-size:15px;outline:none"></div>'+
+      (FEAT_EMAIL?'<div style="margin-bottom:16px"><label style="font-size:9px;color:var(--c-text-2);letter-spacing:2px;text-transform:uppercase;display:block;margin-bottom:6px">E-mail <span style="font-size:9px;opacity:0.5">(opcional)</span></label>'+
+        '<input id="cdEmail" type="email" placeholder="seu@email.com" style="width:100%;padding:10px 0;background:transparent;border:none;border-bottom:1px solid var(--c-border);color:var(--c-text);font-size:15px;outline:none"></div>':'')+
     '</div>'+
     '<button onclick="_desktopSalvar()" id="btnCdSalvar" style="width:100%;padding:14px;background:var(--c-primary);color:#fff;border:none;font-family:var(--sans);font-style:normal;font-weight:600;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:space-between"><span>✅ Confirmar agendamento</span><span>→</span></button>'+
     '<button onclick="renderEtapaDesktop(\''+_dSvc.id+'\')" style="width:100%;padding:10px;background:transparent;border:none;color:var(--c-text-2);font-family:var(--sans);font-style:normal;font-size:13px;cursor:pointer;margin-top:6px">← Escolher outro horário</button>';

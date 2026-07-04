@@ -1163,6 +1163,9 @@ function enviarWhatsAppById(id){
       <button class="adm-nav-item" id="nav-funil" onclick="navSidebar('funil',this)" style="color:rgba(255,255,255,.7)">
         <span class="adm-nav-icon">📈</span> Funil & Uso
       </button>
+      <button class="adm-nav-item" id="nav-saloes-stats" onclick="navSidebar('saloes-stats',this)" style="color:rgba(255,255,255,.7)">
+        <span class="adm-nav-icon">🏪</span> Por Salão
+      </button>
     </nav>
 
     <div class="adm-sidebar-footer">
@@ -1196,6 +1199,7 @@ function enviarWhatsAppById(id){
       <button class="mobile-tab" onclick="navSidebar('cobrancas',this)">💳 Cobranças</button>
       <button class="mobile-tab" onclick="navSidebar('lixeira',this)">🗑️ Lixeira</button>
       <button class="mobile-tab" onclick="navSidebar('funil',this)">📈 Funil</button>
+      <button class="mobile-tab" onclick="navSidebar('saloes-stats',this)">🏪 Salões</button>
       <div style="margin-left:auto;display:flex;align-items:center;gap:6px;padding-right:10px">
         <div class="theme-dot" id="mtdot-onyx" style="background:#F2CA50;flex-shrink:0" onclick="setTheme('t-onyx')" title="Onyx"></div>
         <div class="theme-dot" id="mtdot-feminine" style="background:#D81B60;flex-shrink:0" onclick="setTheme('t-feminine')" title="Feminine"></div>
@@ -1379,14 +1383,15 @@ function navSidebar(id, btn){
   activeTab=id;
   const el=document.getElementById('mainContent');
   // Topbar
-  const eyebrow={'visaogeral':'Platform Overview','cobrancas':'Financeiro','lixeira':'Gerenciamento','funil':'Analytics'}[id]||'';
-  const title={'visaogeral':'Executive Dashboard','cobrancas':'Cobranças','lixeira':'Lixeira','funil':'Funil & Comportamento'}[id]||'';
+  const eyebrow={'visaogeral':'Platform Overview','cobrancas':'Financeiro','lixeira':'Gerenciamento','funil':'Analytics','saloes-stats':'Analytics'}[id]||'';
+  const title={'visaogeral':'Executive Dashboard','cobrancas':'Cobranças','lixeira':'Lixeira','funil':'Funil & Comportamento','saloes-stats':'Desempenho por Salão'}[id]||'';
   document.getElementById('topbar-eyebrow').textContent=eyebrow;
   document.getElementById('topbar-title').textContent=title;
   if(id==='visaogeral'){renderVisaoGeral(el);carregarUso();}
   else if(id==='cobrancas'){renderCobrancas(el);}
   else if(id==='lixeira'){renderLixeira(el);}
   else if(id==='funil'){renderFunilTab(el);}
+  else if(id==='saloes-stats'){renderSaloesStats(el);}
 }
 // Compat legado (usado pelos botões gerados pelo JS)
 function navTab(id,btn){navSidebar(id,btn);}
@@ -1438,6 +1443,69 @@ async function carregarUso(){
     // Atualizado
     if(atEl) atEl.textContent='Atualizado às '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
   }catch(e){console.error('[carregarUso]',e);}
+}
+
+// ── DESEMPENHO POR SALÃO ──
+async function renderSaloesStats(el){
+  el.innerHTML='<div class="loading">Carregando dados por salão...</div>';
+  var token=SESSION&&SESSION.access_token?SESSION.access_token:KEY;
+  try{
+    // Buscar salões ativos + todos os agendamentos em paralelo
+    var [saloesRes, agsRes, agsHojeRes] = await Promise.all([
+      fetch(SUPA+'/rest/v1/saloes?deleted_at=is.null&select=id,nome,slug,plano,status,telefone&order=nome',
+        {headers:{'apikey':KEY,'Authorization':'Bearer '+token}}).then(r=>r.json()),
+      fetch(SUPA+'/rest/v1/agendamentos?status=neq.cancelado&select=salao_id,data',
+        {headers:{'apikey':KEY,'Authorization':'Bearer '+token}}).then(r=>r.json()),
+      fetch(SUPA+'/rest/v1/agendamentos?status=neq.cancelado&select=salao_id&data=gte.'+new Date(Date.now()-30*864e5).toISOString().slice(0,10),
+        {headers:{'apikey':KEY,'Authorization':'Bearer '+token}}).then(r=>r.json())
+    ]);
+    var saloes=saloesRes||[];
+    var ags=agsRes||[];
+    var agsRecentes=agsHojeRes||[];
+
+    // Agrupar por salão
+    var agsTotal={}, agsUlt30={};
+    ags.forEach(function(a){ agsTotal[a.salao_id]=(agsTotal[a.salao_id]||0)+1; });
+    agsRecentes.forEach(function(a){ agsUlt30[a.salao_id]=(agsUlt30[a.salao_id]||0)+1; });
+
+    var html='<div class="adm-card">';
+    html+='<div class="adm-card-hdr"><span class="adm-card-title">Desempenho por Salão</span><span style="font-size:11px;color:var(--tx3)">agendamentos não cancelados</span></div>';
+    html+='<div class="table-scroll"><table class="adm-table"><thead class="adm-table-head"><tr>'+
+      '<th>Salão</th><th>Slug</th><th>Plano</th><th>Status</th>'+
+      '<th style="text-align:right">Total ags</th><th style="text-align:right">Ags 30d</th>'+
+      '</tr></thead><tbody>';
+
+    // Ordenar por total de ags desc
+    saloes.sort(function(a,b){return (agsTotal[b.id]||0)-(agsTotal[a.id]||0);});
+    saloes.forEach(function(s){
+      var total=agsTotal[s.id]||0;
+      var ult30=agsUlt30[s.id]||0;
+      html+='<tr>'+
+        '<td><div class="t-biz"><div class="t-biz-icon" style="background:var(--brand-soft,rgba(229,90,12,.12));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--c-primary)">'+s.nome.slice(0,1).toUpperCase()+'</div>'+
+          '<div><div class="t-biz-name">'+esc(s.nome)+'</div></div></div></td>'+
+        '<td style="font-size:11px;color:var(--tx3)">'+esc(s.slug)+'</td>'+
+        '<td><span class="vg-plano pl-'+s.plano+'">'+((PNOME&&PNOME[s.plano])||s.plano)+'</span></td>'+
+        '<td><span class="badge badge-'+(s.status==='bloqueado'?'cancelado':s.status)+'">'+
+          (s.status==='ativo'?'Ativo':s.status==='trial'?'Trial':s.status==='bloqueado'?'Bloqueado':'Inativo')+'</span></td>'+
+        '<td style="text-align:right;font-weight:800;font-size:14px">'+total+'</td>'+
+        '<td style="text-align:right;font-weight:700;color:'+(ult30>0?'var(--primary)':'var(--tx3)')+'">'+ult30+'</td>'+
+      '</tr>';
+    });
+    if(!saloes.length) html+='<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--tx3)">Nenhum salão encontrado</td></tr>';
+    html+='</tbody></table></div>';
+
+    // Summary bar
+    var totalGeral=ags.length;
+    var totalUlt30=agsRecentes.length;
+    html+='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:16px 0 4px">';
+    html+='<div style="text-align:center"><div style="font-size:22px;font-weight:800">'+saloes.length+'</div><div style="font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:1px">Salões</div></div>';
+    html+='<div style="text-align:center"><div style="font-size:22px;font-weight:800">'+totalGeral+'</div><div style="font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:1px">Total ags</div></div>';
+    html+='<div style="text-align:center"><div style="font-size:22px;font-weight:800;color:var(--primary)">'+totalUlt30+'</div><div style="font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:1px">Ags (30d)</div></div>';
+    html+='</div></div>';
+    el.innerHTML=html;
+  }catch(e){
+    el.innerHTML='<div class="adm-card" style="padding:20px;color:var(--tx3)">Erro ao carregar: '+e.message+'</div>';
+  }
 }
 
 // ── FUNIL & COMPORTAMENTO ──
