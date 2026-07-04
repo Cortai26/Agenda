@@ -1476,7 +1476,12 @@ function _buildFunilHtml(d, dias){
   var erros=d.erros||{};
   var pos=d.pos_agendamento||{};
   var porDia=d.por_dia||[];
-  var taxa=d.taxa_conversao||0;
+  var resumo=d.resumo||{};
+  var taxa=resumo.taxa_conversao||d.taxa_conversao||0;
+  // Usar resumo quando disponível (RPC atualizada); fallback para funil array
+  var pv=resumo.total_visitas||(funil[0]&&funil[0].total)||0;
+  var cr=resumo.total_agendamentos||(funil[funil.length-1]&&funil[funil.length-1].total)||0;
+  var totalErros=resumo.total_erros||erros.agendamento_erro||0;
 
   // Seletor de período
   var html='<div style="margin-bottom:20px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">';
@@ -1487,23 +1492,23 @@ function _buildFunilHtml(d, dias){
   });
   html+='</div>';
 
-  // Taxa de conversão destaque
+  // KPI cards — 4 tiles
   html+='<div class="kpi-grid" style="margin-bottom:20px">';
-  html+='<div class="kpi-card"><div class="kpi-header"><span class="kpi-label">Taxa de Conversão</span><span class="kpi-icon">🎯</span></div>'+
-    '<div class="kpi-value-row"><span class="kpi-value">'+taxa+'%</span><span class="kpi-delta '+(taxa>=5?'up':'down')+'">view→booking</span></div></div>';
-  var pv=(funil[0]&&funil[0].total)||0;
-  var cr=(funil[5]&&funil[5].total)||0;
-  html+='<div class="kpi-card"><div class="kpi-header"><span class="kpi-label">Visitas ('+dias+'d)</span><span class="kpi-icon">👁</span></div>'+
-    '<div class="kpi-value-row"><span class="kpi-value">'+pv+'</span><span class="kpi-delta up">page_view</span></div></div>';
-  html+='<div class="kpi-card"><div class="kpi-header"><span class="kpi-label">Agendamentos ('+dias+'d)</span><span class="kpi-icon">✅</span></div>'+
+  html+='<div class="kpi-card"><div class="kpi-header"><span class="kpi-label">Visitas</span><span class="kpi-icon">👁</span></div>'+
+    '<div class="kpi-value-row"><span class="kpi-value">'+pv+'</span><span class="kpi-delta up">'+dias+'d</span></div></div>';
+  html+='<div class="kpi-card"><div class="kpi-header"><span class="kpi-label">Agendamentos</span><span class="kpi-icon">✅</span></div>'+
     '<div class="kpi-value-row"><span class="kpi-value">'+cr+'</span><span class="kpi-delta '+(cr>0?'up':'down')+'">criados</span></div></div>';
+  html+='<div class="kpi-card"><div class="kpi-header"><span class="kpi-label">Conversão</span><span class="kpi-icon">🎯</span></div>'+
+    '<div class="kpi-value-row"><span class="kpi-value">'+taxa+'%</span><span class="kpi-delta '+(taxa>=5?'up':'down')+'">view→booking</span></div></div>';
+  html+='<div class="kpi-card"><div class="kpi-header"><span class="kpi-label">Erros</span><span class="kpi-icon">⚠️</span></div>'+
+    '<div class="kpi-value-row"><span class="kpi-value" style="color:'+(totalErros>0?'var(--danger,#ef4444)':'inherit')+'">'+totalErros+'</span><span class="kpi-delta '+(totalErros>0?'down':'up')+'">ao agendar</span></div></div>';
   html+='</div>';
 
   // Funil de etapas
   html+='<div class="adm-card" style="margin-bottom:16px">';
   html+='<div class="adm-card-hdr"><span class="adm-card-title">Funil de Agendamento</span><span style="font-size:11px;color:var(--tx3)">últimos '+dias+' dias</span></div>';
   html+='<div style="padding:4px 0">';
-  var LABELS={'page_view':'Visita','salao_carregado':'Salão carregado','servico_selecionado':'Serviço selecionado','horario_selecionado':'Horário selecionado','agendamento_iniciado':'Confirmou clique','agendamento_criado':'Agendamento criado'};
+  var LABELS={'page_view':'Visita','pagina_visualizada':'Visita','salao_carregado':'Salão carregado','servico_selecionado':'Serviço selecionado','data_selecionada':'Data selecionada','horario_selecionado':'Horário selecionado','agendamento_iniciado':'Confirmou clique','agendamento_criado':'Agendamento criado'};
   var baseTotal=pv||1;
   funil.forEach(function(et, i){
     var pct=Math.round((et.total/baseTotal)*100);
