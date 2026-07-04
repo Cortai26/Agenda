@@ -1160,6 +1160,9 @@ function enviarWhatsAppById(id){
       <button class="adm-nav-item" id="nav-lixeira" onclick="navSidebar('lixeira',this)" style="color:rgba(255,255,255,.7)">
         <span class="adm-nav-icon">🗑️</span> Lixeira
       </button>
+      <button class="adm-nav-item" id="nav-funil" onclick="navSidebar('funil',this)" style="color:rgba(255,255,255,.7)">
+        <span class="adm-nav-icon">📈</span> Funil & Uso
+      </button>
     </nav>
 
     <div class="adm-sidebar-footer">
@@ -1192,6 +1195,7 @@ function enviarWhatsAppById(id){
       <button class="mobile-tab on" onclick="navSidebar('visaogeral',this)">📊 Visão Geral</button>
       <button class="mobile-tab" onclick="navSidebar('cobrancas',this)">💳 Cobranças</button>
       <button class="mobile-tab" onclick="navSidebar('lixeira',this)">🗑️ Lixeira</button>
+      <button class="mobile-tab" onclick="navSidebar('funil',this)">📈 Funil</button>
       <div style="margin-left:auto;display:flex;align-items:center;gap:6px;padding-right:10px">
         <div class="theme-dot" id="mtdot-onyx" style="background:#F2CA50;flex-shrink:0" onclick="setTheme('t-onyx')" title="Onyx"></div>
         <div class="theme-dot" id="mtdot-feminine" style="background:#D81B60;flex-shrink:0" onclick="setTheme('t-feminine')" title="Feminine"></div>
@@ -1375,13 +1379,14 @@ function navSidebar(id, btn){
   activeTab=id;
   const el=document.getElementById('mainContent');
   // Topbar
-  const eyebrow={'visaogeral':'Platform Overview','cobrancas':'Financeiro','lixeira':'Gerenciamento'}[id]||'';
-  const title={'visaogeral':'Executive Dashboard','cobrancas':'Cobranças','lixeira':'Lixeira'}[id]||'';
+  const eyebrow={'visaogeral':'Platform Overview','cobrancas':'Financeiro','lixeira':'Gerenciamento','funil':'Analytics'}[id]||'';
+  const title={'visaogeral':'Executive Dashboard','cobrancas':'Cobranças','lixeira':'Lixeira','funil':'Funil & Comportamento'}[id]||'';
   document.getElementById('topbar-eyebrow').textContent=eyebrow;
   document.getElementById('topbar-title').textContent=title;
   if(id==='visaogeral'){renderVisaoGeral(el);carregarUso();}
   else if(id==='cobrancas'){renderCobrancas(el);}
   else if(id==='lixeira'){renderLixeira(el);}
+  else if(id==='funil'){renderFunilTab(el);}
 }
 // Compat legado (usado pelos botões gerados pelo JS)
 function navTab(id,btn){navSidebar(id,btn);}
@@ -1433,6 +1438,152 @@ async function carregarUso(){
     // Atualizado
     if(atEl) atEl.textContent='Atualizado às '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
   }catch(e){console.error('[carregarUso]',e);}
+}
+
+// ── FUNIL & COMPORTAMENTO ──
+var _funilDias=30;
+function renderFunilTab(el){
+  el.innerHTML='<div class="loading">Carregando funil...</div>';
+  carregarFunil(el, _funilDias);
+}
+
+async function carregarFunil(el, dias){
+  dias=dias||30;
+  _funilDias=dias;
+  el.innerHTML='<div class="loading">Carregando funil...</div>';
+  var token=SESSION&&SESSION.access_token?SESSION.access_token:KEY;
+  try{
+    var r=await fetch(SUPA+'/rest/v1/rpc/funil_eventos',{
+      method:'POST',
+      headers:{'apikey':KEY,'Authorization':'Bearer '+token,'Content-Type':'application/json'},
+      body:JSON.stringify({p_dias:dias})
+    });
+    var d=r.ok?await r.json():null;
+    if(!d||!d.ok){
+      el.innerHTML='<div class="adm-card" style="padding:20px;color:var(--tx3)">'+
+        (d&&d.erro?d.erro:'Sem dados de eventos ainda. Acesse a página de agendamento para gerar eventos.')+
+        '</div>';
+      return;
+    }
+    el.innerHTML=_buildFunilHtml(d, dias);
+  }catch(e){
+    el.innerHTML='<div class="adm-card" style="padding:20px;color:var(--tx3)">Erro ao carregar: '+e.message+'</div>';
+  }
+}
+
+function _buildFunilHtml(d, dias){
+  var funil=d.funil||[];
+  var erros=d.erros||{};
+  var pos=d.pos_agendamento||{};
+  var porDia=d.por_dia||[];
+  var taxa=d.taxa_conversao||0;
+
+  // Seletor de período
+  var html='<div style="margin-bottom:20px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">';
+  html+='<span style="font-size:11px;color:var(--tx3);letter-spacing:1px;text-transform:uppercase;font-weight:700">Período:</span>';
+  [7,30,90].forEach(function(d){
+    var ativo=d===dias;
+    html+='<button onclick="carregarFunil(document.getElementById(\'mainContent\'),'+d+')" style="padding:5px 14px;border-radius:20px;border:1px solid '+(ativo?'var(--primary)':'var(--bd)')+';background:'+(ativo?'var(--primary)':'transparent')+';color:'+(ativo?'#fff':'var(--tx)')+';font-size:12px;font-weight:700;cursor:pointer">'+d+'d</button>';
+  });
+  html+='</div>';
+
+  // Taxa de conversão destaque
+  html+='<div class="kpi-grid" style="margin-bottom:20px">';
+  html+='<div class="kpi-card"><div class="kpi-header"><span class="kpi-label">Taxa de Conversão</span><span class="kpi-icon">🎯</span></div>'+
+    '<div class="kpi-value-row"><span class="kpi-value">'+taxa+'%</span><span class="kpi-delta '+(taxa>=5?'up':'down')+'">view→booking</span></div></div>';
+  var pv=(funil[0]&&funil[0].total)||0;
+  var cr=(funil[5]&&funil[5].total)||0;
+  html+='<div class="kpi-card"><div class="kpi-header"><span class="kpi-label">Visitas ('+dias+'d)</span><span class="kpi-icon">👁</span></div>'+
+    '<div class="kpi-value-row"><span class="kpi-value">'+pv+'</span><span class="kpi-delta up">page_view</span></div></div>';
+  html+='<div class="kpi-card"><div class="kpi-header"><span class="kpi-label">Agendamentos ('+dias+'d)</span><span class="kpi-icon">✅</span></div>'+
+    '<div class="kpi-value-row"><span class="kpi-value">'+cr+'</span><span class="kpi-delta '+(cr>0?'up':'down')+'">criados</span></div></div>';
+  html+='</div>';
+
+  // Funil de etapas
+  html+='<div class="adm-card" style="margin-bottom:16px">';
+  html+='<div class="adm-card-hdr"><span class="adm-card-title">Funil de Agendamento</span><span style="font-size:11px;color:var(--tx3)">últimos '+dias+' dias</span></div>';
+  html+='<div style="padding:4px 0">';
+  var LABELS={'page_view':'Visita','salao_carregado':'Salão carregado','servico_selecionado':'Serviço selecionado','horario_selecionado':'Horário selecionado','agendamento_iniciado':'Confirmou clique','agendamento_criado':'Agendamento criado'};
+  var baseTotal=pv||1;
+  funil.forEach(function(et, i){
+    var pct=Math.round((et.total/baseTotal)*100);
+    var dropPct=i>0&&funil[i-1].total>0?Math.round((1-(et.total/funil[i-1].total))*100):0;
+    html+='<div style="padding:10px 0;border-bottom:1px solid var(--bd)">';
+    html+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">';
+    html+='<span style="font-size:13px;font-weight:700;color:var(--tx)">'+String(i+1).padStart(2,'0')+'. '+(LABELS[et.etapa]||et.etapa)+'</span>';
+    html+='<span style="font-size:15px;font-weight:800;color:var(--tx)">'+et.total+'</span></div>';
+    html+='<div style="background:var(--s2);border-radius:4px;height:6px;overflow:hidden">';
+    var barPct=Math.min(100,pct);
+    html+='<div style="height:100%;width:'+barPct+'%;background:var(--primary);border-radius:4px;transition:width .3s"></div></div>';
+    html+='<div style="display:flex;justify-content:space-between;margin-top:4px">';
+    html+='<span style="font-size:10px;color:var(--tx3)">'+pct+'% do topo</span>';
+    if(i>0&&dropPct>0) html+='<span style="font-size:10px;color:var(--danger,#ef4444)">-'+dropPct+'% vs etapa anterior</span>';
+    html+='</div></div>';
+  });
+  html+='</div></div>';
+
+  // Erros e bloqueios
+  html+='<div class="adm-2col" style="margin-bottom:16px">';
+  html+='<div class="adm-card"><div class="adm-card-hdr"><span class="adm-card-title">Bloqueios & Erros</span></div>';
+  html+='<div style="padding:8px 0">';
+  var errRows=[
+    {k:'agendamento_erro',l:'Erros ao agendar',icon:'❌'},
+    {k:'dia_fechado_exibido',l:'Dia fechado exibido',icon:'🔒'},
+    {k:'slot_fora_expediente',l:'Slot fora expediente',icon:'⏰'}
+  ];
+  errRows.forEach(function(row){
+    var v=erros[row.k]||0;
+    html+='<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bd)">';
+    html+='<span style="font-size:13px;color:var(--tx)">'+row.icon+' '+row.l+'</span>';
+    html+='<span style="font-size:14px;font-weight:800;color:'+(v>0?'var(--danger,#ef4444)':'var(--tx3)')+'">'+v+'</span></div>';
+  });
+  html+='</div></div>';
+
+  // Pós-agendamento
+  html+='<div class="adm-card"><div class="adm-card-hdr"><span class="adm-card-title">Pós-Agendamento</span></div>';
+  html+='<div style="padding:8px 0">';
+  var posRows=[
+    {k:'whatsapp_clicado',l:'WhatsApp clicado',icon:'💬'},
+    {k:'ics_salvo',l:'Agenda salva (.ics)',icon:'📅'}
+  ];
+  posRows.forEach(function(row){
+    var v=pos[row.k]||0;
+    var pct2=cr>0?Math.round((v/cr)*100):0;
+    html+='<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bd)">';
+    html+='<div><span style="font-size:13px;color:var(--tx)">'+row.icon+' '+row.l+'</span>';
+    html+='<div style="font-size:10px;color:var(--tx3)">'+pct2+'% dos agendamentos</div></div>';
+    html+='<span style="font-size:14px;font-weight:800;color:var(--tx)">'+v+'</span></div>';
+  });
+  html+='</div></div>';
+  html+='</div>';
+
+  // Gráfico por dia (SVG inline)
+  if(porDia&&porDia.length>0){
+    html+='<div class="adm-card">';
+    html+='<div class="adm-card-hdr"><span class="adm-card-title">Volume por Dia</span></div>';
+    html+='<div style="padding:8px 0;overflow-x:auto">';
+    var maxV=Math.max.apply(null,porDia.map(function(x){return x.total;}));
+    if(maxV===0) maxV=1;
+    var W=Math.max(porDia.length*22,300);
+    var H=80;
+    html+='<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMinYMax meet" style="width:100%;min-width:'+W+'px;height:'+H+'px;display:block">';
+    porDia.forEach(function(pt,i){
+      var barH=Math.max(2,Math.round((pt.total/maxV)*(H-20)));
+      var x=i*22+2;
+      var y=H-barH-4;
+      var isLast=i===porDia.length-1;
+      html+='<rect x="'+x+'" y="'+y+'" width="18" height="'+barH+'" fill="'+(isLast?'var(--primary)':'var(--primary-muted,#e57a4b)')+'" rx="2" opacity="'+(isLast?1:0.7)+'">';
+      html+='<title>'+pt.data+': '+pt.total+'</title></rect>';
+      if(porDia.length<=15||i%3===0){
+        var label=pt.data?pt.data.slice(5):'';
+        html+='<text x="'+(x+9)+'" y="'+(H-1)+'" text-anchor="middle" font-size="7" fill="var(--tx3)">'+label+'</text>';
+      }
+    });
+    html+='</svg>';
+    html+='</div></div>';
+  }
+
+  return html;
 }
 
 // ── RENDER VISÃO GERAL ──
