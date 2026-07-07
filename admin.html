@@ -1151,20 +1151,17 @@ function enviarWhatsAppById(id){
     </div>
 
     <nav class="adm-nav">
-      <button class="adm-nav-item active" id="nav-visaogeral" onclick="navSidebar('visaogeral',this)" style="color:rgba(255,255,255,.9)">
-        <span class="adm-nav-icon">📊</span> Dashboard
+      <button class="adm-nav-item active" id="nav-analytics" onclick="navSidebar('analytics',this)" style="color:rgba(255,255,255,.9)">
+        <span class="adm-nav-icon">📊</span> Analytics
       </button>
       <button class="adm-nav-item" id="nav-cobrancas" onclick="navSidebar('cobrancas',this)" style="color:rgba(255,255,255,.7)">
         <span class="adm-nav-icon">💳</span> Cobranças
       </button>
-      <button class="adm-nav-item" id="nav-lixeira" onclick="navSidebar('lixeira',this)" style="color:rgba(255,255,255,.7)">
-        <span class="adm-nav-icon">🗑️</span> Lixeira
+      <button class="adm-nav-item" id="nav-saloes" onclick="navSidebar('saloes',this)" style="color:rgba(255,255,255,.7)">
+        <span class="adm-nav-icon">🏪</span> Salões
       </button>
-      <button class="adm-nav-item" id="nav-funil" onclick="navSidebar('funil',this)" style="color:rgba(255,255,255,.7)">
-        <span class="adm-nav-icon">📈</span> Funil & Uso
-      </button>
-      <button class="adm-nav-item" id="nav-saloes-stats" onclick="navSidebar('saloes-stats',this)" style="color:rgba(255,255,255,.7)">
-        <span class="adm-nav-icon">🏪</span> Por Salão
+      <button class="adm-nav-item" id="nav-sistema" onclick="navSidebar('sistema',this)" style="color:rgba(255,255,255,.7)">
+        <span class="adm-nav-icon">⚙️</span> Sistema
       </button>
     </nav>
 
@@ -1195,11 +1192,10 @@ function enviarWhatsAppById(id){
 
     <!-- MOBILE TABS -->
     <div class="mobile-tabs" style="display:flex;align-items:center">
-      <button class="mobile-tab on" onclick="navSidebar('visaogeral',this)">📊 Visão Geral</button>
+      <button class="mobile-tab on" onclick="navSidebar('analytics',this)">📊 Analytics</button>
       <button class="mobile-tab" onclick="navSidebar('cobrancas',this)">💳 Cobranças</button>
-      <button class="mobile-tab" onclick="navSidebar('lixeira',this)">🗑️ Lixeira</button>
-      <button class="mobile-tab" onclick="navSidebar('funil',this)">📈 Funil</button>
-      <button class="mobile-tab" onclick="navSidebar('saloes-stats',this)">🏪 Salões</button>
+      <button class="mobile-tab" onclick="navSidebar('saloes',this)">🏪 Salões</button>
+      <button class="mobile-tab" onclick="navSidebar('sistema',this)">⚙️ Sistema</button>
       <div style="margin-left:auto;display:flex;align-items:center;gap:6px;padding-right:10px">
         <div class="theme-dot" id="mtdot-onyx" style="background:#F2CA50;flex-shrink:0" onclick="setTheme('t-onyx')" title="Onyx"></div>
         <div class="theme-dot" id="mtdot-feminine" style="background:#D81B60;flex-shrink:0" onclick="setTheme('t-feminine')" title="Feminine"></div>
@@ -1282,7 +1278,7 @@ const PRECO={trial:0,basico:35,pro:70,salao:140};
 const PNOME={trial:'Trial',basico:'Básico',pro:'Profissional',salao:'Salão'};
 const SK='cortai_admin_v2';
 const ASAAS_FN='https://acldrisohnjfekjxgmoh.supabase.co/functions/v1/asaas-billing';
-let SESSION=null,clientes=[],activeTab='visaogeral',filtroStatus='todos',filtroPlano='todos',editId=null,ocultarDemo=false;
+let SESSION=null,clientes=[],activeTab='analytics',filtroStatus='todos',filtroPlano='todos',editId=null,ocultarDemo=false;
 let _cobCache=null, _cobCacheAt=0;
 
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
@@ -1352,8 +1348,7 @@ async function mostrarApp(){
     document.getElementById('loginWrap').style.display='none';
     document.getElementById('appWrap').classList.add('show');
     await carregar();
-    renderVisaoGeral(document.getElementById('mainContent'));
-    carregarUso();
+    renderAnalytics(document.getElementById('mainContent'));
   }catch(e){
     console.error('[mostrarApp]',e);
     const isExpired=e.message&&(e.message.includes('expired')||e.message.includes('PGRST')||e.message.includes('JWT'));
@@ -1383,15 +1378,14 @@ function navSidebar(id, btn){
   activeTab=id;
   const el=document.getElementById('mainContent');
   // Topbar
-  const eyebrow={'visaogeral':'Platform Overview','cobrancas':'Financeiro','lixeira':'Gerenciamento','funil':'Analytics','saloes-stats':'Analytics'}[id]||'';
-  const title={'visaogeral':'Executive Dashboard','cobrancas':'Cobranças','lixeira':'Lixeira','funil':'Funil & Comportamento','saloes-stats':'Desempenho por Salão'}[id]||'';
+  const eyebrow={'analytics':'Platform Overview','cobrancas':'Financeiro','sistema':'Gerenciamento','saloes':'Desempenho'}[id]||'';
+  const title={'analytics':'Analytics','cobrancas':'Cobranças','sistema':'Sistema','saloes':'Por Salão'}[id]||'';
   document.getElementById('topbar-eyebrow').textContent=eyebrow;
   document.getElementById('topbar-title').textContent=title;
-  if(id==='visaogeral'){renderVisaoGeral(el);carregarUso();}
+  if(id==='analytics'){renderAnalytics(el);}
   else if(id==='cobrancas'){renderCobrancas(el);}
-  else if(id==='lixeira'){renderLixeira(el);}
-  else if(id==='funil'){renderFunilTab(el);}
-  else if(id==='saloes-stats'){renderSaloesStats(el);}
+  else if(id==='sistema'){renderLixeira(el);}
+  else if(id==='saloes'){renderSaloesStats(el);}
 }
 // Compat legado (usado pelos botões gerados pelo JS)
 function navTab(id,btn){navSidebar(id,btn);}
@@ -1508,7 +1502,242 @@ async function renderSaloesStats(el){
   }
 }
 
-// ── FUNIL & COMPORTAMENTO ──
+// ── ANALYTICS (Dashboard + Funil combinados) ──
+var _analyticsDias=30;
+async function renderAnalytics(el, dias){
+  if(!el) return;
+  dias=dias||_analyticsDias;
+  _analyticsDias=dias;
+
+  const todos=ocultarDemo?clientes.filter(c=>!c.is_demo):clientes;
+  const ativos=todos.filter(c=>c.status==='ativo'&&!c.is_demo);
+  const trials=todos.filter(c=>c.status==='trial');
+  const inadimp=todos.filter(c=>c.pagamento==='aberto'&&c.status==='ativo');
+  const mrr=ativos.reduce((s,c)=>s+PRECO[c.plano],0);
+  const filtrados=filtroStatus==='todos'?todos:todos.filter(c=>c.status===filtroStatus);
+
+  // Period selector
+  var html='<div style="margin-bottom:20px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">';
+  html+='<span style="font-size:11px;color:var(--tx3);letter-spacing:1px;text-transform:uppercase;font-weight:700">Período:</span>';
+  [7,30,90].forEach(function(d){
+    var ativo=d===dias;
+    html+='<button onclick="renderAnalytics(document.getElementById(\'mainContent\'),'+d+')" style="padding:5px 14px;border-radius:20px;border:1px solid '+(ativo?'var(--primary)':'var(--bd)')+';background:'+(ativo?'var(--primary)':'transparent')+';color:'+(ativo?'#fff':'var(--tx)')+';font-size:12px;font-weight:700;cursor:pointer">'+d+'d</button>';
+  });
+  html+='</div>';
+
+  // KPI grid — 6 cards: 2 business (immediate) + 4 behavior (async placeholders)
+  html+='<div class="kpi-grid" style="margin-bottom:20px">';
+  html+='<div class="kpi-card"><div class="kpi-header"><span class="kpi-label">Receita (MRR)</span><span class="kpi-icon">💳</span></div>'+
+    '<div class="kpi-value-row"><span class="kpi-value">R$'+mrr.toLocaleString('pt-BR')+'</span><span class="kpi-delta up">'+ativos.length+' ativos</span></div></div>';
+  html+='<div class="kpi-card"><div class="kpi-header"><span class="kpi-label">Estabelecimentos</span><span class="kpi-icon">🏪</span></div>'+
+    '<div class="kpi-value-row"><span class="kpi-value">'+ativos.length+'</span><span class="kpi-delta up">+'+trials.length+' trial</span></div></div>';
+  html+='<div class="kpi-card" id="kpi-visitas"><div class="kpi-header"><span class="kpi-label">Visitas</span><span class="kpi-icon">👁</span></div>'+
+    '<div class="kpi-value-row"><span class="kpi-value" style="color:var(--tx3)">…</span><span class="kpi-delta up">'+dias+'d</span></div></div>';
+  html+='<div class="kpi-card" id="kpi-ags"><div class="kpi-header"><span class="kpi-label">Agendamentos</span><span class="kpi-icon">✅</span></div>'+
+    '<div class="kpi-value-row"><span class="kpi-value" style="color:var(--tx3)">…</span><span class="kpi-delta up">criados</span></div></div>';
+  html+='<div class="kpi-card" id="kpi-conv"><div class="kpi-header"><span class="kpi-label">Conversão</span><span class="kpi-icon">🎯</span></div>'+
+    '<div class="kpi-value-row"><span class="kpi-value" style="color:var(--tx3)">…</span><span class="kpi-delta up">view→booking</span></div></div>';
+  html+='<div class="kpi-card" id="kpi-erros"><div class="kpi-header"><span class="kpi-label">Erros</span><span class="kpi-icon">⚠️</span></div>'+
+    '<div class="kpi-value-row"><span class="kpi-value" style="color:var(--tx3)">…</span><span class="kpi-delta up">ao agendar</span></div></div>';
+  html+='</div>';
+
+  // Funil section placeholder
+  html+='<div id="analytics-funil" style="margin-bottom:20px"><div class="loading">Carregando funil...</div></div>';
+
+  // Establishments table
+  html+='<div class="adm-card" style="margin-bottom:16px">';
+  html+='<div class="adm-card-hdr"><span class="adm-card-title">Estabelecimentos ('+todos.length+')</span>';
+  html+='<div class="filtros-bar">';
+  ['todos','ativo','trial','cancelado'].forEach(function(f){
+    var labels={todos:'Todos',ativo:'Ativos',trial:'Trial',cancelado:'Inativos'};
+    var isSel=filtroStatus===f;
+    html+='<button data-filtro="'+f+'" class="btn-filtro'+(isSel?' on':'')+'" onclick="setFst(\''+f+'\',this)">'+labels[f]+'</button>';
+  });
+  html+='</div></div>';
+  if(!filtrados.length){
+    html+='<div class="empty">Nenhum resultado</div>';
+  }else{
+    html+='<div class="table-scroll"><table class="adm-table"><thead class="adm-table-head"><tr>'+
+      '<th>Estabelecimento</th><th>Status</th><th>Plano</th><th>Vencimento</th><th style="text-align:right">Ações</th>'+
+      '</tr></thead><tbody>';
+    filtrados.forEach(function(c){
+      var venc=c.vencimento?fmtData(c.vencimento):'—';
+      var diasVenc=c.vencimento?Math.ceil((new Date(c.vencimento)-new Date())/86400000):null;
+      var vencido=diasVenc!==null&&diasVenc<0;
+      var vencendoEm7=diasVenc!==null&&diasVenc>=0&&diasVenc<=7;
+      var vencColor=vencido?'var(--red)':(vencendoEm7?'var(--amber,#ca8a04)':'var(--tx3)');
+      var vencLabel=c.vencimento?(c.status==='bloqueado'&&vencido?'Venceu '+venc:(vencendoEm7?'Vence '+venc:venc)):'—';
+      html+='<tr><td><div class="t-biz">'+
+        '<div class="t-biz-icon" style="background:var(--brand-soft,rgba(229,90,12,.12));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--c-primary)">A</div>'+
+        '<div><div class="t-biz-name">'+esc(c.nome)+'</div><div class="t-biz-loc">'+esc(c.email||c.slug||'')+'</div></div>'+
+        '</div></td>'+
+        '<td><span class="badge badge-'+(c.status==='bloqueado'?'cancelado':c.status)+'">'+(c.status==='ativo'?'Ativo':c.status==='trial'?'Trial':c.status==='bloqueado'?'Bloqueado':'Inativo')+'</span></td>'+
+        '<td><span class="vg-plano pl-'+c.plano+'">'+(PNOME[c.plano]||c.plano)+'</span></td>'+
+        '<td style="font-size:11px;color:'+vencColor+';font-weight:700">'+vencLabel+'</td>'+
+        '<td style="text-align:right">'+
+          '<button class="t-actions" onclick="abrirModal(\'edit\',\''+c.id+'\',\''+c.slug+'\',\''+esc(c.nome)+'\')">✏️</button>'+
+          '<button class="t-actions" onclick="resetarSenha(\''+c.slug+'\',\''+esc(c.nome)+'\')">🔑</button>'+
+          '<button class="t-actions" title="'+(c.status==='bloqueado'?'Liberar acesso':'Bloquear acesso')+'" onclick="toggleAtivoSalao(\''+c.id+'\',\''+c.status+'\')" style="'+(c.status==='bloqueado'?'background:#16a34a;color:#fff':'background:#ef4444;color:#fff')+'">'+(c.status==='bloqueado'?'🔓':'🔒')+'</button>'+
+          '<button class="t-actions" onclick="excluir(\''+c.id+'\',\''+esc(c.nome)+'\')">🗑️</button>'+
+        '</td></tr>';
+    });
+    html+='</tbody></table></div>';
+  }
+  html+='</div>';
+
+  // DB usage + system health
+  html+='<div class="adm-2col">';
+  html+='<div class="adm-card"><div class="adm-card-hdr"><span class="adm-card-title">💾 Banco de dados</span></div>'+
+    '<div class="uso-wrap">'+
+      '<div class="uso-bar-wrap">'+
+        '<div class="uso-bar-topo"><span class="uso-bar-label">Uso atual</span><span class="uso-bar-valor" id="usoPct">—</span></div>'+
+        '<div class="uso-bar-bg"><div class="uso-bar-fill" id="usoFill" style="width:0%"></div></div>'+
+        '<div class="uso-bar-sub" id="usoSub">Carregando...</div>'+
+      '</div>'+
+      '<div id="usoAlerta"></div>'+
+      '<div class="uso-stats">'+
+        '<div class="uso-stat"><div class="uso-stat-n" id="usoSaloes">—</div><div class="uso-stat-l">Salões</div></div>'+
+        '<div class="uso-stat"><div class="uso-stat-n" id="usoAgs">—</div><div class="uso-stat-l">Agendamentos</div></div>'+
+        '<div class="uso-stat"><div class="uso-stat-n" id="usoClis">—</div><div class="uso-stat-l">Clientes</div></div>'+
+        '<div class="uso-stat"><div class="uso-stat-n" id="usoProfissionais">—</div><div class="uso-stat-l">Profissionais</div></div>'+
+        '<div class="uso-stat"><div class="uso-stat-n" id="usoServicos">—</div><div class="uso-stat-l">Serviços ativos</div></div>'+
+        '<div class="uso-stat"><div class="uso-stat-n" id="usoPush">—</div><div class="uso-stat-l">Push subs</div></div>'+
+        '<div class="uso-stat"><div class="uso-stat-n" id="usoTrialExp" style="color:var(--success)">—</div><div class="uso-stat-l">Trials expirados</div></div>'+
+      '</div>'+
+    '</div></div>';
+  html+='<div class="adm-card"><div class="adm-card-hdr"><span class="adm-card-title">Saúde do Sistema</span></div>'+
+    '<div class="adm-card-body" style="padding-top:12px">'+
+      '<div class="health-item"><div class="health-item-L"><div class="health-dot pulse"></div><span class="health-name">API Supabase</span></div><span class="health-val">99.9% OK</span></div>'+
+      '<div class="health-item"><div class="health-item-L"><div class="health-dot"></div><span class="health-name">Latência do Banco</span></div><span class="health-val">24ms</span></div>'+
+      '<div class="health-item"><div class="health-item-L"><div class="health-dot"></div><span class="health-name">Asaas (billing)</span></div><span class="health-val">Operacional</span></div>'+
+      '<div class="health-item" style="margin-top:12px"><div class="health-item-L"><div class="health-dot dim"></div><span class="health-name">Atualizado</span></div><span class="health-val" id="usoAtualizado">—</span></div>'+
+    '</div></div>';
+  html+='</div>';
+
+  el.innerHTML=html;
+
+  // Async: load funil + usage stats in parallel
+  var token=SESSION&&SESSION.access_token?SESSION.access_token:KEY;
+  var funilRes=null;
+  try{
+    var [fr]=await Promise.all([
+      fetch(SUPA+'/rest/v1/rpc/funil_eventos',{
+        method:'POST',
+        headers:{'apikey':KEY,'Authorization':'Bearer '+token,'Content-Type':'application/json'},
+        body:JSON.stringify({p_dias:dias})
+      }).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}),
+      carregarUso()
+    ]);
+    funilRes=fr;
+  }catch(e){}
+
+  if(funilRes&&funilRes.ok){
+    var resumo=funilRes.resumo||{};
+    var pv=resumo.total_visitas||(funilRes.funil&&funilRes.funil[0]?funilRes.funil[0].total:0)||0;
+    var cr=resumo.total_agendamentos||0;
+    var taxa=resumo.taxa_conversao||funilRes.taxa_conversao||0;
+    var totalErros=resumo.total_erros||0;
+
+    var kvEl=document.getElementById('kpi-visitas');
+    if(kvEl) kvEl.innerHTML='<div class="kpi-header"><span class="kpi-label">Visitas</span><span class="kpi-icon">👁</span></div>'+
+      '<div class="kpi-value-row"><span class="kpi-value">'+pv+'</span><span class="kpi-delta up">'+dias+'d</span></div>';
+    var kaEl=document.getElementById('kpi-ags');
+    if(kaEl) kaEl.innerHTML='<div class="kpi-header"><span class="kpi-label">Agendamentos</span><span class="kpi-icon">✅</span></div>'+
+      '<div class="kpi-value-row"><span class="kpi-value">'+cr+'</span><span class="kpi-delta '+(cr>0?'up':'down')+'">criados</span></div>';
+    var kcEl=document.getElementById('kpi-conv');
+    if(kcEl) kcEl.innerHTML='<div class="kpi-header"><span class="kpi-label">Conversão</span><span class="kpi-icon">🎯</span></div>'+
+      '<div class="kpi-value-row"><span class="kpi-value">'+taxa+'%</span><span class="kpi-delta '+(taxa>=5?'up':'down')+'">view→booking</span></div>';
+    var keEl=document.getElementById('kpi-erros');
+    if(keEl) keEl.innerHTML='<div class="kpi-header"><span class="kpi-label">Erros</span><span class="kpi-icon">⚠️</span></div>'+
+      '<div class="kpi-value-row"><span class="kpi-value" style="color:'+(totalErros>0?'var(--danger,#ef4444)':'inherit')+'">'+totalErros+'</span>'+
+      '<span class="kpi-delta '+(totalErros>0?'down':'up')+'">ao agendar</span></div>';
+
+    var fEl=document.getElementById('analytics-funil');
+    if(fEl) fEl.innerHTML=_buildFunilSectionHtml(funilRes,dias,cr);
+  }else{
+    var fEl=document.getElementById('analytics-funil');
+    if(fEl) fEl.innerHTML='<div class="adm-card" style="padding:20px;color:var(--tx3)">Sem dados de eventos ainda. Acesse a página de agendamento para gerar eventos.</div>';
+  }
+}
+
+function _buildFunilSectionHtml(d, dias, cr){
+  var funil=d.funil||[];
+  var erros=d.erros||{};
+  var pos=d.pos_agendamento||{};
+  var porDia=d.por_dia||[];
+  var resumo=d.resumo||{};
+  var pv=resumo.total_visitas||(funil[0]?funil[0].total:0)||1;
+  cr=cr||resumo.total_agendamentos||0;
+
+  var html='';
+  // Funnel bars
+  html+='<div class="adm-card" style="margin-bottom:16px">';
+  html+='<div class="adm-card-hdr"><span class="adm-card-title">Funil de Agendamento</span><span style="font-size:11px;color:var(--tx3)">últimos '+dias+' dias</span></div>';
+  html+='<div style="padding:4px 0">';
+  var LABELS={'page_view':'Visita','pagina_visualizada':'Visita','salao_carregado':'Salão carregado','servico_selecionado':'Serviço selecionado','data_selecionada':'Data selecionada','horario_selecionado':'Horário selecionado','agendamento_iniciado':'Confirmou clique','agendamento_criado':'Agendamento criado'};
+  funil.forEach(function(et,i){
+    var pct=Math.round((et.total/pv)*100);
+    var dropPct=i>0&&funil[i-1].total>0?Math.round((1-(et.total/funil[i-1].total))*100):0;
+    html+='<div style="padding:10px 0;border-bottom:1px solid var(--bd)">';
+    html+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">';
+    html+='<span style="font-size:13px;font-weight:700;color:var(--tx)">'+String(i+1).padStart(2,'0')+'. '+(LABELS[et.etapa]||et.etapa)+'</span>';
+    html+='<span style="font-size:15px;font-weight:800;color:var(--tx)">'+et.total+'</span></div>';
+    html+='<div style="background:var(--s2);border-radius:4px;height:6px;overflow:hidden">';
+    html+='<div style="height:100%;width:'+Math.min(100,pct)+'%;background:var(--primary);border-radius:4px;transition:width .3s"></div></div>';
+    html+='<div style="display:flex;justify-content:space-between;margin-top:4px">';
+    html+='<span style="font-size:10px;color:var(--tx3)">'+pct+'% do topo</span>';
+    if(i>0&&dropPct>0) html+='<span style="font-size:10px;color:var(--danger,#ef4444)">-'+dropPct+'% vs etapa anterior</span>';
+    html+='</div></div>';
+  });
+  html+='</div></div>';
+
+  // Chart + grids row
+  html+='<div class="adm-2col" style="margin-bottom:16px">';
+  // Left: errors + post-booking
+  html+='<div>';
+  html+='<div class="adm-card" style="margin-bottom:12px"><div class="adm-card-hdr"><span class="adm-card-title">Bloqueios & Erros</span></div><div style="padding:8px 0">';
+  [{k:'agendamento_erro',l:'Erros ao agendar',icon:'❌'},{k:'dia_fechado_exibido',l:'Dia fechado exibido',icon:'🔒'},{k:'slot_fora_expediente',l:'Slot fora expediente',icon:'⏰'}].forEach(function(row){
+    var v=erros[row.k]||0;
+    html+='<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bd)">'+
+      '<span style="font-size:13px;color:var(--tx)">'+row.icon+' '+row.l+'</span>'+
+      '<span style="font-size:14px;font-weight:800;color:'+(v>0?'var(--danger,#ef4444)':'var(--tx3)')+'">'+v+'</span></div>';
+  });
+  html+='</div></div>';
+  html+='<div class="adm-card"><div class="adm-card-hdr"><span class="adm-card-title">Pós-Agendamento</span></div><div style="padding:8px 0">';
+  [{k:'whatsapp_clicado',l:'WhatsApp clicado',icon:'💬'},{k:'ics_salvo',l:'Agenda salva (.ics)',icon:'📅'}].forEach(function(row){
+    var v=pos[row.k]||0;
+    var pct2=cr>0?Math.round((v/cr)*100):0;
+    html+='<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bd)">'+
+      '<div><span style="font-size:13px;color:var(--tx)">'+row.icon+' '+row.l+'</span>'+
+      '<div style="font-size:10px;color:var(--tx3)">'+pct2+'% dos agendamentos</div></div>'+
+      '<span style="font-size:14px;font-weight:800;color:var(--tx)">'+v+'</span></div>';
+  });
+  html+='</div></div>';
+  html+='</div>';
+  // Right: SVG chart
+  if(porDia&&porDia.length>0){
+    var maxV=Math.max.apply(null,porDia.map(function(x){return x.total;}))||1;
+    var W=Math.max(porDia.length*22,300);
+    var H=100;
+    html+='<div class="adm-card"><div class="adm-card-hdr"><span class="adm-card-title">Volume por Dia</span></div>';
+    html+='<div style="padding:8px 0;overflow-x:auto">';
+    html+='<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMinYMax meet" style="width:100%;min-width:'+W+'px;height:'+H+'px;display:block">';
+    porDia.forEach(function(pt,i){
+      var barH=Math.max(2,Math.round((pt.total/maxV)*(H-20)));
+      var x=i*22+2; var y=H-barH-4;
+      var isLast=i===porDia.length-1;
+      html+='<rect x="'+x+'" y="'+y+'" width="18" height="'+barH+'" fill="'+(isLast?'var(--primary)':'var(--primary-muted,#e57a4b)')+'" rx="2" opacity="'+(isLast?1:0.7)+'"><title>'+pt.data+': '+pt.total+'</title></rect>';
+      if(porDia.length<=15||i%3===0){
+        html+='<text x="'+(x+9)+'" y="'+(H-1)+'" text-anchor="middle" font-size="7" fill="var(--tx3)">'+(pt.data?pt.data.slice(5):'')+'</text>';
+      }
+    });
+    html+='</svg></div></div>';
+  }
+  html+='</div>';
+  return html;
+}
+
+// ── FUNIL & COMPORTAMENTO (legacy — mantido para compatibilidade) ──
 var _funilDias=30;
 function renderFunilTab(el){
   el.innerHTML='<div class="loading">Carregando funil...</div>';
@@ -2084,7 +2313,7 @@ async function toggleAtivoSalao(salaoId,statusAtual){
   try{
     await api('saloes?id=eq.'+salaoId,{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status:novoStatus})});
     toast('success',novoStatus==='ativo'?'🔓 Acesso liberado!':'🔒 Salão bloqueado!');
-    navSidebar('visaogeral',null);
+    navSidebar('analytics',null);
   }catch(e){alert('Erro: '+e.message);}
 }
 
@@ -2141,19 +2370,18 @@ function setFst(v,btn){
   filtroStatus=v;
   document.querySelectorAll('[id^="fst-"],.btn-filtro').forEach(b=>b.classList.remove('on'));
   if(btn) btn.classList.add('on');
-  renderVisaoGeral(document.getElementById('mainContent'));
+  renderAnalytics(document.getElementById('mainContent'));
 }
 function setFpl(v){
   filtroPlano=v;
-  renderVisaoGeral(document.getElementById('mainContent'));
+  renderAnalytics(document.getElementById('mainContent'));
 }
 function renderTabela(){}
 function toggleDemo(){
   ocultarDemo=!ocultarDemo;
   const btn=document.querySelector('.btn-topbar-outline');
   if(btn) btn.textContent=ocultarDemo?'Mostrar demo':'Ocultar demo';
-  renderVisaoGeral(document.getElementById('mainContent'));
-  carregarUso();
+  renderAnalytics(document.getElementById('mainContent'));
 }
 function formatData(d){return fmtData(d);}
 function fmtData(s){if(!s)return'—';try{const d=new Date(s+'T12:00:00');return d.toLocaleDateString('pt-BR');}catch{return s;}}
@@ -2608,7 +2836,7 @@ async function salvarCliente(id,slug){
     await api('saloes?id=eq.'+id,{method:'PATCH',body:JSON.stringify({plano,status,atualizado_em:new Date().toISOString()})});
     fecharModal();
     await carregar();
-    renderVisaoGeral(document.getElementById('mainContent'));
+    renderAnalytics(document.getElementById('mainContent'));
   }catch(e){alert('Erro: '+e.message);}
 }
 async function excluir(id,nome){
@@ -2617,7 +2845,7 @@ async function excluir(id,nome){
     const res = await rpc('deletar_conta_salao', {p_id: id});
     if(res.ok){
       await carregar();
-      renderVisaoGeral(document.getElementById('mainContent'));
+      renderAnalytics(document.getElementById('mainContent'));
     }else{
       alert('Erro: '+res.erro);
     }
