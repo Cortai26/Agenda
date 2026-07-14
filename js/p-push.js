@@ -1,7 +1,7 @@
 /* Agenda Painel — Push Notifications SW */
 
 /* ═══ PWA PUSH NOTIFICATIONS ═══ */
-const VAPID_PUBLIC='BE7yLo8_tT-zgOgyMqcn49YnmK2tVpVxYIV0rCEhqSzZmBPP74nAwl8OejicM2QAOd9hM_XcIu-P-OuGou8QZAE';
+const VAPID_PUBLIC='BE9mWEdMNjOk929T3p4U0vDnkQbKy3oKORWpLww_lqdnLZPwTA_4CDlli75weTuXo87EHm0r95v05xaNxclBnRU';
 
 function b64uToUint8(b64u){
   var b=b64u.replace(/-/g,'+').replace(/_/g,'/');
