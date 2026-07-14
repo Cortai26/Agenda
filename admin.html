@@ -967,6 +967,16 @@ html.t-feminine .adm-sidebar .adm-nav-item.active{color:var(--primary)!important
 /* Logout button always visible */
 
 
+/* ── PUSH ADMIN BANNER ── */
+.push-banner{display:flex;align-items:center;justify-content:space-between;background:rgba(229,90,12,.06);border:1px solid rgba(229,90,12,.2);border-radius:12px;padding:14px 18px;margin:0 0 20px;gap:12px;flex-wrap:wrap}
+.push-banner-info{display:flex;align-items:center;gap:12px}
+.push-icon{font-size:24px;flex-shrink:0}
+.push-banner-info strong{display:block;font-size:14px;margin-bottom:2px}
+.push-banner-info span{font-size:12px;color:var(--tx3,#888)}
+.btn-push-ativar{background:var(--primary,#E55A0C);color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.btn-push-ativar.ativo{background:#22C55E;cursor:default}
+.btn-push-ativar:disabled:not(.ativo){background:#94A3B8;cursor:not-allowed}
+
 /* Admin modal box — centered dialog on desktop */
 .modal {
   background: var(--card-bg);
@@ -1103,6 +1113,7 @@ function enviarWhatsAppById(id){
   enviarWhatsApp(c.tel,c.pix,c.nome,c.valor,c.venc,c.link);
 }
 </script>
+<script src="/js/features.js"></script>
 </head>
 <body>
 <!-- ══════════════════════════════════════════
@@ -1163,6 +1174,9 @@ function enviarWhatsAppById(id){
       <button class="adm-nav-item" id="nav-sistema" onclick="navSidebar('sistema',this)" style="color:rgba(255,255,255,.7)">
         <span class="adm-nav-icon">⚙️</span> Sistema
       </button>
+      <button class="adm-nav-item" id="nav-marketplace" onclick="navSidebar('marketplace',this)" style="color:rgba(255,255,255,.7)">
+        <span class="adm-nav-icon">🛍️</span> Marketplace
+      </button>
     </nav>
 
     <div class="adm-sidebar-footer">
@@ -1196,6 +1210,7 @@ function enviarWhatsAppById(id){
       <button class="mobile-tab" onclick="navSidebar('cobrancas',this)">💳 Cobranças</button>
       <button class="mobile-tab" onclick="navSidebar('saloes',this)">🏪 Salões</button>
       <button class="mobile-tab" onclick="navSidebar('sistema',this)">⚙️ Sistema</button>
+      <button class="mobile-tab" onclick="navSidebar('marketplace',this)">🛍️ Marketplace</button>
       <div style="margin-left:auto;display:flex;align-items:center;gap:6px;padding-right:10px">
         <div class="theme-dot" id="mtdot-onyx" style="background:#F2CA50;flex-shrink:0" onclick="setTheme('t-onyx')" title="Onyx"></div>
         <div class="theme-dot" id="mtdot-feminine" style="background:#D81B60;flex-shrink:0" onclick="setTheme('t-feminine')" title="Feminine"></div>
@@ -1206,6 +1221,17 @@ function enviarWhatsAppById(id){
 
     <!-- CONTENT -->
     <div class="adm-content">
+      <!-- PUSH NOTIFICATIONS BANNER -->
+      <div id="admin-push-section" class="push-banner" style="display:none">
+        <div class="push-banner-info">
+          <span class="push-icon">🔔</span>
+          <div>
+            <strong>Notificações em tempo real</strong>
+            <span id="push-status-text">Ative para receber alertas de novos agendamentos</span>
+          </div>
+        </div>
+        <button id="btn-ativar-push" class="btn-push-ativar" onclick="ativarPushAdmin()">Ativar notificações</button>
+      </div>
       <div id="mainContent"><div class="loading">Carregando...</div></div>
     </div>
 
@@ -1349,6 +1375,7 @@ async function mostrarApp(){
     document.getElementById('appWrap').classList.add('show');
     await carregar();
     renderAnalytics(document.getElementById('mainContent'));
+    checarStatusPush();
   }catch(e){
     console.error('[mostrarApp]',e);
     const isExpired=e.message&&(e.message.includes('expired')||e.message.includes('PGRST')||e.message.includes('JWT'));
@@ -1378,14 +1405,15 @@ function navSidebar(id, btn){
   activeTab=id;
   const el=document.getElementById('mainContent');
   // Topbar
-  const eyebrow={'analytics':'Platform Overview','cobrancas':'Financeiro','sistema':'Gerenciamento','saloes':'Desempenho'}[id]||'';
-  const title={'analytics':'Analytics','cobrancas':'Cobranças','sistema':'Sistema','saloes':'Por Salão'}[id]||'';
+  const eyebrow={'analytics':'Platform Overview','cobrancas':'Financeiro','sistema':'Gerenciamento','saloes':'Desempenho','marketplace':'Em desenvolvimento'}[id]||'';
+  const title={'analytics':'Analytics','cobrancas':'Cobranças','sistema':'Sistema','saloes':'Por Salão','marketplace':'Marketplace'}[id]||'';
   document.getElementById('topbar-eyebrow').textContent=eyebrow;
   document.getElementById('topbar-title').textContent=title;
   if(id==='analytics'){renderAnalytics(el);}
   else if(id==='cobrancas'){renderCobrancas(el);}
   else if(id==='sistema'){renderLixeira(el);}
   else if(id==='saloes'){renderSaloesStats(el);}
+  else if(id==='marketplace'){renderMarketplace(el);}
 }
 // Compat legado (usado pelos botões gerados pelo JS)
 function navTab(id,btn){navSidebar(id,btn);}
@@ -2099,6 +2127,48 @@ function renderVisaoGeral(el){
   html+='</div>'; // /adm-2col
 
   el.innerHTML=html;
+}
+
+// ── RENDER MARKETPLACE ──
+async function renderMarketplace(el){
+  if(!el) return;
+  el.innerHTML='<div class="loading">Carregando salões…</div>';
+  var r=await fetch(SUPA+'/rest/v1/saloes?deleted_at=is.null&select=nome,slug,plano,status&order=nome',{headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}});
+  var saloes=r.ok?await r.json():[];
+  var rows=(saloes||[]).map(function(s){
+    var badgeCol=s.status==='ativo'?'#22C55E':s.status==='trial'?'#F59E0B':'#94A3B8';
+    return '<tr><td>'+s.nome+'</td><td><code style="font-size:12px">'+s.slug+'</code></td>'+
+      '<td>'+s.plano+'</td>'+
+      '<td><span style="display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700;background:'+badgeCol+'22;color:'+badgeCol+'">'+s.status+'</span></td>'+
+      '<td><span style="color:var(--tx3,#666);font-size:12px">Desabilitado</span></td></tr>';
+  }).join('');
+  el.innerHTML=
+    '<div style="margin-bottom:20px;padding:16px;background:rgba(229,90,12,.06);border:1px solid rgba(229,90,12,.2);border-radius:12px;display:flex;align-items:center;gap:12px">'+
+      '<span style="font-size:24px">🛍️</span>'+
+      '<div><strong style="font-size:14px">Status: Desabilitado globalmente</strong>'+
+      '<p style="font-size:12px;margin:4px 0 0;color:var(--tx3,#888)">Quando habilitado, cada salão terá página pública com busca, avaliações e agendamento direto. Altere <code>MARKETPLACE: false</code> em js/features.js para ativar.</p></div>'+
+    '</div>'+
+    '<h3 style="font-size:14px;font-weight:700;margin:0 0 12px">Salões ('+saloes.length+')</h3>'+
+    '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px">'+
+      '<thead><tr style="border-bottom:1px solid var(--rule,rgba(255,255,255,.1))">'+
+        '<th style="text-align:left;padding:8px 12px 8px 0;font-size:11px;letter-spacing:.06em;color:var(--tx3,#888);text-transform:uppercase">Salão</th>'+
+        '<th style="text-align:left;padding:8px 12px 8px 0;font-size:11px;letter-spacing:.06em;color:var(--tx3,#888);text-transform:uppercase">Slug</th>'+
+        '<th style="text-align:left;padding:8px 12px 8px 0;font-size:11px;letter-spacing:.06em;color:var(--tx3,#888);text-transform:uppercase">Plano</th>'+
+        '<th style="text-align:left;padding:8px 12px 8px 0;font-size:11px;letter-spacing:.06em;color:var(--tx3,#888);text-transform:uppercase">Status</th>'+
+        '<th style="text-align:left;padding:8px 12px 8px 0;font-size:11px;letter-spacing:.06em;color:var(--tx3,#888);text-transform:uppercase">Marketplace</th>'+
+      '</tr></thead>'+
+      '<tbody>'+rows+'</tbody>'+
+    '</table></div>'+
+    '<h3 style="font-size:14px;font-weight:700;margin:24px 0 12px">Em desenvolvimento</h3>'+
+    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px">'+
+      ['🗺️|Descoberta local|Busca por categoria e localização','⭐|Avaliações|Visíveis publicamente pós-atendimento','📅|Agendamento direto|Sem sair do marketplace'].map(function(s){
+        var p=s.split('|');
+        return '<div style="padding:16px;border:1px solid var(--rule,rgba(255,255,255,.1));border-radius:12px">'+
+          '<div style="font-size:24px;margin-bottom:8px">'+p[0]+'</div>'+
+          '<div style="font-size:13px;font-weight:700;margin-bottom:4px">'+p[1]+'</div>'+
+          '<div style="font-size:12px;color:var(--tx3,#888)">'+p[2]+'</div></div>';
+      }).join('')+
+    '</div>';
 }
 
 // ── RENDER COBRANÇAS ──
@@ -2991,6 +3061,74 @@ async function gerarCSV(){
     showLogin();
   })();
 })();
+
+// ── PUSH ADMIN ──
+const VAPID_PUBLIC_ADMIN='BE7yLo8_tT-zgOgyMqcn49YnmK2tVpVxYIV0rCEhqSzZmBPP74nAwl8OejicM2QAOd9hM_XcIu-P-OuGou8QZAE';
+
+function _b64uToUint8(b64u){
+  var b=b64u.replace(/-/g,'+').replace(/_/g,'/');
+  while(b.length%4) b+='=';
+  return Uint8Array.from(atob(b),function(c){return c.charCodeAt(0);});
+}
+
+async function checarStatusPush(){
+  const banner=document.getElementById('admin-push-section');
+  if(!banner) return;
+  if(!isFeatureEnabled('ADMIN_PUSH_NOTIF')){banner.style.display='none';return;}
+  if(!('Notification' in window)||!('serviceWorker' in navigator)){banner.style.display='none';return;}
+  banner.style.display='flex';
+  const btn=document.getElementById('btn-ativar-push');
+  const statusText=document.getElementById('push-status-text');
+  if(Notification.permission==='granted'){
+    try{
+      const reg=await navigator.serviceWorker.getRegistration('/sw.js');
+      const sub=reg?await reg.pushManager.getSubscription():null;
+      if(sub){
+        btn.textContent='✅ Ativo';btn.disabled=true;btn.classList.add('ativo');
+        statusText.textContent='Notificações ativas — você receberá alertas de novos agendamentos';
+        return;
+      }
+    }catch(e){}
+  }
+  if(Notification.permission==='denied'){
+    btn.textContent='Bloqueado pelo browser';btn.disabled=true;
+    statusText.textContent='Permissão negada — habilite nas configurações do browser';
+    return;
+  }
+  btn.textContent='Ativar notificações';btn.disabled=false;
+}
+
+async function ativarPushAdmin(){
+  const btn=document.getElementById('btn-ativar-push');
+  btn.textContent='Aguarde…';btn.disabled=true;
+  try{
+    const perm=await Notification.requestPermission();
+    if(perm!=='granted'){btn.textContent='Permissão negada';btn.disabled=false;return;}
+    if('serviceWorker' in navigator){
+      await navigator.serviceWorker.register('/js/sw.js').catch(function(){});
+    }
+    const reg=await navigator.serviceWorker.ready;
+    const sub=await reg.pushManager.subscribe({
+      userVisibleOnly:true,
+      applicationServerKey:_b64uToUint8(VAPID_PUBLIC_ADMIN)
+    });
+    const j=sub.toJSON();
+    const res=await fetch(SUPA+'/rest/v1/admin_push_subscriptions',{
+      method:'POST',
+      headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},
+      body:JSON.stringify({endpoint:j.endpoint,p256dh:j.keys.p256dh,auth:j.keys.auth,user_agent:navigator.userAgent.slice(0,200)})
+    });
+    if(!res.ok && res.status!==409) throw new Error('HTTP '+res.status);
+    btn.textContent='✅ Ativo';btn.classList.add('ativo');
+    document.getElementById('push-status-text').textContent='Notificações ativas — você receberá alertas de novos agendamentos';
+    setTimeout(function(){
+      new Notification('✅ Agenda Admin',{body:'Notificações ativadas com sucesso!',icon:'/icons/icon-192.png'});
+    },500);
+  }catch(e){
+    console.error('[push admin]',e);
+    btn.textContent='Erro — tentar novamente';btn.disabled=false;
+  }
+}
 </script>
 </body>
 </html>

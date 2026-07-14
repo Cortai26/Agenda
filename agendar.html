@@ -835,6 +835,7 @@ html.t-onyx .ag-input {
 html.t-onyx .ag-input::placeholder { color: var(--c-text-3); }
 
 .ag-two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 480px) { .ag-two { grid-template-columns: 1fr; gap: 0; } }
 
 /* ── BOTÃO CONFIRMAR ── */
 .btn-ag {
@@ -1678,6 +1679,7 @@ html.fonte-serif .hdr-name{
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:image" content="https://agendatop.vercel.app/og/og-image.png">
+  <script src="/js/features.js"></script>
 </head>
 <body>
 
@@ -1950,7 +1952,6 @@ html.fonte-serif .hdr-name{
 // ═══════════════════════════════════════════════════════════════
 // AGENDA — AGENDAR JS (lógica completa, tema via CSS)
 // ═══════════════════════════════════════════════════════════════
-const FEAT_EMAIL=false;
 const SUPA_URL = 'https://acldrisohnjfekjxgmoh.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFjbGRyaXNvaG5qZmVranhnbW9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1ODA1MzcsImV4cCI6MjA4OTE1NjUzN30.etojz12x1oVNvbW_fPeVpNx2OFuJ72C1YioFBlCLS2Y';
 
@@ -2033,7 +2034,7 @@ function updateBar(){
 // ── INIT ──
 async function init(){
   var campoEmail=document.getElementById('campoEmail');
-  if(campoEmail) campoEmail.style.display=FEAT_EMAIL?'block':'none';
+  if(campoEmail) campoEmail.style.display=isFeatureEnabled('EMAIL_FIELD')?'block':'none';
   try {
     const dados = await supa(`saloes?slug=eq.${slug}&deleted_at=is.null&select=id,slug,nome,responsavel,plano,status,descricao,endereco,cancelamento_min,pix_key,pix_tipo,aceita_pix,aceita_dinheiro,aceita_cartao,aceita_debito,tema,trial_expira,horario,sinal_percentual,sinal_obrigatorio,mostrar_sinal,foto_url,foto_capa_url,instagram_url,website_url,whatsapp_url,tiktok_url,facebook_url,video_url,galeria_fotos,diferenciais,faq,produtos,nota_media,total_avaliacoes,tag_destaque,fundado_em`);
     if(!dados||dados.length===0){
@@ -2671,6 +2672,8 @@ function chkBtn(){
   document.getElementById('btnAg').disabled=!(S.srv&&S.dataStr&&S.hora&&S.nome.trim().length>=2&&S.tel.trim().length>=8);
 }
 document.getElementById('iNome').oninput=e=>{S.nome=e.target.value;chkBtn()};
+document.getElementById('iNome').addEventListener('focus',function(){_setFabVisibility(false);});
+document.getElementById('iTel').addEventListener('focus',function(){_setFabVisibility(false);});
 document.getElementById('iTel').oninput=e=>{
   S.tel=e.target.value;
   var digits=(S.tel||'').replace(/\D/g,'');
@@ -2716,7 +2719,7 @@ document.getElementById('btnAg').onclick=async()=>{
       }).catch(function(){});
     }
     // Send confirmation email (fire and forget)
-    if(FEAT_EMAIL && emailVal && rpcRes.cancel_token){
+    if(isFeatureEnabled('EMAIL_FIELD') && emailVal && rpcRes.cancel_token){
       var _sinalPct=salao.sinal_percentual||30;
       var _sinalVal2=salao.mostrar_sinal&&salao.pix_key&&S.srv.preco>0?Math.round(S.srv.preco*(_sinalPct/100)):0;
       var _horasCan=(salao.cancelamento_min||120)>=60?Math.floor((salao.cancelamento_min||120)/60):null;
@@ -3094,12 +3097,21 @@ document.getElementById('btnNovo').onclick=()=>{
 // ═══ v40: PROFILE PAGE ═══
 function isDesktop(){ return window.innerWidth>=780; }
 
+function _setFabVisibility(visible){
+  var fabW=document.querySelector('.fab-wrapper');
+  var fabV=document.getElementById('fabV2');
+  if(fabW) fabW.style.opacity=visible?'':'0';
+  if(fabW) fabW.style.pointerEvents=visible?'':'none';
+  if(fabV) fabV.style.display=visible?'':'none';
+}
+
 function abrirSheet(srvId, profId){
   /* No desktop, redirecionar para o painel direito */
   if(isDesktop()){
     renderEtapaDesktop(srvId);
     return;
   }
+  _setFabVisibility(false);
   var cs=document.getElementById('confirmScreen');
   var ap=document.querySelector('.ag-page');
   if(cs&&cs.style.display!=='none'){ cs.style.display='none'; if(ap) ap.style.display='block'; }
@@ -3133,6 +3145,7 @@ function fecharSheet(){
   if(sheet){sheet.classList.remove('show');sheet.style.maxHeight='';sheet.style.borderRadius='';}
   if(overlay) overlay.classList.remove('show');
   document.body.classList.remove('sheet-open');
+  _setFabVisibility(true);
 }
 
 function compartilhar(){
@@ -4008,7 +4021,7 @@ function _desktopConfirmar(){
         '<input id="cdNome" type="text" placeholder="Seu nome" style="width:100%;padding:10px 0;background:transparent;border:none;border-bottom:1px solid var(--c-border);color:var(--c-text);font-size:15px;outline:none"></div>'+
       '<div style="margin-bottom:12px"><label style="font-size:9px;color:var(--c-text-2);letter-spacing:2px;text-transform:uppercase;display:block;margin-bottom:6px">WhatsApp *</label>'+
         '<input id="cdTel" type="tel" placeholder="(11) 99999-9999" oninput="mascaraTelInput(this)" style="width:100%;padding:10px 0;background:transparent;border:none;border-bottom:1px solid var(--c-border);color:var(--c-text);font-size:15px;outline:none"></div>'+
-      (FEAT_EMAIL?'<div style="margin-bottom:16px"><label style="font-size:9px;color:var(--c-text-2);letter-spacing:2px;text-transform:uppercase;display:block;margin-bottom:6px">E-mail <span style="font-size:9px;opacity:0.5">(opcional)</span></label>'+
+      (isFeatureEnabled('EMAIL_FIELD')?'<div style="margin-bottom:16px"><label style="font-size:9px;color:var(--c-text-2);letter-spacing:2px;text-transform:uppercase;display:block;margin-bottom:6px">E-mail <span style="font-size:9px;opacity:0.5">(opcional)</span></label>'+
         '<input id="cdEmail" type="email" placeholder="seu@email.com" style="width:100%;padding:10px 0;background:transparent;border:none;border-bottom:1px solid var(--c-border);color:var(--c-text);font-size:15px;outline:none"></div>':'')+
     '</div>'+
     '<button onclick="_desktopSalvar()" id="btnCdSalvar" style="width:100%;padding:14px;background:var(--c-primary);color:#fff;border:none;font-family:var(--sans);font-style:normal;font-weight:600;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:space-between"><span>✅ Confirmar agendamento</span><span>→</span></button>'+
