@@ -3991,7 +3991,6 @@ async function _loadDesktopHoras(dStr){
 window._loadDesktopHoras=_loadDesktopHoras;
 
 function _desktopHora(hora){
-  console.log('[desktop] slot clicado:', hora);
   _dHora=hora;
   if(typeof trackEvento==='function') trackEvento('horario_selecionado',{hora:hora.slice(0,5),data:_dDia});
   var btn=document.getElementById('btnCdConf');

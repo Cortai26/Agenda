@@ -87,8 +87,6 @@ function toggleDia(btn){
   }
 }
 
-function atualizarHora(input){}
-
 async function salvarHorario(){
   var btn=document.querySelector('[onclick="salvarHorario()"]');
   if(btn){btn.disabled=true;btn.textContent='Salvando...';}

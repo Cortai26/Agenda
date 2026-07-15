@@ -385,7 +385,6 @@ async function buildIcones(){
 async function selIco(ic){_icoSel=ic;buildIcones();}
 
 async function salvarServico(){
-  console.log('[salvarServico] iniciado');
   var btn=document.getElementById('btnSvSrv'), err=document.getElementById('srvErr');
   if(!err||!btn){console.error('[salvarServico] elementos não encontrados');return;}
   err.style.display='none'; err.classList.remove('show');
