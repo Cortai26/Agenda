@@ -16,6 +16,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/tokens.css">
+<script>try{var _t=localStorage.getItem('cortai_admin_theme')||'t-onyx';document.documentElement.classList.add(_t);}catch(e){document.documentElement.classList.add('t-onyx');}</script>
 <style>
 /* ═══ RESET ═══ */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -103,7 +104,6 @@ body{background:var(--bg);color:var(--tx);font-family:var(--font-b)}
 
 
 /* ══ ONYX — Dark Editorial Gold ══ */
-:root,
 html.t-onyx {
   --bg:#131313;
   --s1:#181818;
@@ -937,15 +937,14 @@ html.t-feminine .vg-plano { border-radius: 20px; }
 
 /* logout btn removed — using footer button instead */
 
-/* Force nav items visible regardless of theme loading */
-.adm-sidebar .adm-nav-item{color:rgba(255,255,255,.75)!important}
-.adm-sidebar .adm-nav-item:hover,.adm-sidebar .adm-nav-item.active{color:#fff!important;background:rgba(255,255,255,.08)!important}
-.adm-sidebar .adm-nav-item.active{background:rgba(242,202,80,.15)!important;color:#F2CA50!important}
-/* Neutral/Feminine themes: dark text on white sidebar */
-html.t-neutral .adm-sidebar .adm-nav-item,html.t-feminine .adm-sidebar .adm-nav-item{color:#333!important}
-html.t-neutral .adm-sidebar .adm-nav-item:hover,html.t-feminine .adm-sidebar .adm-nav-item:hover{color:#000!important;background:rgba(0,0,0,.06)!important}
-html.t-neutral .adm-sidebar .adm-nav-item.active{color:var(--primary)!important;background:var(--primary-bg)!important}
-html.t-feminine .adm-sidebar .adm-nav-item.active{color:var(--primary)!important;background:var(--primary-bg)!important}
+/* Scoped per-theme sidebar nav colours — no !important needed */
+html.t-onyx .adm-sidebar .adm-nav-item{color:rgba(255,255,255,.75)}
+html.t-onyx .adm-sidebar .adm-nav-item:hover{color:#fff;background:rgba(255,255,255,.08)}
+html.t-onyx .adm-sidebar .adm-nav-item.active{background:rgba(242,202,80,.15);color:#F2CA50}
+html.t-neutral .adm-sidebar .adm-nav-item,html.t-feminine .adm-sidebar .adm-nav-item{color:#333}
+html.t-neutral .adm-sidebar .adm-nav-item:hover,html.t-feminine .adm-sidebar .adm-nav-item:hover{color:#000;background:rgba(0,0,0,.06)}
+html.t-neutral .adm-sidebar .adm-nav-item.active{color:var(--primary);background:var(--primary-bg)}
+html.t-feminine .adm-sidebar .adm-nav-item.active{color:var(--primary);background:var(--primary-bg)}
 /* Logout button always visible */
 
 
