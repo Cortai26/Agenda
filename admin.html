@@ -39,8 +39,6 @@ body{background:var(--bg);color:var(--tx);font-family:var(--font-b)}
 /* ═══ RESPONSIVE — mobile first, sidebar appears at 1024px+ ═══ */
 @media(max-width:380px){
   .adm-content{padding:10px 10px 24px}
-  .kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-  .kpi-value{font-size:20px}
 }
 
 
@@ -57,6 +55,12 @@ body{background:var(--bg);color:var(--tx);font-family:var(--font-b)}
 /* Remove min-width no mobile — tabela ocupa 100% sem scroll */
 .table-scroll .adm-table{min-width:0}
 
+/* ── 640px+: 3 colunas no grid ── */
+@media(min-width:640px){
+  .kpi-grid{grid-template-columns:repeat(3,1fr)}
+  .kpi-value{font-size:clamp(22px,3vw,28px)}
+}
+
 @media(min-width:1024px){
   .app.show{flex-direction:row}
   .adm-table th:nth-child(2),.adm-table td:nth-child(2),
@@ -66,7 +70,6 @@ body{background:var(--bg);color:var(--tx);font-family:var(--font-b)}
   .t-biz-name{max-width:none;white-space:normal}
   .t-biz-loc{max-width:none;white-space:normal}
   .t-biz-icon{width:36px;height:36px;font-size:16px}
-
   .adm-sidebar{display:flex}
   .mobile-tabs{display:none!important}
   .adm-topbar{padding:14px 24px}
@@ -74,7 +77,6 @@ body{background:var(--bg);color:var(--tx);font-family:var(--font-b)}
   .adm-content{padding:24px 28px 40px}
   .kpi-grid{grid-template-columns:repeat(3,1fr);gap:16px}
   .kpi-value{font-size:26px}
-  
   .adm-2col-side{display:flex;flex-direction:column;gap:14px}
 }
 
@@ -488,15 +490,15 @@ html.t-onyx .adm-nav-item.active { box-shadow: none; }
 /* ── KPI GRID ── */
 .kpi-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(8px, 2vw, 16px);
   margin-bottom: 24px;
 }
 .kpi-card {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: var(--r-xl);
-  padding: 14px 14px 12px;
+  padding: clamp(10px, 2.5vw, 16px);
   position: relative;
   overflow: hidden;
   box-shadow: var(--sh);
@@ -512,7 +514,7 @@ html.t-onyx .adm-nav-item.active { box-shadow: none; }
 .kpi-value-row{display:flex;align-items:baseline;gap:6px;margin-bottom:8px;flex-wrap:wrap}
 .kpi-value {
   font-family: var(--font-h);
-  font-size: 26px;
+  font-size: clamp(18px, 5vw, 26px);
   font-weight: 800;
   color: var(--tx);
   line-height: 1;
@@ -542,14 +544,14 @@ html.t-onyx .adm-nav-item.active { box-shadow: none; }
 
 /* ── CARDS GENÉRICOS ── */
 .adm-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--r-xl);box-shadow:var(--sh);overflow:hidden}
-.adm-card-hdr{padding:14px 16px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px solid var(--card-border);flex-wrap:wrap}
+.adm-card-hdr{padding:clamp(10px,2vw,14px) clamp(12px,3vw,16px);display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px solid var(--card-border);flex-wrap:wrap}
 .adm-card-title {
   font-family: var(--font-h);
   font-size: 15px;
   font-weight: 800;
   color: var(--tx);
 }
-.adm-card-body { padding: 20px 22px; }
+.adm-card-body { padding: clamp(12px,3vw,22px); }
 .adm-card-link {
   font-size: 12px;
   font-weight: 700;
@@ -929,29 +931,9 @@ html.t-feminine .vg-plano { border-radius: 20px; }
 .pl-trial { background: var(--badge-trial-bg); color: var(--badge-trial-text); font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: var(--r-sm); }
 
 
-  .kpi-value{font-size:36px}
-}
-
-  .kpi-value { font-size: 36px; }
-}
-
-/* ════════════════════════════════
-.adm-page-title { font-size: 17px; }
-.kpi-grid { grid-template-columns: repeat(2,1fr); gap: 10px; }
-.kpi-value { font-size: 22px; }
-.adm-2col { grid-template-columns: 1fr; gap: 14px; }
-.adm-2col-side { display: none; }
-.uso-stats { grid-template-columns: repeat(3,1fr); gap: 8px; }
-.uso-stat-n { font-size: clamp(14px,5vw,22px); }
-
-/* Small phones */
-
-/* Tablet 768+ — show sidebar, row layout */
-
 /* Table responsive wrapper */
 .table-scroll{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
 .table-scroll .adm-table{min-width:520px}
-.table-scroll 
 
 /* logout btn removed — using footer button instead */
 
@@ -1078,7 +1060,7 @@ input.fi:focus{
 .fl{color:#9B9B9B!important;font-size:11px!important;font-weight:600!important;
   letter-spacing:.06em!important;text-transform:uppercase!important;}
 .kpi-valor{font-size:clamp(18px,5vw,36px);font-weight:800;line-height:1;word-break:break-all}
-@media(max-width:400px){.kpi-grid{grid-template-columns:1fr 1fr}.kpi-card:nth-child(3){grid-column:1/-1}}
+/* kpi-grid: 2 colunas mobile (<640px), 3 colunas tablet+, 4 colunas desktop — ver media queries acima */
 </style>
 <script src="/js/toast.js"></script>
 <script>
