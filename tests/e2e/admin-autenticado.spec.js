@@ -19,8 +19,18 @@ async function loginAdmin(page) {
 }
 
 // Helper: clica em uma seção do sidebar admin
+// No mobile (<1024px) o .adm-sidebar tem display:none — usa evaluate como fallback
 async function irSecao(page, id) {
-  await page.locator(`#nav-${id}`).click();
+  const btn = page.locator(`#nav-${id}`);
+  const visible = await btn.isVisible({ timeout: 2_000 }).catch(() => false);
+  if (visible) {
+    await btn.click();
+  } else {
+    await page.evaluate(sectionId => {
+      const el = document.querySelector(`#nav-${sectionId}`);
+      if (el) el.click();
+    }, id);
+  }
   await page.waitForTimeout(600);
 }
 

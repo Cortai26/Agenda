@@ -32,7 +32,8 @@ async function irTab(page, tab) {
       if (el) el.click();
     }, tab);
   }
-  await page.waitForTimeout(500);
+  // Aguarda o painel da tab ficar ativo antes de continuar
+  await page.locator(`#tb-${tab}.on`).waitFor({ state: 'attached', timeout: 5_000 }).catch(() => {});
 }
 
 test.describe('Painel autenticado — login', () => {

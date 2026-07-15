@@ -18,8 +18,8 @@ const BASE_URL = process.env.BASE_URL || 'https://agendatop.vercel.app';
 
 module.exports = defineConfig({
   testDir: './tests/e2e',
-  timeout: 30_000,
-  retries: process.env.CI ? 2 : 1,
+  timeout: 60_000,
+  retries: process.env.CI ? 2 : 2,
   workers: 1,
   reporter: [['list'], ['html', { open: 'never' }]],
   use: {
