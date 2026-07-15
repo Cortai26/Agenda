@@ -1964,7 +1964,8 @@ async function supaRpc(fn, body){
     body: JSON.stringify(body)
   });
   if(!r.ok) return null;
-  return r.json();
+  const text = await r.text();
+  return text ? JSON.parse(text) : null;
 }
 async function supa(path, opts={}) {
   const r = await fetch(SUPA_URL+'/rest/v1/'+path, {
