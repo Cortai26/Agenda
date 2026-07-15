@@ -19,13 +19,20 @@ const BASE_URL = process.env.BASE_URL || 'https://agendatop.vercel.app';
 module.exports = defineConfig({
   testDir: './tests/e2e',
   timeout: 30_000,
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 2 : 1,
+  workers: 1,
   reporter: [['list'], ['html', { open: 'never' }]],
   use: {
     baseURL: BASE_URL,
     headless: true,
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
+    launchOptions: {
+      args: ['--disable-blink-features=AutomationControlled'],
+    },
+    extraHTTPHeaders: {
+      'Accept-Language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
+    },
   },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
