@@ -16,6 +16,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/tokens.css">
+<link rel="stylesheet" href="/css/themes.css">
 <script>try{var _t=localStorage.getItem('cortai_admin_theme')||'t-onyx';document.documentElement.classList.add(_t);}catch(e){document.documentElement.classList.add('t-onyx');}</script>
 <style>
 /* ═══ RESET ═══ */
@@ -96,168 +97,6 @@ body{background:var(--bg);color:var(--tx);font-family:var(--font-b)}
 }
 
 
-
-/* ═══════════════════════════════════════════════════════════════
-   AGENDA ADMIN — SISTEMA DE TEMAS v2
-   t-onyx (dark gold) · t-feminine (pink) · t-neutral (blue)
-   ═══════════════════════════════════════════════════════════════ */
-
-
-/* ══ ONYX — Dark Editorial Gold ══ */
-html.t-onyx {
-  --bg:#131313;
-  --s1:#181818;
-  --s2:#212121;
-  --s3:#2C2C2C;
-  --bd:rgba(255,255,255,.07);
-  --bd2:rgba(255,255,255,.12);
-  --primary:#F2CA50;
-  --primary-d:#D4AF37;
-  --primary-bg:rgba(242,202,80,.1);
-  --primary-glow:rgba(242,202,80,.3);
-  --tx:#E5E2E1;
-  --tx2:#A09080;
-  --tx3:#5C5045;
-  --green:#4ADE80;
-  --green-bg:rgba(74,222,128,.1);
-  --red:#F87171;
-  --red-bg:rgba(248,113,113,.1);
-  --amber:#F59E0B;
-  --amber-bg:rgba(245,158,11,.1);
-  --blue:#60A5FA;
-  --r-sm:4px;--r-md:8px;--r-lg:12px;--r-xl:16px;
-  --sh:0 4px 20px rgba(0,0,0,.4);
-  --sh-lg:0 8px 40px rgba(0,0,0,.5);
-  --font-h:'Manrope',sans-serif;
-  --font-b:'Inter',sans-serif;
-  --sidebar-w:220px;
-  --sidebar-bg:#0E0E0E;
-  --sidebar-border:rgba(255,255,255,.05);
-  --sidebar-active-bg:rgba(242,202,80,.12);
-  --sidebar-active-color:var(--primary);
-  --sidebar-text:rgba(255,255,255,.75);
-  --sidebar-text-hover:rgba(255,255,255,.8);
-  --topbar-bg:#131313;
-  --card-bg:#181818;
-  --card-border:rgba(255,255,255,.06);
-  --input-bg:#212121;
-  --btn-primary-bg:var(--primary);
-  --btn-primary-text:#131313;
-  --badge-active-bg:rgba(242,202,80,.15);
-  --badge-active-text:var(--primary);
-  --badge-trial-bg:rgba(96,165,250,.12);
-  --badge-trial-text:var(--blue);
-  --badge-cancel-bg:rgba(248,113,113,.12);
-  --badge-cancel-text:var(--red);
-  --sparkbar:#3a3020;
-  --sparkbar-active:var(--primary);
-  --table-border:rgba(255,255,255,.05);
-  --table-hover:rgba(255,255,255,.03);
-}
-
-/* ══ FEMININE — Blush Pink Light ══ */
-html.t-feminine {
-  --bg:#FFFBFF;
-  --s1:#FFFFFF;
-  --s2:#FFF1F3;
-  --s3:#FAEEF0;
-  --bd:#F4DDDF;
-  --bd2:rgba(216,27,96,.15);
-  --primary:#D81B60;
-  --primary-d:#AD1457;
-  --primary-bg:rgba(216,27,96,.08);
-  --primary-glow:rgba(216,27,96,.2);
-  --tx:#201A1A;
-  --tx2:#534344;
-  --tx3:#908E8E;
-  --green:#2E7D32;
-  --green-bg:rgba(46,125,50,.08);
-  --red:#C62828;
-  --red-bg:rgba(198,40,40,.08);
-  --amber:#E65100;
-  --amber-bg:rgba(230,81,0,.08);
-  --blue:#1565C0;
-  --r-sm:8px;--r-md:12px;--r-lg:16px;--r-xl:24px;
-  --sh:0 2px 12px rgba(216,27,96,.08);
-  --sh-lg:0 8px 32px rgba(216,27,96,.12);
-  --font-h:'Manrope',sans-serif;
-  --font-b:'Inter',sans-serif;
-  --sidebar-w:220px;
-  --sidebar-bg:#FFFFFF;
-  --sidebar-border:#F4DDDF;
-  --sidebar-active-bg:rgba(216,27,96,.1);
-  --sidebar-active-color:var(--primary);
-  --sidebar-text:#555555;
-  --sidebar-text-hover:#201A1A;
-  --topbar-bg:#FFFFFF;
-  --card-bg:#FFFFFF;
-  --card-border:#F4DDDF;
-  --input-bg:#FFF1F3;
-  --btn-primary-bg:var(--primary);
-  --btn-primary-text:#FFFFFF;
-  --badge-active-bg:rgba(216,27,96,.1);
-  --badge-active-text:var(--primary);
-  --badge-trial-bg:rgba(30,136,229,.1);
-  --badge-trial-text:#1565C0;
-  --badge-cancel-bg:rgba(198,40,40,.08);
-  --badge-cancel-text:#C62828;
-  --sparkbar:rgba(216,27,96,.15);
-  --sparkbar-active:var(--primary);
-  --table-border:rgba(216,27,96,.06);
-  --table-hover:rgba(216,27,96,.03);
-}
-
-/* ══ NEUTRAL — Professional Blue ══ */
-html.t-neutral {
-  --bg:#F8FAFC;
-  --s1:#FFFFFF;
-  --s2:#F1F5F9;
-  --s3:#E2E8F0;
-  --bd:#CBD5E1;
-  --bd2:rgba(0,94,184,.2);
-  --primary:#005EB8;
-  --primary-d:#004A91;
-  --primary-bg:rgba(0,94,184,.08);
-  --primary-glow:rgba(0,94,184,.2);
-  --tx:#0F172A;
-  --tx2:#475569;
-  --tx3:#94A3B8;
-  --green:#16A34A;
-  --green-bg:rgba(22,163,74,.08);
-  --red:#DC2626;
-  --red-bg:rgba(220,38,38,.07);
-  --amber:#D97706;
-  --amber-bg:rgba(217,119,6,.08);
-  --blue:#005EB8;
-  --r-sm:6px;--r-md:10px;--r-lg:14px;--r-xl:20px;
-  --sh:0 1px 6px rgba(0,0,0,.06);
-  --sh-lg:0 4px 20px rgba(0,0,0,.08);
-  --font-h:'Syne',sans-serif;
-  --font-b:'Nunito',sans-serif;
-  --sidebar-w:220px;
-  --sidebar-bg:#FFFFFF;
-  --sidebar-border:#E2E8F0;
-  --sidebar-active-bg:rgba(0,94,184,.1);
-  --sidebar-active-color:var(--primary);
-  --sidebar-text:#475569;
-  --sidebar-text-hover:#0F172A;
-  --topbar-bg:#FFFFFF;
-  --card-bg:#FFFFFF;
-  --card-border:#E2E8F0;
-  --input-bg:#F1F5F9;
-  --btn-primary-bg:var(--primary);
-  --btn-primary-text:#FFFFFF;
-  --badge-active-bg:rgba(0,94,184,.1);
-  --badge-active-text:var(--primary);
-  --badge-trial-bg:rgba(217,119,6,.1);
-  --badge-trial-text:var(--amber);
-  --badge-cancel-bg:rgba(220,38,38,.08);
-  --badge-cancel-text:var(--red);
-  --sparkbar:#DBEAFE;
-  --sparkbar-active:var(--primary);
-  --table-border:#E2E8F0;
-  --table-hover:#F8FAFC;
-}
 
 /* ════════════════════════════════════════════════
    BASE LAYOUT
@@ -976,22 +815,7 @@ html.t-feminine .adm-sidebar .adm-nav-item.active{color:var(--primary);backgroun
 .wm-dot{display:inline-block;width:.2em;height:.2em;border-radius:50%;background:#E55A0C;margin-left:2px;position:relative;top:-.52em;flex-shrink:0}
 .brand-lockup{display:inline-flex;align-items:center;gap:10px;text-decoration:none}
 
-/* ═══ ADMIN DARK REDESIGN ═══ */
-:root {
-  --primary:#E55A0C; --primary-dark:#C44D08;
-  --bg:#0C0A09; --card-bg:rgba(255,255,255,.04); --card-border:rgba(255,255,255,.08);
-  --text:#FFFFFF; --text-2:#9B9B9B; --text-3:#5A5A5A;
-  --sep:rgba(255,255,255,.08); --sep-strong:rgba(255,255,255,.12);
-  --surface:#1A1714; --surface-2:#242018;
-  --error:#FF3B30; --error-bg:rgba(255,59,48,.12);
-  --success:#34C759; --success-bg:rgba(52,199,89,.12);
-  --warning:#FF9500;
-  --r-sm:10px; --r-md:14px; --r-lg:18px; --r-xl:24px;
-  --font-h:'Sora',sans-serif; --font-b:'Nunito Sans',sans-serif;
-  --btn-primary-bg:#E55A0C; --btn-primary-text:#fff;
-}
-
-body { background:var(--bg,#0C0A09); color:var(--tx,#fff); font-family:'Nunito Sans',sans-serif; }
+body { background:var(--bg,#131313); color:var(--tx,#E5E2E1); font-family:var(--font-b,'Inter',sans-serif); }
 
 /* Radial glow */
 .login-wrap::before {
@@ -1137,9 +961,10 @@ function enviarWhatsAppById(id){
 
     <!-- Theme switcher dots -->
     <div class="theme-switch" title="Trocar tema">
-      <div class="theme-dot active" id="tdot-onyx" style="background:#F2CA50" onclick="setTheme('t-onyx')" title="Onyx"></div>
+      <div class="theme-dot active" id="tdot-onyx" style="background:#E55A0C" onclick="setTheme('t-onyx')" title="Onyx"></div>
       <div class="theme-dot" id="tdot-feminine" style="background:#D81B60" onclick="setTheme('t-feminine')" title="Feminine"></div>
-      <div class="theme-dot" id="tdot-neutral" style="background:#005EB8" onclick="setTheme('t-neutral')" title="Neutral"></div>
+      <div class="theme-dot" id="tdot-neutral" style="background:#E55A0C;filter:brightness(1.3)" onclick="setTheme('t-neutral')" title="Neutral"></div>
+      <div class="theme-dot" id="tdot-clinic" style="background:#2C6FAA" onclick="setTheme('t-clinic')" title="Clinic"></div>
     </div>
 
     <nav class="adm-nav">
@@ -1193,9 +1018,10 @@ function enviarWhatsAppById(id){
       <button class="mobile-tab" onclick="navSidebar('sistema',this)">⚙️ Sistema</button>
       <button class="mobile-tab" onclick="navSidebar('marketplace',this)">🛍️ Marketplace</button>
       <div style="margin-left:auto;display:flex;align-items:center;gap:6px;padding-right:10px">
-        <div class="theme-dot" id="mtdot-onyx" style="background:#F2CA50;flex-shrink:0" onclick="setTheme('t-onyx')" title="Onyx"></div>
+        <div class="theme-dot" id="mtdot-onyx" style="background:#E55A0C;flex-shrink:0" onclick="setTheme('t-onyx')" title="Onyx"></div>
         <div class="theme-dot" id="mtdot-feminine" style="background:#D81B60;flex-shrink:0" onclick="setTheme('t-feminine')" title="Feminine"></div>
-        <div class="theme-dot" id="mtdot-neutral" style="background:#005EB8;flex-shrink:0" onclick="setTheme('t-neutral')" title="Neutral"></div>
+        <div class="theme-dot" id="mtdot-neutral" style="background:#E55A0C;filter:brightness(1.3);flex-shrink:0" onclick="setTheme('t-neutral')" title="Neutral"></div>
+        <div class="theme-dot" id="mtdot-clinic" style="background:#2C6FAA;flex-shrink:0" onclick="setTheme('t-clinic')" title="Clinic"></div>
         <button onclick="logout()" style="padding:8px 12px;background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.2);border-radius:8px;color:#DC2626;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap">↩</button>
       </div>
     </div>
@@ -1298,7 +1124,7 @@ function logout(){if(!confirm('Sair?'))return;localStorage.removeItem(SK);SESSIO
 // ── THEME SWITCH ──
 function setTheme(cls){
   const html=document.documentElement;
-  html.classList.remove('t-onyx','t-feminine','t-neutral');
+  html.classList.remove('t-onyx','t-feminine','t-neutral','t-clinic');
   html.classList.add(cls);
   // Atualiza dots ativos (sidebar + mobile)
   document.querySelectorAll('.theme-dot').forEach(d=>d.classList.remove('active'));
