@@ -28,7 +28,7 @@ async function atualizarStatusPush(){
     else{
       el.innerHTML='⚠️ Permissão OK mas não registrado. <button class="btn-add" style="margin-top:8px;width:100%;justify-content:center" onclick="registrarPush(S.slug,_pw||\'\')">Registrar agora</button>';
     }
-  }catch(e){el.innerHTML='❌ Erro: '+e.message;}
+  }catch(e){el.innerHTML='❌ Erro: '+esc(e.message||String(e));}
 }
 
 async function testarPush(btn){

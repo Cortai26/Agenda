@@ -94,7 +94,7 @@ async function renderAnalytics(){
     }
 
   }catch(e){
-    el.innerHTML='<div class="empty" style="color:var(--error)">Erro ao carregar analytics: '+e.message+'</div>';
+    el.innerHTML='<div class="empty" style="color:var(--error)">Erro ao carregar analytics: '+esc(e.message)+'</div>';
     console.error('[renderAnalytics]',e);
   }
 }

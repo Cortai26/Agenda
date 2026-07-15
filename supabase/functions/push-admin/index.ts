@@ -1,10 +1,15 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-
-// web-push via npm (Deno suporta npm: specifier)
 import webpush from 'npm:web-push@3.6.7'
 
 serve(async (req) => {
+  // ── Auth: shared secret validado no header x-push-secret ──
+  const secret = req.headers.get('x-push-secret')
+  const expected = Deno.env.get('PUSH_ADMIN_SECRET')
+  if (!expected || secret !== expected) {
+    return new Response('Unauthorized', { status: 401 })
+  }
+
   try {
     const payload = await req.json()
 
@@ -13,7 +18,6 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     )
 
-    // Buscar todas as subscrições do admin
     const { data: subs, error } = await supabase
       .from('admin_push_subscriptions')
       .select('endpoint, p256dh, auth')

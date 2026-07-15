@@ -90,14 +90,18 @@ function sforca(v,ids,infoId){
 /* ═══ AUTH ═══ */
 var S=null, _pw=null;
 
-// S1.3: 72h session + auto-refresh
-function salvarSessao(d,pw){
-  var e=new Date();e.setHours(e.getHours()+72);
+// ── salvarSessao: nunca persiste a senha — usa refresh token ──
+function salvarSessao(d, pw, refreshToken){
+  var e=new Date(); e.setHours(e.getHours()+72);
   var payload=Object.assign({},d,{exp:e.toISOString(),_savedAt:new Date().toISOString()});
-  if(pw) payload._pw=pw;
+  // Limpar senha caso venha de sessão antiga
+  delete payload._pw;
+  if(refreshToken) payload._rt=refreshToken;
   localStorage.setItem(SK,JSON.stringify(payload));
-  _pw=pw||null;
+  _pw=pw||null; // manter em memória apenas para a sessão atual
 }
+
+// ── Auto-refresh via refresh token (sem reenviar senha) ──
 (function setupAutoRefresh(){
   var _lastActivity=Date.now();
   ['click','keydown','touchstart'].forEach(function(ev){
@@ -105,34 +109,36 @@ function salvarSessao(d,pw){
   });
   setInterval(async function(){
     if(Date.now()-_lastActivity>3600000) return;
-    var s=carregarSessao(); if(!s||!s.email||!_pw) return;
+    var s=carregarSessao(); if(!s) return;
     try{
-      var res=await rpc('verificar_acesso_por_email',{p_email:s.email,p_senha:_pw});
-      if(res&&res.ok) salvarSessao(res,_pw);
+      // Preferência: refresh token (sem senha no wire)
+      if(s._rt){
+        var res=await rpc('usar_refresh_token',{p_token:s._rt});
+        if(res&&res.ok) salvarSessao(res,_pw,res.refresh_token);
+        return;
+      }
+      // Fallback legado: usa senha em memória se ainda disponível
+      if(s.email&&_pw){
+        var res2=await rpc('verificar_acesso_por_email',{p_email:s.email,p_senha:_pw});
+        if(res2&&res2.ok) salvarSessao(res2,_pw,res2.refresh_token);
+      }
     }catch(e){ console.warn('[Agenda] session refresh failed',e.message); }
   }, 50*60*1000);
 })();
 
 // ── AUTO-RESTORE SESSION ON PAGE LOAD ──
-// Runs once when scripts finish loading — restores session from localStorage
-// so the user doesn't have to re-login on every page refresh
 (function autoRestoreSession(){
   try{
-    // NEVER restore old session when arriving from cadastro (?novo=1)
-    // A new salon must start with a fresh login, not inherit previous session
     if(new URLSearchParams(location.search).get('novo')==='1'){
-      localStorage.removeItem(SK);
-      return;
+      localStorage.removeItem(SK); return;
     }
     var s=JSON.parse(localStorage.getItem(SK)||'null');
     if(!s||new Date(s.exp)<new Date()){localStorage.removeItem(SK);return;}
-    if(s._pw){_pw=s._pw; delete s._pw;}
+    // Migração silenciosa: se sessão antiga tinha _pw, limpar e continuar
+    if(s._pw){ _pw=s._pw; delete s._pw; localStorage.setItem(SK,JSON.stringify(s)); }
     function tryStart(){
-      if(document.getElementById('loginWrap')){
-        iniciarApp(s);
-      } else {
-        setTimeout(tryStart,50);
-      }
+      if(document.getElementById('loginWrap')) iniciarApp(s);
+      else setTimeout(tryStart,50);
     }
     if(document.readyState==='loading'){
       document.addEventListener('DOMContentLoaded',function(){iniciarApp(s);},{once:true});
@@ -146,11 +152,17 @@ function carregarSessao(){
   try{
     var s=JSON.parse(localStorage.getItem(SK)||'null');
     if(!s||new Date(s.exp)<new Date()){localStorage.removeItem(SK);return null;}
-    if(s._pw){_pw=s._pw; delete s._pw;}
+    if(s._pw){ _pw=s._pw; delete s._pw; localStorage.setItem(SK,JSON.stringify(s)); }
     return s;
   }catch(e){return null;}
 }
-function sair(){if(!confirm('Sair do painel?'))return;localStorage.removeItem(SK);_pw=null;location.reload();}
+function sair(){
+  if(!confirm('Sair do painel?'))return;
+  var s=carregarSessao();
+  // Revogar refresh token no servidor (best-effort)
+  if(s&&s.id){ rpc('revogar_refresh_tokens',{p_salao_id:s.id}).catch(function(){}); }
+  localStorage.removeItem(SK); _pw=null; location.reload();
+}
 
 /* ═══ S1.2: getPw via modal (sem prompt()) ═══ */
 var _getPwResolve=null, _getPwReject=null;
@@ -203,8 +215,13 @@ document.getElementById('btnLogin').addEventListener('click', async function(){
   try{
     var res=await rpcRetry('verificar_acesso_por_email',{p_email:email,p_senha:pw});
     if(res&&res.ok){
+      // Obter refresh token (best-effort — não falha o login se RPC não existir ainda)
+      var rt=null;
+      if(res.id){
+        try{ rt=await rpc('criar_refresh_token',{p_salao_id:res.id}); }catch(_){}
+      }
       if(res.trial_expirado){
-        salvarSessao(res,pw);
+        salvarSessao(res,pw,rt);
         res.status='trial_expirado';
         iniciarApp(res);
         setTimeout(function(){
@@ -213,7 +230,7 @@ document.getElementById('btnLogin').addEventListener('click', async function(){
           abrirUpgrade();
         }, 600);
       } else {
-        salvarSessao(res,pw); iniciarApp(res);
+        salvarSessao(res,pw,rt); iniciarApp(res);
       }
     } else if(res&&res.erro&&res.erro.includes('configurada')){
       document.getElementById('loginWrap').style.display='none';

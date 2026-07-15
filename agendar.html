@@ -2607,7 +2607,7 @@ async function buildHoras(){
       await buscarProximos();
     }
   }catch(e){
-    w.innerHTML=`<div class="erro">Erro: ${e.message}</div>`;
+    w.innerHTML='<div class="erro">Erro: '+esc(e.message||String(e))+'</div>';
   }
 }
 
