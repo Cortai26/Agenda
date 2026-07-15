@@ -1,5 +1,18 @@
 // @ts-check
 const { defineConfig, devices } = require('@playwright/test');
+const fs = require('fs');
+const path = require('path');
+
+// Load .env.test if present (credentials for authenticated tests)
+const envFile = path.join(__dirname, '.env.test');
+if (fs.existsSync(envFile)) {
+  fs.readFileSync(envFile, 'utf8').split('\n').forEach(line => {
+    const [k, ...v] = line.split('=');
+    if (k && v.length && !process.env[k.trim()]) {
+      process.env[k.trim()] = v.join('=').trim();
+    }
+  });
+}
 
 const BASE_URL = process.env.BASE_URL || 'https://agendatop.vercel.app';
 
