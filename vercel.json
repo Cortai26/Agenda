@@ -120,7 +120,6 @@
       "destination": "/apple-app-site-association"
     }
   ],
-  "buildCommand": "npm install && npm run build",
   "cleanUrls": false,
   "trailingSlash": false,
   "crons": [
