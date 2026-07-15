@@ -19,9 +19,19 @@ async function login(page) {
   await page.locator('#appWrap.show').waitFor({ state: 'attached', timeout: 20_000 });
 }
 
-// Helper: navega para uma tab via click no sidebar
+// Helper: navega para uma tab via click no sidebar (desktop) ou bottom nav (mobile)
+// Para tabs sem botão visível (ex: analytics no mobile), usa tabSidebar via JS
 async function irTab(page, tab) {
-  await page.locator(`[data-tab="${tab}"]`).first().click();
+  const btn = page.locator(`[data-tab="${tab}"]`).filter({ visible: true }).first();
+  const visible = await btn.isVisible({ timeout: 2_000 }).catch(() => false);
+  if (visible) {
+    await btn.click();
+  } else {
+    await page.evaluate(t => {
+      const el = document.querySelector(`[data-tab="${t}"]`);
+      if (el) el.click();
+    }, tab);
+  }
   await page.waitForTimeout(500);
 }
 
@@ -38,8 +48,9 @@ test.describe('Painel autenticado — login', () => {
 
   test('nome do salão aparece no header após login', async ({ page }) => {
     await login(page);
+    // #hdrNome é display:none em viewports ≤480px (mobile); verifica existência e conteúdo
     const nome = page.locator('#hdrNome');
-    await expect(nome).toBeVisible();
+    await nome.waitFor({ state: 'attached', timeout: 10_000 });
     const txt = await nome.textContent();
     expect(txt?.trim().length).toBeGreaterThan(0);
   });
