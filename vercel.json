@@ -120,6 +120,7 @@
       "destination": "/apple-app-site-association"
     }
   ],
+  "installCommand": "",
   "cleanUrls": false,
   "trailingSlash": false,
   "crons": [
