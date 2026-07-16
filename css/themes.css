@@ -101,7 +101,7 @@ html.t-feminine {
   --primary-glow: rgba(216, 27, 96, .2);
   --tx: #201A1A;
   --tx2: #534344;
-  --tx3: #908E8E;
+  --tx3: #6B6B6B;
   --green: #2E7D32;
   --green-bg: rgba(46, 125, 50, .08);
   --red: #C62828;
@@ -263,7 +263,7 @@ html.t-clinic {
   --primary-glow: rgba(44, 111, 170, .2);
   --tx: #1C3A5E;
   --tx2: #3A6080;
-  --tx3: #5A7A9A;
+  --tx3: #4A6A8A;
   --green: #16A34A;
   --green-bg: rgba(22, 163, 74, .08);
   --red: #DC2626;
