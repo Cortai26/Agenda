@@ -112,6 +112,18 @@
       "destination": "/agendar.html?slug=:slug"
     },
     {
+      "source": "/login",
+      "destination": "/login.html"
+    },
+    {
+      "source": "/minha-agenda",
+      "destination": "/minha-agenda.html"
+    },
+    {
+      "source": "/recepcao",
+      "destination": "/recepcao.html"
+    },
+    {
       "source": "/.well-known/assetlinks.json",
       "destination": "/assetlinks.json"
     },

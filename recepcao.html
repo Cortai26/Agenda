@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="t-onyx">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Recepção · AgendaTop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);font-family:var(--font-b);color:var(--tx);height:100vh;
+      display:flex;flex-direction:column;overflow:hidden}
+
+    /* Header */
+    .hdr{display:flex;align-items:center;justify-content:space-between;
+      padding:12px 16px;background:var(--s1);border-bottom:1px solid var(--bd);flex-shrink:0}
+    .hdr-left{display:flex;align-items:center;gap:10px}
+    .hdr-nome{font-size:14px;font-weight:700}
+    .badge-rc{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;
+      background:rgba(96,165,250,.12);color:var(--blue);margin-left:6px;text-transform:uppercase}
+    .btn-sair{background:none;border:1px solid var(--bd);color:var(--tx3);padding:6px 12px;
+      border-radius:var(--r-md);font-size:12px;cursor:pointer;font-family:inherit}
+
+    /* Day nav */
+    .day-nav{display:flex;align-items:center;justify-content:space-between;
+      padding:10px 16px;background:var(--s1);border-bottom:1px solid var(--bd);flex-shrink:0}
+    .day-nav button{background:none;border:none;color:var(--tx2);font-size:20px;
+      cursor:pointer;padding:4px 10px;border-radius:var(--r-sm)}
+    .day-nav button:hover{background:var(--s2)}
+    .day-label{font-size:13px;font-weight:700}
+
+    /* Grid container */
+    .grid-scroll{flex:1;overflow:auto;position:relative}
+    .grid-wrap{min-width:100%;width:max-content}
+
+    /* Sticky header row */
+    .grid-hdr{display:flex;position:sticky;top:0;z-index:5;background:var(--s1);
+      border-bottom:2px solid var(--bd)}
+    .g-corner{width:60px;flex-shrink:0;border-right:1px solid var(--bd)}
+    .g-prof-col{min-width:130px;width:130px;padding:10px 8px;border-right:1px solid var(--bd);
+      flex-shrink:0}
+    .g-prof-hdr{text-align:center}
+    .g-prof-av{width:32px;height:32px;border-radius:50%;margin:0 auto 4px;
+      background:var(--primary-bg);display:flex;align-items:center;justify-content:center;
+      font-size:14px;overflow:hidden}
+    .g-prof-av img{width:100%;height:100%;object-fit:cover}
+    .g-prof-nm{font-size:11px;font-weight:700;color:var(--tx);text-align:center;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .g-prof-sp{font-size:10px;color:var(--tx3);text-align:center;white-space:nowrap;
+      overflow:hidden;text-overflow:ellipsis}
+
+    /* Grid rows */
+    .g-row{display:flex;border-bottom:1px solid var(--bd);min-height:44px}
+    .g-row:hover{background:rgba(255,255,255,.01)}
+    .g-time{width:60px;flex-shrink:0;padding:8px 6px;font-size:11px;color:var(--tx3);
+      text-align:right;padding-right:10px;border-right:1px solid var(--bd);
+      display:flex;align-items:center;justify-content:flex-end;font-variant-numeric:tabular-nums;
+      font-weight:600}
+    .g-cell{min-width:130px;width:130px;border-right:1px solid var(--bd);
+      position:relative;cursor:pointer;flex-shrink:0;padding:2px}
+    .g-cell:hover{background:rgba(229,90,12,.04)}
+    .g-cell.occupied{cursor:default}
+    .g-cell.occupied:hover{background:transparent}
+    .ag-chip{padding:3px 5px;border-radius:4px;font-size:10px;line-height:1.3;
+      background:var(--primary-bg);border:1px solid var(--primary-glow);
+      color:var(--tx);margin:1px;cursor:pointer;position:absolute;inset:2px;overflow:hidden}
+    .ag-chip.status-concluido{background:var(--green-bg);border-color:rgba(74,222,128,.2)}
+    .ag-chip.status-confirmado{background:rgba(96,165,250,.1);border-color:rgba(96,165,250,.2)}
+    .ag-chip.status-cancelado{background:var(--red-bg);border-color:rgba(248,113,113,.2);opacity:.5}
+    .ag-chip-cliente{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .ag-chip-srv{color:var(--tx3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .hora-full{font-size:11px;color:var(--amber);font-weight:700}
+
+    /* Modal */
+    .ov{position:fixed;inset:0;background:rgba(0,0,0,.65);display:flex;
+      align-items:flex-end;justify-content:center;z-index:100;opacity:0;
+      pointer-events:none;transition:opacity .2s}
+    .ov.show{opacity:1;pointer-events:all}
+    .modal{background:var(--s1);border:1px solid var(--bd);border-radius:16px 16px 0 0;
+      padding:24px;width:100%;max-width:480px;transform:translateY(40px);transition:transform .2s;
+      max-height:90vh;overflow-y:auto}
+    .ov.show .modal{transform:translateY(0)}
+    .mhdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+    .mhdr h3{font-size:16px;font-weight:800}
+    .mclose{background:none;border:none;color:var(--tx3);font-size:20px;cursor:pointer}
+    .fg{margin-bottom:14px}
+    .fl{display:block;font-size:11px;font-weight:700;color:var(--tx3);margin-bottom:5px;
+      text-transform:uppercase;letter-spacing:.04em}
+    .fi{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r-md);
+      color:var(--tx);font-size:14px;padding:10px 12px;outline:none;font-family:inherit}
+    .fi:focus{border-color:var(--primary)}
+    .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .btn-prim{width:100%;padding:13px;background:var(--primary);color:#fff;border:none;
+      border-radius:var(--r-md);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
+    .btn-prim:hover{background:var(--primary-d)}
+    .btn-prim:disabled{opacity:.4;cursor:not-allowed}
+    .merr{color:var(--red);font-size:12px;margin-bottom:10px;display:none}
+
+    /* Detail panel */
+    .detail-row{display:flex;gap:12px;margin-bottom:10px;align-items:baseline}
+    .detail-label{font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;
+      letter-spacing:.04em;min-width:80px;flex-shrink:0}
+    .detail-val{font-size:14px;color:var(--tx)}
+    .badge-status{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;
+      border-radius:20px;text-transform:uppercase}
+    .badge-agendado{background:var(--amber-bg);color:var(--amber)}
+    .badge-confirmado{background:rgba(96,165,250,.12);color:var(--blue)}
+    .badge-concluido{background:var(--green-bg);color:var(--green)}
+    .badge-cancelado{background:var(--red-bg);color:var(--red)}
+    .btn-sec{padding:10px 14px;background:var(--s2);border:1px solid var(--bd);color:var(--tx2);
+      border-radius:var(--r-md);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;
+      margin-top:10px;width:100%}
+
+    /* Empty/loading */
+    .g-loading{padding:40px;text-align:center;color:var(--tx3);font-size:14px}
+  </style>
+</head>
+<body>
+  <header class="hdr">
+    <div class="hdr-left">
+      <div class="hdr-nome" id="hNome">—<span class="badge-rc">Recepção</span></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="font-size:12px;color:var(--tx3)" id="hSalao">—</span>
+      <button class="btn-sair" onclick="logout()">Sair</button>
+    </div>
+  </header>
+
+  <div class="day-nav">
+    <button onclick="mudaDia(-1)">‹</button>
+    <div class="day-label" id="dayLabel">—</div>
+    <button onclick="mudaDia(1)">›</button>
+  </div>
+
+  <div class="grid-scroll" id="gridScroll">
+    <div class="g-loading">Carregando...</div>
+  </div>
+
+  <!-- Modal: novo agendamento / detalhes -->
+  <div class="ov" id="modal" onclick="if(event.target===this)fecharModal()">
+    <div class="modal" id="modalBody"></div>
+  </div>
+
+  <script>
+    const SUPA  = 'https://acldrisohnjfekjxgmoh.supabase.co';
+    const KEY   = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFjbGRyaXNvaG5qZmVranhnbW9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1ODA1MzcsImV4cCI6MjA4OTE1NjUzN30.etojz12x1oVNvbW_fPeVpNx2OFuJ72C1YioFBlCLS2Y';
+    const SK    = 'prof_sessao';
+    const DIAS  = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+    const MESES = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+
+    var sessao = null, profissionais = [], servicos = [], agendamentos = [];
+    var diaAtual = new Date(); diaAtual.setHours(0,0,0,0);
+    var modalCtx = null;
+
+    function fmt(n) { return String(n).padStart(2,'0'); }
+    function isoData(d) { return d.getFullYear()+'-'+fmt(d.getMonth()+1)+'-'+fmt(d.getDate()); }
+    function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+    async function rpc(fn, params) {
+      var r = await fetch(SUPA+'/rest/v1/rpc/'+fn, {
+        method:'POST',
+        headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json'},
+        body: JSON.stringify(params)
+      });
+      var d = await r.json();
+      if (!r.ok) throw new Error(d.message || d.error || 'Erro');
+      return d;
+    }
+
+    async function get(path) {
+      var r = await fetch(SUPA+'/rest/v1/'+path, {
+        headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}
+      });
+      if (!r.ok) throw new Error(await r.text());
+      return r.json();
+    }
+
+    function guard() {
+      try { sessao = JSON.parse(localStorage.getItem(SK)||'null'); } catch(e) {}
+      if (!sessao || !sessao.profissional) { location.replace('/login.html'); return false; }
+      var papel = sessao.profissional.papel;
+      if (papel !== 'recepcao' && papel !== 'admin') {
+        location.replace('/minha-agenda.html'); return false;
+      }
+      return true;
+    }
+
+    function gerarSlots() {
+      var slots = [];
+      for (var h = 8; h < 21; h++)
+        for (var m = 0; m < 60; m += 30)
+          slots.push(fmt(h)+':'+fmt(m));
+      return slots;
+    }
+    var SLOTS = gerarSlots();
+
+    async function init() {
+      if (!guard()) return;
+      document.getElementById('hNome').childNodes[0].textContent = sessao.profissional.nome;
+      document.getElementById('hSalao').textContent = sessao.salao.nome;
+      await carregarBase();
+      renderDia();
+    }
+
+    async function carregarBase() {
+      var salaoId = sessao.salao.id;
+      try {
+        profissionais = await get('profissionais?salao_id=eq.'+salaoId+
+          '&ativo=eq.true&papel=neq.recepcao&order=ordem&select=id,nome,especialidade,foto_url');
+      } catch(e) { profissionais = []; }
+      try {
+        servicos = await get('servicos?salao_id=eq.'+salaoId+
+          '&ativo=eq.true&order=nome&select=id,nome,preco,duracao');
+      } catch(e) { servicos = []; }
+    }
+
+    function mudaDia(delta) {
+      diaAtual = new Date(diaAtual.getTime() + delta * 86400000);
+      renderDia();
+    }
+
+    async function renderDia() {
+      var hoje = new Date(); hoje.setHours(0,0,0,0);
+      var label = DIAS[diaAtual.getDay()]+', '+diaAtual.getDate()+' '+MESES[diaAtual.getMonth()];
+      var suf = diaAtual.getTime()===hoje.getTime()?' (hoje)':
+                diaAtual.getTime()===hoje.getTime()+86400000?' (amanhã)':'';
+      document.getElementById('dayLabel').textContent = label+suf;
+      await carregarAgendamentos();
+      renderGrid();
+    }
+
+    async function carregarAgendamentos() {
+      try {
+        var salaoId = sessao.salao.id;
+        var data = isoData(diaAtual);
+        agendamentos = await get('agendamentos?salao_id=eq.'+salaoId+'&data=eq.'+data+
+          '&status=neq.cancelado&select=id,hora,profissional_id,cliente_nome,servico_nome,status,cliente_telefone');
+      } catch(e) { agendamentos = []; }
+    }
+
+    function renderGrid() {
+      if (!profissionais.length) {
+        document.getElementById('gridScroll').innerHTML = '<div class="g-loading">Nenhum profissional cadastrado.</div>';
+        return;
+      }
+
+      // Map: profId → hora → agendamento
+      var agMap = {};
+      agendamentos.forEach(function(a) {
+        var hora = (a.hora||'').slice(0,5);
+        if (!agMap[a.profissional_id]) agMap[a.profissional_id] = {};
+        agMap[a.profissional_id][hora] = a;
+      });
+
+      var html = '<div class="grid-wrap">';
+
+      // Sticky header
+      html += '<div class="grid-hdr"><div class="g-corner"></div>';
+      profissionais.forEach(function(p) {
+        var av = p.foto_url
+          ? '<img src="'+esc(p.foto_url)+'" alt="">'
+          : '👤';
+        html += '<div class="g-prof-col"><div class="g-prof-hdr">'+
+          '<div class="g-prof-av">'+av+'</div>'+
+          '<div class="g-prof-nm">'+esc(p.nome)+'</div>'+
+          '<div class="g-prof-sp">'+esc(p.especialidade||'')+'</div>'+
+          '</div></div>';
+      });
+      html += '</div>';
+
+      // Time rows
+      SLOTS.forEach(function(slot) {
+        html += '<div class="g-row"><div class="g-time">'+slot+'</div>';
+        profissionais.forEach(function(p) {
+          var ag = agMap[p.id] && agMap[p.id][slot];
+          if (ag) {
+            html += '<div class="g-cell occupied" onclick="verAgendamento(\''+ag.id+'\')">'+
+              '<div class="ag-chip status-'+(ag.status||'agendado')+'">'+
+                '<div class="ag-chip-cliente">'+esc(ag.cliente_nome||'—')+'</div>'+
+                '<div class="ag-chip-srv">'+esc(ag.servico_nome||'')+'</div>'+
+              '</div>'+
+            '</div>';
+          } else {
+            html += '<div class="g-cell" data-prof="'+p.id+'" data-hora="'+slot+'" onclick="novoAgendamento(this)"></div>';
+          }
+        });
+        html += '</div>';
+      });
+
+      html += '</div>';
+      document.getElementById('gridScroll').innerHTML = html;
+    }
+
+    /* ── Modal: novo agendamento ── */
+    function novoAgendamento(cell) {
+      modalCtx = { profId: cell.dataset.prof, hora: cell.dataset.hora };
+      var prof = profissionais.find(function(p){return p.id===modalCtx.profId;});
+      var srvOpts = servicos.map(function(s){
+        return '<option value="'+s.id+'">'+esc(s.nome)+(s.preco?' · R$'+Number(s.preco).toFixed(2):'')+'</option>';
+      }).join('');
+      var horaOpts = SLOTS.map(function(h){
+        return '<option value="'+h+'"'+(h===modalCtx.hora?' selected':'')+'>'+h+'</option>';
+      }).join('');
+
+      document.getElementById('modalBody').innerHTML =
+        '<div class="mhdr"><h3>Novo agendamento</h3><button class="mclose" onclick="fecharModal()">✕</button></div>'+
+        '<div class="merr" id="mErr"></div>'+
+        '<div class="fg"><span class="fl">Profissional</span>'+
+          '<div style="font-size:14px;font-weight:700;color:var(--tx)">'+esc(prof?prof.nome:modalCtx.profId)+'</div></div>'+
+        '<div class="fg"><label class="fl" for="nHora">Horário</label>'+
+          '<select class="fi" id="nHora">'+horaOpts+'</select></div>'+
+        '<div class="fg"><label class="fl" for="nSrv">Serviço</label>'+
+          '<select class="fi" id="nSrv">'+srvOpts+'</select></div>'+
+        '<div class="row2">'+
+          '<div class="fg"><label class="fl" for="nNome">Nome do cliente</label>'+
+            '<input class="fi" type="text" id="nNome" maxlength="80"></div>'+
+          '<div class="fg"><label class="fl" for="nTel">Telefone</label>'+
+            '<input class="fi" type="tel" id="nTel" placeholder="(11) 9 0000-0000" maxlength="20"></div>'+
+        '</div>'+
+        '<button class="btn-prim" id="btnNovo" onclick="salvarNovo()">Agendar</button>';
+      abrirModal();
+    }
+
+    async function salvarNovo() {
+      var nome   = (document.getElementById('nNome').value||'').trim();
+      var tel    = (document.getElementById('nTel').value||'').trim();
+      var srvId  = document.getElementById('nSrv').value;
+      var hora   = document.getElementById('nHora').value;
+      var errEl  = document.getElementById('mErr');
+      errEl.style.display = 'none';
+      if (!nome)  { errEl.textContent='Informe o nome do cliente.'; errEl.style.display='block'; return; }
+      if (!srvId) { errEl.textContent='Selecione o serviço.'; errEl.style.display='block'; return; }
+      var btn = document.getElementById('btnNovo');
+      btn.disabled = true; btn.textContent = 'Agendando...';
+      try {
+        await rpc('criar_agendamento', {
+          p_slug: sessao.salao.slug,
+          p_servico_id: srvId,
+          p_data: isoData(diaAtual),
+          p_hora: hora,
+          p_cliente_nome: nome,
+          p_cliente_tel: tel,
+          p_profissional_id: modalCtx.profId,
+          p_cliente_email: ''
+        });
+        fecharModal();
+        await carregarAgendamentos();
+        renderGrid();
+      } catch(ex) {
+        errEl.textContent = ex.message; errEl.style.display = 'block';
+        btn.disabled = false; btn.textContent = 'Agendar';
+      }
+    }
+
+    /* ── Modal: detalhes do agendamento ── */
+    function verAgendamento(agId) {
+      var ag = agendamentos.find(function(a){return a.id===agId;});
+      if (!ag) return;
+      var tel = (ag.cliente_telefone||'').replace(/\D/g,'');
+      var labelStatus = {agendado:'Agendado',confirmado:'Confirmado',concluido:'Concluído',cancelado:'Cancelado'}[ag.status]||ag.status;
+      document.getElementById('modalBody').innerHTML =
+        '<div class="mhdr"><h3>Agendamento</h3><button class="mclose" onclick="fecharModal()">✕</button></div>'+
+        '<div class="detail-row"><span class="detail-label">Cliente</span><span class="detail-val">'+esc(ag.cliente_nome||'—')+'</span></div>'+
+        '<div class="detail-row"><span class="detail-label">Serviço</span><span class="detail-val">'+esc(ag.servico_nome||'—')+'</span></div>'+
+        '<div class="detail-row"><span class="detail-label">Horário</span><span class="detail-val">'+esc((ag.hora||'').slice(0,5))+'</span></div>'+
+        '<div class="detail-row"><span class="detail-label">Status</span><span class="badge-status badge-'+(ag.status||'agendado')+'">'+labelStatus+'</span></div>'+
+        (tel ? '<button class="btn-sec" onclick="window.open(\'https://wa.me/55'+tel+'\',\'_blank\')">WhatsApp → '+esc(ag.cliente_telefone)+'</button>' : '');
+      abrirModal();
+    }
+
+    function abrirModal()  { document.getElementById('modal').classList.add('show'); }
+    function fecharModal() { document.getElementById('modal').classList.remove('show'); }
+
+    function logout() {
+      if (!confirm('Sair?')) return;
+      localStorage.removeItem(SK);
+      location.replace('/login.html');
+    }
+
+    init();
+  </script>
+</body>
+</html>

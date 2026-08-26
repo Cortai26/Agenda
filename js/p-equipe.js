@@ -41,9 +41,11 @@ async function renderEquipe(){
         '<div class="eq-card">'+
         '<div style="flex-shrink:0">'+fotoThumb+'</div>'+
         '<div class="eq-info-d">'+
-          '<div class="eq-nm">'+esc(p.nome)+(p.ativo?'':'<span class="eq-badge-inativo" style="margin-left:6px">inativo</span>')+'</div>'+
+          '<div class="eq-nm">'+esc(p.nome)+(p.ativo?'':'<span class="eq-badge-inativo" style="margin-left:6px">inativo</span>')+
+            (p.papel&&p.papel!=='profissional'?'<span style="margin-left:6px;font-size:10px;font-weight:700;padding:2px 6px;border-radius:10px;background:rgba(229,90,12,.12);color:var(--brand);vertical-align:middle">'+(p.papel==='admin'?'Admin':'Recepção')+'</span>':'')+
+          '</div>'+
           '<div class="eq-sp">'+esc(p.especialidade||'Profissional')+'</div>'+
-          (p.comissao_pct!=null?'<div style="font-size:11px;font-weight:700;color:var(--VD);margin-top:2px;cursor:pointer" onclick="abrirProf(\''+p.id+'\')">Comissão: '+p.comissao_pct+'%</div>':'')+
+          (p.comissao_pct!=null&&p.papel!=='recepcao'?'<div style="font-size:11px;font-weight:700;color:var(--VD);margin-top:2px;cursor:pointer" onclick="abrirProf(\''+p.id+'\')">Comissão: '+p.comissao_pct+'%</div>':'')+
         '</div>'+
         '<div class="eq-ctrl">'+
           (isBasico?
@@ -77,12 +79,30 @@ async function abrirProf(id){
   }
 
   var comissaoVal=p&&p.comissao_pct!=null?p.comissao_pct:50;
+  var papelVal=p&&p.papel?p.papel:'profissional';
+  var podeVerFin=p&&p.pode_ver_financeiro!=null?p.pode_ver_financeiro:true;
   var html=
     '<div class="mhdr"><h3>'+titulo+'</h3><button class="mclose" onclick="fecharProf()">✕</button></div>'+
     '<div class="merr" id="profErr"></div>'+
     '<div class="fg"><label class="fl">Nome *</label><input class="fi" type="text" id="profNome" placeholder="Nome do profissional" value="'+esc(p?p.nome:'')+'" maxlength="60"></div>'+
     '<div class="fg"><label class="fl">Especialidade</label><input class="fi" type="text" id="profEsp" placeholder="Ex: Barbeiro, Cabeleireiro" value="'+esc(p&&p.especialidade?p.especialidade:'')+'" maxlength="60"></div>'+
     (!isBasico?'<div class="fg"><label class="fl">Comissão (%)</label><input class="fi" type="number" id="profComissao" min="0" max="100" step="1" value="'+comissaoVal+'" style="width:120px"></div>':'')+
+    (!isBasico?'<div class="fg"><label class="fl">Função</label>'+
+      '<select class="fi" id="profPapel" style="width:auto">'+
+        '<option value="profissional"'+(papelVal==='profissional'?' selected':'')+'>Profissional</option>'+
+        '<option value="recepcao"'+(papelVal==='recepcao'?' selected':'')+'>Recepção</option>'+
+        '<option value="admin"'+(papelVal==='admin'?' selected':'')+'>Admin</option>'+
+      '</select></div>':'')+
+    (!isBasico?'<div class="fg"><label style="display:flex;align-items:center;gap:8px;cursor:pointer">'+
+      '<input type="checkbox" id="profVerFin"'+(podeVerFin?' checked':'')+' style="width:16px;height:16px;accent-color:var(--brand)">'+
+      '<span style="font-size:13px;color:var(--text);font-weight:600">Pode ver faturamento próprio</span></label></div>':'')+
+    (id&&!isBasico?'<div class="fg"><label class="fl">PIN de acesso (4 dígitos)</label>'+
+      '<div style="display:flex;gap:8px;align-items:center">'+
+        '<input class="fi" type="password" id="profPin" maxlength="4" inputmode="numeric"'+
+          ' placeholder="••••" style="width:100px;letter-spacing:4px;font-size:20px">'+
+        '<button onclick="salvarPinProf()" class="bsrv" style="padding:8px 12px;white-space:nowrap;background:rgba(229,90,12,.1);border:1px solid rgba(229,90,12,.3);color:var(--brand)">Definir PIN</button>'+
+      '</div>'+
+      '<div style="font-size:11px;color:var(--text-3);margin-top:4px">Senha numérica para login em /login</div></div>':'')+
     '<div class="fg">'+
       '<label class="fl">Foto do profissional</label>'+
       '<div class="foto-wrap">'+
@@ -197,6 +217,10 @@ async function salvarProf(){
       var upd={nome:nome.trim(),especialidade:esp.trim()||null};
       if(comissaoPct!=null) upd.comissao_pct=comissaoPct;
       if(fotoUrl!==undefined) upd.foto_url=fotoUrl;
+      var papelEl=document.getElementById('profPapel');
+      var verFinEl=document.getElementById('profVerFin');
+      if(papelEl) upd.papel=papelEl.value;
+      if(verFinEl) upd.pode_ver_financeiro=verFinEl.checked;
       await rpc('atualizar_profissional',{p_slug:S.slug,p_senha:pw,p_prof_id:_editProfId,p_dados:upd});
       var idx=_profissionais.findIndex(function(x){return x.id===_editProfId;});
       if(idx>=0) _profissionais[idx]=Object.assign(_profissionais[idx],upd);
@@ -205,9 +229,16 @@ async function salvarProf(){
       var novo=await rpc('criar_profissional',{p_slug:S.slug,p_senha:pw,p_nome:nome.trim(),p_especialidade:esp.trim()||null});
       if(novo&&novo.id){
         var fotoUrlNovo=await _uploadFotoProf(S.id,novo.id);
-        if(fotoUrlNovo!==undefined){
-          await rpc('atualizar_profissional',{p_slug:S.slug,p_senha:pw,p_prof_id:novo.id,p_dados:{foto_url:fotoUrlNovo}});
-          novo.foto_url=fotoUrlNovo;
+        var novoDados={};
+        if(fotoUrlNovo!==undefined) novoDados.foto_url=fotoUrlNovo;
+        var papelElN=document.getElementById('profPapel');
+        var verFinElN=document.getElementById('profVerFin');
+        if(papelElN) novoDados.papel=papelElN.value;
+        if(verFinElN) novoDados.pode_ver_financeiro=verFinElN.checked;
+        if(comissaoPct!=null) novoDados.comissao_pct=comissaoPct;
+        if(Object.keys(novoDados).length){
+          await rpc('atualizar_profissional',{p_slug:S.slug,p_senha:pw,p_prof_id:novo.id,p_dados:novoDados});
+          Object.assign(novo,novoDados);
         }
         _profissionais.push(novo);
       }
@@ -293,4 +324,17 @@ async function salvarTemaProf(profId, temaId){
 function copiarLinkProf(id){
   var url=BASE+'/agendar.html?slug='+S.slug+'&prof='+id;
   navigator.clipboard.writeText(url).then(function(){toast('Link copiado! \u2713','ok');});
+}
+
+/* ─── DEFINIR PIN ─── */
+async function salvarPinProf(){
+  var pinEl=document.getElementById('profPin');
+  var pin=(pinEl?pinEl.value:'').replace(/\D/g,'');
+  if(pin.length!==4){toast('PIN deve ter exatamente 4 d\u00edgitos','err');return;}
+  if(!_editProfId){toast('Salve o profissional antes de definir o PIN','err');return;}
+  try{
+    var ok=await rpc('definir_pin_profissional',{p_profissional_id:_editProfId,p_pin:pin});
+    if(ok){toast('\u2713 PIN definido com sucesso','ok');pinEl.value='';}
+    else{toast('Erro ao definir PIN','err');}
+  }catch(e){toast('Erro: '+e.message,'err');}
 }
