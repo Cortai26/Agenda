@@ -20,180 +20,275 @@
 <link rel="manifest" href="/manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,300;1,14..32,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400;1,6..72,500;1,6..72,600&family=Schibsted+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:#0A0908;color:#F0EDE8;font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{background:var(--bg);color:var(--ink);font-family:var(--grotesk);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
 :root{
-  --ink:#0A0908;--ink-2:#111009;--ink-3:#191714;
-  --bone:#F0EDE8;--stone:#A09890;--stone-2:#6A6462;
+  --bg:#FBF7F1;
+  --bg2:#F2EDE4;
+  --ink:#17130F;
+  --ink2:#2B2520;
+  --muted:#6B625A;
   --brand:#E55A0C;
-  --rule:rgba(240,237,232,0.06);--rule-2:rgba(240,237,232,0.12);
-  --display:'Instrument Serif',Georgia,serif;
-  --serif:var(--display);
-  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
-  --mono:'JetBrains Mono','Fira Code',monospace;
+  --green:#1E7A46;
+  --rule:rgba(23,19,15,.1);
+  --rule2:rgba(23,19,15,.06);
+  --grotesk:'Schibsted Grotesk',system-ui,-apple-system,sans-serif;
+  --serif:'Newsreader',Georgia,serif;
 }
 
-/* NAV */
-.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,9,8,0.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--rule);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.nav-logo{font-family:var(--display);font-style:italic;font-size:20px;color:var(--bone);text-decoration:none;flex-shrink:0}
+/* ── NAV ────────────────────────────────────── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(251,247,241,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--rule);height:56px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.nav-logo{font-family:var(--serif);font-style:italic;font-size:20px;color:var(--ink);text-decoration:none;flex-shrink:0}
 .nav-logo span{color:var(--brand)}
-.nav-links{display:flex;align-items:center;gap:4px}
-.nav-link{font-size:12px;color:var(--stone);text-decoration:none;padding:8px 10px;transition:color 0.15s;white-space:nowrap}
-.nav-link:hover{color:var(--bone)}
-.nav-cta{padding:9px 18px;background:var(--brand);color:var(--bone);border:none;font-family:var(--sans);font-weight:600;font-style:normal;font-size:14px;cursor:pointer;text-decoration:none;display:inline-block;white-space:nowrap;transition:background 0.15s;flex-shrink:0}
-.nav-cta:active{background:#C04A08}
+.nav-links{display:flex;align-items:center;gap:2px}
+.nav-link{font-size:13px;color:var(--muted);text-decoration:none;padding:8px 11px;transition:color .15s;white-space:nowrap}
+.nav-link:hover{color:var(--ink)}
+.nav-cta{padding:9px 18px;background:var(--ink);color:var(--bg);font-family:var(--grotesk);font-weight:600;font-size:13px;text-decoration:none;white-space:nowrap;transition:background .15s;flex-shrink:0}
+.nav-cta:hover{background:var(--brand)}
 @media(max-width:520px){.nav-link:not(.nav-link-entrar){display:none}}
 
-/* HERO */
-.hero{min-height:100vh;padding-top:56px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden}
-.hero-glow{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(229,90,12,0.07) 0%,transparent 70%);top:-100px;left:-100px;pointer-events:none}
-.hero-glow-2{position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(229,90,12,0.05) 0%,transparent 70%);bottom:100px;right:-80px;pointer-events:none}
-.hero-content{position:relative;z-index:1;padding:0 24px 64px;max-width:680px}
-.hero-eyebrow{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(229,90,12,0.7);margin-bottom:20px}
-.hero-h1{font-family:var(--display);font-style:normal;font-size:clamp(48px,11vw,80px);line-height:0.93;letter-spacing:-3px;color:var(--bone);margin-bottom:20px}
-.hero-h1 em{font-style:italic;color:var(--brand)}
-.hero-sub{font-size:14px;color:var(--stone);line-height:1.7;font-weight:300;max-width:440px;margin-bottom:32px}
+/* ── HERO ───────────────────────────────────── */
+.hero{padding-top:56px;min-height:100svh;display:grid;grid-template-columns:1fr;align-items:center;padding-bottom:48px}
+@media(min-width:860px){.hero{grid-template-columns:1fr 420px;gap:48px;padding:0 48px 0 56px;padding-top:56px;min-height:100svh;align-items:center}}
+.hero-copy{padding:48px 24px 0;max-width:560px}
+@media(min-width:860px){.hero-copy{padding:80px 0 0}}
+.hero-label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--brand);font-weight:600;margin-bottom:20px}
+.hero-h1{font-family:var(--serif);font-style:italic;font-size:clamp(48px,10vw,76px);line-height:.92;letter-spacing:-2px;color:var(--ink);margin-bottom:20px;text-wrap:balance}
+.hero-h1 strong{font-style:normal;color:var(--brand)}
+.hero-sub{font-size:16px;color:var(--muted);line-height:1.65;margin-bottom:32px;max-width:440px}
+.claim-wrap{margin-bottom:24px}
+.claim-row{display:flex;align-items:stretch;border:1.5px solid var(--rule);background:#fff;overflow:hidden;max-width:460px;transition:border-color .15s}
+.claim-row:focus-within{border-color:var(--brand)}
+.claim-prefix{font-size:12px;color:var(--muted);padding:12px 8px 12px 14px;display:flex;align-items:center;white-space:nowrap;flex-shrink:0;border-right:1px solid var(--rule);font-family:monospace}
+.claim-input{flex:1;background:transparent;border:none;outline:none;font-family:monospace;font-size:13px;color:var(--brand);padding:12px 10px;min-width:0}
+.claim-input::placeholder{color:var(--rule);color:rgba(23,19,15,.25)}
+.slug-status{font-size:11px;margin-top:8px;height:16px;letter-spacing:.5px;font-weight:500}
+.slug-status.ok{color:var(--green)}
+.slug-status.taken{color:#C0392B}
+.slug-status.checking{color:var(--muted)}
+.btn-hero{display:inline-flex;align-items:center;gap:10px;padding:14px 28px;background:var(--brand);color:#fff;text-decoration:none;font-family:var(--serif);font-style:italic;font-size:18px;transition:background .15s;-webkit-tap-highlight-color:transparent}
+.btn-hero:hover{background:#C84B08}
+.hero-disclaimer{font-size:11px;color:var(--muted);margin-top:12px}
+.hero-phone-wrap{display:flex;justify-content:center;padding:32px 24px 0}
+@media(min-width:860px){.hero-phone-wrap{padding:80px 48px 0 0;justify-content:flex-end;align-self:flex-end}}
 
-/* CLAIM-LINK */
-.claim-wrap{margin-bottom:16px}
-.claim-row{display:flex;align-items:stretch;border:1px solid var(--rule-2);background:var(--ink-2);overflow:hidden;max-width:480px}
-.claim-row:focus-within{border-color:rgba(229,90,12,0.5)}
-.claim-prefix{font-family:var(--mono);font-size:12px;color:var(--stone-2);padding:12px 10px 12px 14px;display:flex;align-items:center;white-space:nowrap;flex-shrink:0;border-right:1px solid var(--rule)}
-.claim-input{flex:1;background:transparent;border:none;outline:none;font-family:var(--mono);font-size:13px;color:var(--brand);padding:12px 10px;min-width:0}
-.claim-input::placeholder{color:var(--stone-2)}
-.slug-status{font-family:var(--mono);font-size:11px;margin-top:8px;height:16px;letter-spacing:1px}
-.slug-status.ok{color:#4CAF50}
-.slug-status.taken{color:#EF5350}
-.slug-status.checking{color:var(--stone-2)}
-.btn-hero{display:inline-flex;align-items:center;gap:10px;padding:14px 28px;background:var(--brand);color:var(--bone);text-decoration:none;font-family:var(--serif);font-style:italic;font-size:18px;transition:background 0.15s;-webkit-tap-highlight-color:transparent;white-space:nowrap}
-.btn-hero:active{background:#C04A08}
-.hero-disclaimer{font-size:11px;color:var(--stone-2);margin-top:12px;letter-spacing:0.5px}
-.hero-scroll{padding:20px 24px;font-size:10px;color:var(--stone-2);letter-spacing:3px;text-transform:uppercase}
+/* ── PHONE MOCKUP ───────────────────────────── */
+.phone{width:240px;background:#fff;border:1px solid var(--rule);border-radius:28px;overflow:hidden;box-shadow:0 32px 64px rgba(23,19,15,.12),0 8px 16px rgba(23,19,15,.06);min-height:420px;display:flex;flex-direction:column}
+.phone-bar{padding:12px 16px 10px;border-bottom:1px solid var(--rule2);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.phone-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,rgba(229,90,12,.5),rgba(229,90,12,.15));flex-shrink:0}
+.phone-sname{font-family:var(--serif);font-style:italic;font-size:13px;color:var(--ink);line-height:1.2}
+.phone-scat{font-size:9px;color:var(--muted);letter-spacing:.5px;text-transform:uppercase}
+.phone-progress{display:flex;gap:3px;padding:8px 16px;border-bottom:1px solid var(--rule2);flex-shrink:0}
+.phone-dot{flex:1;height:2px;background:var(--rule);border-radius:1px;transition:background .3s}
+.phone-dot.done{background:var(--brand)}
+.phone-body{flex:1;overflow:hidden;position:relative}
+.pstate{position:absolute;inset:0;padding:12px;display:flex;flex-direction:column;transition:opacity .2s,transform .2s}
+.pstate.hidden{opacity:0;pointer-events:none;transform:translateX(10px)}
+.pstate-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;font-weight:600}
+/* step 0 — services */
+.psvc-row{display:flex;align-items:center;justify-content:space-between;padding:9px 6px;border-bottom:1px solid var(--rule2);cursor:pointer;border-radius:4px;transition:background .12s;-webkit-tap-highlight-color:transparent}
+.psvc-row:last-of-type{border-bottom:none}
+.psvc-row:hover,.psvc-row:active{background:rgba(229,90,12,.05)}
+.psvc-name{font-family:var(--serif);font-style:italic;font-size:13px;color:var(--ink)}
+.psvc-info{font-size:10px;color:var(--muted);text-align:right}
+.psvc-price{font-size:12px;font-weight:600;color:var(--brand)}
+/* step 1 — days */
+.pdays{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:4px}
+.pday{padding:8px 4px;border:1px solid var(--rule);border-radius:4px;text-align:center;cursor:pointer;transition:all .12s;-webkit-tap-highlight-color:transparent}
+.pday:hover,.pday:active{border-color:var(--brand);background:rgba(229,90,12,.06)}
+.pday.off{opacity:.35;pointer-events:none}
+.pday-name{font-size:9px;color:var(--muted);display:block;margin-bottom:2px}
+.pday-num{font-size:14px;font-weight:600;color:var(--ink)}
+/* step 2 — times */
+.ptimes{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:4px}
+.ptime{padding:9px;border:1px solid var(--rule);border-radius:4px;font-size:11px;font-family:monospace;color:var(--ink);text-align:center;cursor:pointer;transition:all .12s;-webkit-tap-highlight-color:transparent}
+.ptime:hover,.ptime:active{border-color:var(--brand);background:rgba(229,90,12,.06);color:var(--brand)}
+/* step 3 — form */
+.pfield{width:100%;border:1px solid var(--rule);padding:8px 10px;font-family:var(--grotesk);font-size:12px;color:var(--ink);background:var(--bg);border-radius:3px;outline:none;margin-bottom:6px;transition:border-color .12s}
+.pfield:focus{border-color:var(--brand)}
+.pconfirm{width:100%;padding:10px;background:var(--brand);color:#fff;border:none;font-family:var(--serif);font-style:italic;font-size:14px;cursor:pointer;border-radius:3px;margin-top:4px;transition:background .12s}
+.pconfirm:hover{background:#C84B08}
+/* step 4 — success */
+.psuccess{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;padding:16px}
+.pcheck{width:52px;height:52px;border-radius:50%;background:rgba(30,122,70,.12);border:2px solid rgba(30,122,70,.35);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--green);margin-bottom:4px}
+.psuccess-title{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--ink)}
+.psuccess-sub{font-size:11px;color:var(--muted);line-height:1.5}
+.prestart{margin-top:10px;background:none;border:1px solid var(--rule);padding:7px 16px;font-size:11px;color:var(--muted);cursor:pointer;border-radius:3px;font-family:var(--grotesk);transition:all .12s}
+.prestart:hover{border-color:var(--muted);color:var(--ink)}
+/* back btn */
+.pback{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--muted);cursor:pointer;padding:0 0 8px;background:none;border:none;font-family:var(--grotesk)}
+.pback:hover{color:var(--ink)}
 
-/* SEÇÕES */
-.section{padding:56px 24px;border-bottom:1px solid var(--rule);max-width:720px;margin:0 auto}
-.section-full{border-bottom:1px solid var(--rule)}
-.eyebrow{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(229,90,12,0.6);margin-bottom:16px}
-.eyebrow span{color:var(--stone-2)}
-.h2{font-family:var(--display);font-style:italic;font-size:clamp(32px,8vw,48px);line-height:0.95;letter-spacing:-1.5px;color:var(--bone);margin-bottom:16px}
-.p{font-size:14px;color:var(--stone);line-height:1.7;font-weight:300;margin-bottom:24px}
+/* ── SECTION BASE ───────────────────────────── */
+.sec{padding:72px 24px;border-bottom:1px solid var(--rule)}
+.sec-inner{max-width:1100px;margin:0 auto}
+.sec-inner--sm{max-width:720px;margin:0 auto}
+.eyebrow{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--brand);font-weight:600;margin-bottom:16px}
+.h2{font-family:var(--serif);font-style:italic;font-size:clamp(34px,7vw,56px);line-height:.93;letter-spacing:-1.5px;color:var(--ink);margin-bottom:20px;text-wrap:balance}
+.lead{font-size:16px;color:var(--muted);line-height:1.65;margin-bottom:28px;max-width:540px}
+@media(min-width:780px){.sec{padding:96px 48px}}
 
-/* STEPS */
-.steps{display:flex;flex-direction:column;margin-top:28px}
-.step{display:flex;gap:20px;align-items:flex-start;padding:20px 0;border-bottom:1px solid var(--rule)}
-.step:last-child{border:none}
-.step-n{font-family:var(--mono);font-size:28px;color:rgba(229,90,12,0.35);min-width:32px;line-height:1;flex-shrink:0}
-.step-title{font-family:var(--sans);font-weight:600;font-size:17px;color:var(--bone);margin-bottom:4px}
-.step-desc{font-size:12px;color:var(--stone);line-height:1.6;font-weight:300}
+/* ── COMPARISON ─────────────────────────────── */
+.cmp-sec{background:var(--ink);border-bottom:none;padding:72px 24px}
+@media(min-width:780px){.cmp-sec{padding:96px 48px}}
+.cmp-grid{display:grid;gap:24px;margin-top:40px}
+@media(min-width:720px){.cmp-grid{grid-template-columns:1fr 1fr;gap:32px}}
+.cmp-card{padding:28px;border:1px solid rgba(251,247,241,.08);border-radius:6px}
+.cmp-card--wa{background:rgba(251,247,241,.03)}
+.cmp-card--ag{background:rgba(229,90,12,.06);border-color:rgba(229,90,12,.2)}
+.cmp-tag{font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:6px}
+.cmp-tag--wa{color:rgba(251,247,241,.35)}
+.cmp-tag--ag{color:var(--brand)}
+.cmp-h3{font-family:var(--serif);font-style:italic;font-size:20px;color:#FBF7F1;margin-bottom:20px;line-height:1.2}
+/* wa bubbles */
+.bub{display:flex;flex-direction:column;gap:6px}
+.bub-row{display:flex}
+.bub-row.them{justify-content:flex-start}
+.bub-row.us{justify-content:flex-end}
+.bub-msg{font-size:11px;line-height:1.45;padding:7px 11px;border-radius:10px;max-width:80%}
+.bub-row.them .bub-msg{background:rgba(251,247,241,.1);color:rgba(251,247,241,.8);border-bottom-left-radius:2px}
+.bub-row.us .bub-msg{background:#25D366;color:#fff;border-bottom-right-radius:2px}
+.bub-note{font-size:10px;color:rgba(251,247,241,.3);text-align:center;margin-top:12px;letter-spacing:.5px}
+/* agenda flow */
+.ag-steps{display:flex;flex-direction:column;gap:12px}
+.ag-step{display:flex;align-items:center;gap:12px}
+.ag-num{width:28px;height:28px;border-radius:50%;background:var(--brand);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ag-txt{font-size:13px;color:rgba(251,247,241,.8)}
+.ag-result{margin-top:16px;padding:12px;background:rgba(30,122,70,.15);border:1px solid rgba(30,122,70,.3);border-radius:4px;font-size:12px;color:rgba(251,247,241,.9);display:flex;align-items:center;gap:8px}
+.ag-result-ic{color:var(--green);font-size:16px;flex-shrink:0}
+.cmp-h2{font-family:var(--serif);font-style:italic;font-size:clamp(30px,6vw,48px);line-height:.94;letter-spacing:-1.5px;color:#FBF7F1;margin-bottom:16px;text-wrap:balance}
+.cmp-sub{font-size:15px;color:rgba(251,247,241,.55);line-height:1.6;max-width:500px}
 
-/* DEMO */
-.demo-wrap{display:flex;flex-direction:column;align-items:center;gap:24px;margin-top:32px}
-.demo-phone{width:240px;background:var(--ink-2);border:1px solid var(--rule-2);border-radius:24px;overflow:hidden;box-shadow:0 24px 48px rgba(0,0,0,0.5);min-height:360px;display:flex;flex-direction:column}
-.demo-phone-header{padding:16px;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:10px;flex-shrink:0}
-.demo-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,rgba(229,90,12,0.6),rgba(229,90,12,0.2));flex-shrink:0}
-.demo-salon-name{font-family:var(--display);font-style:italic;font-size:14px;color:var(--bone)}
-.demo-salon-cat{font-size:9px;color:var(--stone-2);letter-spacing:1px;text-transform:uppercase}
-.demo-body{flex:1;overflow:hidden;position:relative}
-.demo-state{position:absolute;inset:0;padding:12px;display:flex;flex-direction:column;transition:opacity 0.2s,transform 0.2s}
-.demo-state.hidden{opacity:0;pointer-events:none;transform:translateX(12px)}
-.demo-hint{font-size:10px;color:var(--stone-2);text-align:center;margin-top:8px;letter-spacing:1px}
-.demo-svc-row{display:flex;align-items:center;justify-content:space-between;padding:10px 8px;border-bottom:1px solid var(--rule);cursor:pointer;border-radius:4px;transition:background 0.15s;-webkit-tap-highlight-color:transparent}
-.demo-svc-row:last-child{border-bottom:none}
-.demo-svc-row:hover,.demo-svc-row:active{background:rgba(229,90,12,0.06)}
-.demo-svc-name{font-family:var(--display);font-style:italic;font-size:13px;color:var(--bone)}
-.demo-svc-info{font-size:10px;color:var(--stone-2);text-align:right}
-.demo-back-btn{font-size:11px;color:var(--stone);cursor:pointer;padding:4px 0 12px;display:flex;align-items:center;gap:4px}
-.demo-svc-title-big{font-family:var(--display);font-style:italic;font-size:15px;color:var(--bone);margin-bottom:10px}
-.demo-slots{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.demo-slot{padding:8px;border:1px solid var(--rule-2);font-family:var(--mono);font-size:11px;color:var(--bone);text-align:center;cursor:pointer;border-radius:3px;transition:all 0.15s;-webkit-tap-highlight-color:transparent}
-.demo-slot:hover,.demo-slot:active{border-color:var(--brand);background:rgba(229,90,12,0.08);color:var(--brand)}
-.demo-success{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:16px}
-.demo-check{width:48px;height:48px;border-radius:50%;background:rgba(76,175,80,0.15);border:2px solid rgba(76,175,80,0.5);display:flex;align-items:center;justify-content:center;font-size:22px;color:#4CAF50;margin-bottom:4px}
-.demo-success-title{font-family:var(--display);font-style:italic;font-size:18px;color:var(--bone)}
-.demo-success-sub{font-size:11px;color:var(--stone-2);line-height:1.5}
-.demo-restart{margin-top:12px;background:none;border:1px solid var(--rule-2);padding:8px 16px;font-size:11px;color:var(--stone-2);cursor:pointer;border-radius:3px;font-family:var(--sans)}
-.demo-restart:hover{color:var(--bone);border-color:var(--rule)}
-.demo-caption{font-size:12px;color:var(--stone-2);text-align:center;max-width:240px;line-height:1.6}
-@media(min-width:780px){.demo-wrap{flex-direction:row;align-items:flex-start;justify-content:center}.demo-caption{text-align:left;max-width:300px;padding-top:48px}}
+/* ── CALCULATOR ─────────────────────────────── */
+.calc-sec{background:var(--bg2)}
+.calc-grid{display:grid;gap:40px;margin-top:40px}
+@media(min-width:720px){.calc-grid{grid-template-columns:1fr 1fr;align-items:center}}
+.slider-wrap{margin:20px 0}
+.slider-label{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:10px}
+.slider-label strong{color:var(--ink);font-size:18px;font-weight:700}
+input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:4px;background:var(--rule);border-radius:2px;outline:none;cursor:pointer;accent-color:var(--brand)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--brand);border:3px solid var(--bg2);box-shadow:0 2px 6px rgba(229,90,12,.3);cursor:pointer}
+.calc-metrics{display:flex;flex-direction:column;gap:16px}
+.calc-metric{display:flex;flex-direction:column;gap:4px;padding:20px;background:#fff;border:1px solid var(--rule);border-radius:6px}
+.calc-metric-label{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);font-weight:600}
+.calc-metric-val{font-family:var(--serif);font-style:italic;font-size:40px;color:var(--ink);line-height:1}
+.calc-metric-val span{font-size:16px;font-style:normal;color:var(--muted)}
+.calc-note{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.5}
 
-/* BENEFÍCIOS */
-.benefits-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:28px}
-.benefit{background:var(--ink);padding:24px}
-.benefit-icon{font-family:var(--display);font-style:italic;font-size:40px;color:var(--brand);line-height:1;margin-bottom:8px}
-.benefit-title{font-family:var(--display);font-style:italic;font-size:17px;color:var(--bone);margin-bottom:6px}
-.benefit-desc{font-size:12px;color:var(--stone);line-height:1.6;font-weight:300}
-@media(min-width:640px){.benefits-grid{grid-template-columns:repeat(4,1fr)}}
+/* ── STEPS ──────────────────────────────────── */
+.steps{margin-top:36px;display:flex;flex-direction:column;gap:0}
+.step{display:flex;gap:20px;padding:24px 0;border-bottom:1px solid var(--rule)}
+.step:last-child{border-bottom:none}
+.step-n{font-family:var(--serif);font-style:italic;font-size:36px;color:rgba(229,90,12,.3);min-width:36px;flex-shrink:0;line-height:1}
+.step-title{font-size:16px;font-weight:600;color:var(--ink);margin-bottom:5px}
+.step-desc{font-size:13px;color:var(--muted);line-height:1.6}
 
-/* PLANOS */
-.planos-section{padding:56px 0;border-bottom:1px solid var(--rule)}
-.planos-inner{padding:0 24px;max-width:720px;margin:0 auto}
-.toggle-ciclo{display:inline-flex;border:1px solid var(--rule-2);margin:24px 0;overflow:hidden}
-.toggle-btn{padding:8px 20px;background:transparent;border:none;font-family:var(--sans);font-size:13px;color:var(--stone-2);cursor:pointer;transition:all 0.15s;white-space:nowrap;font-style:normal}
-.toggle-btn.active{background:var(--brand);color:var(--bone)}
-.toggle-badge{font-size:9px;background:rgba(76,175,80,0.2);color:#4CAF50;padding:2px 7px;border-radius:20px;margin-left:6px;letter-spacing:0.5px;font-weight:600}
-.planos-grid{display:flex;flex-direction:column;gap:12px;margin-top:8px}
-.plano{border:1px solid rgba(240,237,232,0.1);padding:24px;position:relative;transition:border-color 0.2s}
-.plano:hover{border-color:rgba(240,237,232,0.2)}
-.plano.destaque{border-color:var(--brand);background:rgba(229,90,12,0.04)}
-.plano-badge{position:absolute;top:-1px;left:20px;background:var(--brand);font-size:9px;color:var(--bone);padding:3px 10px;letter-spacing:2px;text-transform:uppercase}
-.plano-nome{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--stone);margin-bottom:10px}
-.plano-preco{font-family:var(--display);font-style:italic;font-size:40px;color:var(--bone);line-height:1;margin-bottom:4px}
-.plano-preco sup{font-size:16px;vertical-align:top;margin-top:8px;font-style:normal}
-.plano-preco sub{font-size:14px;color:var(--stone);font-style:normal}
-.plano-anual-info{font-size:10px;color:rgba(76,175,80,0.8);margin-bottom:10px;display:none;letter-spacing:0.5px}
-.plano-itens{list-style:none;margin:14px 0}
-.plano-itens li{font-size:12px;color:var(--stone);padding:4px 0;display:flex;gap:8px}
-.plano-itens li::before{content:'→';color:var(--brand);flex-shrink:0}
-.plano-cta{width:100%;padding:12px;background:transparent;border:1px solid rgba(240,237,232,0.15);color:var(--stone);font-family:var(--serif);font-style:italic;font-size:15px;cursor:pointer;text-decoration:none;display:block;text-align:center;margin-top:16px;transition:all 0.15s;-webkit-tap-highlight-color:transparent}
-.plano-cta:hover{border-color:var(--bone);color:var(--bone)}
-.plano.destaque .plano-cta{background:var(--brand);border-color:var(--brand);color:var(--bone)}
-.plano-trial{font-size:10px;color:rgba(229,90,12,0.6);margin-top:8px;text-align:center;letter-spacing:1px}
-@media(min-width:780px){.planos-grid{flex-direction:row}.plano{flex:1}.planos-inner{padding-left:48px;padding-right:48px}}
+/* ── FEATURES ───────────────────────────────── */
+.feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:36px}
+@media(min-width:640px){.feat-grid{grid-template-columns:repeat(4,1fr)}}
+.feat{background:var(--bg);padding:24px}
+.feat-val{font-family:var(--serif);font-style:italic;font-size:40px;color:var(--brand);line-height:1;margin-bottom:8px}
+.feat-title{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:5px}
+.feat-desc{font-size:12px;color:var(--muted);line-height:1.55}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px}
+.chip{padding:6px 14px;border:1px solid var(--rule);font-size:12px;color:var(--muted);border-radius:100px;transition:all .15s;cursor:default}
+.chip:hover{border-color:var(--brand);color:var(--brand);background:rgba(229,90,12,.04)}
 
-/* DEPOIMENTOS */
+/* ── PLANS ──────────────────────────────────── */
+.plans-sec{background:var(--bg)}
+.toggle-wrap{display:inline-flex;border:1px solid var(--rule);overflow:hidden;margin:24px 0}
+.toggle-btn{padding:9px 22px;background:transparent;border:none;font-family:var(--grotesk);font-size:13px;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap;font-weight:500}
+.toggle-btn.on{background:var(--ink);color:var(--bg)}
+.toggle-badge{font-size:9px;background:rgba(30,122,70,.15);color:var(--green);padding:2px 7px;border-radius:20px;margin-left:5px;font-weight:600}
+.plans-grid{display:flex;flex-direction:column;gap:12px;margin-top:4px}
+@media(min-width:780px){.plans-grid{flex-direction:row}}
+.plan{border:1.5px solid var(--rule);padding:28px;position:relative;transition:border-color .2s;background:var(--bg)}
+.plan:hover{border-color:rgba(23,19,15,.2)}
+.plan.feat-plan{border-color:var(--brand);background:rgba(229,90,12,.03)}
+.plan-badge{position:absolute;top:-1px;left:20px;background:var(--brand);font-size:9px;color:#fff;padding:3px 10px;letter-spacing:2px;text-transform:uppercase;font-weight:600}
+.plan-name{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:10px}
+.plan-name.feat-name{color:var(--brand)}
+.plan-price{font-family:var(--serif);font-style:italic;font-size:48px;color:var(--ink);line-height:1;margin-bottom:4px}
+.plan-price sup{font-size:18px;vertical-align:top;margin-top:10px;font-style:normal;color:var(--muted)}
+.plan-price sub{font-size:14px;color:var(--muted);font-style:normal}
+.plan-annual{font-size:11px;color:var(--green);margin-bottom:10px;display:none;font-weight:500}
+.plan-items{list-style:none;margin:16px 0}
+.plan-items li{font-size:13px;color:var(--muted);padding:5px 0;display:flex;gap:10px;border-bottom:1px solid var(--rule2)}
+.plan-items li:last-child{border-bottom:none}
+.plan-items li::before{content:'→';color:var(--brand);flex-shrink:0}
+.plan-cta{width:100%;padding:13px;background:transparent;border:1.5px solid var(--rule);color:var(--muted);font-family:var(--serif);font-style:italic;font-size:16px;cursor:pointer;text-decoration:none;display:block;text-align:center;margin-top:16px;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.plan-cta:hover{border-color:var(--ink);color:var(--ink)}
+.plan.feat-plan .plan-cta{background:var(--brand);border-color:var(--brand);color:#fff}
+.plan.feat-plan .plan-cta:hover{background:#C84B08;border-color:#C84B08}
+.plan-trial{font-size:10px;color:rgba(229,90,12,.7);margin-top:8px;text-align:center;letter-spacing:.5px;font-weight:500}
+
+/* ── TRANSPARENCY ───────────────────────────── */
+.transp-grid{display:grid;gap:16px;margin-top:36px}
+@media(min-width:600px){.transp-grid{grid-template-columns:1fr 1fr}}
+@media(min-width:900px){.transp-grid{grid-template-columns:repeat(4,1fr)}}
+.transp-item{padding:24px;border:1px solid var(--rule);border-radius:4px}
+.transp-icon{font-size:24px;margin-bottom:10px}
+.transp-title{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:6px}
+.transp-desc{font-size:12px;color:var(--muted);line-height:1.6}
+
+/* ── FAQ ────────────────────────────────────── */
+.faq-item{border-top:1px solid var(--rule)}
+.faq-item:last-of-type{border-bottom:1px solid var(--rule)}
+.faq-btn{width:100%;padding:18px 0;background:none;border:none;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;font-size:15px;font-weight:500;color:var(--ink);font-family:var(--grotesk)}
+.faq-icon{font-size:20px;color:var(--muted);flex-shrink:0;transition:transform .2s,color .2s}
+.faq-icon.open{transform:rotate(45deg);color:var(--brand)}
+.faq-resp{font-size:14px;color:var(--muted);line-height:1.7;padding:0 0 18px;display:none;max-width:600px}
+
+/* ── DEPOIMENTOS ────────────────────────────── */
 .depo-wrap{border-bottom:1px solid var(--rule)}
-.depo-inner{max-width:720px;margin:0 auto;padding:56px 24px}
+.depo-inner{max-width:720px;margin:0 auto;padding:72px 24px}
 .depo-item{padding:32px 0;border-bottom:1px solid var(--rule)}
 .depo-item:last-child{border-bottom:none}
-.depo-open{font-family:var(--display);font-style:italic;font-size:60px;color:rgba(229,90,12,0.12);line-height:0.6;margin-bottom:16px}
-.depo-text{font-family:var(--display);font-style:italic;font-size:clamp(16px,4vw,20px);color:var(--bone);line-height:1.5;margin-bottom:16px}
-.depo-author{font-size:10px;color:rgba(229,90,12,0.6);letter-spacing:3px;text-transform:uppercase}
+.depo-open{font-family:var(--serif);font-style:italic;font-size:64px;color:rgba(229,90,12,.15);line-height:.6;margin-bottom:16px}
+.depo-text{font-family:var(--serif);font-style:italic;font-size:clamp(17px,4vw,22px);color:var(--ink);line-height:1.5;margin-bottom:14px}
+.depo-author{font-size:10px;color:var(--brand);letter-spacing:2px;text-transform:uppercase;font-weight:600}
+@media(min-width:780px){.depo-inner{padding:96px 48px}}
 
-/* FAQ */
-.faq-lp{border-top:1px solid var(--rule)}
-.faq-lp-btn{width:100%;padding:16px 0;background:none;border:none;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;font-size:14px;font-weight:500;color:var(--bone);font-family:var(--sans)}
-.faq-lp-icon{font-size:20px;color:var(--stone-2);flex-shrink:0;transition:transform 0.2s}
-.faq-lp-icon.open{transform:rotate(45deg);color:var(--brand)}
-.faq-lp-resp{font-size:13px;color:var(--stone);line-height:1.7;font-weight:300;padding:0 0 16px;display:none;max-width:560px}
+/* ── CTA FINAL ──────────────────────────────── */
+.cta-sec{padding:96px 24px;text-align:center;background:var(--ink);position:relative;overflow:hidden}
+.cta-glow{position:absolute;inset:0;background:radial-gradient(ellipse at center bottom,rgba(229,90,12,.12) 0%,transparent 70%);pointer-events:none}
+.cta-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(229,90,12,.7);font-weight:600;margin-bottom:16px}
+.cta-h2{font-family:var(--serif);font-style:italic;font-size:clamp(38px,9vw,64px);line-height:.92;letter-spacing:-2px;color:#FBF7F1;margin-bottom:14px;text-wrap:balance}
+.cta-h2 strong{color:var(--brand);font-style:normal}
+.cta-p{font-size:15px;color:rgba(251,247,241,.5);margin-bottom:32px;max-width:360px;margin-left:auto;margin-right:auto;line-height:1.6}
+.cta-claim{max-width:460px;margin:0 auto 14px}
+.cta-claim .claim-row{border-color:rgba(251,247,241,.15);background:rgba(251,247,241,.05)}
+.cta-claim .claim-row:focus-within{border-color:var(--brand)}
+.cta-claim .claim-prefix{color:rgba(251,247,241,.4);border-right-color:rgba(251,247,241,.1)}
+.cta-claim .claim-input{color:var(--brand)}
+.cta-claim .slug-status{color:rgba(251,247,241,.5)}
+.cta-claim .slug-status.ok{color:var(--green)}
+.cta-claim .slug-status.taken{color:#EF5350}
+.cta-btn-wrap{text-align:center;margin-top:16px}
+.cta-disclaimer{font-size:11px;color:rgba(251,247,241,.3);margin-top:12px}
 
-/* CTA FINAL */
-.cta-final{padding:80px 24px;text-align:center;background:linear-gradient(180deg,#0A0908 0%,#150d08 100%);position:relative;overflow:hidden}
-.cta-final-glow{position:absolute;inset:0;background:radial-gradient(ellipse at center bottom,rgba(229,90,12,0.1) 0%,transparent 70%);pointer-events:none}
-.cta-final-eyebrow{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(229,90,12,0.6);margin-bottom:16px}
-.cta-final-h2{font-family:var(--display);font-style:italic;font-size:clamp(36px,10vw,56px);line-height:0.95;letter-spacing:-2px;color:var(--bone);margin-bottom:12px}
-.cta-final-h2 em{color:var(--brand)}
-.cta-final-p{font-size:14px;color:var(--stone);margin-bottom:32px;max-width:360px;margin-left:auto;margin-right:auto;font-weight:300}
-.cta-final-claim{max-width:480px;margin:0 auto 16px;text-align:left}
-.cta-final-disclaimer{font-size:11px;color:var(--stone-2);margin-top:14px;letter-spacing:1px}
-
-/* FOOTER */
-.footer{padding:24px;border-top:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;max-width:720px;margin:0 auto}
-.footer-brand{font-family:var(--display);font-style:italic;font-size:22px;color:rgba(240,237,232,0.2);text-decoration:none}
+/* ── FOOTER ─────────────────────────────────── */
+.footer{padding:24px;border-top:1px solid rgba(251,247,241,.08);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;max-width:1100px;margin:0 auto;background:var(--ink)}
+.footer-brand{font-family:var(--serif);font-style:italic;font-size:22px;color:rgba(251,247,241,.2);text-decoration:none}
 .footer-links{display:flex;gap:16px;flex-wrap:wrap}
-.footer-link{font-size:11px;color:rgba(240,237,232,0.2);text-decoration:none;letter-spacing:1px}
-.footer-link:hover{color:var(--stone)}
+.footer-link{font-size:11px;color:rgba(251,247,241,.25);text-decoration:none;letter-spacing:.5px;transition:color .15s}
+.footer-link:hover{color:rgba(251,247,241,.6)}
 
-/* REVEAL */
-@keyframes revealUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+/* ── REVEAL ─────────────────────────────────── */
+@keyframes revealUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 .reveal{opacity:0}
-.reveal.visible{animation:revealUp 0.6s cubic-bezier(0.4,0,0.2,1) forwards}
+.reveal.visible{animation:revealUp .55s cubic-bezier(.4,0,.2,1) forwards}
 
-@media(min-width:780px){
-  .hero-content{padding:0 48px 64px}
-  .section{padding:80px 48px}
+@media(min-width:860px){
+  .hero-copy{padding:80px 0 48px}
+  .cta-sec{padding:120px 48px}
+}
+@media(max-width:859px){
+  .hero{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -212,313 +307,439 @@ body{background:#0A0908;color:#F0EDE8;font-family:var(--sans);-webkit-font-smoot
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-glow"></div>
-  <div class="hero-glow-2"></div>
-  <div class="hero-content">
-    <div class="hero-eyebrow reveal">Para quem atende com hora marcada</div>
-    <h1 class="hero-h1 reveal">
-      Seu cliente<br>agenda <em>sozinho.</em>
-    </h1>
+  <div class="hero-copy">
+    <div class="hero-label reveal">Para quem atende com hora marcada</div>
+    <h1 class="hero-h1 reveal">Seu cliente<br>agenda <strong>sozinho.</strong></h1>
     <p class="hero-sub reveal">Crie sua página em 3 minutos. Compartilhe o link. Pronto.</p>
 
     <div class="claim-wrap reveal">
       <div class="claim-row">
         <span class="claim-prefix">agendatop.vercel.app/</span>
-        <input id="slugHero" class="claim-input" type="text" placeholder="seu-negocio" autocomplete="off" spellcheck="false" maxlength="50">
+        <input id="slugHero" class="claim-input" type="text" placeholder="meu-negocio" autocomplete="off" spellcheck="false" maxlength="50" aria-label="Escolha seu endereço">
       </div>
       <div id="slugHeroStatus" class="slug-status"></div>
     </div>
 
-    <a id="heroCta" href="/cadastro.html" class="btn-hero reveal">
-      Criar minha página grátis →
-    </a>
+    <a id="heroCta" href="/cadastro.html" class="btn-hero reveal">Criar minha página grátis →</a>
     <div class="hero-disclaimer reveal">14 dias grátis · Sem cartão · Cancela quando quiser</div>
   </div>
-  <div class="hero-scroll">↓ &nbsp; veja como funciona</div>
+
+  <!-- Phone mockup -->
+  <div class="hero-phone-wrap">
+    <div class="phone">
+      <div class="phone-bar">
+        <div class="phone-avatar"></div>
+        <div>
+          <div class="phone-sname">Studio Carol</div>
+          <div class="phone-scat">Estética · São Paulo</div>
+        </div>
+      </div>
+      <div class="phone-progress">
+        <div class="phone-dot done" id="pd0"></div>
+        <div class="phone-dot" id="pd1"></div>
+        <div class="phone-dot" id="pd2"></div>
+        <div class="phone-dot" id="pd3"></div>
+        <div class="phone-dot" id="pd4"></div>
+      </div>
+      <div class="phone-body">
+
+        <!-- Step 0 — serviço -->
+        <div class="pstate" id="ps0">
+          <div class="pstate-label">Escolha o serviço</div>
+          <div class="psvc-row" onclick="phoneStep(1,'Sobrancelha Designer')">
+            <div>
+              <div class="psvc-name">Sobrancelha Designer</div>
+              <div class="psvc-info">45 min</div>
+            </div>
+            <div class="psvc-price">R$50</div>
+          </div>
+          <div class="psvc-row" onclick="phoneStep(1,'Limpeza de Pele')">
+            <div>
+              <div class="psvc-name">Limpeza de Pele</div>
+              <div class="psvc-info">60 min</div>
+            </div>
+            <div class="psvc-price">R$80</div>
+          </div>
+          <div class="psvc-row" onclick="phoneStep(1,'Extensão de Cílios')">
+            <div>
+              <div class="psvc-name">Extensão de Cílios</div>
+              <div class="psvc-info">90 min</div>
+            </div>
+            <div class="psvc-price">R$120</div>
+          </div>
+        </div>
+
+        <!-- Step 1 — dia -->
+        <div class="pstate hidden" id="ps1">
+          <button class="pback" onclick="phoneBack(0)">← voltar</button>
+          <div class="pstate-label">Escolha o dia</div>
+          <div class="pdays">
+            <div class="pday off"><span class="pday-name">Dom</span><span class="pday-num">31</span></div>
+            <div class="pday" onclick="phoneStep(2)"><span class="pday-name">Seg</span><span class="pday-num">1</span></div>
+            <div class="pday" onclick="phoneStep(2)"><span class="pday-name">Ter</span><span class="pday-num">2</span></div>
+            <div class="pday" onclick="phoneStep(2)"><span class="pday-name">Qua</span><span class="pday-num">3</span></div>
+            <div class="pday" onclick="phoneStep(2)"><span class="pday-name">Qui</span><span class="pday-num">4</span></div>
+            <div class="pday" onclick="phoneStep(2)"><span class="pday-name">Sex</span><span class="pday-num">5</span></div>
+          </div>
+        </div>
+
+        <!-- Step 2 — horário -->
+        <div class="pstate hidden" id="ps2">
+          <button class="pback" onclick="phoneBack(1)">← voltar</button>
+          <div class="pstate-label">Escolha o horário</div>
+          <div class="ptimes">
+            <div class="ptime" onclick="phoneStep(3)">09:00</div>
+            <div class="ptime" onclick="phoneStep(3)">10:30</div>
+            <div class="ptime" onclick="phoneStep(3)">14:00</div>
+            <div class="ptime" onclick="phoneStep(3)">15:30</div>
+            <div class="ptime" onclick="phoneStep(3)">16:00</div>
+            <div class="ptime" onclick="phoneStep(3)">17:30</div>
+          </div>
+        </div>
+
+        <!-- Step 3 — dados -->
+        <div class="pstate hidden" id="ps3">
+          <button class="pback" onclick="phoneBack(2)">← voltar</button>
+          <div class="pstate-label">Seus dados</div>
+          <input class="pfield" type="text" placeholder="Seu nome" readonly>
+          <input class="pfield" type="text" placeholder="WhatsApp" readonly>
+          <button class="pconfirm" onclick="phoneStep(4)">Confirmar agendamento →</button>
+        </div>
+
+        <!-- Step 4 — confirmado -->
+        <div class="pstate hidden" id="ps4">
+          <div class="psuccess">
+            <div class="pcheck">✓</div>
+            <div class="psuccess-title">Agendado!</div>
+            <div class="psuccess-sub">Confirmação enviada por WhatsApp.</div>
+            <button class="prestart" onclick="phoneRestart()">recomeçar demo</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section class="cmp-sec" id="como-funciona">
+  <div class="sec-inner--sm">
+    <div class="eyebrow reveal" style="color:rgba(229,90,12,.7)">— O problema</div>
+    <h2 class="cmp-h2 reveal">Chega de agendar<br>pelo WhatsApp.</h2>
+    <p class="cmp-sub reveal">Cada agendamento consome em média 8 mensagens e 12 minutos do seu tempo. Multiplique pelo mês.</p>
+    <div class="cmp-grid reveal">
+      <!-- WhatsApp side -->
+      <div class="cmp-card cmp-card--wa">
+        <div class="cmp-tag cmp-tag--wa">
+          <span style="font-size:14px">💬</span> Hoje, pelo WhatsApp
+        </div>
+        <div class="cmp-h3">Vai e vem sem fim.</div>
+        <div class="bub">
+          <div class="bub-row them"><div class="bub-msg">Oi! Tem horário quinta?</div></div>
+          <div class="bub-row us"><div class="bub-msg">Tarde ou manhã?</div></div>
+          <div class="bub-row them"><div class="bub-msg">Tarde, tipo 14h?</div></div>
+          <div class="bub-row us"><div class="bub-msg">14h tá ocupado. 15h?</div></div>
+          <div class="bub-row them"><div class="bub-msg">Pode ser. Qual serviço?</div></div>
+          <div class="bub-row us"><div class="bub-msg">Nome completo pra confirmar?</div></div>
+          <div class="bub-row them"><div class="bub-msg">Maria Silva 😊</div></div>
+          <div class="bub-row us"><div class="bub-msg">Confirmado! Quinta 15h ✓</div></div>
+          <div class="bub-note">8 mensagens · 12 minutos · 1 agendamento</div>
+        </div>
+      </div>
+      <!-- Agenda side -->
+      <div class="cmp-card cmp-card--ag">
+        <div class="cmp-tag cmp-tag--ag">
+          <span style="font-size:14px">✦</span> Com o Agenda
+        </div>
+        <div class="cmp-h3">Seu cliente resolve sozinho.</div>
+        <div class="ag-steps">
+          <div class="ag-step"><div class="ag-num">1</div><div class="ag-txt">Cliente abre seu link e escolhe o serviço</div></div>
+          <div class="ag-step"><div class="ag-num">2</div><div class="ag-txt">Vê os horários disponíveis e escolhe</div></div>
+          <div class="ag-step"><div class="ag-num">3</div><div class="ag-txt">Confirma com nome e telefone</div></div>
+        </div>
+        <div class="ag-result">
+          <div class="ag-result-ic">✓</div>
+          <div>Você recebe a notificação. <strong>Sem uma mensagem sequer.</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CALCULATOR -->
+<section class="sec calc-sec" id="calculadora">
+  <div class="sec-inner--sm">
+    <div class="eyebrow reveal">— Calcule seu ganho</div>
+    <h2 class="h2 reveal">Quanto tempo você<br>perde agendando?</h2>
+    <div class="calc-grid reveal">
+      <div>
+        <p class="lead" style="margin-bottom:24px">Arraste o controle para ver quanto tempo você recupera por mês.</p>
+        <div class="slider-wrap">
+          <div class="slider-label">
+            <span>Agendamentos/mês</span>
+            <strong id="calcMsgs">12</strong>
+          </div>
+          <input type="range" id="calcSlider" min="2" max="40" value="12" step="1">
+        </div>
+        <div class="calc-note">Cálculo: cada agendamento consome ~3 trocas de mensagem com ~30 min cada.</div>
+      </div>
+      <div class="calc-metrics">
+        <div class="calc-metric">
+          <div class="calc-metric-label">Horas salvas por mês</div>
+          <div class="calc-metric-val" id="calcHours">18 <span>h</span></div>
+        </div>
+        <div class="calc-metric">
+          <div class="calc-metric-label">Atendimentos extras possíveis</div>
+          <div class="calc-metric-val" id="calcClients">24 <span>clientes</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- COMO FUNCIONA -->
-<div class="section-full" id="como-funciona">
-<div class="section">
-  <div class="eyebrow reveal"><span>—</span> No ar em 3 minutos</div>
-  <h2 class="h2 reveal">Simples assim.</h2>
-  <div class="steps">
-    <div class="step reveal">
-      <div class="step-n">01</div>
-      <div>
-        <div class="step-title">Crie sua conta</div>
-        <div class="step-desc">Só nome, email e senha. 30 segundos, sem cartão de crédito.</div>
-      </div>
-    </div>
-    <div class="step reveal">
-      <div class="step-n">02</div>
-      <div>
-        <div class="step-title">Configure serviços e horários</div>
-        <div class="step-desc">Adicione o que você oferece, os preços e os dias disponíveis. 2 minutos.</div>
-      </div>
-    </div>
-    <div class="step reveal">
-      <div class="step-n">03</div>
-      <div>
-        <div class="step-title">Compartilhe seu link</div>
-        <div class="step-desc">Coloque na bio do Instagram, no cartão de visita ou mande no grupo. Seu cliente já pode agendar.</div>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-
-<!-- DEMO INTERATIVA -->
-<div class="section-full">
-<div class="section" style="border-bottom:none">
-  <div class="eyebrow reveal"><span>—</span> Veja como seu cliente te vê</div>
-  <h2 class="h2 reveal">É assim que eles agendam.</h2>
-  <div class="demo-wrap reveal">
-    <div class="demo-phone">
-      <div class="demo-phone-header">
-        <div class="demo-avatar"></div>
+<section class="sec" id="passos">
+  <div class="sec-inner--sm">
+    <div class="eyebrow reveal">— No ar em 3 minutos</div>
+    <h2 class="h2 reveal">Simples assim.</h2>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-n">1</div>
         <div>
-          <div class="demo-salon-name">Studio Carol</div>
-          <div class="demo-salon-cat">Estética · São Paulo</div>
+          <div class="step-title">Crie sua conta</div>
+          <div class="step-desc">Só nome, email e senha. 30 segundos. Sem cartão de crédito.</div>
         </div>
       </div>
-      <div class="demo-body">
-
-        <!-- Estado 0: serviços -->
-        <div class="demo-state" id="dS0">
-          <div class="demo-svc-row" onclick="demoStep1(this,'Sobrancelha Designer','45 min · R$50')">
-            <div>
-              <div class="demo-svc-name">Sobrancelha Designer</div>
-              <div class="demo-svc-info">45 min</div>
-            </div>
-            <div class="demo-svc-info">R$50</div>
-          </div>
-          <div class="demo-svc-row" onclick="demoStep1(this,'Limpeza de Pele','60 min · R$80')">
-            <div>
-              <div class="demo-svc-name">Limpeza de Pele</div>
-              <div class="demo-svc-info">60 min</div>
-            </div>
-            <div class="demo-svc-info">R$80</div>
-          </div>
-          <div class="demo-svc-row" onclick="demoStep1(this,'Extensão de Cílios','90 min · R$120')">
-            <div>
-              <div class="demo-svc-name">Extensão de Cílios</div>
-              <div class="demo-svc-info">90 min</div>
-            </div>
-            <div class="demo-svc-info">R$120</div>
-          </div>
-          <div class="demo-hint">← toque em um serviço</div>
+      <div class="step reveal">
+        <div class="step-n">2</div>
+        <div>
+          <div class="step-title">Configure serviços e horários</div>
+          <div class="step-desc">Adicione o que você oferece, os preços e os dias disponíveis. Menos de 2 minutos.</div>
         </div>
-
-        <!-- Estado 1: horários -->
-        <div class="demo-state hidden" id="dS1">
-          <div class="demo-back-btn" onclick="demoBack()">← voltar</div>
-          <div class="demo-svc-title-big" id="dSvcTitle">Sobrancelha Designer</div>
-          <div class="demo-slots">
-            <div class="demo-slot" onclick="demoStep2()">Hoje 14:00</div>
-            <div class="demo-slot" onclick="demoStep2()">Hoje 16:30</div>
-            <div class="demo-slot" onclick="demoStep2()">Amanhã 10:00</div>
-            <div class="demo-slot" onclick="demoStep2()">Amanhã 11:30</div>
-          </div>
-          <div class="demo-hint" style="margin-top:10px">← escolha um horário</div>
+      </div>
+      <div class="step reveal">
+        <div class="step-n">3</div>
+        <div>
+          <div class="step-title">Compartilhe seu link</div>
+          <div class="step-desc">Cole na bio do Instagram, no cartão de visita ou mande no grupo. Seu cliente já pode agendar.</div>
         </div>
-
-        <!-- Estado 2: confirmado -->
-        <div class="demo-state hidden" id="dS2">
-          <div class="demo-success">
-            <div class="demo-check">✓</div>
-            <div class="demo-success-title">Agendado!</div>
-            <div class="demo-success-sub">Seu cliente recebeu a confirmação.</div>
-            <button class="demo-restart" onclick="demoRestart()">recomeçar</button>
-          </div>
-        </div>
-
       </div>
     </div>
-    <div class="demo-caption">
-      <p style="color:var(--bone);font-family:var(--display);font-style:italic;font-size:18px;line-height:1.3;margin-bottom:10px">Esta é a página que seu cliente vai abrir.</p>
-      <p style="font-size:12px;color:var(--stone);line-height:1.6;font-weight:300">Ele escolhe o serviço, o horário e confirma. Você recebe a notificação. Sem nenhuma troca de mensagem.</p>
-    </div>
   </div>
-</div>
-</div>
+</section>
 
-<!-- BENEFÍCIOS -->
-<div class="section-full">
-<div class="section" style="max-width:100%;padding-left:0;padding-right:0;border-bottom:none">
-  <div style="padding:0 24px" class="section">
-    <div class="eyebrow reveal"><span>—</span> O que você ganha</div>
-    <h2 class="h2 reveal">Menos trabalho.<br>Mais clientes.</h2>
+<!-- FEATURES -->
+<section class="sec" style="background:var(--bg2);padding-top:72px;padding-bottom:72px">
+  <div class="sec-inner">
+    <div class="sec-inner--sm" style="max-width:100%">
+      <div class="eyebrow reveal">— O que você ganha</div>
+      <h2 class="h2 reveal">Menos trabalho.<br>Mais clientes.</h2>
+    </div>
+    <div class="feat-grid reveal">
+      <div class="feat">
+        <div class="feat-val">24h</div>
+        <div class="feat-title">Agenda aberta</div>
+        <div class="feat-desc">Clientes agendam enquanto você dorme, descansa ou está atendendo.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-val">0%</div>
+        <div class="feat-title">Faltas</div>
+        <div class="feat-desc">Confirmação automática na hora do agendamento. O cliente confirma e já era.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-val">PIX</div>
+        <div class="feat-title">Sinal antecipado</div>
+        <div class="feat-desc">Receba parte do valor antes do atendimento. Compromisso garantido.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-val">→</div>
+        <div class="feat-title">Página própria</div>
+        <div class="feat-desc">Link profissional com seu nome para bio, cartão de visita e indicações.</div>
+      </div>
+    </div>
+    <div class="sec-inner--sm" style="max-width:100%;margin-top:0">
+      <p class="lead reveal" style="margin-top:28px;margin-bottom:12px">Para qualquer profissional que atende com hora marcada:</p>
+      <div class="chips reveal">
+        <div class="chip">Cabelereiro</div>
+        <div class="chip">Esteticista</div>
+        <div class="chip">Tatuador</div>
+        <div class="chip">Barbeiro</div>
+        <div class="chip">Personal Trainer</div>
+        <div class="chip">Nutricionista</div>
+        <div class="chip">Psicólogo</div>
+        <div class="chip">Dentista</div>
+        <div class="chip">Manicure</div>
+        <div class="chip">Maquiadora</div>
+        <div class="chip">Fisioterapeuta</div>
+        <div class="chip">Coach</div>
+      </div>
+    </div>
   </div>
-  <div class="benefits-grid">
-    <div class="benefit reveal">
-      <div class="benefit-icon">24h</div>
-      <div class="benefit-title">Agenda aberta</div>
-      <div class="benefit-desc">Clientes agendam enquanto você dorme, descansa ou está atendendo.</div>
-    </div>
-    <div class="benefit reveal">
-      <div class="benefit-icon">0%</div>
-      <div class="benefit-title">Faltas</div>
-      <div class="benefit-desc">Confirmação automática na hora do agendamento. O cliente confirma e já era.</div>
-    </div>
-    <div class="benefit reveal">
-      <div class="benefit-icon">PIX</div>
-      <div class="benefit-title">Sinal antecipado</div>
-      <div class="benefit-desc">Receba parte do valor antes do atendimento. Compromisso garantido.</div>
-    </div>
-    <div class="benefit reveal">
-      <div class="benefit-icon">→</div>
-      <div class="benefit-title">Página própria</div>
-      <div class="benefit-desc">Link profissional com seu nome para colocar na bio, cartão e indicações.</div>
-    </div>
-  </div>
-</div>
-</div>
+</section>
 
 <!-- PLANOS -->
-<div class="planos-section" id="planos">
-  <div class="planos-inner">
-    <div class="eyebrow reveal"><span>—</span> Planos</div>
+<section class="sec plans-sec" id="planos">
+  <div class="sec-inner--sm">
+    <div class="eyebrow reveal">— Planos</div>
     <h2 class="h2 reveal">Sem surpresas.<br>Sem letra miúda.</h2>
-    <p class="p reveal" style="margin-bottom:0">Todos os planos começam com 14 dias grátis. Cancela quando quiser.</p>
+    <p class="lead reveal" style="margin-bottom:0">Todos os planos começam com 14 dias grátis. Cancela quando quiser.</p>
     <div class="reveal">
-      <div class="toggle-ciclo">
-        <button class="toggle-btn active" data-ciclo="mensal" onclick="setCiclo('mensal')">Mensal</button>
+      <div class="toggle-wrap">
+        <button class="toggle-btn on" data-ciclo="mensal" onclick="setCiclo('mensal')">Mensal</button>
         <button class="toggle-btn" data-ciclo="anual" onclick="setCiclo('anual')">Anual <span class="toggle-badge">2 meses grátis</span></button>
       </div>
     </div>
-    <div class="planos-grid">
+    <div class="plans-grid">
 
-      <div class="plano reveal">
-        <div class="plano-nome">Solo</div>
-        <div class="plano-preco"><sup>R$</sup><span class="preco-val" data-mensal="35" data-anual="29">35</span><sub>/mês</sub></div>
-        <div class="plano-anual-info">Cobrado anualmente · R$350/ano</div>
-        <ul class="plano-itens">
+      <div class="plan reveal">
+        <div class="plan-name">Solo</div>
+        <div class="plan-price"><sup>R$</sup><span class="preco-val" data-mensal="35" data-anual="29">35</span><sub>/mês</sub></div>
+        <div class="plan-annual">Cobrado anualmente · R$350/ano</div>
+        <ul class="plan-items">
           <li>1 profissional</li>
           <li>Agendamentos ilimitados</li>
           <li>Página pública completa</li>
           <li>Confirmação automática</li>
           <li>Painel de controle</li>
         </ul>
-        <a href="/cadastro.html?plano=basico" class="plano-cta">Começar grátis →</a>
-        <div class="plano-trial">14 dias grátis incluídos</div>
+        <a href="/cadastro.html?plano=basico" class="plan-cta">Começar grátis →</a>
+        <div class="plan-trial">14 dias grátis incluídos</div>
       </div>
 
-      <div class="plano destaque reveal">
-        <div class="plano-badge">★ Mais popular</div>
-        <div class="plano-nome" style="color:var(--brand)">Equipe</div>
-        <div class="plano-preco"><sup>R$</sup><span class="preco-val" data-mensal="70" data-anual="58">70</span><sub>/mês</sub></div>
-        <div class="plano-anual-info">Cobrado anualmente · R$700/ano</div>
-        <ul class="plano-itens">
+      <div class="plan feat-plan reveal">
+        <div class="plan-badge">★ Mais popular</div>
+        <div class="plan-name feat-name">Equipe</div>
+        <div class="plan-price"><sup>R$</sup><span class="preco-val" data-mensal="70" data-anual="58">70</span><sub>/mês</sub></div>
+        <div class="plan-annual">Cobrado anualmente · R$700/ano</div>
+        <ul class="plan-items">
           <li>Até 3 profissionais</li>
           <li>Tudo do Solo</li>
           <li>PIX antecipado</li>
           <li>Analytics da agenda</li>
           <li>Avaliações de clientes</li>
         </ul>
-        <a href="/cadastro.html?plano=pro" class="plano-cta">Começar grátis →</a>
-        <div class="plano-trial">14 dias grátis incluídos</div>
+        <a href="/cadastro.html?plano=pro" class="plan-cta">Começar grátis →</a>
+        <div class="plan-trial">14 dias grátis incluídos</div>
       </div>
 
-      <div class="plano reveal">
-        <div class="plano-nome">Negócio</div>
-        <div class="plano-preco"><sup>R$</sup><span class="preco-val" data-mensal="140" data-anual="117">140</span><sub>/mês</sub></div>
-        <div class="plano-anual-info">Cobrado anualmente · R$1.400/ano</div>
-        <ul class="plano-itens">
+      <div class="plan reveal">
+        <div class="plan-name">Negócio</div>
+        <div class="plan-price"><sup>R$</sup><span class="preco-val" data-mensal="140" data-anual="117">140</span><sub>/mês</sub></div>
+        <div class="plan-annual">Cobrado anualmente · R$1.400/ano</div>
+        <ul class="plan-items">
           <li>Profissionais ilimitados</li>
           <li>Tudo do Equipe</li>
           <li>Suporte prioritário</li>
           <li>Onboarding personalizado</li>
         </ul>
-        <a href="/cadastro.html?plano=salao" class="plano-cta">Começar grátis →</a>
-        <div class="plano-trial">14 dias grátis incluídos</div>
+        <a href="/cadastro.html?plano=salao" class="plan-cta">Começar grátis →</a>
+        <div class="plan-trial">14 dias grátis incluídos</div>
       </div>
 
     </div>
   </div>
-</div>
+</section>
+
+<!-- TRANSPARENCY -->
+<section class="sec" style="background:var(--bg2)">
+  <div class="sec-inner--sm">
+    <div class="eyebrow reveal">— Transparência</div>
+    <h2 class="h2 reveal">Sem truques,<br>sem pegadinhas.</h2>
+    <div class="transp-grid reveal">
+      <div class="transp-item">
+        <div class="transp-icon">🔓</div>
+        <div class="transp-title">Cancele quando quiser</div>
+        <div class="transp-desc">Sem fidelidade, sem multa. Você cancela pelo painel e pronto.</div>
+      </div>
+      <div class="transp-item">
+        <div class="transp-icon">📦</div>
+        <div class="transp-title">Seus dados são seus</div>
+        <div class="transp-desc">Exporte tudo antes de sair. Clientes, agendamentos, histórico.</div>
+      </div>
+      <div class="transp-item">
+        <div class="transp-icon">💳</div>
+        <div class="transp-title">Sem cartão no trial</div>
+        <div class="transp-desc">14 dias grátis sem precisar informar forma de pagamento.</div>
+      </div>
+      <div class="transp-item">
+        <div class="transp-icon">📞</div>
+        <div class="transp-title">Suporte humano</div>
+        <div class="transp-desc">Precisa de ajuda? Fale com a gente pelo WhatsApp. Sem bot.</div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- DEPOIMENTOS (oculto enquanto vazio) -->
 <script>const DEPOIMENTOS_REAIS = [];</script>
 <div class="depo-wrap" id="depoSection" style="display:none">
   <div class="depo-inner">
-    <div class="eyebrow"><span>—</span> O que dizem os primeiros usuários</div>
+    <div class="eyebrow">— O que dizem os primeiros usuários</div>
     <div id="depoList"></div>
   </div>
 </div>
 
 <!-- FAQ -->
-<div class="section-full">
-<div class="section">
-  <div class="eyebrow reveal"><span>—</span> Dúvidas frequentes</div>
-  <h2 class="h2 reveal">Antes de decidir.</h2>
-  <div id="faqLanding" style="margin-top:28px">
+<section class="sec" id="faq">
+  <div class="sec-inner--sm">
+    <div class="eyebrow reveal">— Dúvidas frequentes</div>
+    <h2 class="h2 reveal">Antes de decidir.</h2>
+    <div style="margin-top:28px">
 
-    <div class="faq-lp reveal">
-      <button class="faq-lp-btn" onclick="toggleFaq(0)">
-        <span>Preciso entender de tecnologia para usar?</span>
-        <span class="faq-lp-icon" id="fi0">+</span>
-      </button>
-      <div class="faq-lp-resp" id="fr0">
-        Não. Se você usa Instagram, você usa o Agenda. O cadastro leva 3 minutos e o onboarding te guia em cada passo. Zero conhecimento técnico necessário.
+      <div class="faq-item reveal">
+        <button class="faq-btn" onclick="toggleFaq(0)">
+          <span>Preciso entender de tecnologia para usar?</span>
+          <span class="faq-icon" id="fi0">+</span>
+        </button>
+        <div class="faq-resp" id="fr0">Não. Se você usa Instagram, você usa o Agenda. O cadastro leva 3 minutos e o onboarding te guia em cada passo. Zero conhecimento técnico necessário.</div>
       </div>
-    </div>
 
-    <div class="faq-lp reveal">
-      <button class="faq-lp-btn" onclick="toggleFaq(1)">
-        <span>Meu cliente precisa criar uma conta para agendar?</span>
-        <span class="faq-lp-icon" id="fi1">+</span>
-      </button>
-      <div class="faq-lp-resp" id="fr1">
-        Não. O cliente abre sua página, escolhe o serviço, o dia e o horário, informa o nome e o telefone — pronto. Sem cadastro, sem senha, sem atrito.
+      <div class="faq-item reveal">
+        <button class="faq-btn" onclick="toggleFaq(1)">
+          <span>Meu cliente precisa criar uma conta para agendar?</span>
+          <span class="faq-icon" id="fi1">+</span>
+        </button>
+        <div class="faq-resp" id="fr1">Não. O cliente abre sua página, escolhe o serviço, o dia e o horário, informa o nome e o telefone — pronto. Sem cadastro, sem senha, sem atrito.</div>
       </div>
-    </div>
 
-    <div class="faq-lp reveal">
-      <button class="faq-lp-btn" onclick="toggleFaq(2)">
-        <span>Posso cancelar quando quiser?</span>
-        <span class="faq-lp-icon" id="fi2">+</span>
-      </button>
-      <div class="faq-lp-resp" id="fr2">
-        Sim. Sem fidelidade, sem multa. Você cancela pelo painel e pronto. Seus dados ficam disponíveis para exportar antes de sair.
+      <div class="faq-item reveal">
+        <button class="faq-btn" onclick="toggleFaq(2)">
+          <span>Posso cancelar quando quiser?</span>
+          <span class="faq-icon" id="fi2">+</span>
+        </button>
+        <div class="faq-resp" id="fr2">Sim. Sem fidelidade, sem multa. Você cancela pelo painel e pronto. Seus dados ficam disponíveis para exportar antes de sair.</div>
       </div>
-    </div>
 
-    <div class="faq-lp reveal">
-      <button class="faq-lp-btn" onclick="toggleFaq(3)">
-        <span>Para qual tipo de profissional o Agenda foi feito?</span>
-        <span class="faq-lp-icon" id="fi3">+</span>
-      </button>
-      <div class="faq-lp-resp" id="fr3">
-        Para qualquer profissional que atende com hora marcada: cabelereiros, esteticistas, tatuadores, personal trainers, psicólogos, nutricionistas, dentistas e muito mais. Se você agenda horários, o Agenda é para você.
+      <div class="faq-item reveal">
+        <button class="faq-btn" onclick="toggleFaq(3)">
+          <span>Para qual tipo de profissional o Agenda foi feito?</span>
+          <span class="faq-icon" id="fi3">+</span>
+        </button>
+        <div class="faq-resp" id="fr3">Para qualquer profissional que atende com hora marcada: cabelereiros, esteticistas, tatuadores, personal trainers, psicólogos, nutricionistas, dentistas e muito mais. Se você agenda horários, o Agenda é para você.</div>
       </div>
-    </div>
 
-    <div class="faq-lp" style="border-bottom:1px solid var(--rule)"></div>
+    </div>
   </div>
-</div>
-</div>
+</section>
 
 <!-- CTA FINAL -->
-<div class="cta-final">
-  <div class="cta-final-glow"></div>
+<div class="cta-sec">
+  <div class="cta-glow"></div>
   <div style="position:relative;z-index:1">
-    <div class="cta-final-eyebrow reveal">— Pronto para começar</div>
-    <h2 class="cta-final-h2 reveal">Seu link te<br><em>espera.</em></h2>
-    <p class="cta-final-p reveal">Escolha agora antes que alguém do seu segmento pegue o endereço que você queria.</p>
-    <div class="cta-final-claim reveal">
-      <div class="claim-row" style="max-width:480px;margin:0 auto 8px">
+    <div class="cta-label reveal">— Pronto para começar</div>
+    <h2 class="cta-h2 reveal">Seu link te<br><strong>espera.</strong></h2>
+    <p class="cta-p reveal">Escolha agora antes que alguém do seu segmento pegue o endereço que você queria.</p>
+    <div class="cta-claim reveal">
+      <div class="claim-row">
         <span class="claim-prefix">agendatop.vercel.app/</span>
-        <input id="slugFinal" class="claim-input" type="text" placeholder="seu-negocio" autocomplete="off" spellcheck="false" maxlength="50">
+        <input id="slugFinal" class="claim-input" type="text" placeholder="meu-negocio" autocomplete="off" spellcheck="false" maxlength="50" aria-label="Escolha seu endereço">
       </div>
-      <div id="slugFinalStatus" class="slug-status" style="text-align:center"></div>
-      <div style="text-align:center;margin-top:16px">
-        <a id="finalCta" href="/cadastro.html" class="btn-hero">
-          Criar minha página grátis →
-        </a>
-      </div>
+      <div id="slugFinalStatus" class="slug-status" style="text-align:center;margin-top:8px;height:16px"></div>
     </div>
-    <div class="cta-final-disclaimer reveal">14 dias grátis · Sem cartão · Cancela quando quiser</div>
+    <div class="cta-btn-wrap reveal">
+      <a id="finalCta" href="/cadastro.html" class="btn-hero">Criar minha página grátis →</a>
+    </div>
+    <div class="cta-disclaimer reveal">14 dias grátis · Sem cartão · Cancela quando quiser</div>
   </div>
 </div>
 
@@ -539,18 +760,18 @@ body{background:#0A0908;color:#F0EDE8;font-family:var(--sans);-webkit-font-smoot
 const SUPA_URL = 'https://acldrisohnjfekjxgmoh.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFjbGRyaXNvaG5qZmVranhnbW9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1ODA1MzcsImV4cCI6MjA4OTE1NjUzN30.etojz12x1oVNvbW_fPeVpNx2OFuJ72C1YioFBlCLS2Y';
 
-// Reveal on scroll
+// ── Reveal on scroll ──────────────────────────────────────────────────────
 const _obs = new IntersectionObserver((entries) => {
   entries.forEach((e, i) => {
     if (e.isIntersecting) {
-      setTimeout(() => e.target.classList.add('visible'), i * 60);
+      setTimeout(() => e.target.classList.add('visible'), i * 55);
       _obs.unobserve(e.target);
     }
   });
-}, { threshold: 0.1 });
+}, { threshold: 0.08 });
 document.querySelectorAll('.reveal').forEach(el => _obs.observe(el));
 
-// Scroll suave para âncoras na nav
+// ── Smooth scroll for anchor links ───────────────────────────────────────
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
     e.preventDefault();
@@ -559,7 +780,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 });
 
-// Claim-link: sanitize + debounce + RPC
+// ── Slug checker ─────────────────────────────────────────────────────────
 function sanitizeSlug(v) {
   return v.toLowerCase()
     .normalize('NFD').replace(/[̀-ͯ]/g,'')
@@ -580,10 +801,10 @@ async function checkSlug(slug, statusEl) {
     });
     const ok = await r.json();
     if (ok === true) {
-      statusEl.textContent = '✓ disponível';
+      statusEl.textContent = '✓ agendatop.vercel.app/' + slug + ' está disponível';
       statusEl.className = 'slug-status ok';
     } else {
-      statusEl.textContent = '✗ já reservado';
+      statusEl.textContent = '✗ já reservado — tente outro nome';
       statusEl.className = 'slug-status taken';
     }
   } catch(_) { statusEl.textContent = ''; statusEl.className = 'slug-status'; }
@@ -608,16 +829,33 @@ function wireSlugInput(inputId, statusId, ctaId) {
 wireSlugInput('slugHero', 'slugHeroStatus', 'heroCta');
 wireSlugInput('slugFinal', 'slugFinalStatus', 'finalCta');
 
-// Plano toggle
+// ── Calculator ────────────────────────────────────────────────────────────
+const slider = document.getElementById('calcSlider');
+const calcMsgs = document.getElementById('calcMsgs');
+const calcHours = document.getElementById('calcHours');
+const calcClients = document.getElementById('calcClients');
+
+function updateCalc() {
+  const msgs = parseInt(slider.value, 10);
+  const hours = Math.round(msgs * 3 * 30 / 60);
+  const clients = Math.round(hours / 0.75);
+  calcMsgs.textContent = msgs;
+  calcHours.innerHTML = hours + ' <span>h</span>';
+  calcClients.innerHTML = clients + ' <span>clientes</span>';
+}
+slider.addEventListener('input', updateCalc);
+updateCalc();
+
+// ── Plans toggle ──────────────────────────────────────────────────────────
 function setCiclo(ciclo) {
-  document.querySelectorAll('[data-ciclo]').forEach(b => b.classList.toggle('active', b.dataset.ciclo === ciclo));
+  document.querySelectorAll('[data-ciclo]').forEach(b => b.classList.toggle('on', b.dataset.ciclo === ciclo));
   document.querySelectorAll('.preco-val').forEach(el => {
     el.textContent = ciclo === 'anual' ? el.dataset.anual : el.dataset.mensal;
   });
-  document.querySelectorAll('.plano-anual-info').forEach(el => {
+  document.querySelectorAll('.plan-annual').forEach(el => {
     el.style.display = ciclo === 'anual' ? 'block' : 'none';
   });
-  document.querySelectorAll('.plano-cta').forEach(a => {
+  document.querySelectorAll('.plan-cta').forEach(a => {
     try {
       const u = new URL(a.href, location.origin);
       if (ciclo === 'anual') u.searchParams.set('ciclo','anual');
@@ -628,18 +866,26 @@ function setCiclo(ciclo) {
 }
 window.setCiclo = setCiclo;
 
-// FAQ accordion
+// ── FAQ accordion ─────────────────────────────────────────────────────────
 function toggleFaq(i) {
-  const r = document.getElementById('fr' + i);
-  const ic = document.getElementById('fi' + i);
-  if (!r) return;
-  const open = r.style.display === 'block';
-  r.style.display = open ? 'none' : 'block';
-  ic.classList.toggle('open', !open);
+  const total = 4;
+  for (let j = 0; j < total; j++) {
+    const r = document.getElementById('fr' + j);
+    const ic = document.getElementById('fi' + j);
+    if (!r) continue;
+    if (j === i) {
+      const open = r.style.display === 'block';
+      r.style.display = open ? 'none' : 'block';
+      ic.classList.toggle('open', !open);
+    } else {
+      r.style.display = 'none';
+      ic.classList.remove('open');
+    }
+  }
 }
 window.toggleFaq = toggleFaq;
 
-// Depoimentos
+// ── Testimonials ──────────────────────────────────────────────────────────
 if (DEPOIMENTOS_REAIS.length > 0) {
   document.getElementById('depoSection').style.display = '';
   const list = document.getElementById('depoList');
@@ -649,28 +895,37 @@ if (DEPOIMENTOS_REAIS.length > 0) {
   list.querySelectorAll('.reveal').forEach(el => _obs.observe(el));
 }
 
-// Demo interativa
-function demoStep1(el, nome) {
-  document.getElementById('dSvcTitle').textContent = nome;
-  document.getElementById('dS0').classList.add('hidden');
-  document.getElementById('dS1').classList.remove('hidden');
+// ── Phone demo (5 steps) ──────────────────────────────────────────────────
+let phoneCurrentStep = 0;
+
+function phoneStep(step, svcName) {
+  document.getElementById('ps' + phoneCurrentStep).classList.add('hidden');
+  phoneCurrentStep = step;
+  document.getElementById('ps' + step).classList.remove('hidden');
+  // Update progress dots
+  for (let i = 0; i < 5; i++) {
+    const dot = document.getElementById('pd' + i);
+    if (dot) dot.classList.toggle('done', i <= step);
+  }
 }
-function demoBack() {
-  document.getElementById('dS1').classList.add('hidden');
-  document.getElementById('dS0').classList.remove('hidden');
+
+function phoneBack(toStep) {
+  phoneStep(toStep);
 }
-function demoStep2() {
-  document.getElementById('dS1').classList.add('hidden');
-  document.getElementById('dS2').classList.remove('hidden');
+
+function phoneRestart() {
+  document.getElementById('ps' + phoneCurrentStep).classList.add('hidden');
+  phoneCurrentStep = 0;
+  document.getElementById('ps0').classList.remove('hidden');
+  for (let i = 0; i < 5; i++) {
+    const dot = document.getElementById('pd' + i);
+    if (dot) dot.classList.toggle('done', i === 0);
+  }
 }
-function demoRestart() {
-  document.getElementById('dS2').classList.add('hidden');
-  document.getElementById('dS0').classList.remove('hidden');
-}
-window.demoStep1 = demoStep1;
-window.demoBack = demoBack;
-window.demoStep2 = demoStep2;
-window.demoRestart = demoRestart;
+
+window.phoneStep = phoneStep;
+window.phoneBack = phoneBack;
+window.phoneRestart = phoneRestart;
 </script>
 </body>
 </html>
