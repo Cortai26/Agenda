@@ -2825,7 +2825,13 @@
       <label class="ll" for="loginEmail">E-mail</label>
       <input class="li" type="email" id="loginEmail" placeholder="seu@email.com" autocomplete="email">
       <label class="ll" for="loginSenha">Senha</label>
-      <input class="li" type="password" id="loginSenha" placeholder="••••••••" autocomplete="current-password">
+      <div style="position:relative">
+        <input class="li" type="password" id="loginSenha" placeholder="••••••••" autocomplete="current-password" style="padding-right:44px">
+        <button type="button" title="Mostrar senha"
+          onclick="var i=document.getElementById('loginSenha');i.type=i.type==='password'?'text':'password';this.textContent=i.type==='password'?'👁':'🙈'"
+          style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:17px;line-height:1;padding:4px;opacity:.45;transition:opacity .15s"
+          onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.45'">👁</button>
+      </div>
       <button class="lbtn" id="btnLogin" type="button">Entrar</button>
       <button class="llink" id="btnEsqueci" type="button">Esqueci minha senha</button>
     </div>

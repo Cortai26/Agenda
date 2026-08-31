@@ -936,11 +936,17 @@ function enviarWhatsAppById(id){
     <div class="login-sub">Painel administrativo</div>
     <div class="fg">
       <label class="fl">E-mail</label>
-      <input class="fi" type="email" id="loginEmail" value="agenda.contato@gmail.com" autocomplete="username">
+      <input class="fi" type="email" id="loginEmail" value="cortai.contato@gmail.com" autocomplete="username">
     </div>
     <div class="fg">
       <label class="fl">Senha</label>
-      <input class="fi" type="password" id="loginSenha" autocomplete="current-password">
+      <div style="position:relative">
+        <input class="fi" type="password" id="loginSenha" autocomplete="current-password" style="padding-right:44px">
+        <button type="button" title="Mostrar senha"
+          onclick="var i=document.getElementById('loginSenha');i.type=i.type==='password'?'text':'password';this.textContent=i.type==='password'?'👁':'🙈'"
+          style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:17px;line-height:1;padding:4px;opacity:.55;transition:opacity .15s"
+          onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.55'">👁</button>
+      </div>
     </div>
     <div class="login-erro" id="loginErro"></div>
     <button class="btn-login" id="btnLogin">Entrar</button>
