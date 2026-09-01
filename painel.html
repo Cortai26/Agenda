@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="t-cream">
 
 <head>
   <meta charset="UTF-8">
@@ -14,10 +14,10 @@
   <meta name="theme-color" content="#E55A0C">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&family=Newsreader:ital,wght@0,400;1,400;1,600;1,700&family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/tokens.css?v=30">
   <link rel="stylesheet" href="/css/themes.css">
-  <script>try{var _t=localStorage.getItem('cortai_painel_tema')||'t-onyx';document.documentElement.classList.add(_t);}catch(e){document.documentElement.classList.add('t-onyx');}</script>
+  <script>/* tema cream fixo — não modifica a classe */</script>
   <style>
     /* ── RESET ── */
     * {
@@ -37,7 +37,7 @@
       --c-brand:      #E55A0C;
       --c-brand-text: #C04A08;
       --c-brand-dark: #9C3A06;
-      --font-heading: 'Inter', sans-serif;
+      --font-heading: 'Schibsted Grotesk', 'Inter', sans-serif;
       --font-mono:    'JetBrains Mono', monospace;
       --text-h1:      clamp(28px, 6vw, 48px);
       --text-h2:      clamp(20px, 4vw, 32px);
@@ -49,6 +49,12 @@
       --fw-subhead:   700;
       --fw-label:     600;
       --fw-body:      400;
+      /* Fallbacks para vars não definidas em todos os temas */
+      --surface:      var(--s1, #FFFFFF);
+      --sh-md:        var(--sh, 0 2px 8px rgba(0,0,0,.12));
+      --bottom-bg:    var(--topbar-bg, rgba(0,0,0,.9));
+      --red-border:   rgba(220,38,38,.2);
+      --amber-border: rgba(217,119,6,.25);
     }
 
     body {
@@ -396,10 +402,10 @@
 
     /* ── SIDEBAR (desktop) ── */
     .app-sidebar {
-      width: 220px;
+      width: var(--sidebar-w, 248px);
       flex-shrink: 0;
-      background: var(--bg-card);
-      border-right: 1px solid var(--sep);
+      background: var(--sidebar-bg, #17130F);
+      border-right: 1px solid var(--sidebar-border, rgba(255,255,255,.08));
       display: none;
       flex-direction: column;
       overflow-y: auto;
@@ -413,18 +419,19 @@
 
     .sb-logo {
       padding: 22px 18px 16px;
-      border-bottom: 1px solid var(--sep);
+      border-bottom: 1px solid var(--sidebar-border, rgba(255,255,255,.08));
       display: flex;
       align-items: center;
       gap: 10px
     }
 
     .sb-brand {
-      font-family: var(--font-brand);
-      font-weight: 900;
-      font-size: 14px;
-      letter-spacing: 2px;
-      color: var(--primary)
+      font-family: 'Newsreader', Georgia, serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 22px;
+      letter-spacing: -.01em;
+      color: rgba(255,255,255,.92)
     }
 
     .sb-nav {
@@ -440,11 +447,11 @@
       align-items: center;
       gap: 10px;
       padding: 9px 12px;
-      border-radius: var(--r-md);
-      font-family: var(--font-brand);
+      border-radius: var(--r-md, 10px);
+      font-family: var(--font-brand, 'Schibsted Grotesk', sans-serif);
       font-size: 13px;
-      font-weight: 700;
-      color: var(--text-2);
+      font-weight: 600;
+      color: var(--sidebar-text, rgba(255,255,255,.62));
       cursor: pointer;
       background: transparent;
       border: none;
@@ -454,13 +461,13 @@
     }
 
     .sb-item:hover {
-      color: var(--text);
-      background: var(--surface-2)
+      color: var(--sidebar-text-hover, rgba(255,255,255,.92));
+      background: rgba(255,255,255,.055)
     }
 
     .sb-item.on {
-      color: var(--primary);
-      background: var(--primary-light)
+      color: var(--sidebar-active-color, #E55A0C);
+      background: var(--sidebar-active-bg, rgba(229,90,12,.16))
     }
 
     .sb-icon {
@@ -472,7 +479,7 @@
 
     .sb-footer {
       padding: 10px;
-      border-top: 1px solid var(--sep)
+      border-top: 1px solid var(--sidebar-border, rgba(255,255,255,.08))
     }
 
     .sb-user {
@@ -480,20 +487,20 @@
       align-items: center;
       gap: 9px;
       padding: 10px 12px;
-      border-radius: var(--r-md);
+      border-radius: var(--r-md, 10px);
       cursor: pointer;
-      background: var(--surface-2);
+      background: rgba(255,255,255,.07);
       transition: .15s;
     }
 
     .sb-user:hover {
-      background: var(--surface-3)
+      background: rgba(255,255,255,.12)
     }
 
     .sb-nome {
       font-size: 12px;
       font-weight: 700;
-      color: var(--text-2);
+      color: rgba(255,255,255,.82);
       flex: 1;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -502,7 +509,7 @@
 
     .sb-plano {
       font-size: 10px;
-      color: var(--text-3)
+      color: rgba(255,255,255,.42)
     }
 
     .sb-av {
@@ -2862,24 +2869,23 @@
     <aside class="app-sidebar">
       <a class="sb-logo" href="#" onclick="tabSidebar('agenda',document.querySelector('[data-tab=agenda]'));return false" style="text-decoration:none;cursor:pointer">
         <img src="/brand/agenda-mark-small.svg" alt="" width="28" height="28" style="border-radius:6px;display:block;flex-shrink:0">
-        <span class="sb-brand" style="font-family:'Instrument Serif',Georgia,serif;font-style:italic;letter-spacing:-.01em">agenda</span>
+        <span class="sb-brand">Agenda.</span>
       </a>
       <nav class="sb-nav">
-        <button class="sb-item tnav on" data-tab="agenda" onclick="tabSidebar('agenda',this)"> <span
-            class="sb-icon"><img src="/brand/agenda-mark-small.svg" alt="" width="20" height="20" style="border-radius:5px;display:block"></span>Agenda</button>
-        <button class="sb-item tnav" data-tab="clientes" onclick="tabSidebar('clientes',this)"> <span
-            class="sb-icon">👤</span>Clientes</button>
-        <button class="sb-item tnav" data-tab="servicos" onclick="tabSidebar('servicos',this)"> <span
-            class="sb-icon">🛎️</span>Serviços</button>
-        <button class="sb-item tnav" data-tab="equipe" onclick="tabSidebar('equipe',this)"> <span
-            class="sb-icon">👥</span>Equipe</button>
-        <button class="sb-item tnav tab-plano-pro" data-tab="campanhas" onclick="tabSidebar('campanhas',this)"><span
-            class="sb-icon">📣</span>Campanhas</button>
-        <button class="sb-item tnav tab-plano-pro" data-tab="analytics" onclick="tabSidebar('analytics',this)"><span
-            class="sb-icon">📊</span>Analytics</button>
-        <button class="sb-item tnav" data-tab="pagina" onclick="tabSidebar('pagina',this)"> <span
-            class="sb-icon">⚙️</span>Configurações</button>
-
+        <button class="sb-item tnav on" data-tab="agenda" onclick="tabSidebar('agenda',this)">
+          <span class="sb-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>Agenda</button>
+        <button class="sb-item tnav" data-tab="clientes" onclick="tabSidebar('clientes',this)">
+          <span class="sb-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>Clientes</button>
+        <button class="sb-item tnav" data-tab="servicos" onclick="tabSidebar('servicos',this)">
+          <span class="sb-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>Serviços</button>
+        <button class="sb-item tnav" data-tab="equipe" onclick="tabSidebar('equipe',this)">
+          <span class="sb-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0 1 12 0v2"/></svg></span>Equipe</button>
+        <button class="sb-item tnav tab-plano-pro" data-tab="campanhas" onclick="tabSidebar('campanhas',this)">
+          <span class="sb-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg></span>Campanhas</button>
+        <button class="sb-item tnav tab-plano-pro" data-tab="analytics" onclick="tabSidebar('analytics',this)">
+          <span class="sb-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>Analytics</button>
+        <button class="sb-item tnav" data-tab="pagina" onclick="tabSidebar('pagina',this)">
+          <span class="sb-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>Configurações</button>
       </nav>
     </aside>
 
@@ -2936,18 +2942,18 @@
 
       <!-- BOTTOM NAV (mobile) -->
       <nav class="app-bottom">
-        <button class="bnav-item tnav on" data-tab="agenda" onclick="tabBottom('agenda',this)"> <span
-            class="bnav-icon"><img src="/brand/agenda-mark-small.svg" alt="" width="22" height="22" style="border-radius:5px;display:block"></span>Agenda</button>
-        <button class="bnav-item tnav" data-tab="clientes" onclick="tabBottom('clientes',this)"> <span
-            class="bnav-icon">👤</span>Clientes</button>
-        <button class="bnav-item tnav" data-tab="servicos" onclick="tabBottom('servicos',this)"> <span
-            class="bnav-icon">🛎️</span>Serviços</button>
-        <button class="bnav-item tnav" data-tab="equipe" onclick="tabBottom('equipe',this)"> <span
-            class="bnav-icon">👥</span>Equipe</button>
-        <button class="bnav-item tnav tab-plano-pro" data-tab="campanhas" onclick="tabBottom('campanhas',this)"> <span
-            class="bnav-icon">📣</span>Camp.</button>
-        <button class="bnav-item tnav" data-tab="pagina" onclick="tabBottom('pagina',this)"> <span
-            class="bnav-icon">⚙️</span>Config</button>
+        <button class="bnav-item tnav on" data-tab="agenda" onclick="tabBottom('agenda',this)">
+          <span class="bnav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>Agenda</button>
+        <button class="bnav-item tnav" data-tab="clientes" onclick="tabBottom('clientes',this)">
+          <span class="bnav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></span>Clientes</button>
+        <button class="bnav-item tnav" data-tab="servicos" onclick="tabBottom('servicos',this)">
+          <span class="bnav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>Serviços</button>
+        <button class="bnav-item tnav" data-tab="equipe" onclick="tabBottom('equipe',this)">
+          <span class="bnav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0 1 12 0v2"/></svg></span>Equipe</button>
+        <button class="bnav-item tnav tab-plano-pro" data-tab="campanhas" onclick="tabBottom('campanhas',this)">
+          <span class="bnav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg></span>Camp.</button>
+        <button class="bnav-item tnav" data-tab="pagina" onclick="tabBottom('pagina',this)">
+          <span class="bnav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>Config</button>
       </nav>
 
     </div><!-- /app-main -->
