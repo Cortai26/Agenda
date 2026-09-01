@@ -18,36 +18,32 @@ async function renderAnalytics(){
 
     var html='<div class="wrap">';
 
-    // Period selector
-    html+='<div style="display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap" id="periodoSelector"></div>';
+    // Period selector — pill style
+    html+='<div id="periodoSelector" style="display:flex;gap:4px;background:#fff;border:1px solid rgba(23,19,15,.1);border-radius:999px;padding:5px;width:fit-content;margin-bottom:20px"></div>';
 
-    // KPIs
-    html+='<div class="analytics-grid">';
-    html+='<div class="akpi"><div class="akpi-n">'+(data.total_agendamentos||0)+'</div><div class="akpi-l">Agendamentos</div></div>';
-    html+='<div class="akpi"><div class="akpi-n">'+formatPrice(data.faturamento_total||0)+'</div><div class="akpi-l">Faturamento</div></div>';
-    html+='<div class="akpi"><div class="akpi-n">'+(data.novos_clientes||0)+'</div><div class="akpi-l">Clientes novos</div></div>';
-    html+='<div class="akpi"><div class="akpi-n">'+Math.round(data.taxa_conclusao||0)+'%</div><div class="akpi-l">Taxa conclusão</div></div>';
+    // KPIs — grid cream style
+    var taxa=Math.round(data.taxa_conclusao||0);
+    html+='<div class="metrics">';
+    html+='<div class="mc"><div class="mc-l">Agendamentos</div><div class="mc-n">'+(data.total_agendamentos||0)+'</div></div>';
+    html+='<div class="mc"><div class="mc-l">Faturamento</div><div class="mc-n">'+formatPrice(data.faturamento_total||0)+'</div></div>';
+    html+='<div class="mc"><div class="mc-l">Clientes novos</div><div class="mc-n">'+(data.novos_clientes||0)+'</div></div>';
+    html+='<div class="mc"><div class="mc-l">Taxa de conclusão</div><div class="mc-n" style="color:'+(taxa>=54?'#1E7A46':'#17130F')+'">'+taxa+'%</div></div>';
     html+='</div>';
-
-    // Ticket médio
-    if(data.ticket_medio){
-      html+='<div class="speech-box">🎯 Ticket médio: <strong>'+formatPrice(data.ticket_medio)+'</strong></div>';
-    }
 
     // Serviços mais pedidos
     if(data.servicos_top&&data.servicos_top.length>0){
-      html+='<div class="lista" style="margin-bottom:12px">';
-      html+='<div class="lista-hdr"><h3>✂️ Serviços mais pedidos</h3></div>';
+      html+='<div style="background:#fff;border:1px solid rgba(23,19,15,.08);border-radius:20px;overflow:hidden;margin-top:18px">'+
+        '<div style="padding:20px 24px;border-bottom:1px solid rgba(23,19,15,.08);font-size:17px;font-weight:700;letter-spacing:-.02em;color:#17130F">Serviços mais pedidos</div>';
       data.servicos_top.forEach(function(s){
-        html+='<div class="ag-card" style="flex-direction:column;gap:4px">'+
-          '<div style="display:flex;justify-content:space-between;width:100%">'+
-          '<span style="font-size:13px;font-weight:700;color:var(--text)">'+esc(s.nome||s.servico_nome||'—')+'</span>'+
-          '<span style="font-size:13px;font-weight:800;color:var(--primary)">'+formatPrice(s.faturamento||0)+'</span>'+
+        html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(23,19,15,.07)">'+
+          '<div>'+
+            '<div style="font-size:15px;font-weight:700;color:#17130F">'+esc(s.nome||s.servico_nome||'—')+'</div>'+
+            '<div style="font-size:12.5px;color:#8A8078">'+(s.total||s.quantidade||0)+' atendimentos</div>'+
           '</div>'+
-          '<div style="font-size:11px;color:var(--text-3)">'+(s.total||s.quantidade||0)+' atendimentos</div>'+
-          '</div>';
+          '<span style="font-size:15.5px;font-weight:700;color:#E55A0C">'+formatPrice(s.faturamento||0)+'</span>'+
+        '</div>';
       });
-      html+='</div>';
+      html+='</div></div>';
     }
 
     // Origem das visitas
@@ -60,90 +56,94 @@ async function renderAnalytics(){
         prof_link:{label:'Link profissional',icon:'✂️'},
         outros:{label:'Outros',icon:'🌐'}
       };
-      html+='<div class="lista" style="margin-bottom:12px">';
-      html+='<div class="lista-hdr"><h3>🔗 Origem das visitas</h3></div>';
-      html+='<div style="padding:4px 16px 14px">';
+      html+='<div style="background:#fff;border:1px solid rgba(23,19,15,.08);border-radius:20px;overflow:hidden;margin-top:18px">'+
+        '<div style="padding:20px 24px;border-bottom:1px solid rgba(23,19,15,.08);font-size:17px;font-weight:700;letter-spacing:-.02em;color:#17130F">Origem das visitas</div>'+
+        '<div style="padding:14px 24px">';
       Object.entries(data.por_fonte).sort(function(a,b){return b[1]-a[1];}).forEach(function(kv){
         var fonte=kv[0], cnt=kv[1];
         var pct=totalF>0?Math.round(cnt/totalF*100):0;
         var cfg=fonteConf[fonte]||{label:fonte,icon:'?'};
-        html+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:9px">'+
+        html+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">'+
           '<div style="font-size:16px;width:22px;text-align:center">'+cfg.icon+'</div>'+
-          '<div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:3px">'+
-          '<span style="font-size:13px;font-weight:700;color:var(--text)">'+cfg.label+'</span>'+
-          '<span style="font-size:13px;font-weight:800;color:var(--primary)">'+cnt+' <span style="font-size:11px;color:var(--text-3)">('+pct+'%)</span></span>'+
-          '</div><div style="height:4px;background:var(--sep);border-radius:2px">'+
-          '<div style="height:4px;background:var(--primary);border-radius:2px;width:'+pct+'%"></div></div></div></div>';
+          '<div style="flex:1">'+
+            '<div style="display:flex;justify-content:space-between;margin-bottom:4px">'+
+              '<span style="font-size:14px;font-weight:700;color:#17130F">'+cfg.label+'</span>'+
+              '<span style="font-size:14px;font-weight:700;color:#E55A0C">'+cnt+' <span style="font-size:11.5px;color:#8A8078">('+pct+'%)</span></span>'+
+            '</div>'+
+            '<div style="height:4px;background:rgba(23,19,15,.08);border-radius:2px">'+
+              '<div style="height:4px;background:#E55A0C;border-radius:2px;width:'+pct+'%;transition:width .4s"></div>'+
+            '</div>'+
+          '</div>'+
+        '</div>';
       });
       html+='</div></div>';
     }
 
-    /* ── GRÁFICO: por dia da semana ── */
-    (function(){
-      // Aggregate agendamentos por dia da semana do período
+    /* ── GRID: gráfico semana + diagnóstico lado a lado ── */
+    html+='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin-top:18px">';
+
+    /* Gráfico por dia da semana */
+    if(data.por_dia&&Array.isArray(data.por_dia)&&data.por_dia.length>0){
       var semLabels=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
       var counts=[0,0,0,0,0,0,0];
-      // data.servicos_top doesn't have weekday breakdown — fetch raw for period
-      // Use por_dia if available, otherwise skip
-      if(data.por_dia&&Array.isArray(data.por_dia)){
-        data.por_dia.forEach(function(d){
-          var dt=new Date(d.data+'T12:00:00');
-          var wd=dt.getDay();
-          counts[wd]+=(d.total||d.count||1);
-        });
-        var maxC=Math.max.apply(null,counts)||1;
-        var bars='<div class="bar-chart">';
-        counts.forEach(function(c,i){
-          var h=Math.round((c/maxC)*64);
-          bars+=
-            '<div class="bar-col">'+
-              '<div class="bar-day-val">'+(c||'')+'</div>'+
-              '<div class="bar-fill" style="height:'+h+'px;background:'+(c===maxC?'#E55A0C':'rgba(229,90,12,.35)')+'"></div>'+
-              '<div class="bar-day-label">'+semLabels[i]+'</div>'+
-            '</div>';
-        });
-        bars+='</div>';
-        var topDia=semLabels[counts.indexOf(Math.max.apply(null,counts))];
-        html+='<div class="diag-card">'+
-          '<div class="diag-label">Por dia da semana</div>'+
-          '<div class="diag-headline">Mais cheio: '+topDia+'</div>'+
-          '<div class="diag-sub">Pico de demanda identificado — considere ofertar mais slots nesse dia.</div>'+
-          bars+
+      data.por_dia.forEach(function(d){
+        var dt=new Date(d.data+'T12:00:00');
+        counts[dt.getDay()]+=(d.total||d.count||1);
+      });
+      var maxC=Math.max.apply(null,counts)||1;
+      var topIdx=counts.indexOf(maxC);
+      var lowIdx=counts.indexOf(Math.min.apply(null,counts.filter(function(c){return c>0;}))||0);
+      var bars='<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:10px;align-items:end;height:160px">';
+      counts.forEach(function(c,i){
+        var isPeak=i===topIdx;
+        var pct=Math.round((c/maxC)*100);
+        bars+='<div style="display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;gap:6px">'+
+          '<div style="font-size:10px;color:#8A8078;font-weight:600">'+(c||'')+'</div>'+
+          '<div style="width:100%;border-radius:8px 8px 3px 3px;background:'+(isPeak?'#E55A0C':'rgba(23,19,15,.12)')+';height:'+pct+'%;min-height:4px;transition:height .5s '+(i*.05)+'s"></div>'+
+          '<div style="font-size:12px;font-weight:700;color:#8A8078">'+semLabels[i]+'</div>'+
         '</div>';
-      }
-
-      /* ── Diagnóstico de ocupação ── */
-      var taxa=Math.round(data.taxa_conclusao||0);
-      var benchmark=54;
-      var diff=taxa-benchmark;
-      var statusTxt=diff>0?'acima da média do setor':'abaixo da média do setor';
-      var projetado=data.faturamento_total&&_analyticsDias>0?Math.round(data.faturamento_total/(_analyticsDias/30)):0;
-      html+='<div class="diag-card">'+
-        '<div class="diag-label">Diagnóstico</div>'+
-        '<div class="diag-headline">'+taxa+'% conclusão</div>'+
-        '<div class="diag-sub">'+
-          (diff>=0?'+'+(diff):''+diff)+'pp '+statusTxt+' (ref. '+benchmark+'%). '+
-          (projetado>0?'Projeção mensal: '+formatPrice(projetado)+'.':'')+
-        '</div>'+
-        '<div style="display:flex;align-items:center;gap:8px;margin-top:6px">'+
-          '<div style="flex:1;height:8px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden">'+
-            '<div style="width:'+Math.min(taxa,100)+'%;height:100%;background:'+(taxa>=benchmark?'#1E7A46':'#E55A0C')+';border-radius:99px"></div>'+
-          '</div>'+
-          '<div style="font-size:11px;font-weight:700;color:rgba(251,247,241,.55);white-space:nowrap">ref. '+benchmark+'%</div>'+
-        '</div>'+
+      });
+      bars+='</div>';
+      html+='<div style="background:#fff;border:1px solid rgba(23,19,15,.08);border-radius:20px;padding:24px">'+
+        '<div style="font-size:17px;font-weight:700;letter-spacing:-.02em;color:#17130F">Ocupação por dia da semana</div>'+
+        '<div style="font-size:13.5px;color:#8A8078;margin:4px 0 20px">'+semLabels[topIdx]+' é seu dia mais cheio.</div>'+
+        bars+
       '</div>';
-    })();
+    }
+
+    /* Diagnóstico — dark card com CTA */
+    var benchmark=54;
+    var diff=taxa-benchmark;
+    var projetado=data.faturamento_total&&_analyticsDias>0?Math.round(data.faturamento_total/(_analyticsDias/30)):0;
+    html+='<div style="background:#17130F;color:#FBF7F1;border-radius:20px;padding:24px;display:flex;flex-direction:column">'+
+      '<div style="font-size:11.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#C99A7A;margin-bottom:10px">→ Diagnóstico</div>'+
+      '<div style="font-size:23px;font-weight:700;letter-spacing:-.025em;line-height:1.2;margin-bottom:12px">'+
+        'Sua agenda está <span style="font-family:Newsreader,serif;font-style:italic;font-weight:400;color:#F79355">'+taxa+'% cheia.</span>'+
+      '</div>'+
+      '<div style="font-size:15px;line-height:1.55;color:#C4B8AC;flex:1">'+
+        'Com a ocupação média do seu segmento ('+benchmark+'%), '+
+        (projetado>0?'seu faturamento no mês seria de <b style="color:#FBF7F1">'+formatPrice(projetado)+'</b>. ':'')+
+        'A diferença não está no preço, está nos horários vazios.'+
+      '</div>'+
+      '<div style="margin-top:20px;display:flex;flex-direction:column;gap:9px">'+
+        '<button onclick="copiarLink()" style="border:none;cursor:pointer;background:#E55A0C;color:#fff;font-size:14.5px;font-weight:700;padding:14px;border-radius:11px;font-family:inherit">Divulgar meu link agora</button>'+
+        '<button onclick="irSecao(\'campanhas\')" style="border:1.5px solid rgba(251,247,241,.25);cursor:pointer;background:transparent;color:#FBF7F1;font-size:14.5px;font-weight:700;padding:14px;border-radius:11px;font-family:inherit">Criar promoção</button>'+
+      '</div>'+
+    '</div>';
+
+    html+='</div>'; // grid
 
     html+='</div>'; // wrap
     el.innerHTML=html;
 
-    // Period selector buttons
+    // Period selector — pill style
     var sel=document.getElementById('periodoSelector');
     if(sel){
-      [7,15,30,60].forEach(function(d){
+      [7,30,90].forEach(function(d){
+        var isActive=d===_analyticsDias;
         var btn=document.createElement('button');
-        btn.textContent=d+'d';
-        btn.style.cssText='padding:5px 10px;border-radius:8px;border:1px solid var(--sep);font-size:12px;font-weight:700;cursor:pointer;background:'+(d===_analyticsDias?'var(--primary)':'var(--surface-2)')+';color:'+(d===_analyticsDias?'#fff':'var(--text-2)')+'';
+        btn.textContent=d+' dias';
+        btn.style.cssText='border:none;cursor:pointer;border-radius:999px;padding:9px 16px;font-size:13.5px;font-weight:700;font-family:inherit;transition:.15s;background:'+(isActive?'#17130F':'transparent')+';color:'+(isActive?'#FBF7F1':'#6B625A');
         btn.onclick=function(){mudarPeriodo(d);};
         sel.appendChild(btn);
       });

@@ -108,50 +108,68 @@ async function renderAgenda(){
   var _comPct=_profAtual&&_profAtual.comissao_pct!=null?_profAtual.comissao_pct:null;
   var _fatCom=_comPct!==null?Math.round(fat*_comPct/100):null;
   var _fatMesCom=_comPct!==null?Math.round(_fatMes*_comPct/100):null;
-  html+='<div class="metrics">';
-  html+='<div class="mc mc-L"><div class="mc-n">'+ativos.length+'</div><div class="mc-l">Hoje</div></div>';
-  html+='<div class="mc mc-V"><div class="mc-n">'+formatPrice(fat)+'</div><div class="mc-l">Faturamento hoje</div></div>';
-  if(_fatCom!==null){
-    html+='<div class="mc" style="background:var(--VD-bg,rgba(45,106,79,.1))"><div class="mc-n" style="color:var(--VD)">'+formatPrice(_fatCom)+'</div><div class="mc-l" style="color:var(--VD)">Comissão hoje ('+_comPct+'%)</div></div>';
-  }
-  html+='<div class="mc mc-A mc-mes"><div class="mc-n">'+formatPrice(_fatMes)+'</div><div class="mc-l">Este mês'+((_profFiltro&&_profAtual)?' · '+_profAtual.nome.split(' ')[0]:'')+'</div></div>';
-  if(_fatMesCom!==null){
-    html+='<div class="mc" style="background:var(--VD-bg,rgba(45,106,79,.1))"><div class="mc-n" style="color:var(--VD)">'+formatPrice(_fatMesCom)+'</div><div class="mc-l" style="color:var(--VD)">Comissão mês ('+_comPct+'%)</div></div>';
-  }
-  html+='</div>';
-
-  /* ── INSIGHT: "Deixando na mesa" ── */
+  /* ── Calcula "Deixando na mesa" para incluir no grid de métricas ── */
+  var _lossCard='';
   (function(){
     var wd=hoje().getDay();
     var horario=S&&S.horario?S.horario:{};
     var slot=horario[wd]||(typeof horario==='object'?Object.values(horario).find(function(v){return v&&v.ini;}):null);
-    if(!slot||!slot.ini||!slot.fim) return; // fechado hoje
+    if(!slot||!slot.ini||!slot.fim) return;
     var toMin=function(t){var p=t.split(':');return parseInt(p[0])*60+parseInt(p[1]);};
-    var abertura=toMin(slot.ini), fechamento=toMin(slot.fim);
-    var totalMin=fechamento-abertura;
+    var totalMin=toMin(slot.fim)-toMin(slot.ini);
     if(totalMin<=0) return;
-    // Avg duration: use duracao from appointments or default 60 min
     var avgDur=60;
     var withDur=agsHoje.filter(function(a){return a.duracao&&a.duracao>0;});
     if(withDur.length>0) avgDur=Math.round(withDur.reduce(function(s,a){return s+a.duracao;},0)/withDur.length);
-    var totalSlots=Math.floor(totalMin/avgDur);
-    var livres=Math.max(0,totalSlots-ativos.length);
-    if(livres===0) return; // agenda cheia — não mostrar
+    var livres=Math.max(0,Math.floor(totalMin/avgDur)-ativos.length);
+    if(livres===0) return;
     var ticket=ativos.length>0?Math.round(fat/ativos.length):0;
-    if(ticket===0&&window._servicos&&window._servicos.length>0){
+    if(!ticket&&window._servicos&&window._servicos.length>0)
       ticket=Math.round(window._servicos.reduce(function(s,sv){return s+(sv.preco||0);},0)/window._servicos.length);
-    }
-    if(ticket===0) return;
-    var potencial=livres*ticket;
-    html+='<div class="mc-dark" style="border-radius:12px;padding:16px 18px;margin:0 16px 12px;display:flex;justify-content:space-between;align-items:center;gap:12px">'+
-      '<div>'+
-        '<div style="font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#C99A7A;margin-bottom:6px">Deixando na mesa</div>'+
-        '<div style="font-size:22px;font-weight:800;line-height:1">'+formatPrice(potencial)+'</div>'+
-        '<div class="mc-sub">'+livres+' horário'+(livres!==1?'s':'')+' livre'+(livres!==1?'s':'')+' × ticket médio '+formatPrice(ticket)+'</div>'+
-      '</div>'+
-      '<button onclick="abrirManual()" style="border:none;cursor:pointer;background:#E55A0C;color:#fff;font-size:13px;font-weight:700;padding:10px 14px;border-radius:9px;font-family:inherit;white-space:nowrap">+ Horário</button>'+
-    '</div>';
+    if(!ticket) return;
+    var _mes=MESES[hoje().getMonth()];
+    _lossCard=
+      '<div class="mc mc-dark" onclick="abrirManual()" style="cursor:pointer">'+
+        '<div class="mc-l">Deixando na mesa</div>'+
+        '<div class="mc-n">'+formatPrice(livres*ticket)+'</div>'+
+        '<div class="mc-sub">'+livres+' livre'+(livres!==1?'s':'')+' × ticket '+formatPrice(ticket)+'</div>'+
+      '</div>';
   })();
+
+  html+='<div class="metrics">';
+  html+='<div class="mc mc-L">'+
+    '<div class="mc-l">Hoje</div>'+
+    '<div class="mc-n">'+ativos.length+'</div>'+
+    '<div class="mc-sub-txt">agendamento'+(ativos.length!==1?'s':'')+' confirmado'+(ativos.length!==1?'s':'')+'</div>'+
+  '</div>';
+  html+='<div class="mc mc-V">'+
+    '<div class="mc-l">Previsto hoje</div>'+
+    '<div class="mc-n">'+formatPrice(fat)+'</div>'+
+    '<div class="mc-sub-txt">a receber até o fim do dia</div>'+
+  '</div>';
+  if(_fatCom!==null){
+    html+='<div class="mc" style="background:var(--green-bg,rgba(30,122,70,.1))">'+
+      '<div class="mc-l" style="color:var(--green,#1E7A46)">Comissão hoje</div>'+
+      '<div class="mc-n" style="color:var(--green,#1E7A46)">'+formatPrice(_fatCom)+'</div>'+
+      '<div class="mc-sub-txt">'+_comPct+'% do faturamento</div>'+
+    '</div>';
+  }
+  if(_lossCard){
+    html+=_lossCard;
+  }
+  html+='<div class="mc mc-A mc-mes">'+
+    '<div class="mc-l">'+((_profFiltro&&_profAtual)?_profAtual.nome.split(' ')[0]+' — ':'')+MESES[_m-1]+' '+_y+'</div>'+
+    '<div class="mc-n">'+formatPrice(_fatMes)+'</div>'+
+    '<div class="mc-sub-txt">faturamento registrado</div>'+
+  '</div>';
+  if(_fatMesCom!==null){
+    html+='<div class="mc" style="background:var(--green-bg,rgba(30,122,70,.1))">'+
+      '<div class="mc-l" style="color:var(--green,#1E7A46)">Comissão mês</div>'+
+      '<div class="mc-n" style="color:var(--green,#1E7A46)">'+formatPrice(_fatMesCom)+'</div>'+
+      '<div class="mc-sub-txt">'+_comPct+'% do mês</div>'+
+    '</div>';
+  }
+  html+='</div>';
 
   /* HOJE — lista colapsável */
   var _hojeLbl='Hoje · '+parseInt(ds.split('-')[2])+' de '+MESES[hoje().getMonth()]+
@@ -159,48 +177,89 @@ async function renderAgenda(){
   var _hC=localStorage.getItem('sec-hoje-collapsed')==='1'; // aberto por padrão
   html+=_secGroup('sec-hoje',_hojeLbl,_hC,'<div class="lista">'+renderListaAgs(agsHoje,true,'agenda')+'</div>');
 
-  /* ── TIMELINE "Seu dia" ── */
+  /* ── TIMELINE "Seu dia" + "Próximo Passo" ── */
   (function(){
     var wd=hoje().getDay();
     var horario=S&&S.horario?S.horario:{};
     var slot=horario[wd]||(typeof horario==='object'?Object.values(horario).find(function(v){return v&&v.ini;}):null);
-    if(!slot||!slot.ini||!slot.fim||ativos.length===0) return;
+    if(!slot||!slot.ini||!slot.fim) return;
     var toMin=function(t){var p=t.split(':');return parseInt(p[0])*60+parseInt(p[1]);};
     var fromMin=function(m){return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');};
     var abertura=toMin(slot.ini), fechamento=toMin(slot.fim);
+    var avgDur=60;
+    var withDur=agsHoje.filter(function(a){return a.duracao&&a.duracao>0;});
+    if(withDur.length>0) avgDur=Math.round(withDur.reduce(function(s,a){return s+a.duracao;},0)/withDur.length);
+    var totalSlots=Math.floor((fechamento-abertura)/avgDur);
+    var livres=Math.max(0,totalSlots-ativos.length);
+
     // Build booked intervals
     var booked=[];
     ativos.forEach(function(a){
       var st=toMin(a.hora.substring(0,5));
-      var dur=a.duracao&&a.duracao>0?a.duracao:60;
-      booked.push({start:st,end:st+dur,nome:a.cliente_nome,srv:a.servico_nome||''});
+      var dur=a.duracao&&a.duracao>0?a.duracao:avgDur;
+      booked.push({start:st,end:st+dur,nome:a.cliente_nome,srv:a.servico_nome||'',preco:a.servico_preco||0});
     });
     booked.sort(function(a,b){return a.start-b.start;});
-    // Build timeline rows (hourly)
+
+    // Build timeline rows
     var rows='<div class="timeline-wrap">';
     var cur=abertura;
     booked.forEach(function(b){
       if(b.start>cur){
         rows+='<div class="timeline-row">'+
           '<div class="timeline-hour">'+fromMin(cur)+'</div>'+
-          '<div class="timeline-bar timeline-free"><div class="timeline-dot" style="background:var(--bd,rgba(23,19,15,.18))"></div>livre</div>'+
+          '<div class="timeline-bar timeline-free">Livre</div>'+
         '</div>';
       }
       rows+='<div class="timeline-row">'+
         '<div class="timeline-hour">'+fromMin(b.start)+'</div>'+
-        '<div class="timeline-bar timeline-busy"><div class="timeline-dot" style="background:#E55A0C"></div><span>'+esc(b.nome)+'</span><span style="font-size:11px;color:var(--tx3,var(--text-3));font-weight:400;margin-left:auto">'+esc(b.srv)+'</span></div>'+
+        '<div class="timeline-bar timeline-busy" style="justify-content:space-between">'+
+          '<span><span style="display:block;font-size:14.5px;font-weight:700">'+esc(b.nome)+(b.srv?' · '+esc(b.srv):'')+'</span>'+
+          '<span style="font-size:12.5px;color:#8A8078">'+avgDur+' min · confirmado</span></span>'+
+          (b.preco?'<span style="font-size:14.5px;font-weight:700;color:#E55A0C">'+formatPrice(b.preco)+'</span>':'')+
+        '</div>'+
       '</div>';
       cur=b.end;
     });
     if(cur<fechamento){
       rows+='<div class="timeline-row">'+
         '<div class="timeline-hour">'+fromMin(cur)+'</div>'+
-        '<div class="timeline-bar timeline-free"><div class="timeline-dot" style="background:var(--bd,rgba(23,19,15,.18))"></div>livre até '+fromMin(fechamento)+'</div>'+
+        '<div class="timeline-bar timeline-free">Livre</div>'+
+      '</div>';
+    }
+    // CTA footer dentro do card "Seu dia"
+    if(livres>0){
+      rows+='<div style="margin-top:18px;padding:18px 22px 20px;border-top:1px solid rgba(23,19,15,.08);display:flex;align-items:center;gap:14px;flex-wrap:wrap">'+
+        '<div style="flex:1;min-width:200px;font-size:14px;color:#5C544C;line-height:1.5">Horário vazio não volta. Seu link na bio do Instagram enche a agenda sozinho.</div>'+
+        '<button onclick="copiarLink()" style="border:none;cursor:pointer;background:#17130F;color:#FBF7F1;font-size:13.5px;font-weight:700;padding:11px 16px;border-radius:10px;font-family:inherit">Copiar link</button>'+
       '</div>';
     }
     rows+='</div>';
+
     var _secC=localStorage.getItem('sec-timeline-collapsed')==='1';
-    html+=_secGroup('sec-timeline','Seu dia — cronograma',_secC,rows);
+    var _lbl='Seu dia <span style="font-size:13px;font-weight:400;color:#8A8078;margin-left:8px">'+livres+' de '+totalSlots+' horário'+(totalSlots!==1?'s':'')+' livre'+(livres!==1?'s':'')+'</span>';
+    html+=_secGroup('sec-timeline',_lbl,_secC,rows);
+
+    /* "Próximo Passo — Três coisas hoje" */
+    var _acoes=[];
+    if(!S.logo_url&&!S.foto_url) _acoes.push({txt:'Adicionar fotos do trabalho à página',acao:'Enviar',fn:"irSecao('pagina')"});
+    if(!S.pix_key) _acoes.push({txt:'Ativar sinal antecipado no PIX',acao:'Ativar',fn:"irSecao('pagina')"});
+    _acoes.push({txt:'Colocar seu link na bio do Instagram',acao:'Copiar link',fn:'copiarLink()'});
+    if(_acoes.length<3&&(!S.endereco&&!S.cidade)) _acoes.push({txt:'Definir localização do salão',acao:'Definir',fn:"irSecao('pagina')"});
+    _acoes=_acoes.slice(0,3);
+    var _acoesHtml='';
+    _acoes.forEach(function(a){
+      _acoesHtml+=
+        '<div style="background:#FBF7F1;border-radius:13px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px">'+
+          '<span style="font-size:14.5px;font-weight:600;color:#17130F">'+a.txt+'</span>'+
+          '<span onclick="'+a.fn+'" style="font-size:13px;font-weight:700;color:#E55A0C;cursor:pointer;white-space:nowrap;flex-shrink:0">'+a.acao+'</span>'+
+        '</div>';
+    });
+    html+='<div style="background:#F4EDE3;border-radius:20px;padding:24px;margin:18px 26px 0">'+
+      '<div style="font-size:11.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#A08D78;margin-bottom:8px">→ Próximo passo</div>'+
+      '<div style="font-size:19px;font-weight:700;letter-spacing:-.02em;margin-bottom:16px;color:#17130F">Três coisas hoje.</div>'+
+      '<div style="display:flex;flex-direction:column;gap:10px">'+_acoesHtml+'</div>'+
+    '</div>';
   })();
 
   /* SEÇÃO EM BREVE — colapsável */

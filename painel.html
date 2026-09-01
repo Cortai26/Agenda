@@ -695,6 +695,202 @@
       color: var(--text)
     }
 
+    /* ══════════════════════════════════════════
+       CREAM THEME — VISUAL OVERRIDES
+       Faz tudo ficar clean, fluído, bordas sutis
+    ══════════════════════════════════════════ */
+
+    /* Conteúdo: padding generoso no desktop */
+    html.t-cream .wrap {
+      padding: 26px 26px 60px;
+    }
+    @media(max-width:768px) {
+      html.t-cream .wrap { padding: 14px 14px 60px; }
+    }
+
+    /* Métricas: grid automático, cards grandes */
+    html.t-cream .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 14px;
+      padding: 26px 26px 0;
+      align-items: stretch;
+    }
+    @media(max-width:768px) {
+      html.t-cream .metrics { padding: 14px 14px 0; gap: 10px; }
+    }
+    html.t-cream .mc {
+      background: #fff;
+      border: 1px solid rgba(23,19,15,.08);
+      border-radius: 18px;
+      padding: 20px;
+      text-align: left;
+      min-height: unset;
+      align-items: flex-start;
+      gap: 0;
+    }
+    html.t-cream .mc .mc-l {
+      order: -1;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: #A79C92;
+      margin-bottom: 6px;
+      line-height: 1;
+    }
+    html.t-cream .mc .mc-n {
+      font-size: clamp(26px, 5vw, 36px);
+      font-weight: 700;
+      color: #17130F;
+      letter-spacing: -.03em;
+      line-height: 1.15;
+    }
+    html.t-cream .mc-V .mc-n,
+    html.t-cream .mc-A .mc-n { color: #17130F; }
+    html.t-cream .mc-mes { grid-column: auto; }
+    @media(max-width:480px) {
+      html.t-cream .mc-mes { grid-column: 1/-1; }
+    }
+    /* Subtexto abaixo do número */
+    html.t-cream .mc .mc-sub-txt {
+      font-size: 13.5px;
+      color: #8A8078;
+      margin-top: 3px;
+      font-weight: 400;
+      font-size: 13px;
+    }
+
+    /* Seção groups: white card sem accordion visual */
+    html.t-cream .section-group {
+      background: #fff;
+      border: 1px solid rgba(23,19,15,.08);
+      border-radius: 20px;
+      margin: 18px 26px 0;
+      overflow: hidden;
+    }
+    @media(max-width:768px) {
+      html.t-cream .section-group { margin: 14px 14px 0; border-radius: 16px; }
+    }
+    html.t-cream .section-group-header {
+      padding: 20px 24px 14px;
+      border-bottom: none;
+    }
+    html.t-cream .section-group-header:hover { background: transparent; }
+    html.t-cream .section-group-label {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      color: #17130F;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+    html.t-cream .section-chevron { color: rgba(23,19,15,.25); }
+    html.t-cream .section-group-body { overflow: visible; }
+    html.t-cream .section-group-body.collapsed { max-height: 0; opacity: 0; overflow: hidden; }
+
+    /* Lista: sem margem horizontal — herda do section-group */
+    html.t-cream .section-group .lista {
+      margin: 0;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+    }
+    html.t-cream .section-group .lista .lista-hdr {
+      display: none;
+    }
+    /* Lista autônoma (fora de section-group) */
+    html.t-cream .lista {
+      background: #fff;
+      border: 1px solid rgba(23,19,15,.08);
+      border-radius: 20px;
+      margin: 18px 26px 0;
+      overflow: hidden;
+    }
+    @media(max-width:768px) {
+      html.t-cream .lista { margin: 14px 14px 0; border-radius: 16px; }
+    }
+    html.t-cream .lista-hdr {
+      border-bottom: 1px solid rgba(23,19,15,.08);
+      padding: 18px 22px;
+    }
+    html.t-cream .lista-hdr h3 {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      color: #17130F;
+      text-transform: none;
+      font-family: 'Schibsted Grotesk', sans-serif;
+    }
+    /* Itens de agendamento */
+    html.t-cream .ag-card {
+      border-bottom: 1px solid rgba(23,19,15,.07);
+      background: #fff;
+      padding: 14px 22px;
+      gap: 14px;
+    }
+    html.t-cream .ag-card:hover { background: rgba(23,19,15,.018); }
+    html.t-cream .ag-card:last-child { border-bottom: none; }
+    html.t-cream .ag-nome { font-size: 14.5px; font-weight: 700; }
+    html.t-cream .ag-hora {
+      font-size: 14px;
+      font-weight: 700;
+      color: #8A8078;
+      min-width: 50px;
+    }
+    html.t-cream .ag-preco { font-size: 14.5px; font-weight: 700; color: #E55A0C; }
+
+    /* Timeline redesign */
+    html.t-cream .timeline-wrap { padding: 8px 22px 20px; }
+    html.t-cream .timeline-row {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    html.t-cream .timeline-hour {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #8A8078;
+      text-align: left;
+      width: auto;
+      padding-top: 0;
+    }
+    html.t-cream .timeline-bar {
+      border-radius: 11px;
+      padding: 13px 14px;
+      min-height: unset;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    html.t-cream .timeline-busy {
+      background: rgba(229,90,12,.07);
+      border: 1.5px solid rgba(229,90,12,.35);
+      color: #17130F;
+      font-weight: 700;
+    }
+    html.t-cream .timeline-free {
+      border: 1.5px dashed rgba(23,19,15,.16);
+      background: transparent;
+      color: #9A9089;
+      font-weight: 400;
+    }
+
+    /* Insight dark cards: mesmo estilo que o design */
+    html.t-cream .mc-dark {
+      background: #17130F !important;
+      border: none !important;
+      border-radius: 18px !important;
+      color: #FBF7F1 !important;
+    }
+    html.t-cream .mc-dark .mc-n {
+      color: #F79355 !important;
+      font-size: clamp(26px, 5vw, 36px) !important;
+    }
+    html.t-cream .mc-dark .mc-l { color: #C99A7A !important; }
+    html.t-cream .mc-dark .mc-sub { color: rgba(251,247,241,.55); font-size: 13px; margin-top: 4px; font-weight: 400; }
+
     /* ── INSIGHT CARDS (dark) ── */
     .mc-dark {
       background: #17130F !important;

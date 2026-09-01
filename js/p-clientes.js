@@ -34,73 +34,81 @@ async function renderClientes(page){
   var receitaSem=(results[2]||[]).reduce(function(s,a){return s+(a.servico_preco||0);},0);
   var receitaMes=(results[3]||[]).reduce(function(s,a){return s+(a.servico_preco||0);},0);
   var receitaDia=(results[4]||[]).reduce(function(s,a){return s+(a.servico_preco||0);},0);
-  /* Métricas — sempre visíveis */
+  var voltamSempre=clis.filter(function(c){return c.total_visitas>=3;}).length;
+  var ticketMedio=clis.length>0?Math.round(clis.reduce(function(s,c){return s+(c.total_gasto||0);},0)/clis.length):0;
+
+  /* Métricas */
   var html=renderProfStrip()+
     '<div class="metrics">'+
-    '<div class="mc"><div class="mc-n">'+clis.length+'</div><div class="mc-l">Clientes</div></div>'+
-    '<div class="mc mc-V"><div class="mc-n" style="font-size:clamp(11px,3.5vw,16px)">'+formatPrice(receitaDia)+'</div><div class="mc-l">Receita hoje</div></div>'+
-    '<div class="mc mc-A"><div class="mc-n" style="font-size:clamp(11px,3.5vw,16px)">'+formatPrice(receitaSem)+'</div><div class="mc-l">Receita semanal</div></div>'+
-    '<div class="mc"><div class="mc-n" style="font-size:clamp(11px,3.5vw,16px)">'+formatPrice(receitaMes)+'</div><div class="mc-l">Receita mensal</div></div>'+
+    '<div class="mc"><div class="mc-l">Clientes</div><div class="mc-n">'+clis.length+'</div></div>'+
+    '<div class="mc"><div class="mc-l">Ticket médio</div><div class="mc-n">'+formatPrice(ticketMedio)+'</div></div>'+
+    '<div class="mc"><div class="mc-l">Voltam sempre</div><div class="mc-n">'+voltamSempre+'</div><div class="mc-sub-txt">3+ visitas</div></div>'+
+    (inativos.length>0?'<div class="mc mc-dark"><div class="mc-l">Prestes a te esquecer</div><div class="mc-n">'+inativos.length+'</div><div class="mc-sub" style="color:rgba(251,247,241,.52)">há 30+ dias sem agendar</div></div>':'')+''+
     '</div>';
 
-  /* Lista de clientes — colapsável */
-  var _cliBody='<div class="lista"><div class="lista-hdr"><h3>Histórico de clientes</h3></div>';
+  /* Lista de clientes — table grid */
+  var _cliBody=
+    '<div style="background:#fff;border:1px solid rgba(23,19,15,.08);border-radius:20px;overflow:hidden;margin:18px 26px 0">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:20px 24px;border-bottom:1px solid rgba(23,19,15,.08)">'+
+        '<div style="font-size:17px;font-weight:700;letter-spacing:-.02em;color:#17130F">Clientes</div>'+
+        '<span style="font-size:12.5px;font-weight:700;background:#F1E9DE;color:#5C544C;padding:6px 11px;border-radius:999px">'+clis.length+' cadastrado'+(clis.length!==1?'s':'')+'</span>'+
+      '</div>';
   if(clis.length===0){
     _cliBody+='<div class="empty">👥<br>Nenhum cliente ainda</div>';
   } else {
+    _cliBody+='<div style="display:grid;grid-template-columns:1fr 140px 110px 80px;gap:12px;padding:10px 24px 12px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#A79C92;border-bottom:1px solid rgba(23,19,15,.08)">'+
+      '<span>Cliente</span><span>Último atend.</span><span>Total gasto</span><span></span></div>';
     clis.forEach(function(c){
-      _cliBody+='<div class="cli-item">'+
-        '<div class="cli-av">👤</div>'+
-        '<div class="cli-info"><div class="cli-nm">'+esc(c.nome)+'</div><div class="cli-mt">'+c.telefone+' · '+c.total_visitas+' visita'+(c.total_visitas!==1?'s':'')+'</div></div>'+
-        '<div class="cli-st"><div class="cli-g">'+formatPrice(c.total_gasto||0)+'</div><div class="cli-u">'+fmtBR(c.ultima_visita)+'</div></div>'+
+      var ini=esc((c.nome||'?').trim().split(/\s+/).filter(Boolean).map(function(w){return w[0];}).slice(0,2).join('')).toUpperCase();
+      var diasAbs=c.ultima_visita?Math.round((new Date()-new Date(c.ultima_visita))/(1000*60*60*24)):999;
+      var statusTxt=diasAbs===0?'Hoje':diasAbs===1?'Ontem':c.total_visitas>=3?'Fiel':'Ativo';
+      var statusCor=c.total_visitas>=3?'#1E7A46':(diasAbs>60?'#C64C05':'#A79C92');
+      _cliBody+=
+        '<div style="display:grid;grid-template-columns:1fr 140px 110px 80px;gap:12px;align-items:center;padding:14px 24px;border-bottom:1px solid rgba(23,19,15,.07)">'+
+          '<div style="display:flex;align-items:center;gap:12px;min-width:0">'+
+            '<div style="width:34px;height:34px;border-radius:50%;background:#F1E9DE;display:grid;place-items:center;font-size:12px;font-weight:700;color:#8A6A48;flex-shrink:0">'+ini+'</div>'+
+            '<div style="min-width:0">'+
+              '<div style="font-size:14.5px;font-weight:700;color:#17130F;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(c.nome)+'</div>'+
+              '<div style="font-size:12.5px;color:#8A8078">'+esc(c.telefone||'')+'</div>'+
+            '</div>'+
+          '</div>'+
+          '<span style="font-size:13.5px;color:#5C544C">'+fmtBR(c.ultima_visita)+'</span>'+
+          '<span style="font-size:14.5px;font-weight:700;color:#17130F">'+formatPrice(c.total_gasto||0)+'</span>'+
+          '<span style="font-size:12.5px;font-weight:700;color:'+statusCor+';text-align:right">'+statusTxt+'</span>'+
         '</div>';
     });
   }
   _cliBody+='</div>';
-  var _cliLbl='Clientes'+(clis.length?' <span style="background:var(--primary);color:#fff;border-radius:20px;padding:1px 8px;font-size:10px;font-weight:700;margin-left:6px">'+clis.length+'</span>':'');
-  var _cliC=localStorage.getItem('sec-clientes-collapsed')!=='0'; // fechado por padrão
-  html+=typeof _secGroup==='function'?_secGroup('sec-clientes',_cliLbl,_cliC,_cliBody):_cliBody;
+  html+=_cliBody;
 
-  /* ── INSIGHT: "Prestes a te esquecer" dark card ── */
+  /* Reconquistar — card design do Painel.dc */
   if(inativos.length>0){
-    var voltamSempre=clis.filter(function(c){return c.total_visitas>=3;}).length;
-    html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 16px 12px">'+
-      '<div class="mc-dark" style="border-radius:12px;padding:14px 16px">'+
-        '<div style="font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#C99A7A;margin-bottom:6px">Sumindo</div>'+
-        '<div style="font-size:26px;font-weight:800;color:rgba(251,247,241,.92)">'+inativos.length+'</div>'+
-        '<div class="mc-sub">clientes há 30+ dias sem agend.</div>'+
-      '</div>'+
-      '<div class="mc-dark" style="border-radius:12px;padding:14px 16px">'+
-        '<div style="font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#C99A7A;margin-bottom:6px">Voltam sempre</div>'+
-        '<div style="font-size:26px;font-weight:800;color:rgba(251,247,241,.92)">'+voltamSempre+'</div>'+
-        '<div class="mc-sub">clientes com 3+ visitas</div>'+
-      '</div>'+
-    '</div>';
-  }
-
-  /* Clientes inativos — win-back redesenhado */
-  if(inativos.length>0){
-    var _inContent='<div class="winback-card">'+
-      '<div class="winback-title">Reconquistar</div>'+
-      '<div class="winback-headline">'+inativos.length+' cliente'+(inativos.length!==1?'s que sumiu':'s que sumiram')+'</div>'+
-      '<div class="winback-sub">Uma mensagem com seu link costuma bastar para trazer de volta.</div>';
+    var _winHtml=
+      '<div style="background:#fff;border:1px solid rgba(23,19,15,.08);border-radius:20px;overflow:hidden;margin:18px 26px 0">'+
+        '<div style="padding:20px 24px;border-bottom:1px solid rgba(23,19,15,.08)">'+
+          '<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:4px">'+
+            '<div style="font-size:17px;font-weight:700;letter-spacing:-.02em;color:#17130F">Reconquistar</div>'+
+            '<span style="font-size:12.5px;font-weight:700;background:rgba(229,90,12,.1);color:#C64C05;padding:6px 11px;border-radius:999px">'+inativos.length+' cliente'+(inativos.length!==1?'s':'')+'</span>'+
+          '</div>'+
+          '<div style="font-size:14px;color:#6B625A;line-height:1.5">Juntos, já deixaram dinheiro no caixa e não voltam há mais de 30 dias. Uma mensagem com seu link costuma bastar.</div>'+
+        '</div>'+
+        '<div style="display:flex;flex-direction:column;padding:0 24px 12px">';
     inativos.slice(0,8).forEach(function(c){
       var tel=c.telefone.replace(/\D/g,'');
-      var msg=encodeURIComponent('Olá '+c.nome.split(' ')[0]+'! 👋\n\nSentimos sua falta aqui na '+S.nome+'!\n\nQue tal agendar um horário? Fica fácil aqui:\n'+BASE+'/agendar.html?slug='+S.slug+'\n\nAté logo! 😊');
-      _inContent+=
-        '<div class="winback-item">'+
-          '<div class="winback-item-info">'+
-            '<div class="winback-item-nome">'+esc(c.nome)+'</div>'+
-            '<div class="winback-item-dias">'+c.dias_ausente+' dias sem agendar</div>'+
+      var ini=esc((c.nome||'?').trim().split(/\s+/).filter(Boolean).map(function(w){return w[0];}).slice(0,2).join('')).toUpperCase();
+      var msg=encodeURIComponent('Olá '+c.nome.split(' ')[0]+'! 👋\n\nSentimos sua falta aqui na '+S.nome+'!\n\nQue tal agendar? Fica fácil aqui:\n'+BASE+'/agendar.html?slug='+S.slug+'\n\nAté logo! 😊');
+      _winHtml+=
+        '<div style="display:flex;align-items:center;gap:14px;border:1px solid rgba(23,19,15,.09);border-radius:14px;padding:14px 16px;margin-top:10px">'+
+          '<div style="width:38px;height:38px;border-radius:50%;background:#F1E9DE;display:grid;place-items:center;font-size:13px;font-weight:700;color:#8A6A48;flex-shrink:0">'+ini+'</div>'+
+          '<div style="flex:1;min-width:0">'+
+            '<div style="font-size:15px;font-weight:700;color:#17130F">'+esc(c.nome)+'</div>'+
+            '<div style="font-size:13px;color:#8A8078">há '+c.dias_ausente+' dias sem agendar</div>'+
           '</div>'+
-          '<a class="winback-btn" href="https://wa.me/55'+tel+'?text='+msg+'" target="_blank" rel="noopener">'+
-            '💬 Chamar'+
-          '</a>'+
+          '<a href="https://wa.me/55'+tel+'?text='+msg+'" target="_blank" rel="noopener" style="border:none;cursor:pointer;background:#17130F;color:#FBF7F1;font-size:13px;font-weight:700;padding:10px 14px;border-radius:9px;white-space:nowrap;text-decoration:none;display:inline-block">Chamar</a>'+
         '</div>';
     });
-    _inContent+='</div>';
-    var _inC=localStorage.getItem('sec-inativos-collapsed')!=='0';
-    html+=typeof _secGroup==='function'?_secGroup('sec-inativos','Reconquistar clientes',_inC,_inContent):_inContent;
+    _winHtml+='</div></div>';
+    html+=_winHtml;
   }
   // S5.4: Show "load more" if there may be more results
   if(clis.length===_cliPerPage){
