@@ -2773,12 +2773,10 @@ async function excluir(id,nome){
 async function resetarSenha(slug,nome){
   const nova=prompt('Nova senha para '+nome+':');
   if(!nova||nova.length<6){alert('Senha deve ter pelo menos 6 caracteres.');return;}
-  const enc=new TextEncoder();
-  const buf=await crypto.subtle.digest('SHA-256',enc.encode(nova));
-  const hash=Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
   try{
-    await api('saloes?slug=eq.'+slug,{method:'PATCH',body:JSON.stringify({senha_hash:hash,tentativas_login:0,bloqueado_ate:null})});
-    alert('✅ Senha alterada com sucesso!');
+    const res=await rpc('admin_set_senha',{p_slug:slug,p_nova_senha:nova});
+    if(res&&res.ok){alert('✅ Senha alterada com sucesso!');}
+    else{alert('Erro: '+(res&&res.erro||'Sem permissão'));}
   }catch(e){alert('Erro: '+e.message);}
 }
 

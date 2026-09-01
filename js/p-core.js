@@ -287,7 +287,7 @@ document.addEventListener('DOMContentLoaded', function(){
     var _et3=document.getElementById('eqEt3'); if(_et3) _et3.style.display='none';
     if(typeof eqSteps==='function') eqSteps(1);
     if(_overlayEsq) _overlayEsq.classList.add('show');
-    setTimeout(function(){var _sl=document.getElementById('eqSlug');if(_sl)_sl.focus();},200);
+    setTimeout(function(){var _sl=document.getElementById('eqEmail');if(_sl)_sl.focus();},200);
   });
   if(_overlayEsq) _overlayEsq.addEventListener('click',function(e){if(e.target===this)fecharEsq();});
 });
@@ -296,13 +296,13 @@ function fecharEsq(){var _o=document.getElementById('overlayEsq');if(_o)_o.class
 
 document.getElementById('btnEqV').addEventListener('click', async function(){
   var err=document.getElementById('eqErr1'); err.classList.remove('show');
-  var slug=document.getElementById('eqSlug').value.trim().toLowerCase();
+  var email=document.getElementById('eqEmail').value.trim().toLowerCase();
   var tel=document.getElementById('eqTel').value.trim();
-  if(!slug){err.textContent='Informe seu usuário.';err.classList.add('show');return;}
+  if(!email||!email.includes('@')){err.textContent='Informe seu e-mail.';err.classList.add('show');return;}
   if(!tel||tel.replace(/\D/g,'').length<8){err.textContent='Informe o WhatsApp cadastrado.';err.classList.add('show');return;}
   this.disabled=true; this.textContent='Verificando...';
   try{
-    var res=await rpc('self_reset_senha',{p_slug:slug,p_telefone:tel});
+    var res=await rpc('self_reset_senha_email',{p_email:email,p_telefone:tel});
     if(res&&res.ok){
       _eqSlug=res.slug;
       document.getElementById('eqNome').textContent=res.nome;
@@ -317,7 +317,7 @@ document.getElementById('btnEqV').addEventListener('click', async function(){
   }catch(e){err.textContent='Erro de conexão.';err.classList.add('show');}
   this.disabled=false; this.textContent='Verificar identidade';
 });
-document.getElementById('eqSlug').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('eqTel').focus();});
+document.getElementById('eqEmail').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('eqTel').focus();});
 document.getElementById('eqTel').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('btnEqV').click();});
 document.getElementById('eqSenha').addEventListener('input',function(){sforca(this.value,['eqB1','eqB2','eqB3'],'eqInfo');});
 document.getElementById('eqSenha').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('eqSenha2').focus();});
