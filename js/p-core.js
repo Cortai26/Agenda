@@ -164,6 +164,61 @@ function sair(){
   localStorage.removeItem(SK); _pw=null; location.reload();
 }
 
+/* ── Copiar link do salão ── */
+function copiarLink(){
+  var slug=S&&S.slug?S.slug:'';
+  var url=BASE+'/agendar.html?slug='+slug;
+  var btn=document.getElementById('btnCopyLink');
+  try{
+    navigator.clipboard.writeText(url).then(function(){
+      toast('Link copiado!','ok');
+      if(btn){var old=btn.textContent;btn.textContent='Copiado ✓';setTimeout(function(){btn.textContent=old;},1800);}
+    }).catch(function(){_fallbackCopy(url,btn);});
+  }catch(e){_fallbackCopy(url,btn);}
+}
+function _fallbackCopy(txt,btn){
+  var ta=document.createElement('textarea');
+  ta.value=txt; ta.style.cssText='position:fixed;opacity:0';
+  document.body.appendChild(ta); ta.select();
+  try{
+    document.execCommand('copy');
+    toast('Link copiado!','ok');
+    if(btn){var old=btn.textContent;btn.textContent='Copiado ✓';setTimeout(function(){btn.textContent=old;},1800);}
+  }catch(e){toast('Copie: '+txt,'ok');}
+  document.body.removeChild(ta);
+}
+
+/* ── Card de perfil na sidebar ── */
+function renderSbProfile(){
+  var el=document.getElementById('sbProfileCard');
+  if(!el||!S) return;
+  var checks=[
+    !!(S.nome),
+    !!(S.telefone),
+    !!(S.email),
+    !!(S.pix_key),
+    !!(S.horario),
+    !!((window._servicos||[]).length||window._profs&&window._profs.length),
+    !!(S.logo_url||S.foto_url),
+    !!(S.endereco||S.cidade)
+  ];
+  var pct=Math.round(checks.filter(Boolean).length/checks.length*100);
+  var faltam=[];
+  if(!S.logo_url&&!S.foto_url) faltam.push('fotos do trabalho');
+  if(!S.pix_key) faltam.push('chave PIX');
+  if(!S.endereco&&!S.cidade) faltam.push('localização');
+  if(pct>=100){el.style.display='none';return;}
+  el.style.display='block';
+  el.innerHTML=
+    '<div style="font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#C99A7A;margin-bottom:6px">Seu perfil</div>'+
+    '<div style="font-size:14.5px;font-weight:700;color:rgba(255,255,255,.92);margin-bottom:10px">'+pct+'% completo</div>'+
+    '<div style="height:5px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden;margin-bottom:10px">'+
+      '<div style="width:'+pct+'%;height:100%;background:#E55A0C;border-radius:99px;transition:.4s"></div>'+
+    '</div>'+
+    (faltam.length?'<div style="font-size:12px;color:#A6988B;line-height:1.45;margin-bottom:12px">Faltam '+faltam.slice(0,2).join(' e ')+'. Perfis completos recebem mais agendamentos.</div>':'')+
+    '<button onclick="irSecao(\'pagina\')" style="width:100%;border:none;cursor:pointer;background:rgba(251,247,241,.92);color:#17130F;font-size:13px;font-weight:700;padding:10px;border-radius:9px;font-family:inherit">Completar →</button>';
+}
+
 /* ═══ S1.2: getPw via modal (sem prompt()) ═══ */
 var _getPwResolve=null, _getPwReject=null;
 function _ovSenhaConfirmar(){
@@ -354,7 +409,7 @@ var _calDados={}, _drillDia=null;
 /* ── TEMA DO PAINEL ── */
 function setPainelTema(cls){
   var htmlEl=document.documentElement;
-  var allThemes=['t-onyx','t-feminine','t-neutral','t-clinic',
+  var allThemes=['t-onyx','t-feminine','t-neutral','t-clinic','t-cream',
     // legacy themes
     't-obsidian','t-azure','t-emerald','t-rose','t-crimson','t-clean','t-verde'];
   allThemes.forEach(function(t){htmlEl.classList.remove(t);});
@@ -410,7 +465,7 @@ function iniciarApp(sessao){
     // localStorage takes priority (latest user selection); DB is fallback
     var cls=local||(tpl?'t-'+tpl:'');
     if(cls) setPainelTema(cls);
-    else setPainelTema('t-onyx');
+    else setPainelTema('t-cream');
   })();
   document.getElementById('loginWrap').style.display='none';
   document.getElementById('appWrap').classList.add('show');
@@ -424,6 +479,49 @@ function iniciarApp(sessao){
   var _ini=document.getElementById('topbarIniciais');
   if(_ini){var _w=(sessao.nome||'').trim().split(/\s+/);_ini.textContent=_w.length>1?_w[0][0]+_w[1][0]:(_w[0]||'?')[0].toUpperCase();}
   document.getElementById('btnVerPag').href=BASE+'/agendar.html?slug='+sessao.slug;
+  // Desktop header: nome do salão
+  var _hSalon=document.getElementById('hdrSalonName');
+  if(_hSalon) _hSalon.textContent=sessao.nome;
+  // Sidebar footer
+  var _sbN=document.getElementById('sbNome');
+  if(_sbN) _sbN.textContent=sessao.nome;
+  var _sbPl=document.getElementById('sbPlano');
+  if(_sbPl){
+    var pl=sessao.status||'trial';
+    var plMap={'ativo':'Pro','trial':'Gratuito','trial_expirado':'Expirado','inativo':'Inativo'};
+    _sbPl.textContent=plMap[pl]||pl;
+  }
+  var _sbAv=document.getElementById('sbAv');
+  if(_sbAv){
+    var _ws=(sessao.nome||'').trim().split(/\s+/);
+    _sbAv.textContent=_ws.length>1?(_ws[0][0]+_ws[1][0]).toUpperCase():(_ws[0]||'?')[0].toUpperCase();
+  }
+
+  // Preenche data no header
+  (function(){
+    var el=document.getElementById('hdrDate');
+    if(!el) return;
+    var d=new Date();
+    var dias=['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+    var meses=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+    el.textContent=dias[d.getDay()]+', '+d.getDate()+' de '+meses[d.getMonth()]+' de '+d.getFullYear();
+  })();
+
+  // Preenche widget de link no header
+  (function(){
+    var slug=sessao.slug;
+    var urlEl=document.getElementById('hdrLinkUrl');
+    if(urlEl) urlEl.innerHTML='agendatop.com/<b>'+slug+'</b>';
+    var widget=document.getElementById('hdrLinkWidget');
+    if(widget) widget.style.removeProperty('display');
+    var share=document.getElementById('btnShare');
+    if(share) share.style.removeProperty('display');
+    var novo=document.getElementById('btnNovoTopbar');
+    if(novo) novo.style.removeProperty('display');
+  })();
+
+  // Sidebar: perfil card — atualiza 600ms depois (S completo chega via api)
+  setTimeout(function(){ if(typeof renderSbProfile==='function') renderSbProfile(); }, 600);
 
   // Demo banner
   if(sessao.slug==='demo'){

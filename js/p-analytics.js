@@ -78,6 +78,62 @@ async function renderAnalytics(){
       html+='</div></div>';
     }
 
+    /* ── GRÁFICO: por dia da semana ── */
+    (function(){
+      // Aggregate agendamentos por dia da semana do período
+      var semLabels=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+      var counts=[0,0,0,0,0,0,0];
+      // data.servicos_top doesn't have weekday breakdown — fetch raw for period
+      // Use por_dia if available, otherwise skip
+      if(data.por_dia&&Array.isArray(data.por_dia)){
+        data.por_dia.forEach(function(d){
+          var dt=new Date(d.data+'T12:00:00');
+          var wd=dt.getDay();
+          counts[wd]+=(d.total||d.count||1);
+        });
+        var maxC=Math.max.apply(null,counts)||1;
+        var bars='<div class="bar-chart">';
+        counts.forEach(function(c,i){
+          var h=Math.round((c/maxC)*64);
+          bars+=
+            '<div class="bar-col">'+
+              '<div class="bar-day-val">'+(c||'')+'</div>'+
+              '<div class="bar-fill" style="height:'+h+'px;background:'+(c===maxC?'#E55A0C':'rgba(229,90,12,.35)')+'"></div>'+
+              '<div class="bar-day-label">'+semLabels[i]+'</div>'+
+            '</div>';
+        });
+        bars+='</div>';
+        var topDia=semLabels[counts.indexOf(Math.max.apply(null,counts))];
+        html+='<div class="diag-card">'+
+          '<div class="diag-label">Por dia da semana</div>'+
+          '<div class="diag-headline">Mais cheio: '+topDia+'</div>'+
+          '<div class="diag-sub">Pico de demanda identificado — considere ofertar mais slots nesse dia.</div>'+
+          bars+
+        '</div>';
+      }
+
+      /* ── Diagnóstico de ocupação ── */
+      var taxa=Math.round(data.taxa_conclusao||0);
+      var benchmark=54;
+      var diff=taxa-benchmark;
+      var statusTxt=diff>0?'acima da média do setor':'abaixo da média do setor';
+      var projetado=data.faturamento_total&&_analyticsDias>0?Math.round(data.faturamento_total/(_analyticsDias/30)):0;
+      html+='<div class="diag-card">'+
+        '<div class="diag-label">Diagnóstico</div>'+
+        '<div class="diag-headline">'+taxa+'% conclusão</div>'+
+        '<div class="diag-sub">'+
+          (diff>=0?'+'+(diff):''+diff)+'pp '+statusTxt+' (ref. '+benchmark+'%). '+
+          (projetado>0?'Projeção mensal: '+formatPrice(projetado)+'.':'')+
+        '</div>'+
+        '<div style="display:flex;align-items:center;gap:8px;margin-top:6px">'+
+          '<div style="flex:1;height:8px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden">'+
+            '<div style="width:'+Math.min(taxa,100)+'%;height:100%;background:'+(taxa>=benchmark?'#1E7A46':'#E55A0C')+';border-radius:99px"></div>'+
+          '</div>'+
+          '<div style="font-size:11px;font-weight:700;color:rgba(251,247,241,.55);white-space:nowrap">ref. '+benchmark+'%</div>'+
+        '</div>'+
+      '</div>';
+    })();
+
     html+='</div>'; // wrap
     el.innerHTML=html;
 

@@ -120,11 +120,88 @@ async function renderAgenda(){
   }
   html+='</div>';
 
+  /* ── INSIGHT: "Deixando na mesa" ── */
+  (function(){
+    var wd=hoje().getDay();
+    var horario=S&&S.horario?S.horario:{};
+    var slot=horario[wd]||(typeof horario==='object'?Object.values(horario).find(function(v){return v&&v.ini;}):null);
+    if(!slot||!slot.ini||!slot.fim) return; // fechado hoje
+    var toMin=function(t){var p=t.split(':');return parseInt(p[0])*60+parseInt(p[1]);};
+    var abertura=toMin(slot.ini), fechamento=toMin(slot.fim);
+    var totalMin=fechamento-abertura;
+    if(totalMin<=0) return;
+    // Avg duration: use duracao from appointments or default 60 min
+    var avgDur=60;
+    var withDur=agsHoje.filter(function(a){return a.duracao&&a.duracao>0;});
+    if(withDur.length>0) avgDur=Math.round(withDur.reduce(function(s,a){return s+a.duracao;},0)/withDur.length);
+    var totalSlots=Math.floor(totalMin/avgDur);
+    var livres=Math.max(0,totalSlots-ativos.length);
+    if(livres===0) return; // agenda cheia — não mostrar
+    var ticket=ativos.length>0?Math.round(fat/ativos.length):0;
+    if(ticket===0&&window._servicos&&window._servicos.length>0){
+      ticket=Math.round(window._servicos.reduce(function(s,sv){return s+(sv.preco||0);},0)/window._servicos.length);
+    }
+    if(ticket===0) return;
+    var potencial=livres*ticket;
+    html+='<div class="mc-dark" style="border-radius:12px;padding:16px 18px;margin:0 16px 12px;display:flex;justify-content:space-between;align-items:center;gap:12px">'+
+      '<div>'+
+        '<div style="font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#C99A7A;margin-bottom:6px">Deixando na mesa</div>'+
+        '<div style="font-size:22px;font-weight:800;line-height:1">'+formatPrice(potencial)+'</div>'+
+        '<div class="mc-sub">'+livres+' horário'+(livres!==1?'s':'')+' livre'+(livres!==1?'s':'')+' × ticket médio '+formatPrice(ticket)+'</div>'+
+      '</div>'+
+      '<button onclick="abrirManual()" style="border:none;cursor:pointer;background:#E55A0C;color:#fff;font-size:13px;font-weight:700;padding:10px 14px;border-radius:9px;font-family:inherit;white-space:nowrap">+ Horário</button>'+
+    '</div>';
+  })();
+
   /* HOJE — lista colapsável */
   var _hojeLbl='Hoje · '+parseInt(ds.split('-')[2])+' de '+MESES[hoje().getMonth()]+
     (ativos.length?' <span style="background:var(--primary);color:#fff;border-radius:20px;padding:1px 8px;font-size:10px;font-weight:700;margin-left:6px">'+ativos.length+'</span>':'');
   var _hC=localStorage.getItem('sec-hoje-collapsed')==='1'; // aberto por padrão
   html+=_secGroup('sec-hoje',_hojeLbl,_hC,'<div class="lista">'+renderListaAgs(agsHoje,true,'agenda')+'</div>');
+
+  /* ── TIMELINE "Seu dia" ── */
+  (function(){
+    var wd=hoje().getDay();
+    var horario=S&&S.horario?S.horario:{};
+    var slot=horario[wd]||(typeof horario==='object'?Object.values(horario).find(function(v){return v&&v.ini;}):null);
+    if(!slot||!slot.ini||!slot.fim||ativos.length===0) return;
+    var toMin=function(t){var p=t.split(':');return parseInt(p[0])*60+parseInt(p[1]);};
+    var fromMin=function(m){return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');};
+    var abertura=toMin(slot.ini), fechamento=toMin(slot.fim);
+    // Build booked intervals
+    var booked=[];
+    ativos.forEach(function(a){
+      var st=toMin(a.hora.substring(0,5));
+      var dur=a.duracao&&a.duracao>0?a.duracao:60;
+      booked.push({start:st,end:st+dur,nome:a.cliente_nome,srv:a.servico_nome||''});
+    });
+    booked.sort(function(a,b){return a.start-b.start;});
+    // Build timeline rows (hourly)
+    var rows='<div class="timeline-wrap">';
+    var cur=abertura;
+    booked.forEach(function(b){
+      if(b.start>cur){
+        rows+='<div class="timeline-row">'+
+          '<div class="timeline-hour">'+fromMin(cur)+'</div>'+
+          '<div class="timeline-bar timeline-free"><div class="timeline-dot" style="background:var(--bd,rgba(23,19,15,.18))"></div>livre</div>'+
+        '</div>';
+      }
+      rows+='<div class="timeline-row">'+
+        '<div class="timeline-hour">'+fromMin(b.start)+'</div>'+
+        '<div class="timeline-bar timeline-busy"><div class="timeline-dot" style="background:#E55A0C"></div><span>'+esc(b.nome)+'</span><span style="font-size:11px;color:var(--tx3,var(--text-3));font-weight:400;margin-left:auto">'+esc(b.srv)+'</span></div>'+
+      '</div>';
+      cur=b.end;
+    });
+    if(cur<fechamento){
+      rows+='<div class="timeline-row">'+
+        '<div class="timeline-hour">'+fromMin(cur)+'</div>'+
+        '<div class="timeline-bar timeline-free"><div class="timeline-dot" style="background:var(--bd,rgba(23,19,15,.18))"></div>livre até '+fromMin(fechamento)+'</div>'+
+      '</div>';
+    }
+    rows+='</div>';
+    var _secC=localStorage.getItem('sec-timeline-collapsed')==='1';
+    html+=_secGroup('sec-timeline','Seu dia — cronograma',_secC,rows);
+  })();
 
   /* SEÇÃO EM BREVE — colapsável */
   if(proximos.length>0){
