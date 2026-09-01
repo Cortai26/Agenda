@@ -37,13 +37,17 @@ async function renderClientes(page){
   var voltamSempre=clis.filter(function(c){return c.total_visitas>=3;}).length;
   var ticketMedio=clis.length>0?Math.round(clis.reduce(function(s,c){return s+(c.total_gasto||0);},0)/clis.length):0;
 
-  /* Métricas */
+  /* Métricas — inline styles */
+  var _CK='background:#fff;border:1px solid rgba(23,19,15,.08);border-radius:18px;padding:20px';
+  var _CL='font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#A79C92;margin-bottom:4px';
+  var _CN='font-size:36px;font-weight:700;letter-spacing:-.03em;line-height:1.15;color:#17130F;margin:0 0 4px';
+  var _CS='font-size:13.5px;color:#8A8078';
   var html=renderProfStrip()+
-    '<div class="metrics">'+
-    '<div class="mc"><div class="mc-l">Clientes</div><div class="mc-n">'+clis.length+'</div></div>'+
-    '<div class="mc"><div class="mc-l">Ticket médio</div><div class="mc-n">'+formatPrice(ticketMedio)+'</div></div>'+
-    '<div class="mc"><div class="mc-l">Voltam sempre</div><div class="mc-n">'+voltamSempre+'</div><div class="mc-sub-txt">3+ visitas</div></div>'+
-    (inativos.length>0?'<div class="mc mc-dark"><div class="mc-l">Prestes a te esquecer</div><div class="mc-n">'+inativos.length+'</div><div class="mc-sub" style="color:rgba(251,247,241,.52)">há 30+ dias sem agendar</div></div>':'')+''+
+    '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;padding:26px 26px 0">'+
+    '<div style="'+_CK+'"><div style="'+_CL+'">Clientes</div><div style="'+_CN+'">'+clis.length+'</div><div style="'+_CS+'">cadastrados</div></div>'+
+    '<div style="'+_CK+'"><div style="'+_CL+'">Ticket médio</div><div style="'+_CN+'">'+formatPrice(ticketMedio)+'</div><div style="'+_CS+'">por cliente</div></div>'+
+    '<div style="'+_CK+'"><div style="'+_CL+'">Voltam sempre</div><div style="'+_CN+'">'+voltamSempre+'</div><div style="'+_CS+'">3+ visitas</div></div>'+
+    (inativos.length>0?'<div style="background:#17130F;border-radius:18px;padding:20px"><div style="font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:rgba(251,247,241,.5);margin-bottom:4px">Prestes a te esquecer</div><div style="font-size:36px;font-weight:700;letter-spacing:-.03em;line-height:1.15;color:#FBF7F1;margin:0 0 4px">'+inativos.length+'</div><div style="font-size:13.5px;color:rgba(251,247,241,.55)">há 30+ dias sem agendar</div></div>':'')+
     '</div>';
 
   /* Lista de clientes — table grid */
@@ -141,21 +145,34 @@ async function _renderClientesPorProf(el){
     var lista=Object.values(mapa).sort(function(a,b){return b.visitas-a.visitas;});
     var receitaMes=ags.filter(function(a){return a.data>=monthStart;}).reduce(function(s,a){return s+(a.servico_preco||0);},0);
     var comPct=prof&&prof.comissao_pct!=null?prof.comissao_pct:null;
+    var _CK2='background:#fff;border:1px solid rgba(23,19,15,.08);border-radius:18px;padding:20px';
+    var _CL2='font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#A79C92;margin-bottom:4px';
+    var _CN2='font-size:36px;font-weight:700;letter-spacing:-.03em;line-height:1.15;color:#17130F;margin:0 0 4px';
     var html=renderProfStrip()+
-      '<div class="metrics">'+
-      '<div class="mc"><div class="mc-n">'+lista.length+'</div><div class="mc-l">Clientes de '+esc(profNome.split(' ')[0])+'</div></div>'+
-      '<div class="mc mc-V"><div class="mc-n" style="font-size:clamp(11px,3.5vw,16px)">'+formatPrice(receitaMes)+'</div><div class="mc-l">Receita do mês</div></div>'+
-      (comPct!==null?'<div class="mc" style="background:var(--VD-bg,rgba(45,106,79,.1))"><div class="mc-n" style="color:var(--VD);font-size:clamp(11px,3.5vw,16px)">'+formatPrice(Math.round(receitaMes*comPct/100))+'</div><div class="mc-l" style="color:var(--VD)">Comissão ('+comPct+'%)</div></div>':'')+
+      '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;padding:26px 26px 0">'+
+      '<div style="'+_CK2+'"><div style="'+_CL2+'">Clientes de '+esc(profNome.split(' ')[0])+'</div><div style="'+_CN2+'">'+lista.length+'</div></div>'+
+      '<div style="'+_CK2+'"><div style="'+_CL2+'">Receita do mês</div><div style="'+_CN2+'">'+formatPrice(receitaMes)+'</div></div>'+
+      (comPct!==null?'<div style="background:rgba(30,122,70,.1);border:1px solid rgba(30,122,70,.12);border-radius:18px;padding:20px"><div style="font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#1E7A46;margin-bottom:4px">Comissão ('+comPct+'%)</div><div style="font-size:36px;font-weight:700;letter-spacing:-.03em;line-height:1.15;color:#1E7A46;margin:0 0 4px">'+formatPrice(Math.round(receitaMes*comPct/100))+'</div></div>':'')+
       '</div>';
-    var _cliBody='<div class="lista"><div class="lista-hdr"><h3>Clientes de '+esc(profNome)+'</h3><span class="tag-c">'+lista.length+'</span></div>';
+    var _cliBody=
+      '<div style="background:#fff;border:1px solid rgba(23,19,15,.08);border-radius:20px;overflow:hidden;margin:18px 26px 0">'+
+        '<div style="padding:18px 24px;border-bottom:1px solid rgba(23,19,15,.08);font-size:17px;font-weight:700;color:#17130F">Clientes de '+esc(profNome)+'</div>';
     if(!lista.length){
-      _cliBody+='<div class="empty">👥<br>Nenhum atendimento registrado</div>';
+      _cliBody+='<div style="padding:40px 24px;text-align:center;color:#8A8078;font-size:14px">👥 Nenhum atendimento registrado</div>';
     } else {
       lista.forEach(function(c){
-        _cliBody+='<div class="cli-item">'+
-          '<div class="cli-av" style="background:var(--primary-light);color:var(--primary);font-weight:800;font-size:16px">'+esc(c.nome||'?').charAt(0).toUpperCase()+'</div>'+
-          '<div class="cli-info"><div class="cli-nm">'+esc(c.nome)+'</div><div class="cli-mt">'+esc(c.telefone||'')+'&nbsp;· '+c.visitas+' visita'+(c.visitas!==1?'s':'')+'</div></div>'+
-          '<div class="cli-st"><div class="cli-g">'+formatPrice(c.gasto)+'</div><div class="cli-u">'+fmtBR(c.ultima)+'</div></div>'+
+        var _ini=esc((c.nome||'?').trim().split(/\s+/).filter(Boolean).map(function(w){return w[0];}).slice(0,2).join('')).toUpperCase();
+        _cliBody+=
+          '<div style="display:flex;align-items:center;padding:13px 24px;border-bottom:1px solid rgba(23,19,15,.07);gap:12px">'+
+            '<div style="width:34px;height:34px;border-radius:50%;background:#F1E9DE;display:grid;place-items:center;font-size:12px;font-weight:700;color:#8A6A48;flex-shrink:0">'+_ini+'</div>'+
+            '<div style="flex:1;min-width:0">'+
+              '<div style="font-size:14.5px;font-weight:700;color:#17130F">'+esc(c.nome)+'</div>'+
+              '<div style="font-size:12.5px;color:#8A8078">'+esc(c.telefone||'')+(c.telefone?' · ':'')+c.visitas+' visita'+(c.visitas!==1?'s':'')+'</div>'+
+            '</div>'+
+            '<div style="text-align:right;flex-shrink:0">'+
+              '<div style="font-size:14.5px;font-weight:700;color:#17130F">'+formatPrice(c.gasto)+'</div>'+
+              '<div style="font-size:12px;color:#8A8078">'+fmtBR(c.ultima)+'</div>'+
+            '</div>'+
           '</div>';
       });
     }

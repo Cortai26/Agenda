@@ -16,18 +16,22 @@ async function renderAnalytics(){
     var data=await rpc('get_analytics',{p_salao_id:S.id,p_inicio:d0s,p_fim:d1s});
     if(!data){el.innerHTML='<div class="empty">Sem dados para este período.</div>';return;}
 
-    var html='<div class="wrap">';
+    var _AK='background:#fff;border:1px solid rgba(23,19,15,.08);border-radius:18px;padding:20px';
+    var _AL='font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#A79C92;margin-bottom:4px';
+    var _AN='font-size:36px;font-weight:700;letter-spacing:-.03em;line-height:1.15;color:#17130F;margin:0 0 4px';
+    var _AS='font-size:13.5px;color:#8A8078';
+    var html='<div style="padding:26px 26px 60px">';
 
     // Period selector — pill style
     html+='<div id="periodoSelector" style="display:flex;gap:4px;background:#fff;border:1px solid rgba(23,19,15,.1);border-radius:999px;padding:5px;width:fit-content;margin-bottom:20px"></div>';
 
-    // KPIs — grid cream style
+    // KPIs — inline grid
     var taxa=Math.round(data.taxa_conclusao||0);
-    html+='<div class="metrics">';
-    html+='<div class="mc"><div class="mc-l">Agendamentos</div><div class="mc-n">'+(data.total_agendamentos||0)+'</div></div>';
-    html+='<div class="mc"><div class="mc-l">Faturamento</div><div class="mc-n">'+formatPrice(data.faturamento_total||0)+'</div></div>';
-    html+='<div class="mc"><div class="mc-l">Clientes novos</div><div class="mc-n">'+(data.novos_clientes||0)+'</div></div>';
-    html+='<div class="mc"><div class="mc-l">Taxa de conclusão</div><div class="mc-n" style="color:'+(taxa>=54?'#1E7A46':'#17130F')+'">'+taxa+'%</div></div>';
+    html+='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:0">';
+    html+='<div style="'+_AK+'"><div style="'+_AL+'">Agendamentos</div><div style="'+_AN+'">'+(data.total_agendamentos||0)+'</div><div style="'+_AS+'">no período</div></div>';
+    html+='<div style="'+_AK+'"><div style="'+_AL+'">Faturamento</div><div style="'+_AN+'">'+formatPrice(data.faturamento_total||0)+'</div><div style="'+_AS+'">no período</div></div>';
+    html+='<div style="'+_AK+'"><div style="'+_AL+'">Clientes novos</div><div style="'+_AN+'">'+(data.novos_clientes||0)+'</div><div style="'+_AS+'">primeira visita</div></div>';
+    html+='<div style="'+_AK+'"><div style="'+_AL+'">Taxa de conclusão</div><div style="font-size:36px;font-weight:700;letter-spacing:-.03em;line-height:1.15;color:'+(taxa>=54?'#1E7A46':'#17130F')+';margin:0 0 4px">'+taxa+'%</div><div style="'+_AS+'">'+(taxa>=54?'acima da média':'abaixo da média')+'</div></div>';
     html+='</div>';
 
     // Serviços mais pedidos
@@ -35,7 +39,7 @@ async function renderAnalytics(){
       html+='<div style="background:#fff;border:1px solid rgba(23,19,15,.08);border-radius:20px;overflow:hidden;margin-top:18px">'+
         '<div style="padding:20px 24px;border-bottom:1px solid rgba(23,19,15,.08);font-size:17px;font-weight:700;letter-spacing:-.02em;color:#17130F">Serviços mais pedidos</div>';
       data.servicos_top.forEach(function(s){
-        html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(23,19,15,.07)">'+
+        html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 24px;border-bottom:1px solid rgba(23,19,15,.07)">'+
           '<div>'+
             '<div style="font-size:15px;font-weight:700;color:#17130F">'+esc(s.nome||s.servico_nome||'—')+'</div>'+
             '<div style="font-size:12.5px;color:#8A8078">'+(s.total||s.quantidade||0)+' atendimentos</div>'+
@@ -133,7 +137,7 @@ async function renderAnalytics(){
 
     html+='</div>'; // grid
 
-    html+='</div>'; // wrap
+    html+='</div>'; // outer padding wrap
     el.innerHTML=html;
 
     // Period selector — pill style

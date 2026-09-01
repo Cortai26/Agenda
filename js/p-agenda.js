@@ -83,12 +83,22 @@ async function renderAgenda(){
     '<div class="caixa-kpi"><div class="caixa-kpi-n">'+agsHoje.filter(function(a){return a.status==='concluido';}).length+'</div><div class="caixa-kpi-l">Concluídos</div></div>'+
     '<div class="caixa-kpi" style="cursor:pointer;background:var(--primary-light)" onclick="abrirWalkin(ds)"><div class="caixa-kpi-n" style="color:var(--primary)">⚡</div><div class="caixa-kpi-l" style="color:var(--primary)">Walk-in</div></div>';
 
+  /* ── Tokens de design ── */
+  var C_CARD='background:#fff;border:1px solid rgba(23,19,15,.08);border-radius:18px;padding:20px';
+  var C_CARD_LG='background:#fff;border:1px solid rgba(23,19,15,.08);border-radius:20px;overflow:hidden';
+  var C_DARK='background:#17130F;color:#FBF7F1;border-radius:18px;padding:20px';
+  var C_LABEL='font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#A79C92;margin-bottom:4px';
+  var C_NUM='font-size:36px;font-weight:700;letter-spacing:-.03em;line-height:1.15;color:#17130F;margin:0 0 4px';
+  var C_SUB='font-size:13.5px;color:#8A8078';
+  var C_ROW='border-bottom:1px solid rgba(23,19,15,.07)';
+  var C_HDR='padding:20px 24px;border-bottom:1px solid rgba(23,19,15,.08)';
+
   var html='';
 
-  /* ONBOARDING CHECKLIST — renderOnboarding preenche este div */
+  /* ONBOARDING CHECKLIST */
   html+='<div id="onboardingWrap" style="display:none"></div>';
 
-  /* FILTRO DE PROFISSIONAIS — avatar strip global */
+  /* FILTRO DE PROFISSIONAIS */
   html+=renderProfStrip();
 
   /* SEÇÃO HOJE — métricas sempre visíveis */
@@ -129,53 +139,88 @@ async function renderAgenda(){
     if(!ticket) return;
     var _mes=MESES[hoje().getMonth()];
     _lossCard=
-      '<div class="mc mc-dark" onclick="abrirManual()" style="cursor:pointer">'+
-        '<div class="mc-l">Deixando na mesa</div>'+
-        '<div class="mc-n">'+formatPrice(livres*ticket)+'</div>'+
-        '<div class="mc-sub">'+livres+' livre'+(livres!==1?'s':'')+' × ticket '+formatPrice(ticket)+'</div>'+
+      '<div onclick="abrirManual()" style="background:#17130F;color:#FBF7F1;border-radius:18px;padding:20px;cursor:pointer">'+
+        '<div style="font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:rgba(251,247,241,.5);margin-bottom:4px">Deixando na mesa</div>'+
+        '<div style="font-size:36px;font-weight:700;letter-spacing:-.03em;line-height:1.15;color:#FBF7F1;margin:0 0 4px">'+formatPrice(livres*ticket)+'</div>'+
+        '<div style="font-size:13.5px;color:rgba(251,247,241,.55)">'+livres+' livre'+(livres!==1?'s':'')+' × ticket '+formatPrice(ticket)+'</div>'+
       '</div>';
   })();
 
-  html+='<div class="metrics">';
-  html+='<div class="mc mc-L">'+
-    '<div class="mc-l">Hoje</div>'+
-    '<div class="mc-n">'+ativos.length+'</div>'+
-    '<div class="mc-sub-txt">agendamento'+(ativos.length!==1?'s':'')+' confirmado'+(ativos.length!==1?'s':'')+'</div>'+
-  '</div>';
-  html+='<div class="mc mc-V">'+
-    '<div class="mc-l">Previsto hoje</div>'+
-    '<div class="mc-n">'+formatPrice(fat)+'</div>'+
-    '<div class="mc-sub-txt">a receber até o fim do dia</div>'+
-  '</div>';
+  html+='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;padding:26px 26px 0">';
+  html+=
+    '<div style="'+C_CARD+'">'+
+      '<div style="'+C_LABEL+'">Hoje</div>'+
+      '<div style="'+C_NUM+'">'+ativos.length+'</div>'+
+      '<div style="'+C_SUB+'">agendamento'+(ativos.length!==1?'s':'')+' confirmado'+(ativos.length!==1?'s':'')+'</div>'+
+    '</div>';
+  html+=
+    '<div style="'+C_CARD+'">'+
+      '<div style="'+C_LABEL+'">Previsto hoje</div>'+
+      '<div style="'+C_NUM+'">'+formatPrice(fat)+'</div>'+
+      '<div style="'+C_SUB+'">a receber até o fim do dia</div>'+
+    '</div>';
+  html+=
+    '<div style="'+C_CARD+'">'+
+      '<div style="'+C_LABEL+'">'+((_profFiltro&&_profAtual)?_profAtual.nome.split(' ')[0]+' — ':'')+MESES[_m-1]+' '+_y+'</div>'+
+      '<div style="'+C_NUM+'">'+formatPrice(_fatMes)+'</div>'+
+      '<div style="'+C_SUB+'">faturamento registrado</div>'+
+    '</div>';
   if(_fatCom!==null){
-    html+='<div class="mc" style="background:var(--green-bg,rgba(30,122,70,.1))">'+
-      '<div class="mc-l" style="color:var(--green,#1E7A46)">Comissão hoje</div>'+
-      '<div class="mc-n" style="color:var(--green,#1E7A46)">'+formatPrice(_fatCom)+'</div>'+
-      '<div class="mc-sub-txt">'+_comPct+'% do faturamento</div>'+
-    '</div>';
+    html+=
+      '<div style="background:rgba(30,122,70,.1);border:1px solid rgba(30,122,70,.12);border-radius:18px;padding:20px">'+
+        '<div style="font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#1E7A46;margin-bottom:4px">Comissão hoje</div>'+
+        '<div style="font-size:36px;font-weight:700;letter-spacing:-.03em;line-height:1.15;color:#1E7A46;margin:0 0 4px">'+formatPrice(_fatCom)+'</div>'+
+        '<div style="font-size:13.5px;color:#1E7A46;opacity:.7">'+_comPct+'% do faturamento</div>'+
+      '</div>';
   }
-  if(_lossCard){
-    html+=_lossCard;
-  }
-  html+='<div class="mc mc-A mc-mes">'+
-    '<div class="mc-l">'+((_profFiltro&&_profAtual)?_profAtual.nome.split(' ')[0]+' — ':'')+MESES[_m-1]+' '+_y+'</div>'+
-    '<div class="mc-n">'+formatPrice(_fatMes)+'</div>'+
-    '<div class="mc-sub-txt">faturamento registrado</div>'+
-  '</div>';
   if(_fatMesCom!==null){
-    html+='<div class="mc" style="background:var(--green-bg,rgba(30,122,70,.1))">'+
-      '<div class="mc-l" style="color:var(--green,#1E7A46)">Comissão mês</div>'+
-      '<div class="mc-n" style="color:var(--green,#1E7A46)">'+formatPrice(_fatMesCom)+'</div>'+
-      '<div class="mc-sub-txt">'+_comPct+'% do mês</div>'+
-    '</div>';
+    html+=
+      '<div style="background:rgba(30,122,70,.1);border:1px solid rgba(30,122,70,.12);border-radius:18px;padding:20px">'+
+        '<div style="font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#1E7A46;margin-bottom:4px">Comissão mês</div>'+
+        '<div style="font-size:36px;font-weight:700;letter-spacing:-.03em;line-height:1.15;color:#1E7A46;margin:0 0 4px">'+formatPrice(_fatMesCom)+'</div>'+
+        '<div style="font-size:13.5px;color:#1E7A46;opacity:.7">'+_comPct+'% do mês</div>'+
+      '</div>';
   }
+  if(_lossCard) html+=_lossCard;
   html+='</div>';
 
-  /* HOJE — lista colapsável */
-  var _hojeLbl='Hoje · '+parseInt(ds.split('-')[2])+' de '+MESES[hoje().getMonth()]+
-    (ativos.length?' <span style="background:var(--primary);color:#fff;border-radius:20px;padding:1px 8px;font-size:10px;font-weight:700;margin-left:6px">'+ativos.length+'</span>':'');
-  var _hC=localStorage.getItem('sec-hoje-collapsed')==='1'; // aberto por padrão
-  html+=_secGroup('sec-hoje',_hojeLbl,_hC,'<div class="lista">'+renderListaAgs(agsHoje,true,'agenda')+'</div>');
+  /* HOJE — lista colapsável (inline styles) */
+  var _hojeAgHtml='';
+  if(agsHoje.length===0){
+    _hojeAgHtml='<div style="padding:40px 24px;text-align:center;color:#8A8078;font-size:14px">Nenhum agendamento hoje — aproveite para divulgar seu link!</div>';
+  } else {
+    agsHoje.forEach(function(a){
+      var isCancelado=a.status==='cancelado';
+      var statusCor=a.status==='confirmado'?'#1E7A46':a.status==='cancelado'?'#C64C05':a.status==='concluido'?'#8A8078':'#E55A0C';
+      var statusTxt=a.status==='confirmado'?'confirmado':a.status==='cancelado'?'cancelado':a.status==='concluido'?'concluído':'pendente';
+      var _btns='';
+      if(!isCancelado&&a.status!=='concluido'){
+        if(a.status==='pendente') _btns+='<button onclick="confirmAg(\''+a.id+'\',\'agenda\')" style="border:none;cursor:pointer;background:#E55A0C;color:#fff;font-size:11px;font-weight:700;padding:5px 10px;border-radius:7px;font-family:inherit">✓</button> ';
+        _btns+='<button onclick="concluirAg(\''+a.id+'\')" style="border:none;cursor:pointer;background:#1E7A46;color:#fff;font-size:11px;font-weight:700;padding:5px 10px;border-radius:7px;font-family:inherit">Feito</button> ';
+      }
+      var _tel=(a.cliente_tel||'').replace(/\D/g,'');
+      if(_tel&&!isCancelado){var _h=(a.hora||'').slice(0,5);var _wm=encodeURIComponent('Olá '+(a.cliente_nome||'')+'! Lembrete: '+(a.servico_nome||'')+' às '+_h+'. Até logo! 😊');_btns+='<a href="https://wa.me/55'+_tel+'?text='+_wm+'" target="_blank" rel="noopener" style="display:inline-block;border:none;cursor:pointer;background:#25D366;color:#fff;font-size:11px;font-weight:700;padding:5px 10px;border-radius:7px;text-decoration:none">📲</a> ';}
+      if(!isCancelado) _btns+='<button onclick="cancelAg(\''+a.id+'\',\'agenda\')" style="border:none;cursor:pointer;background:rgba(198,76,5,.1);color:#C64C05;font-size:11px;font-weight:700;padding:5px 10px;border-radius:7px;font-family:inherit">✕</button>';
+      var _sinalHtml='';
+      if(a.sinal_valor>0){var sf=formatPrice(a.sinal_valor);if(a.sinal_pago)_sinalHtml='<span style="font-size:11px;color:#1E7A46;font-weight:700">✅ Sinal '+sf+'</span>';else if(a.sinal_retido)_sinalHtml='<span style="font-size:11px;color:#C64C05;font-weight:700">🔒 Sinal retido '+sf+'</span>';else _sinalHtml='<button data-agid="'+a.id+'" onclick="confirmarSinal(this.dataset.agid,this)" style="font-size:11px;font-weight:700;color:#E55A0C;background:rgba(229,90,12,.1);border:1px solid rgba(229,90,12,.3);border-radius:6px;padding:4px 9px;cursor:pointer;font-family:inherit">📲 Sinal '+sf+'</button>';}
+      _hojeAgHtml+=
+        '<div style="display:flex;align-items:center;padding:14px 24px;'+C_ROW+';gap:14px;'+(isCancelado?'opacity:.45':'')+'">'+
+          '<div style="min-width:54px;flex-shrink:0;line-height:1">'+
+            '<div style="font-size:20px;font-weight:800;letter-spacing:-.02em;color:#17130F">'+esc(a.hora.substring(0,5))+'</div>'+
+            '<div style="font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:'+statusCor+';margin-top:2px">'+statusTxt+'</div>'+
+          '</div>'+
+          '<div style="flex:1;min-width:0">'+
+            '<div style="font-size:15px;font-weight:700;color:#17130F;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(a.cliente_nome)+'</div>'+
+            '<div style="font-size:12.5px;color:#8A8078">'+esc(a.servico_nome||'')+(a.cliente_tel?' · '+esc(a.cliente_tel):'')+' </div>'+
+            (_sinalHtml?'<div style="margin-top:4px">'+_sinalHtml+'</div>':'')+
+          '</div>'+
+          (a.servico_preco?'<div style="font-size:16px;font-weight:800;color:#17130F;flex-shrink:0">'+formatPrice(a.servico_preco)+'</div>':'')+
+          (_btns?'<div style="display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0">'+_btns+'</div>':'')+
+        '</div>';
+    });
+  }
+  var _hoje_badge=ativos.length>0?String(ativos.length):'';
+  html+=_cs('sec-hoje','Hoje · '+parseInt(ds.split('-')[2])+' de '+MESES[hoje().getMonth()],_hoje_badge,_hojeAgHtml);
 
   /* ── TIMELINE "Seu dia" + "Próximo Passo" ── */
   (function(){
@@ -201,44 +246,48 @@ async function renderAgenda(){
     });
     booked.sort(function(a,b){return a.start-b.start;});
 
-    // Build timeline rows
-    var rows='<div class="timeline-wrap">';
+    // Build timeline rows — inline styles
+    var _TL_ROW='display:grid;grid-template-columns:56px 1fr;gap:12px;align-items:center;padding:10px 24px';
+    var _TL_HOUR='font-size:13px;font-weight:700;color:#A79C92;line-height:1';
+    var rows='<div style="padding:6px 0">';
     var cur=abertura;
     booked.forEach(function(b){
       if(b.start>cur){
-        rows+='<div class="timeline-row">'+
-          '<div class="timeline-hour">'+fromMin(cur)+'</div>'+
-          '<div class="timeline-bar timeline-free">Livre</div>'+
+        rows+='<div style="'+_TL_ROW+'">'+
+          '<div style="'+_TL_HOUR+'">'+fromMin(cur)+'</div>'+
+          '<div style="border:1.5px dashed rgba(23,19,15,.12);border-radius:10px;padding:10px 14px;font-size:13.5px;color:#A79C92;font-weight:600">Livre — clique para agendar</div>'+
         '</div>';
       }
-      rows+='<div class="timeline-row">'+
-        '<div class="timeline-hour">'+fromMin(b.start)+'</div>'+
-        '<div class="timeline-bar timeline-busy" style="justify-content:space-between">'+
-          '<span><span style="display:block;font-size:14.5px;font-weight:700">'+esc(b.nome)+(b.srv?' · '+esc(b.srv):'')+'</span>'+
-          '<span style="font-size:12.5px;color:#8A8078">'+avgDur+' min · confirmado</span></span>'+
-          (b.preco?'<span style="font-size:14.5px;font-weight:700;color:#E55A0C">'+formatPrice(b.preco)+'</span>':'')+
-        '</div>'+
-      '</div>';
+      rows+=
+        '<div style="'+_TL_ROW+'">'+
+          '<div style="'+_TL_HOUR+'">'+fromMin(b.start)+'</div>'+
+          '<div style="background:rgba(229,90,12,.06);border:1.5px solid rgba(229,90,12,.18);border-radius:10px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px">'+
+            '<div>'+
+              '<div style="font-size:14.5px;font-weight:700;color:#17130F">'+esc(b.nome)+(b.srv?' · '+esc(b.srv):'')+'</div>'+
+              '<div style="font-size:12.5px;color:#8A8078;margin-top:1px">'+avgDur+' min · confirmado</div>'+
+            '</div>'+
+            (b.preco?'<div style="font-size:15px;font-weight:800;color:#E55A0C;flex-shrink:0">'+formatPrice(b.preco)+'</div>':'')+
+          '</div>'+
+        '</div>';
       cur=b.end;
     });
     if(cur<fechamento){
-      rows+='<div class="timeline-row">'+
-        '<div class="timeline-hour">'+fromMin(cur)+'</div>'+
-        '<div class="timeline-bar timeline-free">Livre</div>'+
-      '</div>';
+      rows+=
+        '<div style="'+_TL_ROW+'">'+
+          '<div style="'+_TL_HOUR+'">'+fromMin(cur)+'</div>'+
+          '<div style="border:1.5px dashed rgba(23,19,15,.12);border-radius:10px;padding:10px 14px;font-size:13.5px;color:#A79C92;font-weight:600">Livre</div>'+
+        '</div>';
     }
-    // CTA footer dentro do card "Seu dia"
     if(livres>0){
-      rows+='<div style="margin-top:18px;padding:18px 22px 20px;border-top:1px solid rgba(23,19,15,.08);display:flex;align-items:center;gap:14px;flex-wrap:wrap">'+
-        '<div style="flex:1;min-width:200px;font-size:14px;color:#5C544C;line-height:1.5">Horário vazio não volta. Seu link na bio do Instagram enche a agenda sozinho.</div>'+
-        '<button onclick="copiarLink()" style="border:none;cursor:pointer;background:#17130F;color:#FBF7F1;font-size:13.5px;font-weight:700;padding:11px 16px;border-radius:10px;font-family:inherit">Copiar link</button>'+
+      rows+='<div style="margin:10px 24px 16px;padding:16px 20px;background:#F4EDE3;border-radius:12px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">'+
+        '<div style="flex:1;min-width:180px;font-size:14px;color:#5C544C;line-height:1.5">Horário vazio não volta. Seu link na bio do Instagram enche a agenda sozinho.</div>'+
+        '<button onclick="copiarLink()" style="border:none;cursor:pointer;background:#17130F;color:#FBF7F1;font-size:13px;font-weight:700;padding:10px 16px;border-radius:10px;font-family:inherit;flex-shrink:0">Copiar link</button>'+
       '</div>';
     }
     rows+='</div>';
 
-    var _secC=localStorage.getItem('sec-timeline-collapsed')==='1';
-    var _lbl='Seu dia <span style="font-size:13px;font-weight:400;color:#8A8078;margin-left:8px">'+livres+' de '+totalSlots+' horário'+(totalSlots!==1?'s':'')+' livre'+(livres!==1?'s':'')+'</span>';
-    html+=_secGroup('sec-timeline',_lbl,_secC,rows);
+    var _tlBadge=livres>0?livres+' livre'+(livres!==1?'s':''):'completo';
+    html+=_cs('sec-timeline','Seu dia',_tlBadge,rows);
 
     /* "Próximo Passo — Três coisas hoje" */
     var _acoes=[];
@@ -262,35 +311,31 @@ async function renderAgenda(){
     '</div>';
   })();
 
-  /* SEÇÃO EM BREVE — colapsável */
+  /* SEÇÃO EM BREVE — colapsável inline */
   if(proximos.length>0){
-    var _embreveLista='<div class="lista">';
+    var _ebreve='';
     proximos.forEach(function(a){
       var dp=a.data.split('-');
       var dataFmt=pad(parseInt(dp[2]))+'/'+pad(parseInt(dp[1]));
-      _embreveLista+=
-        '<div class="ag-card ag-card-prox">'+
-          '<div class="ag-hora ag-hora-dt">'+
-            '<div class="ag-dt-d">'+dataFmt+'</div>'+
-            '<div class="ag-dt-h">'+a.hora.substring(0,5)+'</div>'+
+      var sCor=a.status==='confirmado'?'#1E7A46':a.status==='cancelado'?'#C64C05':'#E55A0C';
+      var sTxt=a.status==='confirmado'?'confirmado':a.status==='cancelado'?'cancelado':'pendente';
+      _ebreve+=
+        '<div style="display:flex;align-items:center;padding:14px 24px;'+C_ROW+';gap:14px">'+
+          '<div style="min-width:54px;flex-shrink:0;line-height:1;text-align:center">'+
+            '<div style="font-size:17px;font-weight:800;color:#17130F">'+dataFmt+'</div>'+
+            '<div style="font-size:12.5px;font-weight:700;color:#E55A0C;margin-top:2px">'+a.hora.substring(0,5)+'</div>'+
           '</div>'+
-          '<div class="ag-body">'+
-            '<div class="ag-top">'+
-              '<div class="ag-nome">'+a.cliente_nome+'</div>'+
-              badgeStatus(a.status)+
-            '</div>'+
-            '<div class="ag-info">'+
-              '<span class="ag-srv">✂ '+esc(a.servico_nome)+'</span>'+
-              '<span class="ag-tel">'+a.cliente_tel+'</span>'+
-            '</div>'+
+          '<div style="flex:1;min-width:0">'+
+            '<div style="font-size:15px;font-weight:700;color:#17130F;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(a.cliente_nome)+'</div>'+
+            '<div style="font-size:12.5px;color:#8A8078">'+esc(a.servico_nome||'')+(a.cliente_tel?' · '+esc(a.cliente_tel):'')+'</div>'+
           '</div>'+
-          '<div class="ag-preco">'+formatPrice(a.servico_preco||0)+'</div>'+
+          '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">'+
+            '<div style="font-size:15px;font-weight:800;color:#17130F">'+formatPrice(a.servico_preco||0)+'</div>'+
+            '<div style="font-size:10.5px;font-weight:700;color:'+sCor+';text-transform:uppercase;letter-spacing:.04em">'+sTxt+'</div>'+
+          '</div>'+
         '</div>';
     });
-    _embreveLista+='</div>';
-    var _ebLbl='Em breve · próximos 7 dias <span style="background:rgba(45,106,79,.15);color:var(--VD);border-radius:20px;padding:1px 8px;font-size:10px;font-weight:700;margin-left:6px">'+proximos.length+'</span>';
-    var _ebC=localStorage.getItem('sec-embreve-collapsed')==='1'; // aberto por padrão
-    html+=_secGroup('sec-embreve',_ebLbl,_ebC,_embreveLista);
+    html+=_cs('sec-embreve','Em breve',String(proximos.length),_ebreve,false);
   }
 
 
@@ -307,39 +352,30 @@ async function renderAgenda(){
   });
   var datasPassadas=Object.keys(diasPassados).sort().reverse();
   if(datasPassadas.length>0){
-    var _histCollapsed = localStorage.getItem('historico-collapsed') !== '0';
-    var _chevronCls = _histCollapsed ? 'collapsed' : '';
-    var _bodyCls    = _histCollapsed ? 'collapsed' : '';
-    html+='<div class="section-group" data-section="historico">'+
-      '<div class="section-group-header" onclick="toggleSection(\'historico\')">'+
-        '<span class="section-group-label">Histórico recente — últimos 30 dias</span>'+
-        '<svg class="section-chevron '+_chevronCls+'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>'+
-      '</div>'+
-      '<div class="section-group-body '+_bodyCls+'">';
+    var _histHtml='';
     datasPassadas.slice(0,10).forEach(function(data){
       var d=diasPassados[data];
       var partes=data.split('-');
       var dia=parseInt(partes[2]);
       var mesLabel=MESES[parseInt(partes[1])-1].substring(0,3);
-      html+='<div class="ag-card" onclick="drillDia(\''+data+'\')" style="cursor:pointer">'+
-        '<div class="ag-hora" style="min-width:50px;text-align:center;flex-direction:column;display:flex;align-items:center">'+
-          '<div style="font-size:17px;font-weight:800;color:var(--primary)">'+dia+'</div>'+
-          '<div style="font-size:9px;text-transform:uppercase;color:var(--text-3)">'+mesLabel+'</div>'+
-        '</div>'+
-        '<div class="ag-info">'+
-          '<div class="ag-nome">'+d.total+' agendamento'+(d.total!==1?'s':'')+'</div>'+
-          '<div class="ag-srv">'+formatPrice(d.fat)+' faturado</div>'+
-        '</div>'+
-        '<div style="font-size:11px;color:var(--text-3);font-weight:700;flex-shrink:0">Ver →</div>'+
-      '</div>';
+      _histHtml+=
+        '<div onclick="drillDia(\''+data+'\')" style="display:flex;align-items:center;padding:14px 24px;'+C_ROW+';gap:14px;cursor:pointer">'+
+          '<div style="min-width:52px;flex-shrink:0;text-align:center;line-height:1">'+
+            '<div style="font-size:22px;font-weight:800;color:#E55A0C">'+dia+'</div>'+
+            '<div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#A79C92;margin-top:1px;letter-spacing:.04em">'+mesLabel+'</div>'+
+          '</div>'+
+          '<div style="flex:1;min-width:0">'+
+            '<div style="font-size:15px;font-weight:700;color:#17130F">'+d.total+' agendamento'+(d.total!==1?'s':'')+'</div>'+
+            '<div style="font-size:12.5px;color:#8A8078">'+formatPrice(d.fat)+' faturado</div>'+
+          '</div>'+
+          '<div style="font-size:13px;font-weight:700;color:#A79C92;flex-shrink:0">Ver →</div>'+
+        '</div>';
     });
-    html+='</div></div>';
+    html+=_cs('sec-historico','Histórico recente',null,_histHtml,false);
   }
 
   /* SEÇÃO CALENDÁRIO — colapsável */
-  var _calLbl='Calendário · '+MESES[_calMes]+' '+_calAno;
-  var _calC=localStorage.getItem('sec-calendario-collapsed')==='1';
-  html+=_secGroup('sec-calendario',_calLbl,_calC,'<div id="calWrap"></div><div id="drillWrap"></div>');
+  html+=_cs('sec-calendario','Calendário · '+MESES[_calMes]+' '+_calAno,null,'<div id="calWrap"></div><div id="drillWrap"></div>',false);
 
   el.innerHTML=html;
   renderCalendar();
@@ -588,22 +624,33 @@ async function renderDrill(ds){
     }
   }
 
+  var _drillLivres=Math.max(0,Math.round((_fechaMin-_abreMin)/30)-ativos.length);
   drillWrap.innerHTML=
-    '<div class="drill-hdr">'+
-      '<button class="drill-back" onclick="voltarCal()">← Voltar</button>'+
-      '<button onclick="abrirWalkin(_drillDia)" style="background:var(--primary);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:800;cursor:pointer">⚡ Atendimento rápido</button>'+
-      '<div class="drill-titulo">'+titulo+'</div>'+
+    '<div style="display:flex;align-items:center;gap:10px;padding:16px 26px 0;flex-wrap:wrap">'+
+      '<button onclick="voltarCal()" style="border:none;cursor:pointer;background:rgba(23,19,15,.07);color:#17130F;font-size:13.5px;font-weight:700;padding:9px 14px;border-radius:10px;font-family:inherit">← Voltar</button>'+
+      '<div style="font-size:18px;font-weight:800;letter-spacing:-.02em;color:#17130F;flex:1">'+titulo+'</div>'+
+      '<button onclick="abrirWalkin(_drillDia)" style="border:none;cursor:pointer;background:#E55A0C;color:#fff;font-size:13px;font-weight:700;padding:9px 14px;border-radius:10px;font-family:inherit">⚡ Walk-in</button>'+
     '</div>'+
-    '<div class="metrics" style="margin-bottom:12px">'+
-      '<div class="mc mc-L"><div class="mc-n">'+ativos.length+'</div><div class="mc-l">Agendados</div></div>'+
-      '<div class="mc mc-V"><div class="mc-n">'+formatPrice(fat)+'</div><div class="mc-l">Faturamento</div></div>'+
-      '<div class="mc mc-A"><div class="mc-n">'+(Math.max(0,Math.round((_fechaMin-_abreMin)/30)-ativos.length))+'</div><div class="mc-l">Horários disponíveis</div></div>'+
+    '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;padding:16px 26px">'+
+      '<div style="background:#fff;border:1px solid rgba(23,19,15,.08);border-radius:16px;padding:16px">'+
+        '<div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#A79C92;margin-bottom:4px">Agendados</div>'+
+        '<div style="font-size:30px;font-weight:700;letter-spacing:-.03em;color:#17130F">'+ativos.length+'</div>'+
+      '</div>'+
+      '<div style="background:#fff;border:1px solid rgba(23,19,15,.08);border-radius:16px;padding:16px">'+
+        '<div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#A79C92;margin-bottom:4px">Faturamento</div>'+
+        '<div style="font-size:30px;font-weight:700;letter-spacing:-.03em;color:#17130F">'+formatPrice(fat)+'</div>'+
+      '</div>'+
+      '<div style="background:#fff;border:1px solid rgba(23,19,15,.08);border-radius:16px;padding:16px">'+
+        '<div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#A79C92;margin-bottom:4px">Disponíveis</div>'+
+        '<div style="font-size:30px;font-weight:700;letter-spacing:-.03em;color:#17130F">'+_drillLivres+'</div>'+
+      '</div>'+
     '</div>'+
-    '<div class="lista"><div class="lista-hdr"><h3>Grade do dia</h3>'+
-      '<span class="tag-c" style="background:rgba(45,106,79,.1);color:var(--VD)">'+
-        (Math.max(0,Math.round((_fechaMin-_abreMin)/30)-ativos.length))+' livre'+((Math.max(0,Math.round((_fechaMin-_abreMin)/30)-ativos.length))!==1?'s':'')+
-      '</span></div>'+
-    '<div class="grade-wrap">'+slotsHtml+'</div>'+
+    '<div style="background:#fff;border:1px solid rgba(23,19,15,.08);border-radius:20px;overflow:hidden;margin:0 26px 26px">'+
+      '<div style="display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid rgba(23,19,15,.08)">'+
+        '<div style="font-size:16px;font-weight:700;color:#17130F">Grade do dia</div>'+
+        (_drillLivres>0?'<span style="font-size:12px;font-weight:700;background:rgba(30,122,70,.1);color:#1E7A46;padding:4px 10px;border-radius:999px">'+_drillLivres+' livre'+((_drillLivres!==1)?'s':'')+'</span>':'')+
+      '</div>'+
+      '<div class="grade-wrap">'+slotsHtml+'</div>'+
     '</div>';
 }
 

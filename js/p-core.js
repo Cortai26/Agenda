@@ -165,6 +165,32 @@ function sair(){
 }
 
 /* ── Copiar link do salão ── */
+/* ── Seção colapsável clean (design novo) ── */
+function _cs(id,title,badge,body,openByDef){
+  var isOpen=openByDef!==false
+    ?localStorage.getItem('sec-'+id+'-open')!=='0'
+    :localStorage.getItem('sec-'+id+'-open')==='1';
+  var bdSep=isOpen?'border-bottom:1px solid rgba(23,19,15,.08)':'';
+  return '<div style="background:#fff;border:1px solid rgba(23,19,15,.08);border-radius:20px;overflow:hidden;margin-top:18px">'+
+    '<div onclick="_csTog(\''+id+'\')" style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;cursor:pointer;'+bdSep+'" id="csh-'+id+'">'+
+      '<div style="display:flex;align-items:center;gap:10px;min-width:0">'+
+        '<span style="font-size:17px;font-weight:700;letter-spacing:-.02em;color:#17130F">'+title+'</span>'+
+        (badge?'<span style="background:#F1E9DE;color:#5C544C;font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:999px;white-space:nowrap">'+badge+'</span>':'')+'</div>'+
+      '<svg id="csv-'+id+'" style="color:rgba(23,19,15,.25);transition:transform .25s;transform:rotate('+(isOpen?'0':'-90')+'deg);flex-shrink:0;margin-left:10px" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>'+
+    '</div>'+
+    '<div id="csb-'+id+'" style="'+(isOpen?'':'display:none')+'">'+body+'</div>'+
+  '</div>';
+}
+function _csTog(id){
+  var b=document.getElementById('csb-'+id),v=document.getElementById('csv-'+id),h=document.getElementById('csh-'+id);
+  if(!b) return;
+  var op=b.style.display!=='none';
+  b.style.display=op?'none':'';
+  if(v) v.style.transform=op?'rotate(-90deg)':'rotate(0deg)';
+  if(h) h.style.borderBottom=op?'':'1px solid rgba(23,19,15,.08)';
+  try{localStorage.setItem('sec-'+id+'-open',op?'0':'1');}catch(e){}
+}
+
 function copiarLink(){
   var slug=S&&S.slug?S.slug:'';
   var url=BASE+'/agendar.html?slug='+slug;
