@@ -53,7 +53,7 @@ export default async function handler(req, res) {
 
   // 3. Buscar salão
   const rSalao = await fetch(
-    `${SUPA_URL}/rest/v1/saloes?id=eq.${cobranca.salao_id}&select=id,nome,slug,email,fat_nome,fat_email,plano`,
+    `${SUPA_URL}/rest/v1/saloes?id=eq.${cobranca.salao_id}&select=id,nome,slug,email,fat_nome,fat_email,plano,status`,
     { headers: H }
   );
   const [salao] = await rSalao.json();
@@ -87,6 +87,19 @@ export default async function handler(req, res) {
       vencimento:        proximoVencStr,
     }),
   });
+
+  // 6b. Log de ativação por pagamento
+  await fetch(`${SUPA_URL}/rest/v1/saloes_status_log`, {
+    method: 'POST',
+    headers: H,
+    body: JSON.stringify({
+      salao_id:    cobranca.salao_id,
+      status_de:   salao.status,
+      status_para: 'ativo',
+      motivo:      `Pagamento ${pagamento.id} confirmado (R$ ${(pagamento.value || 0).toFixed(2)}). Plano ${planoAtivo}.`,
+      origem:      'asaas-webhook',
+    }),
+  }).catch(() => {});
 
   // 7. Email de confirmação
   const emailDest = salao.fat_email || salao.email;

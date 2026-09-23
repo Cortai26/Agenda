@@ -546,6 +546,7 @@ html.t-feminine .badge { border-radius: 20px; }
 .badge-ativo { background: var(--badge-active-bg); color: var(--badge-active-text); }
 .badge-trial { background: var(--badge-trial-bg); color: var(--badge-trial-text); }
 .badge-cancelado,.badge-inativo { background: var(--badge-cancel-bg); color: var(--badge-cancel-text); }
+.badge-pagamento_pendente { background: rgba(217,119,6,.14); color: #92400e; }
 .badge-basico { background: var(--s3); color: var(--tx3); }
 .badge-pro { background: var(--primary-bg); color: var(--primary); }
 .badge-salao { background: var(--amber-bg); color: var(--amber); }
@@ -1320,8 +1321,8 @@ async function renderSaloesStats(el){
           '<div><div class="t-biz-name">'+esc(s.nome)+'</div></div></div></td>'+
         '<td style="font-size:11px;color:var(--tx3)">'+esc(s.slug)+'</td>'+
         '<td><span class="vg-plano pl-'+s.plano+'">'+((PNOME&&PNOME[s.plano])||s.plano)+'</span></td>'+
-        '<td><span class="badge badge-'+(s.status==='bloqueado'?'cancelado':s.status)+'">'+
-          (s.status==='ativo'?'Ativo':s.status==='trial'?'Trial':s.status==='bloqueado'?'Bloqueado':'Inativo')+'</span></td>'+
+        '<td><span class="badge badge-'+(s.status==='bloqueado'?'cancelado':s.status==='pagamento_pendente'?'pagamento_pendente':s.status)+'">'+
+          (s.status==='ativo'?'Ativo':s.status==='trial'?'Trial':s.status==='bloqueado'?'Bloqueado':s.status==='pagamento_pendente'?'Pendente':'Inativo')+'</span></td>'+
         '<td style="text-align:right;font-weight:800;font-size:14px">'+total+'</td>'+
         '<td style="text-align:right;font-weight:700;color:'+(ult30>0?'var(--primary)':'var(--tx3)')+'">'+ult30+'</td>'+
       '</tr>';
@@ -1412,7 +1413,7 @@ async function renderAnalytics(el, dias){
         '<div class="t-biz-icon" style="background:var(--brand-soft,rgba(229,90,12,.12));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--c-primary)">A</div>'+
         '<div><div class="t-biz-name">'+esc(c.nome)+'</div><div class="t-biz-loc">'+esc(c.email||c.slug||'')+'</div></div>'+
         '</div></td>'+
-        '<td><span class="badge badge-'+(c.status==='bloqueado'?'cancelado':c.status)+'">'+(c.status==='ativo'?'Ativo':c.status==='trial'?'Trial':c.status==='bloqueado'?'Bloqueado':'Inativo')+'</span></td>'+
+        '<td><span class="badge badge-'+(c.status==='bloqueado'?'cancelado':c.status==='pagamento_pendente'?'pagamento_pendente':c.status)+'">'+(c.status==='ativo'?'Ativo':c.status==='trial'?'Trial':c.status==='bloqueado'?'Bloqueado':c.status==='pagamento_pendente'?'Pendente':'Inativo')+'</span></td>'+
         '<td><span class="vg-plano pl-'+c.plano+'">'+(PNOME[c.plano]||c.plano)+'</span></td>'+
         '<td style="font-size:11px;color:'+vencColor+';font-weight:700">'+vencLabel+'</td>'+
         '<td style="text-align:right">'+
@@ -1857,7 +1858,7 @@ function renderVisaoGeral(el){
             <div class="t-biz-loc">${esc(c.email||c.slug||'')}</div>
           </div>
         </div></td>
-        <td><span class="badge badge-${c.status==='bloqueado'?'cancelado':c.status}">${c.status==='ativo'?'Ativo':c.status==='trial'?'Trial':c.status==='bloqueado'?'Bloqueado':'Inativo'}</span></td>
+        <td><span class="badge badge-${c.status==='bloqueado'?'cancelado':c.status==='pagamento_pendente'?'pagamento_pendente':c.status}">${c.status==='ativo'?'Ativo':c.status==='trial'?'Trial':c.status==='bloqueado'?'Bloqueado':c.status==='pagamento_pendente'?'Pendente':'Inativo'}</span></td>
         <td><span class="vg-plano pl-${c.plano}">${PNOME[c.plano]||c.plano}</span></td>
         <td style="font-size:11px;color:${vencColor};font-weight:700">${vencLabel}</td>
         <td style="text-align:right">

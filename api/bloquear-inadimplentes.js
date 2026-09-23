@@ -28,12 +28,15 @@ export default async function handler(req, res) {
   // A) Cobranças vencidas há mais de 3 dias e ainda PENDING/OVERDUE
   try {
     const rCob = await fetch(
-      `${SUPA_URL}/rest/v1/asaas_cobrancas?status=in.(PENDING,OVERDUE)&vencimento=lt.${toleranciaStr}&select=salao_id`,
+      `${SUPA_URL}/rest/v1/asaas_cobrancas?status=in.(PENDING,OVERDUE)&vencimento=lt.${toleranciaStr}` +
+      `&select=salao_id,saloes!inner(isento_cobranca)`,
       { headers: H }
     );
     const cobrancas = await rCob.json();
     if (Array.isArray(cobrancas)) {
-      cobrancas.forEach(c => c.salao_id && idsBloqueio.add(c.salao_id));
+      cobrancas
+        .filter(c => !c.saloes?.isento_cobranca)
+        .forEach(c => c.salao_id && idsBloqueio.add(c.salao_id));
     }
   } catch (_) {}
 
@@ -41,7 +44,7 @@ export default async function handler(req, res) {
   // NULL comparisons already excluded by PostgreSQL (NULL < X = NULL, not true)
   try {
     const rSal = await fetch(
-      `${SUPA_URL}/rest/v1/saloes?status=eq.ativo&vencimento=lt.${toleranciaStr}&select=id`,
+      `${SUPA_URL}/rest/v1/saloes?status=eq.ativo&vencimento=lt.${toleranciaStr}&isento_cobranca=eq.false&select=id`,
       { headers: H }
     );
     const salVenc = await rSal.json();
@@ -57,7 +60,7 @@ export default async function handler(req, res) {
   // Buscar salões ativos (não bloquear quem já está bloqueado)
   const idsArr = [...idsBloqueio];
   const rAtivos = await fetch(
-    `${SUPA_URL}/rest/v1/saloes?id=in.(${idsArr.join(',')})&status=in.(ativo,trial)&select=id,slug`,
+    `${SUPA_URL}/rest/v1/saloes?id=in.(${idsArr.join(',')})&status=in.(ativo,trial,pagamento_pendente)&select=id,slug,status`,
     { headers: H }
   );
   const ativos = await rAtivos.json();
@@ -74,6 +77,17 @@ export default async function handler(req, res) {
         headers: { ...H, 'Prefer': 'return=minimal' },
         body: JSON.stringify({ status: 'bloqueado' }),
       });
+      await fetch(`${SUPA_URL}/rest/v1/saloes_status_log`, {
+        method: 'POST',
+        headers: H,
+        body: JSON.stringify({
+          salao_id:    salao.id,
+          status_de:   salao.status,
+          status_para: 'bloqueado',
+          motivo:      `Inadimplência confirmada. Tolerância de 3 dias expirou em ${toleranciaStr}.`,
+          origem:      'bloquear-inadimplentes',
+        }),
+      }).catch(() => {});
       bloqueados.push(salao.slug);
     } catch (_) {}
   }

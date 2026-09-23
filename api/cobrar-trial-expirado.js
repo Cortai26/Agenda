@@ -43,7 +43,7 @@ export default async function handler(req, res) {
   // 1. Buscar salões com trial expirado
   const hoje = new Date().toISOString().split('T')[0];
   const r = await fetch(
-    `${SUPA_URL}/rest/v1/saloes?status=eq.trial&trial_expira=lte.${hoje}` +
+    `${SUPA_URL}/rest/v1/saloes?status=eq.trial&trial_expira=lte.${hoje}&isento_cobranca=eq.false` +
     `&select=id,nome,slug,email,plano,responsavel,fat_cpf_cnpj,fat_nome,fat_email`,
     { headers: H_SUPA }
   );
@@ -157,12 +157,23 @@ export default async function handler(req, res) {
         }),
       });
 
-      // 8. Bloquear o salão e registrar vencimento da cobrança pendente
+      // 8. Status intermediário: acesso mantido até a tolerância do bloquear-inadimplentes
       await fetch(`${SUPA_URL}/rest/v1/saloes?id=eq.${salao.id}`, {
         method: 'PATCH',
         headers: H_SUPA,
-        body: JSON.stringify({ status: 'bloqueado', vencimento: vencimentoStr }),
+        body: JSON.stringify({ status: 'pagamento_pendente', vencimento: vencimentoStr }),
       });
+      await fetch(`${SUPA_URL}/rest/v1/saloes_status_log`, {
+        method: 'POST',
+        headers: H_SUPA,
+        body: JSON.stringify({
+          salao_id:    salao.id,
+          status_de:   'trial',
+          status_para: 'pagamento_pendente',
+          motivo:      `Trial expirado em ${hoje}. Fatura ${pagData.id} gerada, vence ${vencimentoStr}.`,
+          origem:      'cobrar-trial-expirado',
+        }),
+      }).catch(() => {});
 
       // 9. Email com link de pagamento
       const emailDest = salao.fat_email || salao.email;

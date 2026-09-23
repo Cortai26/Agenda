@@ -514,7 +514,7 @@ function iniciarApp(sessao){
   var _sbPl=document.getElementById('sbPlano');
   if(_sbPl){
     var pl=sessao.status||'trial';
-    var plMap={'ativo':'Pro','trial':'Gratuito','trial_expirado':'Expirado','inativo':'Inativo'};
+    var plMap={'ativo':'Pro','trial':'Gratuito','trial_expirado':'Expirado','pagamento_pendente':'Pendente','inativo':'Inativo'};
     _sbPl.textContent=plMap[pl]||pl;
   }
   var _sbAv=document.getElementById('sbAv');
@@ -657,6 +657,19 @@ function iniciarApp(sessao){
     }
   }
 
+  // S2.5: Banner pagamento_pendente — fatura gerada, acesso mantido até tolerância
+  if(sessao.status==='pagamento_pendente'){
+    var bPend=document.getElementById('bannerPagamentoPendente');
+    if(bPend){
+      var bPendTxt=document.getElementById('bannerPagamentoPendenteTxt');
+      if(bPendTxt&&sessao.vencimento){
+        var dtPend=new Date(sessao.vencimento+'T12:00:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
+        bPendTxt.textContent='⏳ Pagamento pendente — pague até '+dtPend+' para continuar';
+      }
+      bPend.style.display='block';
+    }
+  }
+
   var fab=document.getElementById('fabBtn');
   if(fab) fab.style.display='flex';
   carregarServicos();
@@ -679,6 +692,24 @@ function iniciarApp(sessao){
   // Ensure FAB visible
   var _fab=document.getElementById('fabBtn');
   if(_fab) _fab.style.display='flex';
+}
+
+async function abrirPagamentoPendente(){
+  try{
+    var cobs=await api('asaas_cobrancas?salao_id=eq.'+S.id+'&status=eq.PENDING&order=vencimento.desc&select=link_pagamento,pix_copia_cola,vencimento&limit=1');
+    var c=Array.isArray(cobs)&&cobs[0];
+    if(c&&c.pix_copia_cola){
+      try{await navigator.clipboard.writeText(c.pix_copia_cola);}catch(_){}
+      toast('success','PIX copiado! Cole no app do seu banco.');
+      if(c.link_pagamento) window.open(c.link_pagamento,'_blank');
+    }else if(c&&c.link_pagamento){
+      window.open(c.link_pagamento,'_blank');
+    }else{
+      toast('info','Nenhuma cobrança ativa. Fale: cortai.contato@gmail.com');
+    }
+  }catch(e){
+    toast('error','Não foi possível carregar a cobrança');
+  }
 }
 
 /* TABS */
