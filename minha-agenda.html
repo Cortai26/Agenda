@@ -194,6 +194,18 @@
     var diaAtual = new Date();
     diaAtual.setHours(0,0,0,0);
 
+    function showToast(msg, type) {
+      var el=document.getElementById('_toast');
+      if(!el) return;
+      var bg=type==='error'?'#dc2626':type==='warning'?'#ca8a04':'#16a34a';
+      el.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(0);'+
+        'background:'+bg+';color:#fff;padding:10px 18px;border-radius:24px;font-size:13px;font-weight:700;'+
+        'z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.25);transition:opacity .3s;pointer-events:none;white-space:nowrap';
+      el.textContent=msg;
+      clearTimeout(el._t);
+      el._t=setTimeout(function(){ el.style.opacity='0'; },3000);
+    }
+
     function guard() {
       try { sessao = JSON.parse(localStorage.getItem(SK)||'null'); } catch(e) {}
       if (!sessao || !sessao.profissional) { location.replace('/login.html'); return false; }
@@ -288,7 +300,9 @@
           var hora = (a.hora||'').slice(0,5);
           var status = a.status||'agendado';
           var tel = (a.cliente_telefone||'').replace(/\D/g,'');
-          var wppMsg = encodeURIComponent('Olá '+a.cliente_nome+'! Confirmando seu atendimento hoje.');
+          var _hj=new Date(); _hj.setHours(0,0,0,0);
+          var _dRef=diaAtual.getTime()===_hj.getTime()?'hoje':diaAtual.getTime()===_hj.getTime()+86400000?'amanhã':'no dia '+diaAtual.getDate()+'/'+(diaAtual.getMonth()+1);
+          var wppMsg = encodeURIComponent('Olá '+a.cliente_nome+'! Confirmando seu atendimento '+_dRef+'.');
           html +=
             '<div class="ag-card status-'+status+'">'+
               '<div class="ag-hora">'+esc(hora)+'</div>'+
@@ -323,7 +337,7 @@
         if (sessao.profissional.pode_ver_financeiro) carregarFaturamento();
       } catch(ex) {
         btn.disabled = false; btn.textContent = '✓ OK';
-        alert('Erro: '+ex.message);
+        showToast('Erro: '+ex.message,'error');
       }
     }
 
@@ -387,7 +401,7 @@
           p_motivo: motivo
         });
         fecharBloquear();
-        alert('Horário bloqueado!');
+        showToast('Horário bloqueado com sucesso!','ok');
       } catch(ex) {
         errEl.textContent = ex.message; errEl.style.display = 'block';
       } finally {
@@ -395,13 +409,20 @@
       }
     }
 
+    var _logoutPendente=false;
     function logout() {
-      if (!confirm('Sair da sua conta?')) return;
+      if(!_logoutPendente){
+        _logoutPendente=true;
+        showToast('Clique em Sair novamente para confirmar','warning');
+        setTimeout(function(){ _logoutPendente=false; }, 3500);
+        return;
+      }
       localStorage.removeItem(SK);
       location.replace('/login.html');
     }
 
     init();
   </script>
+  <div id="_toast" style="display:none;opacity:0"></div>
 </body>
 </html>

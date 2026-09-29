@@ -1826,7 +1826,13 @@ html.fonte-serif .hdr-name{
     <div class="ag-step-line" id="sline3"></div>
     <div class="ag-step">
       <div class="ag-step-dot" id="sdot4">4</div>
-      <span class="ag-step-lbl" id="slbl4">Confirmar</span>
+      <span class="ag-step-lbl" id="slbl4">Seus dados</span>
+    </div>
+    <!-- 5th step, shown only when prof step is active -->
+    <div class="ag-step-line" id="sline4" style="display:none"></div>
+    <div class="ag-step" id="agStep5" style="display:none">
+      <div class="ag-step-dot" id="sdot5">5</div>
+      <span class="ag-step-lbl" id="slbl5">Seus dados</span>
     </div>
   </nav>
 
@@ -2003,21 +2009,22 @@ const profParam=params.get('prof')||null;
 
 // ── STEP INDICATOR UPDATE ──
 function updateSteps(){
-  const step = S.srv ? (S.dataStr ? (S.hora ? 4 : 3) : 2) : 1;
-  [1,2,3,4].forEach(i=>{
-    const dot=document.getElementById('sdot'+i);
-    const lbl=document.getElementById('slbl'+i);
-    if(!dot) return;
+  var has5=document.getElementById('agStep5')&&document.getElementById('agStep5').style.display!=='none';
+  var step=has5
+    ? (!S.srv?1:!profSelecionado?2:!S.dataStr?3:!S.hora?4:5)
+    : (S.srv?(S.dataStr?(S.hora?4:3):2):1);
+  var max=has5?5:4;
+  for(var i=1;i<=max;i++){
+    var dot=document.getElementById('sdot'+i);
+    var lbl=document.getElementById('slbl'+i);
+    if(!dot) break;
     dot.classList.remove('active','done');
     lbl.classList.remove('active');
-    if(i < step){ dot.classList.add('done'); dot.textContent='✓'; }
-    else if(i === step){ dot.classList.add('active'); dot.textContent=i; lbl.classList.add('active'); }
-    else { dot.textContent=i; }
-    if(i < 4){
-      const line=document.getElementById('sline'+i);
-      if(line) line.classList.toggle('done', i < step);
-    }
-  });
+    if(i<step){dot.classList.add('done');dot.textContent='✓';}
+    else if(i===step){dot.classList.add('active');dot.textContent=i;lbl.classList.add('active');}
+    else{dot.textContent=i;}
+    if(i<max){var line=document.getElementById('sline'+i);if(line)line.classList.toggle('done',i<step);}
+  }
 }
 
 // ── ONYX BOTTOM BAR ──
@@ -2362,8 +2369,16 @@ function decidirProximaEtapa(){
     // Renumber subsequent blocks since prof step is now step 2
     var bDiaNum=document.querySelector('#bDia .ag-bloco-num');
     var bHoraNum=document.querySelector('#bHora .ag-bloco-num');
+    var bDadosNum=document.querySelector('#bDados .ag-bloco-num');
     if(bDiaNum) bDiaNum.textContent='3';
     if(bHoraNum) bHoraNum.textContent='4';
+    if(bDadosNum) bDadosNum.textContent='5';
+    // Show 5-step nav and relabel
+    var _s5=document.getElementById('agStep5'); if(_s5) _s5.style.display='';
+    var _l4=document.getElementById('sline4'); if(_l4) _l4.style.display='';
+    var _sl2=document.getElementById('slbl2'); if(_sl2) _sl2.textContent='Com quem';
+    var _sl3=document.getElementById('slbl3'); if(_sl3) _sl3.textContent='Dia';
+    var _sl4=document.getElementById('slbl4'); if(_sl4) _sl4.textContent='Hora';
     unlock('bProf');
     scr('bProf');
   } else {
