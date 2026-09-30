@@ -1,5 +1,13 @@
 /* ═══ p-config.js — Configurações do Painel ═══ */
 
+var _GRUPOS=[
+  {id:'dia-a-dia', label:'Do dia a dia',       icon:'🕐', secoes:['bloqueios','agenda','pgto-cli','sinal','notif-push']},
+  {id:'uma-vez',   label:'Configurado uma vez', icon:'⚙️', secoes:['perfil','localizacao','tema','faturamento','link']},
+  {id:'vitrine',   label:'Vitrine',             icon:'📸', secoes:['galeria','diferenciais','faq','produtos']},
+  {id:'extras',    label:'Extras',              icon:'✨', secoes:['lembrete','marketplace']}
+];
+var _secoesPorId={};
+
 var _pgtoState={dinheiro:true,pix:true,cartao:false,debito:false,pixKey:'',pixTipo:'telefone',mostrarSinal:false,sinalObrig:false,sinalPct:30,cancelMin:120};
 
 var HORARIO_PADRAO={'0':null,'1':{ini:'09:00',fim:'19:00'},'2':{ini:'09:00',fim:'19:00'},'3':{ini:'09:00',fim:'19:00'},'4':{ini:'09:00',fim:'19:00'},'5':{ini:'09:00',fim:'19:00'},'6':{ini:'09:00',fim:'14:00'}};
@@ -152,6 +160,43 @@ async function viaCEP(cepId,campos){
 
 async function _patch(data){
   return api('saloes?id=eq.'+S.id,{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify(data)});
+}
+
+/* ─── BUSCA E GRUPOS ─── */
+function _grupoDoId(id){
+  for(var i=0;i<_GRUPOS.length;i++){
+    if(_GRUPOS[i].secoes.indexOf(id)>=0) return _GRUPOS[i].id;
+  }
+  return null;
+}
+
+function _abrirSecao(id){
+  var body=document.getElementById('secbody-'+id);
+  if(!body) return;
+  var isOpen=body.style.maxHeight&&body.style.maxHeight!=='0px';
+  if(!isOpen){
+    body.style.maxHeight=body.scrollHeight+600+'px';
+    body.style.opacity='1';
+    body.style.padding='';
+    var chevron=body.parentElement?body.parentElement.querySelector('.section-chevron'):null;
+    if(chevron) chevron.style.transform='rotate(90deg)';
+  }
+}
+
+function filtrarConfig(termo){
+  var t=termo.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+  var algumVisivelNoGrupo={};
+  Object.keys(_secoesPorId).forEach(function(id){
+    var el=document.querySelector('[data-section="'+id+'"]');
+    if(!el) return;
+    var bate=!t||_secoesPorId[id].label.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').includes(t);
+    el.style.display=bate?'':'none';
+    if(bate&&t) _abrirSecao(id);
+    if(bate) algumVisivelNoGrupo[_grupoDoId(id)]=true;
+  });
+  document.querySelectorAll('.grupo-header').forEach(function(h){
+    h.style.display=(!t||algumVisivelNoGrupo[h.dataset.grupo])?'':'none';
+  });
 }
 
 /* ─── SECTION TOGGLE ─── */
@@ -513,34 +558,58 @@ async function renderPagina(){
     {id:'link',        icon:'🔗', label:'Link de agendamento',         html:_htmlLink()},
   ];
 
-  secoes.forEach(function(s){
-    var grupo=document.createElement('div');
-    grupo.className='section-group';
-    grupo.dataset.section=s.id;
-    grupo.style.cssText='background:var(--bg-card);border-radius:var(--r-lg);margin:0 0 10px;overflow:hidden;border:1px solid var(--sep)';
+  // Mapa id → seção
+  var secoesPorId={};
+  secoes.forEach(function(s){ secoesPorId[s.id]=s; });
+  _secoesPorId=secoesPorId;
 
-    var header=document.createElement('div');
-    header.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;user-select:none';
-    header.innerHTML='<span style="display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600;color:var(--text)"><span>'+s.icon+'</span>'+s.label+'</span>'+
-      '<svg class="section-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color:var(--text-3);transition:transform .24s;flex-shrink:0"><polyline points="9 18 15 12 9 6"/></svg>';
-    header.onclick=function(){_toggleSecao(s.id);};
+  // Campo de busca
+  var srchWrap=document.createElement('div');
+  srchWrap.style.cssText='margin-bottom:4px';
+  srchWrap.innerHTML='<input type="text" id="cfgSearch" placeholder="🔍 Buscar configuração..." oninput="filtrarConfig(this.value)" '+
+    'style="width:100%;padding:10px 14px;border-radius:var(--r-md);border:1px solid var(--sep);'+
+    'background:var(--s2);font-size:14px;color:var(--text);outline:none;box-sizing:border-box">';
+  container.appendChild(srchWrap);
 
-    var body=document.createElement('div');
-    body.id='secbody-'+s.id;
-    body.style.cssText='max-height:0;opacity:0;overflow:hidden;transition:max-height .32s ease,opacity .24s ease';
+  // Renderizar por grupos
+  _GRUPOS.forEach(function(grupo){
+    var ghdr=document.createElement('div');
+    ghdr.className='grupo-header';
+    ghdr.dataset.grupo=grupo.id;
+    ghdr.style.cssText='font-size:11.5px;font-weight:700;color:var(--CZ);text-transform:uppercase;letter-spacing:.05em;padding:16px 4px 6px';
+    ghdr.textContent=grupo.icon+' '+grupo.label;
+    container.appendChild(ghdr);
 
-    if(s.async){
-      body.innerHTML='<div style="padding:12px 16px"><div class="loading">Carregando...</div></div>';
-      (function(b){
-        _renderBloqueios().then(function(html){b.innerHTML=html;});
-      })(body);
-    }else{
-      body.innerHTML=s.html||'';
-    }
+    grupo.secoes.forEach(function(sid){
+      var s=secoesPorId[sid];
+      if(!s) return;
 
-    grupo.appendChild(header);
-    grupo.appendChild(body);
-    container.appendChild(grupo);
+      var elem=document.createElement('div');
+      elem.className='section-group';
+      elem.dataset.section=s.id;
+      elem.style.cssText='background:var(--bg-card);border-radius:var(--r-lg);margin:0 0 10px;overflow:hidden;border:1px solid var(--sep)';
+
+      var hdr=document.createElement('div');
+      hdr.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;user-select:none';
+      hdr.innerHTML='<span style="display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600;color:var(--text)"><span>'+s.icon+'</span>'+s.label+'</span>'+
+        '<svg class="section-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color:var(--text-3);transition:transform .24s;flex-shrink:0"><polyline points="9 18 15 12 9 6"/></svg>';
+      (function(_sid){hdr.onclick=function(){_toggleSecao(_sid);};})(s.id);
+
+      var body=document.createElement('div');
+      body.id='secbody-'+s.id;
+      body.style.cssText='max-height:0;opacity:0;overflow:hidden;transition:max-height .32s ease,opacity .24s ease';
+
+      if(s.async){
+        body.innerHTML='<div style="padding:12px 16px"><div class="loading">Carregando...</div></div>';
+        (function(b){_renderBloqueios().then(function(html){b.innerHTML=html;});})(body);
+      }else{
+        body.innerHTML=s.html||'';
+      }
+
+      elem.appendChild(hdr);
+      elem.appendChild(body);
+      container.appendChild(elem);
+    });
   });
 
   setTimeout(function(){
