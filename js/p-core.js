@@ -1,7 +1,7 @@
 /* Agenda Painel — Core: config, auth, helpers */
 /* ═══ FEATURE FLAGS ═══ */
 const FEAT_EMAIL=false;
-const FEAT_CAMPANHAS=false;
+const FEAT_CAMPANHAS=true;
 const FEAT_TEMA_PROF=false;
 /* ═══ CONFIG ═══ */
 const SUPA='https://acldrisohnjfekjxgmoh.supabase.co';

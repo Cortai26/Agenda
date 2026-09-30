@@ -74,6 +74,8 @@ async function renderAgenda(){
 
   var ativos=agsHoje.filter(function(a){return a.status!=='cancelado';});
   var fat=ativos.reduce(function(s,a){return s+(a.servico_preco||0);},0);
+  // fatConcluido: base real para cálculo de comissão (só o que foi pago)
+  var fatConcluido=agsHoje.filter(function(a){return a.status==='concluido';}).reduce(function(s,a){return s+(a.servico_preco||0);},0);
   // ITEM 6: Caixa do dia
   var caixaEl=document.getElementById('caixaDia');
   if(!caixaEl){caixaEl=document.createElement('div');caixaEl.id='caixaDia';caixaEl.className='caixa-dia';}
@@ -110,13 +112,13 @@ async function renderAgenda(){
   var _fatMes=0;
   try{
     var _profQ=_profFiltro?'&profissional_id=eq.'+_profFiltro:'';
-    var _resMes=await api('agendamentos?salao_id=eq.'+S.id+'&data=gte.'+_d1+'&data=lte.'+_dFim+'&status=neq.cancelado'+_profQ+'&select=servico_preco');
+    var _resMes=await api('agendamentos?salao_id=eq.'+S.id+'&data=gte.'+_d1+'&data=lte.'+_dFim+'&status=eq.concluido'+_profQ+'&select=servico_preco');
     _fatMes=(_resMes||[]).reduce(function(a,r){return a+(r.servico_preco||0);},0);
   }catch(e){}
   // Comissão do profissional selecionado
   var _profAtual=_profFiltro?_profs.find(function(p){return p.id===_profFiltro;}):null;
   var _comPct=_profAtual&&_profAtual.comissao_pct!=null?_profAtual.comissao_pct:null;
-  var _fatCom=_comPct!==null?Math.round(fat*_comPct/100):null;
+  var _fatCom=_comPct!==null?Math.round(fatConcluido*_comPct/100):null;
   var _fatMesCom=_comPct!==null?Math.round(_fatMes*_comPct/100):null;
   /* ── Calcula "Deixando na mesa" para incluir no grid de métricas ── */
   var _lossCard='';

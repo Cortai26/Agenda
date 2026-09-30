@@ -46,6 +46,7 @@ async function renderEquipe(){
           '</div>'+
           '<div class="eq-sp">'+esc(p.especialidade||'Profissional')+'</div>'+
           (p.comissao_pct!=null&&p.papel!=='recepcao'?'<div style="font-size:11px;font-weight:700;color:var(--VD);margin-top:2px;cursor:pointer" onclick="abrirProf(\''+p.id+'\')">Comissão: '+p.comissao_pct+'%</div>':'')+
+          ('pin_hash' in p&&p.pin_hash===null&&p.papel!=='admin'?'<div style="font-size:11px;font-weight:700;color:#dc2626;margin-top:2px">⚠️ PIN pendente — sem acesso ao login</div>':'')+
         '</div>'+
         '<div class="eq-ctrl">'+
           (isBasico?
